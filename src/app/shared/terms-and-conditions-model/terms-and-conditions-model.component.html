@@ -1,0 +1,55 @@
+<ng-template  #expireModel let-d="dismiss" data-backdrop="static" data-keyboard="false">
+  <div class="modal-header">
+    <p class="modal-title" style="font-size: 20px; font-weight: bold;">We’ve updated our terms and conditions!</p>
+    <!-- <button type="button" class="close" data-bs-dismiss="modal" (click)="d('notNow');closeModel(false)"><i
+        class="fa fa-times-circle" aria-hidden="true" style="color: #4a90e2;"></i></button> -->
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12 text-left">
+          <p>            
+            By clicking the "I Acknowledge" button, you agree to the updated <br>
+            <span class="textcolor" (click)="reDirectToTermsPage()">Terms & Conditions</span> and <span class="textcolor" (click)="reDirectToPrivacyPage()">Privacy Policy.</span>
+          </p>
+      </div>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-12  text-center" style="margin-bottom: 25px;">
+        <!-- <button type="button" class="cancel-button" (click)="setTermsAndConditionsforDecline()">I Decline</button> -->
+        <button type="button" class="accept-button m-r-10" (click)="setTermsAndConditionsforAccept()">I Acknowledge</button>
+      </div>
+    </div>
+    <!-- <p id="demo" style="font-size: 17px;
+    text-align: center; color:red"></p> -->
+  </ng-template>
+  <ng-template  #confirmationModal data-backdrop="static" data-keyboard="false">
+    <!-- <div class="modal-header">
+      <p class="modal-title" style="font-size: 20px; font-weight: bold;">We’ve updated our terms and conditions!</p>
+    </div> -->
+    <div class="modal-body">
+      <div class="row">
+        <div class="deactivatePopUp">           
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>            
+            <p>                   
+              By declining the new terms and conditions, your account will be deactivated. 
+              You will not be able to log in and have access to your data. <br><br>
+              
+                If you have any questions you may email us at <b>support@mfg.com</b> or call <b>770-444-9686.</b>
+              
+            </p>        
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>         
+        </div>
+      </div>
+  
+      </div>
+      <div class="row">
+        <div class="col-md-12  text-center" style="margin-bottom: 25px;">
+          <button type="button" class="cancel-button1" (click)="showTermsAndConditionModal()">No, go back.</button>
+          <button type="button" class="accept-button1 m-r-10" (click)="logoutAndDeactivateAccount()">Yes, I Decline.</button>
+        </div>
+      </div>
+      <!-- <p id="demo" style="font-size: 17px;
+      text-align: center; color:red"></p> -->
+    </ng-template>

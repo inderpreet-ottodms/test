@@ -1,0 +1,204 @@
+<div class="tab-pane" id="messages" *ngIf="!isLoader">
+  <div *ngIf="(items.length !== 0)">
+    <section>
+      {{reloadMessages()}}
+      <div *ngIf="isLoader">
+        <div class="loader animation-start">
+          <span class="circle delay-1 size-2"></span>
+          <span class="circle delay-2 size-4"></span>
+          <span class="circle delay-3 size-6"></span>
+          <span class="circle delay-4 size-7"></span>
+          <span class="circle delay-5 size-7"></span>
+          <span class="circle delay-6 size-6"></span>
+          <span class="circle delay-7 size-4"></span>
+          <span class="circle delay-8 size-2"></span>
+        </div>
+      </div>
+      <div class="table-responsive min-height">
+        <div class="">
+          <table class="nda-table">
+            <thead>
+              <tr>
+                <td class="message-results"> {{items?.length}} results</td>
+                <td class="message-results2">
+                  <div *ngIf="selectedRowCount > 1">{{selectedRowCount}} selected</div>
+                </td>
+                <td><i [ngClass]="(selectedRowCount > 1)? 'iconEnabled' :'iconDisabled'" class="fa fa-envelope"
+                    (click)="openSidePanel('')" ngbTooltip="Message Manufacturers"></i></td>
+                <td><i class="fa fa-trash" [ngClass]="(selectedRowCount > 1)? 'iconEnabled' :'iconDisabled'"
+                    (click)="deleteMultipleMessage()" ngbTooltip="Archive Messages"></i></td>
+              </tr>
+            </thead>
+          </table>
+          <table class="table table-hover rfqtable">
+            <thead>
+              <tr>
+                <th style="width: 5%" class="nda-checkboxth"><input type="checkbox" [(ngModel)]="selectedAll"
+                    (change)="selectAll();"></th>
+                <th style="width: 15%" class="message-contact">Company Name</th>
+                <th style="width: 15%" class="message-contact">From</th>
+                <th style="width: 40%" class="message-subject">Subject</th>
+                <th style="width: 10%" class="message-date" (click)="sortMessage()">Date
+                  <i [ngClass]="(toggle)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                </th>
+                <th style="width: 15%">Actions</th>
+              </tr>
+            </thead>
+          </table>
+          <table class="table table-hover rfqtable">
+            <tbody>
+              <tr [id]="message.messageId" *ngFor="let message of items; let i=index">
+                <table style="width:100%" [ngClass]="{'active-msg': selectedDivIndex===i } ">
+                  <tr>
+                    <td style="width: 5%"
+                      [ngClass]="(message.messageRead == true)?'nda-checkbox grayTr':'nda-checkbox'">
+                      <div class="border-checkbox-group border-checkbox-group-primary">
+                        <input type="checkbox" [(ngModel)]="message.isSelected" (change)="checkIfAllSelected()">
+                      </div>
+                    </td>
+                    <td style="width: 15%"
+                      [ngClass]="(message.messageRead == true)?'rfqtd message-contact grayTr':'rfqtd message-contact'">
+                      <!-- <label> </label> -->
+                      <div *ngIf="(message.messageTypeId == 1)" (click)="goToRfqDetails(message.rfqId)">
+                        <label class="message-contact"> {{message.companyName| dotLimit:'17'}}</label>
+                      </div>
+                      <div *ngIf="(message.messageTypeId == 42)" (click)="goToNdaApprove()">
+                        <label class="message-contact"> {{message.companyName| dotLimit:'17'}}</label>
+                      </div>
+
+                      <div *ngIf="(message.messageTypeId != 42 && message.messageTypeId != 1)"
+                        (click)="openMessageThreadDrawer(message)">
+                        <label> {{message.companyName| dotLimit:'17'}}</label>
+                      </div>
+                    </td>
+
+                    <td style="width: 15%"
+                      [ngClass]="(message.messageRead == true)?'rfqtd message-contact grayTr':'rfqtd message-contact'">
+
+                      <div *ngIf="(message.messageTypeId == 1)" (click)="goToRfqDetails(message.rfqId)">
+                        <label class="message-contact"> {{message.fromContName}}</label>
+                      </div>
+                      <div *ngIf="(message.messageTypeId == 42)" (click)="goToNdaApprove()">
+                        <label class="message-contact"> {{message.fromContName}}</label>
+                      </div>
+                      <div *ngIf="(message.messageTypeId != 42 && message.messageTypeId != 1)"
+                        (click)="openMessageThreadDrawer(message)">
+
+                        <label> {{message.fromContName}}</label>
+                      </div>
+
+                    </td>
+                    <td style="width: 40%"
+                      [ngClass]="(message.messageRead == true)?'message-subject grayTr':'message-subject'">
+
+                      <div *ngIf="(message.messageTypeId == 1)" (click)="goToRfqDetails(message.rfqId)">
+
+                        <label class="message-contact"><span ([innerHTML])="message.messageSubject"></span>-<span
+                            *ngIf="message.messageTypeId === 220 && message.quoteReferenceNumber !== '' && message.quoteReferenceNumber !== null && message.quoteReferenceNumber !== undefined">Quote
+                            Reference Number: {{message.quoteReferenceNumber}}
+                          </span><span>{{ removeHtmlTag(message.messageDescr) | dotLimit:'20' }}</span></label>
+                      </div>
+                      <div *ngIf="(message.messageTypeId == 42)" (click)="goToNdaApprove()">
+                        <label class="message-contact"><span [innerHTML]="message.messageSubject"></span>-<span
+                            *ngIf="message.messageTypeId === 220 && message.quoteReferenceNumber !== '' && message.quoteReferenceNumber !== null && message.quoteReferenceNumber !== undefined">Quote
+                            Reference Number: {{message.quoteReferenceNumber}}
+                          </span><span>{{ removeHtmlTag(message.messageDescr) | dotLimit:'20' }}</span></label>
+                      </div>
+                      <div *ngIf="(message.messageTypeId != 42 && message.messageTypeId != 1)"
+                        (click)="openMessageThreadDrawer(message)">
+                        <label class="message-contact"><span [innerHTML]="message.messageSubject"></span>-<span
+                            *ngIf="message.messageTypeId === 220 && message.quoteReferenceNumber !== '' && message.quoteReferenceNumber !== null && message.quoteReferenceNumber !== undefined">Quote
+                            Reference Number: {{message.quoteReferenceNumber}}
+                          </span><span>{{ removeHtmlTag(message.messageDescr) | dotLimit:'20' }}</span></label>
+                      </div>
+                    </td>
+                    <td style="width: 10%" style="cursor: pointer;"
+                      [ngClass]="(message.messageRead == true)?'message-date grayTr':'message-date'"
+                      (click)="openMessageThreadDrawer(message)">
+                      {{message.messageDate  | date: 'MMM-dd-yyyy'}}
+                    </td>
+                    <td style="width: 5%" [ngClass]="(message.messageRead == true)?'editdelete grayTr':'editdelete'"
+                      (click)="openSidePanel1($event, message.fromCont, message.rfqId, message.fromContName, message.messageId)">
+                      <i class="fa fa-envelope iconpad" ngbTooltip="Message Manufacturer"></i>
+                    </td>
+                    <td style="width: 5%" [ngClass]="(message.messageRead == true)?'editdelete grayTr':'editdelete'"
+                      (click)="deleteMessage(message)">
+                      <i class="fa fa-trash iconpad" ngbTooltip="Archive Message"></i></td>
+                    <td style="width: 5%" 
+                      [ngClass]="(message.messageRead == true)?'editdelete grayTr lastTd':'editdelete lastTd'"
+                      (click)="toggleMessageThreadDiv(i)">
+                      <i class="fa fa-chevron-down" aria-hidden="true" *ngIf="selectedDivIndex !== i"></i><i
+                        class="fa fa-chevron-up" aria-hidden="true" *ngIf="selectedDivIndex === i"></i>
+                    </td>
+                    <!-- <td style="width: 5%" *ngIf="message.isMessageThread == false"
+                      [ngClass]="(message.messageRead == true)?'editdelete grayTr lastTd':'editdelete lastTd'">
+                      <i class="fa fa-chevron-down iconDisabled" aria-hidden="true"></i>
+                    </td> -->
+                  </tr>
+                </table>
+                <div style="width: 98%;padding-left:25px;" *ngIf="selectedDivIndex===i">
+                  <app-message-threads [message]="message" (changeToReply)="openMessageThreadDrawer($event)">
+                  </app-message-threads>
+                </div>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div *ngIf="(items.length === 0 )">
+    <div class="row" style="text-align: center;padding-top:60px">
+      <div class="col-md-12">
+        <div>
+          <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+          assets/rfq/no-rfq@3x.png 3x" class="Group">
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-top:34px">
+      <div class="col-md-12">
+        <div class="You-dont-have-any-R">You don't have any Messages from Manufacturers in the marketplace</div>
+      </div>
+    </div>
+    <div class="row" style="padding-top:10px">
+      <div class="col-md-12">
+        <div class="Please-create-an-RFQ">Press Create an RFQ to get quotes from manufacturers on any of your parts.
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12" style="text-align:center">
+        <button type="submit" 
+        (click)="moveToCreatRfq()"
+         class="btn Save-Rfq-button-active">
+          <span class="button-lbl pointerCursor"> Create an RFQ </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="isLoader">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div>
+<p-confirmDialog header="Confirmation" icon=""  [style]="{width: '630px'}" #msgDlt>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-ignore-rfq btn-width" (click)="msgDlt.reject()">Cancel</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-cancel-rfq btn-width" label="Yes" (click)="msgDlt.accept()"> Archive Message</button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>

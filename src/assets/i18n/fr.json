@@ -1,0 +1,11 @@
+{
+  "Title": "शुभ प्रभात",
+  "CreateAccount": "खाते तयार करा",
+  "RememberMe":"माझी आठवण ठेवा",
+  "Startpage": {
+      "TranslationSections": "Bonjour Monde"
+  },
+  "Aboutpage": {
+      "TranslationSections": "Nous sommes letsboot"
+  }
+}

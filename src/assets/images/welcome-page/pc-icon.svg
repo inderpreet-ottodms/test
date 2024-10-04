@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="211px" height="129px" viewBox="0 0 211 129" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>FA7E7867-1473-4737-A7E8-26E5114FFE80</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <linearGradient x1="98.5015889%" y1="50%" x2="0%" y2="50%" id="linearGradient-1">
+            <stop stop-color="#4A90E2" offset="0%"></stop>
+            <stop stop-color="#00447C" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Dashboard---Initial---NEW-Buyer" transform="translate(-424.000000, -277.000000)">
+            <g id="Group-10" transform="translate(424.000000, 277.000000)">
+                <ellipse id="Oval-2" fill-opacity="0.203011775" fill="#00447C" cx="105.5" cy="117.096628" rx="105.5" ry="11"></ellipse>
+                <path d="M18,100 L18,111 C18,114.313708 20.6862915,117 24,117 L188,117 C191.313708,117 194,114.313708 194,111 L194,100 L18,100 Z" id="Rectangle-10" stroke="#00447C" stroke-width="2" fill="#F6F7FB"></path>
+                <path d="M192.425856,112 C191.173175,114.729358 188.416165,116.624844 185.216441,116.624844 L24.4053058,116.624844 C21.7740231,116.624844 19.4421279,115.343013 18,113.369733 L18,112 L192.425856,112 Z" id="Combined-Shape" fill-opacity="0.0997225996" fill="#00447C"></path>
+                <path d="M83.8001616,100.54224 C84.0488838,102.792215 85.9564204,104.54224 88.2726972,104.54224 L120.272697,104.54224 C122.588974,104.54224 124.496511,102.792215 124.745233,100.54224 L83.8001616,100.54224 Z" id="Rectangle-11" stroke="#00447C"></path>
+                <path d="M27,99 L185,99 L185,10 C185,5.02943725 180.970563,1 176,1 L36,1 C31.0294373,1 27,5.02943725 27,10 L27,99 Z" id="Rectangle-13" stroke="#00447C" stroke-width="2" fill="#F6F7FB"></path>
+                <path d="M33.5,98.5 L178.5,98.5 L178.5,13 C178.5,9.41014913 175.589851,6.5 172,6.5 L40,6.5 C36.4101491,6.5 33.5,9.41014913 33.5,13 L33.5,98.5 Z" id="Rectangle-13-Copy" stroke="#00447C" fill="#4A90E2"></path>
+                <rect id="Rectangle-15" stroke="#00447C" fill="#F6F7FB" x="46.5" y="18.5" width="119" height="69.2699966" rx="1"></rect>
+                <circle id="Oval-6" stroke="#BEC4CB" cx="95" cy="57" r="21"></circle>
+                <circle id="Oval-6-Copy" stroke="#BEC4CB" cx="95" cy="57" r="13"></circle>
+                <path d="M95,35 L95,80.0444225" id="Line-3" stroke="#BEC4CB" stroke-width="2" stroke-linecap="square"></path>
+                <g id="Group-12" transform="translate(95.000000, 57.000000) rotate(-45.000000) translate(-95.000000, -57.000000) translate(93.000000, 37.000000)">
+                    <path d="M2,3 L2,37" id="Line-3-Copy" stroke="#BEC4CB" stroke-linecap="square"></path>
+                    <polygon id="Triangle-3" fill="#BEC4CB" points="2 0 4 4 0 4"></polygon>
+                    <polygon id="Triangle-3-Copy" fill="#BEC4CB" points="2 40 0 36 4 36"></polygon>
+                </g>
+                <g id="Group-11" transform="translate(95.000000, 57.000000) rotate(-315.000000) translate(-95.000000, -57.000000) translate(93.000000, 45.000000)">
+                    <path d="M1.92893219,2.22287334 L1.92893219,21.9000069" id="Line-3-Copy" stroke="#BEC4CB" stroke-linecap="square"></path>
+                    <polygon id="Triangle-3" fill="#BEC4CB" points="2 0 4 1.78883032 0 1.78883032"></polygon>
+                    <polygon id="Triangle-3-Copy" fill="#BEC4CB" points="2 23.2547942 0 21.4659639 4 21.4659639"></polygon>
+                </g>
+                <rect id="Rectangle-16-Copy" fill="#FFFFFF" x="47" y="25.7300034" width="18" height="61"></rect>
+                <rect id="Rectangle-7" fill="#BEC4CB" x="50" y="29" width="11" height="2"></rect>
+                <rect id="Rectangle-7-Copy-6" fill="#BEC4CB" x="124" y="36" width="11" height="2"></rect>
+                <rect id="Rectangle-7-Copy-8" fill="#BEC4CB" x="124" y="42" width="34" height="2"></rect>
+                <rect id="Rectangle-7-Copy-13" fill="#BEC4CB" x="124" y="67" width="34" height="2"></rect>
+                <rect id="Rectangle-7-Copy-9" fill="#BEC4CB" x="124" y="46" width="34" height="2"></rect>
+                <rect id="Rectangle-7-Copy-14" fill="#BEC4CB" x="124" y="71" width="34" height="2"></rect>
+                <rect id="Rectangle-7-Copy-15" fill="#81DB6D" x="124" y="76" width="34" height="5"></rect>
+                <rect id="Rectangle-7-Copy-10" fill="#BEC4CB" x="124" y="50" width="34" height="2"></rect>
+                <rect id="Rectangle-7-Copy-11" fill="#BEC4CB" x="124" y="54" width="34" height="2"></rect>
+                <rect id="Rectangle-7-Copy-12" fill="#BEC4CB" x="124" y="58" width="19" height="2"></rect>
+                <rect id="Rectangle-7-Copy-7" fill="#BEC4CB" x="138" y="36" width="11" height="2"></rect>
+                <rect id="Rectangle-7-Copy-5" fill="#81DB6D" x="47" y="28" width="1" height="4"></rect>
+                <rect id="Rectangle-7-Copy" fill="#BEC4CB" x="50" y="33" width="11" height="2"></rect>
+                <rect id="Rectangle-7-Copy-2" fill="#BEC4CB" x="50" y="37" width="11" height="2"></rect>
+                <rect id="Rectangle-7-Copy-3" fill="#BEC4CB" x="50" y="41" width="11" height="2"></rect>
+                <rect id="Rectangle-7-Copy-4" fill="#BEC4CB" x="50" y="45" width="11" height="2"></rect>
+                <rect id="Rectangle-16" fill="url(#linearGradient-1)" x="47" y="19" width="118" height="7"></rect>
+                <polygon id="Rectangle-14" fill-opacity="0.329999983" fill="#FFFFFF" points="135.774709 6.97563612 152.649709 6.97563612 103.712209 97.9756361 86.8372093 97.9756361"></polygon>
+                <polygon id="Rectangle-14-Copy" fill-opacity="0.329999983" fill="#FFFFFF" points="157.712209 6.97563612 167.837209 6.97563612 118.899709 97.9756361 108.774709 97.9756361"></polygon>
+                <ellipse id="Oval" stroke="#FFFFFF" cx="53" cy="22.5" rx="2" ry="1.5"></ellipse>
+                <polygon id="Path-2" fill="#81DB6D" points="51 20 53 20 53 22"></polygon>
+                <polygon id="Path-3" fill="#81DB6D" points="56 25 53 25 53 22"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

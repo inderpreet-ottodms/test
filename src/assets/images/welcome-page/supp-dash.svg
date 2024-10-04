@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="211" height="129" viewBox="0 0 211 129">
+    <defs>
+        <linearGradient id="a" x1="98.502%" x2="0%" y1="50%" y2="50%">
+            <stop offset="0%" stop-color="#4A90E2"/>
+            <stop offset="100%" stop-color="#00447C"/>
+        </linearGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <ellipse cx="105.5" cy="117.097" fill="#00447C" fill-opacity=".203" rx="105.5" ry="11"/>
+        <path fill="#F6F7FB" stroke="#00447C" stroke-width="2" d="M18 100v11a6 6 0 0 0 6 6h164a6 6 0 0 0 6-6v-11H18z"/>
+        <path fill="#00447C" fill-opacity=".1" d="M192.426 112a7.93 7.93 0 0 1-7.21 4.625H24.406A7.917 7.917 0 0 1 18 113.37V112h174.426z"/>
+        <path stroke="#00447C" d="M83.8 100.542a4.5 4.5 0 0 0 4.473 4h32a4.5 4.5 0 0 0 4.472-4H83.8z"/>
+        <path fill="#F6F7FB" stroke="#00447C" stroke-width="2" d="M27 99h158V10a9 9 0 0 0-9-9H36a9 9 0 0 0-9 9v89z"/>
+        <path fill="#4A90E2" stroke="#00447C" d="M33.5 98.5h145V13a6.5 6.5 0 0 0-6.5-6.5H40a6.5 6.5 0 0 0-6.5 6.5v85.5z"/>
+        <path fill="#F6F7FB" stroke="#00447C" d="M47 18.5a.5.5 0 0 0-.5.5v68.27a.5.5 0 0 0 .5.5h118a.5.5 0 0 0 .5-.5V19a.5.5 0 0 0-.5-.5H47z"/>
+        <text fill="#222" font-family="Poppins-Bold, Poppins" font-size="6" font-weight="bold">
+            <tspan x="73.413" y="34">RFQs</tspan>
+        </text>
+        <path fill="#FFF" d="M47 25.73h18v61H47z"/>
+        <path fill="#BEC4CB" d="M50 29h11v2H50zM74 44h82v2H74zM74 61h82v2H74z"/>
+        <circle cx="90" cy="45" r="4" fill="#81DB6D"/>
+        <circle cx="140" cy="62" r="4" fill="#81DB6D"/>
+        <path fill="#BEC4CB" d="M74 78h82v2H74z"/>
+        <circle cx="115" cy="79" r="4" fill="#81DB6D"/>
+        <path fill="#BEC4CB" d="M74 37h18v2H74zM74 54h18v2H74zM74 70.946h18v2H74z"/>
+        <path fill="#81DB6D" d="M47 28h1v4h-1z"/>
+        <path fill="#BEC4CB" d="M50 33h11v2H50zM50 37h11v2H50zM50 41h11v2H50zM50 45h11v2H50z"/>
+        <path fill="url(#a)" d="M47 19h118v7H47z"/>
+        <path fill="#FFF" fill-opacity=".33" d="M135.775 6.976h16.875l-48.938 91H86.837zM157.712 6.976h10.125l-48.937 91h-10.125z"/>
+        <ellipse cx="53" cy="22.5" stroke="#FFF" rx="2" ry="1.5"/>
+        <path fill="#81DB6D" d="M51 20h2v2zM56 25h-3v-3z"/>
+    </g>
+</svg>

@@ -1,0 +1,54 @@
+<ng-template #regionModel let-d="dismiss" data-backdrop="static" data-keyboard="false">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Select which region to award your parts</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('notNow');closeModel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-left">
+    <!-- <div class="row">
+      <div class="col-md-12 text-center"  style="display: flex; justify-content: center;flex-wrap: wrap;">
+        <div *ngFor="let location of iTerritoryClassificationModel;">
+          <button [class.active]="locationId === location.territoryClassificationId" class="btn-location m-b-5" (click)="getRfqList(location.rfqId,location.territoryClassificationId)"> {{location.territoryName}}</button>
+        </div>
+        
+      </div>
+    </div> -->
+    <div   class="loading"  *ngIf="isLoader">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+    <div class="p-10" *ngIf="!isLoader">
+      <div style="display: flex;justify-content: center;flex-wrap: wrap;">
+        <div *ngFor="let rfq of rfqList;" style="margin-bottom: 10px;">
+
+        
+        <div class="region-card" [class.activeRfq]="selectedRfqId === rfq.rfqId"  (click)="selectedRfqId = rfq.rfqId">
+          <p style="min-height: 75px;margin-bottom: 0px;">
+            <span class="f-14 " style="color: #4a90e2;"  ngbTooltip="{{rfq.rfqName}}">{{rfq.rfqName | dotLimit:'15 '}}</span><br />
+            <span class="f-12" style="color: #919aa3">RFQ #{{rfq.rfqId}}</span><br />
+            <span class="f-12" style="color: #919aa3;">{{rfq.rfqPreferredLocation}}</span>
+          </p> 
+          <p>
+            <span class="f-12" style="color: #262626;">{{rfq.process}}</span><br />
+            <span class="f-12" style="color: #262626;">{{rfq.quotesCount}} Quotes</span>
+          </p>
+          <button class="award-btn">{{rfq.rfqPreferredLocation}}</button>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer text-center" style="justify-content: center; ">
+    <button type="button" class="btn btn-cancel"  style="width: 50%;" (click)="closeModel()">Cancel</button>
+    <button type="button" class="btn btn-save" style="width: 50%;" [disabled]="!selectedRfqId" (click)="redirectToRfqQuote()">Award Now</button>
+  </div>
+</ng-template>

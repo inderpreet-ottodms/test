@@ -1,0 +1,228 @@
+<div class="" style="padding: 10px;" *ngIf="!isBuyerCommpleteProfile()">
+  <div class="row">
+    <div class="col-md-12">
+      <div>
+        <div class="row content-title-container">
+          <div class="col-md-5 content-title">Open RFQs
+            <span *ngIf="rfqIds!=null" class="rfq-counts">
+              ({{_totalRecords}})
+              <!-- ({{rfqIds.length}}) -->
+            </span>
+          </div>
+        </div>
+<div class="row">
+        <div class="content-container" [ngClass]="isSidePanel()?'col-md-8':'col-md-12'">
+        <!-- <div [ngClass]="!showingRFQDetails
+                        ? 'col-sm-12 col-lg-12 col-md-12 content-container'
+                        : 'col-sm-8 col-lg-8 col-md-8 content-container'"> -->
+            <app-buyer-summary [buyerId] = "this.buyerID" [supplierId]="this.supplierId"  ></app-buyer-summary>
+            <!-- <div class="row col-lg-12 col-md-12 col-sm-12" style="border: solid 1px red; margin: 0px auto; text-align: end;">
+                <i class="ti-layout-grid2 listiew-options active"></i>
+                <i class="ti-list listiew-options"></i>
+            </div> -->
+            <br>
+            <div class="col-sm-12 col-lg-12 col-md-12 filter-container">
+                <div ngclass="col-md-3 col-sm-3" style="width: 25%;">
+                    <select class="filter" [(ngModel)]="sortingValue" (change)="setDeaultFilters()" >
+                        <option value="">Sort By</option>
+                        <!-- <option value="1">Company Name</option>
+                            <option value="2">RFQ Name</option> -->
+                        <option value="quantity">Quantity</option>
+                        <option value="material">Material</option>
+                        <option value="process">Process</option>
+                        <option value="postprocess">Post Process</option>
+                        <option value="quoteby">Close Date</option>
+                      </select>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <select class="filter" [(ngModel)]="sortingOrder" (change)="getFilterData()" >
+                      <!-- <option *ngIf="sortByFilterValue == ''" value=""> Filter</option> -->
+                      <option *ngIf="sortingValue == 'quantity'" value="High">High</option>
+                      <option *ngIf="sortingValue == 'quantity'" value="Low">Low</option>
+                      <option *ngIf="sortingValue == 'material' ||
+                                     sortingValue == 'process' ||
+                                     sortingValue == 'postprocess'"
+                              value="A - Z">A - Z</option>
+                      <option *ngIf="sortingValue == 'material' ||
+                                     sortingValue == 'process' ||
+                                     sortingValue == 'postprocess'"
+                              value="Z - A">Z - A</option>
+                      <option *ngIf="sortingValue=='quoteby' || sortingValue==''"
+                              value="Oldest">Oldest</option>
+                      <option *ngIf="sortingValue=='quoteby' || sortingValue==''"
+                              value="Recent">Recent</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <input type="text" readonly="readonly" class="form-control" data-bs-toggle="modal"
+                        [(ngModel)] = "filterProcesses" placeholder="Select Processes"
+                    data-bs-target="#myModal" (click)='getProcesses()'/>
+                </div>
+                <div class="col-md-3 col-sm-3 pull-right">
+                  <div class="input-container">
+                    <i class="fa fa-search icon-search cursor-pointer" placement="top" container="body" ngbTooltip="Search"
+                        (click)="getFilterData()"></i>
+                    <input class="search search-text" placeholder="Search" type="text" [(ngModel)]="searchText" (keypress)="searchByKey($event)" />
+                    <i class="fa fa-times-circle icon cursor-pointer"  placement="top" container="body" ngbTooltip="Remove Text"
+                        (click)="searchText=''; getFilterData()"></i>
+                  </div>
+                </div>
+            </div>
+
+
+
+            <div class="myRFQ-rfq-no-available" *ngIf="rfqIds==null || rfqIds.length==0">
+                <div class="row" style="text-align: center;padding-top:106px">
+                  <div class="col-md-12">
+                    <div>
+                      <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+                      assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+                    </div>
+                  </div>
+                </div>
+                <div class="row" style="padding-top:34px">
+                  <div class="col-md-12">
+                    <div class="myRFQ-noRFQActive-helper-text"
+                          style="text-align: center; font-size: 17pt; font-weight: bold;">No RFQs found at this time.</div>
+                  </div>
+                </div>
+              </div>
+            <!-- <div class="col-md-10 ng-star-inserted"> -->
+              <div class="display:flex">
+                  <div [ngClass]="!isSidePanel()
+                                  ? 'col-sm-3 col-lg-3 col-md-3'
+                                  : 'col-sm-6 col-lg-6 col-md-6'"
+                        style="display: inline-block; margin-right:-5px;"
+                       *ngFor="let refqId of rfqIds" >
+                    <app-rfq-card [rfqID]="refqId.rfq_id" (selectedRFQ_OnChange)="receiveSelectedRFQID($event)" ></app-rfq-card>
+                  </div>
+              </div>
+
+              <div class="row col-lg-12 col-md-12 col-sm-12">
+                  <app-pagination class="col-lg-12 col-md-12 col-sm-12"
+                      style="padding: 0px; margin: 0px auto;"
+                      [(totalRecords)]="_totalRecords"
+                      (pageSize_Change)="pageSizeChange($event)"
+                      (page_Change)="pageChange($event)"
+                      *ngIf="_totalRecords!=null"></app-pagination>
+              </div>
+        </div>
+
+        <div class="col-md-4 sideDrawer Drawer-Shadow" *ngIf="isSidePanel()">
+          <div *ngIf="isRfqDrawer()">
+            <app-supplier-rfq-detail-sidepanel [rfqId]="rfqIDToShowDetail"></app-supplier-rfq-detail-sidepanel>
+          </div>
+          <div *ngIf="isBuyerMiniProfile()">
+            <app-mini-buyer-profile></app-mini-buyer-profile>
+          </div>
+          <div *ngIf="isMessageRfqPanel()">
+            <app-message-send-drawer></app-message-send-drawer>
+            </div>
+        </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+  <div class="row" style="bottom: 0px;width: 101%">
+      <div class="col-md-12" style="text-align:-webkit-right;padding:0px">
+        <div class="Site-Background-Copy" >
+          <!-- <p class="Copyright-2018-MFG">Copyright © 2018 MFG.com, Inc. All Rights Reserved.</p> -->
+        </div>
+      </div>
+    </div>
+</div>
+
+
+<div class="row" *ngIf="isBuyerCommpleteProfile()">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-10">
+
+        </div>
+        <div class="col-md-2 floatRight">
+          <button type="button" class="btn btn-submit-rfq-close-1 RectangleYes-2-1" (click)="goBack()">Go Back to
+            RFQ</button>
+        </div>
+      </div>
+      <div>
+        <app-buyer-view-profile></app-buyer-view-profile>
+      </div>
+    </div>
+  </div>
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog custom-model modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-8 Select-the-processes">
+            Select the processes to include
+          </div>
+          <div class="col-md-3 Deselect-All" (click)="clearSelectedProcess()">
+            Deselect All
+          </div>
+          <div class="col-md-1">
+            <button type="button" class="close" aria-label="Close" style="margin-top:0px;" data-bs-dismiss="modal">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6" style="max-width: 45% !important; ">
+            <div class="Rectangle-indi manufac_scroll" style="padding:5px;">
+                <div *ngFor="let processInfo of masterProcesses | groupBy:'parentDisciplineName'">
+                    <ul>
+                        <!-- <li class="Main-Topic" (click)="includeAllProcess(processInfo.key)">{{processInfo.key}}</li>
+                        <li class="Subtopic-1-Subtopic"
+                            *ngFor="let child of getChildProcess(processInfo.key)"
+                            (click)="selectTheChildKey(child.childDisciplineId)">
+                          {{child.childDisciplineName}}
+                        </li> -->
+                        <li class="Main-Topic" (click)="includeAllProcess(processInfo.key)">{{processInfo.key}}</li>
+                        <li class="Subtopic-1-Subtopic"
+                            *ngFor="let child of getChildProcess(processInfo.key)"
+                            (click)="includeAllProcess(processInfo.key, child.childDisciplineId)">
+                          {{child.childDisciplineName}}
+                        </li>
+                      </ul>
+                </div>
+            </div>
+          </div>
+          <div class="col-md-1" style="padding-top: 97px">
+            <i class="fa fa-exchange" aria-hidden="true"></i>
+          </div>
+          <div class="col-md-5">
+
+            <div class="Rectangle-indi manufac_scroll" style="padding:5px">
+                <div *ngFor="let selectedProcessInfo of selectedProcesses">
+                    <ul>
+                        <li class="Main-Topic" (click)="removeAllChildProcess(selectedProcessInfo.key)">
+                            {{selectedProcessInfo.key}}
+                        </li>
+                        <li class="Subtopic-1-Subtopic"
+                            (click)="removeSelectedChildProcess(selectedChild.childDisciplineId)"
+                            *ngFor="let selectedChild of getSelelctedChildProcess(selectedProcessInfo.key)[0].value">
+                          {{selectedChild.childDisciplineName}}
+                        </li>
+                      </ul>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer footer-modal">
+        <button type="button" class="award-enable" data-bs-dismiss="modal" (click)="getFilterData()">Done </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div *ngIf="showingRFQDetails" class="col-md-4 rfq-sideDrawer"  >
+  <app-supplier-rfq-detail-sidepanel [rfqId]="rfqIDToShowDetail"
+    (drawer_OnClose)="closeRFQDrawerRequest($event)"></app-supplier-rfq-detail-sidepanel>
+</div> -->
+
+<div *ngIf="isModelShow()">
+    <app-rating-model></app-rating-model>
+    </div>

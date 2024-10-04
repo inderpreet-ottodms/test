@@ -1,0 +1,263 @@
+// @import url('https://fonts.googleapis.com/css?family=Poppins');
+
+.login-bg {
+  width: 100% !important;
+  height: 100% !important;
+  // background: -webkit-gradient(linear, left top, right top, from(#00447c), to(#4a90e2));
+	// background: linear-gradient(to right, #00447c, #4a90e2);
+}
+.login2 {
+  overflow-y: auto;
+}
+.container #login #login-row #login-column #login-box {
+  margin-top: 15px !important;
+  background-color: #fff !important;
+  border-radius: 5px !important;
+  box-shadow: 0 5px 10px 0 rgba(47, 47, 47, 0.65) !important;
+  margin-bottom: 120px !important;
+}
+.container #login #login-row #login-column #login-box #login-form #register-link {
+  margin-top: -85px !important;
+}
+.loginpage-logo {
+  text-align: center !important;
+  margin-top: 49px !important;
+}
+.loginregister {
+  padding: 5px 25px 5px 25px !important;
+}
+.loginregisterfooter {
+  width: 100%;
+  padding: 19px 2px 9px 2px !important;
+  text-align: center !important;
+  font-weight: bold !important;
+  background: #f6f7fb !important;
+  color: #919aa3 !important;
+  -webkit-border-bottom-left-radius: 5px !important;
+  -webkit-border-bottom-right-radius: 5px !important;
+  -moz-border-radius-bottomleft: 5px !important;
+  -moz-border-radius-bottomright: 5px !important;
+  border-bottom-left-radius: 5px !important;
+  border-bottom-right-radius: 5px !important;
+}
+.activelink {
+  color: #2E58D6 !important;
+  cursor: pointer;
+}
+.login-page-title {
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+.login-page-header {
+  font-family: Poppins !important;
+  font-size: 14px !important;
+  font-weight: bold !important;
+  font-style: normal !important;
+  font-stretch: normal !important;
+  line-height: 2.14 !important;
+  letter-spacing: normal !important;
+  text-align: center !important;
+  color: #222222 !important;
+}
+.login-page-subheader {
+  font-family: Poppins !important;
+  font-size: 14px !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  font-stretch: normal !important;
+  line-height: 2.14 !important;
+  letter-spacing: normal !important;
+  text-align: center !important;
+  color: #222222 !important;
+}
+.regBuyer-TCApply {
+  font-family: Poppins !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  font-style: normal !important;
+  font-stretch: normal !important;
+  line-height: normal !important;
+  letter-spacing: normal !important;
+  color: #919aa3 !important;
+}
+.input-group {
+  margin-bottom: 5.4em !important;
+  vertical-align: middle !important;
+  position: relative !important;
+  margin: 0px !important;
+  padding-top: 10px !important;
+  text-align: center !important;
+  color: red !important;
+  input[type="text"],
+  input[type="password"],
+  input[type="email"] {
+    margin-bottom: 25px !important;
+  }
+}
+.background-white-login {
+  background: #fff !important;
+  padding: 19px 1px 1px 1px !important;
+  border-radius: 5px !important;
+  margin-bottom: 19px !important;
+  border-radius: 5px !important;
+  box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5) !important;
+}
+.tabbable-line-login>.nav-tabs {
+  border: none !important;
+  margin: 0px !important;
+}
+.tabbable-line-login>.nav-tabs>li {
+  margin-right: 2px !important;
+}
+.tabbable-line-login>.nav-tabs>li>a {
+  border: 0 !important;
+  margin-right: 0 !important;
+  color: #737373 !important;
+  font-size: 16px !important;
+  text-align: center !important;
+  color: #bec4cb !important;
+  text-transform: uppercase !important;
+  padding: 5px 38px 16px 38px !important;
+  font-weight: bold !important;
+}
+.tabbable-line-login>.nav-tabs>li>a>i {
+  color: #a6a6a6 !important;
+}
+.tabbable-line-login>.nav-tabs>li.open,
+.tabbable-line-login>.nav-tabs>li:hover {
+  border-bottom: 4px solid #bbd5f3 !important;
+}
+.tabbable-line-login>.nav-tabs>li.open>a,
+.tabbable-line-login>.nav-tabs>li:hover>a {
+  border: 0 !important;
+  background: none !important;
+  color: #d86262 !important;
+}
+.tabbable-line-login>.nav-tabs>li.open>a>i,
+.tabbable-line-login>.nav-tabs>li:hover>a>i {
+  color: #a6a6a6 !important;
+}
+.tabbable-line-login>.nav-tabs>li.open .dropdown-menu,
+.tabbable-line-login>.nav-tabs>li:hover .dropdown-menu {
+  margin-top: 0px !important;
+}
+.tabbable-line-login>.nav-tabs>li.active {
+  border-bottom: 4px solid #2E58D6 !important;
+  position: relative !important;
+}
+.tabbable-line-login>.nav-tabs>li.active>a {
+  border: 0 !important;
+  color: #222 !important;
+}
+.tabbable-line-login>.nav-tabs>li.active>a>i {
+  color: #404040 !important;
+}
+.tabbable-line-login>.tab-content {
+  margin-top: -3px !important;
+  background-color: #fff !important;
+  border: 0 !important;
+  border-top: 1px solid #eee !important;
+  padding: 15px 0 !important;
+}
+.tabbable-line-login>.tab-content-login {
+  margin-top: -3px !important;
+  background-color: #fff !important;
+  border: 0 !important;
+  border-top: 1px solid #eee !important;
+  padding: 1px 0 !important;
+}
+#login-box-login {
+  margin-top: 15px !important;
+  background-color: #fff !important;
+  border-radius: 5px !important;
+  box-shadow: 0 5px 10px 0 rgba(47, 47, 47, 0.65) !important;
+  margin-bottom: 30px !important;
+}
+.login-tabs a {
+  padding-left: 108px !important;
+  padding-right: 108px !important;
+}
+@media screen and (max-width: 1199px) {
+  .login-tabs a {
+    padding-left: 83px !important;
+    padding-right: 83px !important;
+  }
+}
+@media screen and (max-width: 991px) {
+  .login-tabs a {
+    padding-left: 149px !important;
+    padding-right: 149px !important;
+  }
+}
+@media screen and (max-width: 747px) {
+  .login-tabs a {
+    padding-left: 148px !important;
+    padding-right: 148px !important;
+  }
+}
+@media screen and (max-width: 320px) {
+  .login-tabs a {
+    padding-left: 148px !important;
+    padding-right: 148px !important;
+  }
+}
+.parent50 {
+  width: 95%;
+  text-align: center;
+  padding-bottom: 15px;
+}
+.align-li {
+  margin-left: 15px;
+}
+.login-btn{
+  background-color: #2E58D6 !important;
+  color: white !important;
+}
+.login-btn:disabled{
+  background-color: #bec4cb !important;
+  color: white !important;
+  cursor: default !important;
+}
+.help-block{
+  color:#da2020 ;
+  font-size:12px;
+}
+.has-error input[type='text'], .has-error input[type='password']{
+  border: 1px solid #da2020 !important;
+}
+.buyer-btn{
+  background-color: #8cc63f !important;
+  color: white !important;
+  word-wrap: break-word!important;
+  white-space: break-spaces!important;
+}
+.supplier-btn{
+  background-color: #2E58D6 !important;
+  color: white !important;
+  word-wrap: break-word!important;
+  white-space: break-spaces!important;
+}
+.btn-linkedin{
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 1px solid #212A37 !important;
+  border-radius: 4px !important;
+  font-weight: 600;
+}
+.fa-linkedin{
+  background-color: #000;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 20px;
+  padding: 5px;
+  margin-right: 10px;
+}
+.register_here {
+  color: #2E58D6!important;
+  font-size: 16px;
+}
+.eye-icon{
+  position: absolute;
+  right: 13px;
+  top: 118px;
+}

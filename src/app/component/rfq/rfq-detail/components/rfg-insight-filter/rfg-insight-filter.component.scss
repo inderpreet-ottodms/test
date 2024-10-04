@@ -1,0 +1,29 @@
+.lead-box {
+  text-align: center;
+  padding: 5px;
+  background-color: #f6f7fb;
+  border-radius: 5px;
+  border: 1px solid #bec4cb;
+  /* margin-left: 20px; */
+  width: 80px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.lead-box h5 {
+  color: #2E58D6
+}
+.lead-box span {
+  color: #222222;
+  font-size: 13px;
+}
+.lead-box.active,
+.lead-box.active h5,
+.lead-box.active span {
+  background-color: #2E58D6 !important;
+  color: #fff !important;
+}
+
+.no-available~.lead-box {
+  color: #919aa3;
+  background-color: #f6f7fb !important;
+}

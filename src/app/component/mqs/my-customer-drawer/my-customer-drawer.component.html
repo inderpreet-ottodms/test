@@ -1,0 +1,56 @@
+<div >
+    <div *ngIf="isLoader">
+        <div class="loader animation-start">
+          <span class="circle delay-1 size-2"></span>
+          <span class="circle delay-2 size-4"></span>
+          <span class="circle delay-3 size-6"></span>
+          <span class="circle delay-4 size-7"></span>
+          <span class="circle delay-5 size-7"></span>
+          <span class="circle delay-6 size-6"></span>
+          <span class="circle delay-7 size-4"></span>
+          <span class="circle delay-8 size-2"></span>
+        </div>
+      </div>
+      <div class="row" *ngIf="!isLoader" style="padding-left: 10px">
+          <div class="col-md-12" style="padding-top: 20px">
+            <i class="fa fa-times-circle pull-right " style="color:#4a90e2 " (click)="closeCompanyDrawer()"></i>
+            <!-- <img  class="Close-3 pull-right" src="assets/rfq/close-3.svg" (click)="closeBuyerProfileDrawer()"> -->
+            <div class="mainheading">{{iContactModel.firstName}} {{iContactModel.lastName}}
+            </div>
+            <hr>
+          </div>
+
+
+          <div class="col-md-12" style="padding-top: 10px">
+            <b>Customer ID</b>
+            <p>{{iContactModel.qmsContactId}}</p>
+            <b>Company Name</b>
+            <p>{{iContactModel.company}}</p>
+            <hr>
+            </div>
+
+
+            <div class="col-md-12" style="padding-top: 10px">
+
+                <p>
+                  <span><i class="fa fa-envelope-o" style="color:#4a90e2"  aria-hidden="true"></i></span>
+                  {{iContactModel.email}}
+                </p>
+                <p>
+                  <span>
+                      <i class="fa fa-phone" style="color:#4a90e2"  aria-hidden="true"></i>
+                  </span>
+                  {{iContactModel.phone}}</p>
+                <hr>
+                </div>
+
+                <div class="col-md-12" style="padding-top: 10px">
+                    <b>Address</b><br><br>
+                    <p> <b>Street Address: </b> {{iContactModel.address | Na}} </p>
+                    <p> <b>City: </b>{{iContactModel.city | Na}}</p>
+                    <p> <b>State: </b>  {{iContactModel.stateName | Na}}</p>
+                    <p><b>Zipcode: </b>  {{iContactModel.zipCode | Na}}</p>
+                    <p> <b>Country: </b> {{iContactModel.countryName | Na}}</p>
+                </div>
+
+</div>

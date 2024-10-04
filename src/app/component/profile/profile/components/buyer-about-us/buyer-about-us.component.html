@@ -1,0 +1,663 @@
+<div class="row mx-1">
+    {{ reloadPageOndrawerClose() }}
+    <div class="background-white" [ngClass]="isSidePanelOpen() ? 'col-md-12' : 'col-md-8'">
+      <div *ngIf="!isSidePanelOpen()">
+        <div class="row cust-padding">
+          <div class="col-md-6 bottom-border">
+            <span><h2 class="innerpanelheading">About</h2></span>
+          </div>
+          <div class="col-md-6 bottom-border">
+            <button type="button" [ngClass]="iAboutUsModel.description == '' ? 'profile_btn profile_editbtn' : 'profile_btn profile_editbtn'" (click)="openSidePanel('companyDescription');">
+              {{ iAboutUsModel.description == '' ? 'Edit' : 'Edit' }}
+            </button>
+          </div>
+        </div>
+        <div class="row map-row-padding">
+          <div class="col-md-8 map-padding">
+            <div id="map-canvas" style="width: 100% !important; height: 240px; margin-top: 20px;">    
+              <app-bing-map-viewer [(locationAddress)]="mapSource"></app-bing-map-viewer>
+            </div>
+          </div>
+          <div class="col-md-4 mailing-bg-color">
+            <span><h2 class="innerpanelheading" style="padding-left: 15px;">Mailing Address</h2></span>
+            <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="isShowStateCity">
+              {{iContactViewModel.address.city | Na}} , {{iContactViewModel.address.state | Na}}
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isShowStateCity"
+            [innerHTML]="getAddressFormat( iContactViewModel.address )">
+            </div>
+            <!-- <div style="white-space: initial;visibility: hidden;" [innerHTML]="getAddressFormat( iContactViewModel.address )" ></div> -->
+          </div>
+        </div>
+          <div class="row cust-padding">
+            <div>
+              <span>
+                <h2 class="innerpanelheading">Company Description</h2>
+              </span>
+            </div>
+          </div>
+          <div [ngClass]="{'limitTextHeight1': isReadMore}" class="descP padding-zero" *ngIf="iAboutUsModel.description !== ''">
+            <p class="description-wraper" [innerHTML]="iAboutUsModel.description | sanitizeNolimit"></p>
+          </div>
+          <div class="descP padding-zero" *ngIf="iAboutUsModel.description === ''">
+            <p class="description-wraper">Company Description</p>
+          </div>
+          <span class="title-green" (click)="showText()">
+            {{ isReadMore ? '+Read More': '-Read Less' }}
+          </span>
+        <!-- <div class="row cust-padding">
+          <div class="col-md-4 bottom-border">
+            <h2 class="innerpanelheading">Equipment </h2>
+          </div>
+          <div class="col-md-8 bottom-border text-right">
+            <i
+              class="fa fa-pencil-square-o edit-icon"
+              aria-hidden="true"
+              (click)="openSidePanel('companyEquipment')"
+            ></i>
+          </div>
+        </div> -->
+        <!-- <div class="row">
+          <div class="col-md-12" *ngIf="iAboutUsModel?.equipments?.length !== 0">
+            <ul
+              class="equipment-list"
+              *ngFor="let item of iAboutUsModel.equipments"
+            >
+              <li class="text-truncate" [title]="item.equipmentText">{{ item.equipmentText|Na }}</li>
+            </ul>
+          </div>
+          <div class="col-md-12" *ngIf="iAboutUsModel?.equipments.length === 0">
+            <p>No equipment added at this time.</p>
+          </div>
+        </div> -->
+        <div class="row cust-padding">
+          <div>
+            <h2 class="innerpanelheading">Photos</h2>
+          </div>
+          <!-- <div class="col-md-8 bottom-border text-right">
+            <i
+              class="fa fa-pencil-square-o edit-icon"
+              aria-hidden="true"
+              (click)="openSidePanel('companyPhotos')"
+            ></i>
+          </div> -->
+        </div>
+        <div>
+          <!--
+            <iframe width="420" height="315"
+            src="https://www.youtube.com/embed/tgbNymZ7vqY">
+
+            </iframe>
+          -->
+          <!--
+            <video width="320" height="240" controls>
+              <source src="https://s3.us-east-2.amazonaws.com/mfg.mp2020/2018-07-30+18.00+MFG+Sprint+Planning+Meeting+Every+other+Monday+8_30+to+10+AM+EST.mp4" type="video/mp4">
+
+              <source src="https://s3.us-east-2.amazonaws.com/mfg.mp2020/2018-07-30+18.00+MFG+Sprint+Planning+Meeting+Every+other+Monday+8_30+to+10+AM+EST.mp4" type="video/ogg">
+
+            Your browser does not support the video tag.
+
+            </video>
+          -->
+        </div>
+        <!-- <div class="row">
+            <div class="col-md-12">
+                <button type="button" [ngClass]="iAboutUsModel?.specialFiles?.length === 0 ? 'profile_btn' : 'profile_btn profile_editbtn'" (click)="openSidePanel('companyPhotos')">
+                    {{ iAboutUsModel?.specialFiles?.length === 0 ? 'Add Photos' : 'Edit Photos' }}
+                </button>
+            </div>
+          </div> -->
+        <div [ngClass]="{'limitTextHeight': isLoadMore}" class="row" *ngIf="!(iAboutUsModel?.specialFiles?.length === 0)" style="max-height:500px;">
+          <div class="col-md-2 thumb" *ngFor="let item of photoArray">
+            <!-- <div class="fluidratio" [ngStyle]="{'background-image': 'url(' + item.fileName + ')'}" ></div> -->
+            <a class="thumbnail" href="#" data-image-id="" (click)="openPhoto(item.fileName)" data-bs-toggle="modal" data-title="" data-image="item.fileName" data-bs-target="#image-gallery">
+              <img class="img-thumbnail" [src]="item.fileName" alt="Another alt text"/>
+              <div class="middle">
+                <i class="fa fa-arrows fa-3x" aria-hidden="true"></i>
+                <div>View Larger</div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <span class="title-green" (click)="loadPhotos()">
+           {{ isLoadMore ? '+Load More': '-Load Less' }}
+         </span>
+      </div>
+      <div *ngIf="isSidePanelOpen()">
+        <div class="row cust-padding">
+          <div class="col-md-6 bottom-border">
+            <h2 class="innerpanelheading">About</h2>
+          </div>
+          <div class="col-md-6 bottom-border" style="text-align: end;" >
+            <button type="button" [ngClass]="iAboutUsModel?.description == '' ? 'profile_btn' : 'profile_btn profile_editbtn'" (click)="openSidePanel('companyDescription');">
+                {{ iAboutUsModel?.description == '' ? 'Edit' : 'Edit' }}
+            </button>
+          </div>
+        </div>
+        <div class="row map-row-padding">
+          <div class="col-md-8 map-padding2">
+            <div id="map-canvas" style="width: 100% !important; height: 240px;">    
+              <app-bing-map-viewer [(locationAddress)]="mapSource" *ngIf="mapSource!=null"></app-bing-map-viewer>
+            </div>
+          </div>
+          <div class="col-md-4 mailing-bg-color">
+            <span><h2 class="innerpanelheading">Mailing Address</h2></span>
+            <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="isShowStateCity">
+              {{iContactViewModel.address.city | Na}} , {{iContactViewModel.address.state | Na}}
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isShowStateCity"
+            [innerHTML]="getAddressFormat( iContactViewModel.address )">
+            </div>
+            <!-- <div style="white-space: initial" [innerHTML]="getAddressFormat( iContactViewModel.address )" ></div> -->
+          </div>
+        </div>
+        <div class="row cust-padding">
+          <div>
+            <span>
+              <h2 class="innerpanelheading">Company Description</h2>
+            </span>
+          </div>
+          <div [ngClass]="{'limitTextHeight1': isReadMore}" class="col-md-12 descP padding-zero" *ngIf="iAboutUsModel.description !== ''">
+            <p class="description-wraper" [innerHTML]="iAboutUsModel.description | sanitizeNolimit"></p>
+          </div>
+          <div class="col-md-12 descP padding-zero" *ngIf="iAboutUsModel.description === ''">
+            <p class="description-wraper">Company Description</p>
+          </div>
+          <span class="title-green" (click)="showText()">
+            {{ isReadMore ? '+Read More': '-Read Less' }}
+           </span>
+        </div>
+         <!-- <div class="row cust-padding">
+          <div class="col-md-12 bottom-border">
+            <h2 class="innerpanelheading">Equipment</h2>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" [ngClass]="iAboutUsModel?.equipments?.length === 0 ? 'profile_btn' : 'profile_btn profile_editbtn'" (click)="openSidePanel('companyEquipment')">
+                    {{ iAboutUsModel?.equipments?.length === 0 ? 'Add Equipments' : 'Edit Equipments' }}
+                </button>
+              </div>
+          <div class="col-md-12" *ngIf="iAboutUsModel?.equipments?.length !== 0">
+            <ul
+              class="equipment-list"
+              *ngFor="let item of iAboutUsModel?.equipments"
+            >
+              <li class="text-truncate" [title]="item.equipmentText">{{ item.equipmentText |Na }}</li>
+            </ul>
+          </div>
+        </div> -->
+        <div class="row cust-padding">
+          <div class="col-md-12 bottom-border">
+            <h2 class="innerpanelheading">Photos</h2>
+          </div>
+          <!-- <div class="col-md-8 bottom-border text-right">
+            <i
+              class="fa fa-pencil-square-o edit-icon"
+              aria-hidden="true"
+              (click)="openSidePanel('companyPhotos')"
+            ></i>
+          </div> -->
+        </div>
+        <!-- <div class="row">
+            <div class="col-md-12">
+                <button type="button" [ngClass]="iAboutUsModel?.specialFiles.length === 0 ? 'profile_btn' : 'profile_btn profile_editbtn'" (click)="openSidePanel('companyPhotos')">
+                    {{ iAboutUsModel?.specialFiles.length === 0 ? 'Add Photos' : 'Edit Photos' }}
+                </button>
+            </div>
+          </div> -->
+        <div [ngClass]="{'limitTextHeight': isLoadMore}" class="row" *ngIf="iAboutUsModel?.specialFiles.length !== 0">
+          <div
+            class="col-md-3 thumb"
+            *ngFor="let item of photoArray"
+          >
+            <a
+              class="thumbnail"
+              href="#"
+              data-image-id=""
+              (click)="openPhoto(item.fileName)"
+              data-bs-toggle="modal"
+              data-title=""
+              data-image="item.fileName"
+              data-bs-target="#image-gallery"
+            >
+              <img
+                class="img-thumbnail"
+                [src]="item.fileName"
+                alt="Another alt text"
+              />
+            </a>
+          </div>
+        </div>
+        <span class="title-green" (click)="loadPhotos()">
+          + {{ isLoadMore ? 'Load More': 'Load Less' }}
+         </span>
+      </div>
+      <div
+        class="modal fade"
+        id="image-gallery"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="myModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="image-gallery-title"></h4>
+              <button type="button" class="close" data-bs-dismiss="modal">
+                <span aria-hidden="true" style="color: #2E58D6;">×</span
+                ><span class="sr-only">Close</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <img
+                id="image-gallery-image"
+                class="img-responsive img-thumbnail-1 col-md-12 Bitmap"
+                [src]="currentPhoto"
+              />
+              <button style="background: none;
+              border: none; color: #2E58D6;
+    font-size: 34px;
+    cursor: pointer;"
+                class="carousel-control-prev slider"
+                *ngIf="checkForFirstImage()"
+                (click)="goToPrev()"
+              >
+                <i class="icofont icofont-rounded-left"></i>
+              </button>
+              <button style="background: none;
+            border: none; color: #2E58D6;
+  font-size: 34px;
+  cursor: pointer;"
+                class="carousel-control-next slider"
+                *ngIf="checkForLastImage()"
+                (click)="goToNext()"
+              >
+                <i class="icofont icofont-rounded-right"></i>
+              </button>
+            </div>
+            <div class="modal-footer">
+              <p>
+                <strong>{{currentPhotoTitle  }}</strong
+                ><br />{{ currentPhotoCaption }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+       
+        <div class="row margin-tp2" *ngIf="isSidePanelOpen()">
+          <div class="col-md-6">
+            <div class="row cust-padding">
+              <div class="col-md-6 bottom-border">
+                <h2 class="innerpanelheading">Demographics</h2>
+              </div>
+              <div class="col-md-6 bottom-border" style="padding: 0px;">
+                <button type="button" class="profile_btn profile_editbtn" (click)="openSidePanel('companyDemographics'); openDemographicsDetail(iAboutUsModel.companyId)">
+                    Edit
+                </button>
+              </div>
+            </div>
+            <div *ngIf="!isDemographics" class="descP">
+            <p class="p-t-10">
+              <strong>MFG.com Member Since:</strong><br />{{ iAboutUsModel.createdDate ? (iAboutUsModel.createdDate | date: "MM/dd/yy") : 'Member Since Date' }}
+            </p>
+            <!-- <p>
+              <strong>Company Type:</strong><br />
+              <label *ngIf="iAboutUsModel.supplierType !== null">{{ iAboutUsModel?.supplierType.supplierTypeNameEn | Na }}</label>
+            </p> -->
+            <!-- <p>
+              <strong># of Employees:</strong><br />{{ iAboutUsModel?.employeeCountRange |Na }}
+            </p> -->
+            <div class="m-t-10">
+            <strong>Languages:</strong><br />
+            <div *ngFor="let language of iAboutUsModel?.languages"> {{ language.languageName ? language.languageName : 'Language' }} </div>
+            </div>
+            <p class="description-wraper p-t-10"><strong>D-U-N-S Number:</strong><br /> {{ iAboutUsModel.dunsNumber ?  iAboutUsModel.dunsNumber : 'DUNS Number'}} </p>
+            <p class="description-wraper p-t-10"><strong>Cage Code:</strong><br />{{ iAboutUsModel?.cageCode ? iAboutUsModel?.cageCode : 'Cage Code' }}</p>
+            <br />
+          </div>
+          </div>
+          <div class="col-md-6"  *ngIf="isSidePanelOpen()">
+            <div class="row cust-padding">
+              <div class="col-md-6 bottom-border">
+                <h2 class="innerpanelheading">Contact</h2>
+              </div>
+              <div class="col-md-6 bottom-border" style="padding: 0px;">
+                <button type="button" class="profile_btn profile_editbtn" (click)="openSidePanel('isProfileEditActive',0)">
+                  Edit
+                </button>
+              </div>
+            </div>
+            <div class="contact-details">
+              <div><i class="fa fa-phone"></i> {{iContactViewModel.phoneNo ? iContactViewModel.phoneNo : 'Phone Number'}}</div> 
+              <div><i class="fa fa-envelope"></i>{{iContactViewModel.emailId ? iContactViewModel.emailId : 'Email Address' }}</div>
+              <div class="title-blue" (click)="websiteClick(iContactViewModel?.website)"><i class="fa fa-globe"></i>{{iContactViewModel.website ? iContactViewModel.website : 'Website' }}</div>
+              <div class="title-blue" (click)="websiteClick(iContactViewModel.facebook)"><i class="fa fa-facebook-square"></i>{{iContactViewModel.facebook ? iContactViewModel.facebook : '@facebook'}}</div>  
+              <div class="title-blue" (click)="websiteClick(iContactViewModel.tweeter)"><i class="fa fa-twitter-square"></i>{{iContactViewModel.tweeter ? iContactViewModel.tweeter : '@twitter'}}</div>  
+              <div class="title-blue" (click)="websiteClick(iContactViewModel.linkedIn)"><i class="fa fa-linkedin"></i>{{iContactViewModel.linkedIn ?  iContactViewModel.linkedIn : '@linkedin'}}</div>
+              <div class="title-blue m-b-10" (click)="websiteClick(iContactViewModel.instagram)"><i class="fa fa-instagram"></i>{{iContactViewModel.instagram ?  iContactViewModel.instagram : '@instagram'}}</div>
+            </div>
+          </div>
+          <div class="col-md-12" style="margin-top: -20px;" *ngIf="isSidePanelOpen()">
+            <div class="row cust-padding">
+              <div class="col-md-6 bottom-border">
+                <h2 class="innerpanelheading">Certifications</h2>
+              </div>
+            <div class="col-md-6 bottom-border" style="padding: 0px;text-align:end ;">
+                <button type="button" class="profile_btn" (click)="openSidePanel('companyCertifications')">
+                    Edit
+                </button>
+            </div>
+          </div>
+          </div>
+          <div class="col-md-12 padding-zero" *ngIf="certificateViewModelList.length !== 0">
+            <ul>
+              <li *ngFor="let certificate of certificateViewModelList">
+                <p>
+                  <strong class="title-blue pointerCursor" (click)="downloadS3File(certificate.fileName, true)"> {{ certificate.certificateCode ? certificate.certificateCode : 'Certification'}}</strong><br />
+                  {{ setProperDate(certificate.creationDate)  | date }}
+                  <span class="activeLink" (click)="removeCertificate(certificate)">Remove</span>
+                </p>
+              </li>
+            </ul>
+          </div>
+          <div  class="col-md-12 m-t-20 m-b-20" *ngIf="certificateViewModelList.length === 0">
+            <b>Certification</b>
+          </div>
+          <div class="col-md-12" *ngIf="isSidePanelOpen()"> 
+              <b>Price Award Pattern</b>
+              <hr><br>
+              <div class="row">
+                <div class="col-md-12">
+                  <!-- <fusioncharts [id]="id" [width]="width" [height]="height" [type]="type" [dataFormat]="dataFormat"
+                          [dataSource]="dataSource"></fusioncharts> -->
+                  <!-- <div class="line-chart">
+                            <canvas
+                              class="test"
+                              baseChart
+                              chartType="line"
+                              [data]="data"
+                              [labels]="doughnutChartLabels"
+                              [options]="chartOptions"
+                              [legend]="true">
+                              </canvas>
+                          </div> -->
+                  <div>
+                    <canvas class="chart" id="lineCanvas" #lineCanvas></canvas>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="priceArr.length  === 0" style="margin-top:-200px"><b>No Data Available</b></div>
+              <!-- <div *ngIf="ispriceLoader" class="col-md-12" style="text-align:center;">
+                <div class="loader animation-start">
+                  <span class="circle delay-1 size-2"></span>
+                  <span class="circle delay-2 size-4"></span>
+                  <span class="circle delay-3 size-6"></span>
+                  <span class="circle delay-4 size-7"></span>
+                  <span class="circle delay-5 size-7"></span>
+                  <span class="circle delay-6 size-6"></span>
+                  <span class="circle delay-7 size-4"></span>
+                  <span class="circle delay-8 size-2"></span>
+                </div>
+              </div><br> -->
+              <div class="row" style="text-align: center" *ngIf="priceArr.length  && !ispriceLoader">
+                <div class="col-md-6">
+                  <div style="margin-top: 10px;display: inline-flex;">
+                    <button type="button" (click)="GetPriceAwardPattern(90)"
+                      [ngClass]="(activePriceStatusFilterBtn == 90)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+                      90 Days</button>
+                    <button type="button" style="margin-left: 10px;margin-right: 10px;" (click)="GetPriceAwardPattern(180)"
+                      [ngClass]="(activePriceStatusFilterBtn == 180)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+                      180 Days</button>
+                    <button type="button" (click)="GetPriceAwardPattern(0)"
+                      [ngClass]="(activePriceStatusFilterBtn == 0)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+                      Max</button>
+                  </div>
+                </div>
+              </div><br><br>
+          </div>
+
+          <div class="col-md-12" style="margin-bottom:-30px" *ngIf="isSidePanelOpen()">
+            <b>Geographic Award Pattern</b>
+            <hr><br>
+            <div class="row" *ngIf="pieChartData[0].data.length && !isLoader">
+              <div class="col-md-06">
+                <canvas baseChart class="chart" [chartType]="'pie'" [datasets]="pieChartData" [labels]="pieChartLabels"
+                  [options]="pieChartOptions" [legend]="true" [colors]="pieChartColor">
+                </canvas>
+              </div>
+            </div>
+            <div class="row" *ngIf="pieChartData[0].data.length === 0">
+              <div style="margin-left: 20px;">
+                <div><b>No Data Available</b></div>
+              </div>
+            </div>
+            <!-- <div *ngIf="isLoader" class="col-md-12" style="text-align:center;">
+              <div class="loader animation-start">
+                <span class="circle delay-1 size-2"></span>
+                <span class="circle delay-2 size-4"></span>
+                <span class="circle delay-3 size-6"></span>
+                <span class="circle delay-4 size-7"></span>
+                <span class="circle delay-5 size-7"></span>
+                <span class="circle delay-6 size-6"></span>
+                <span class="circle delay-7 size-4"></span>
+                <span class="circle delay-8 size-2"></span>
+              </div>
+            </div><br><br> -->
+            <div class="row" style="text-align: center" *ngIf="pieChartData[0].data.length && !isLoader">
+              <div class="col-md-6">
+                <div style="margin-top: 10px;display: inline-flex;">
+                  <button type="button" (click)="getRFQCountGeographicLocation(90)"
+                    [ngClass]="(activeStatusFilterBtn == 90)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+                    90 Days</button>
+                  <button type="button" style="margin-left: 10px;margin-right: 10px;" (click)="getRFQCountGeographicLocation(180)"
+                    [ngClass]="(activeStatusFilterBtn == 180)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+                    180 Days</button>
+                  <button type="button" (click)="getRFQCountGeographicLocation(0)"
+                    [ngClass]="(activeStatusFilterBtn == 0)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+                    Max</button>
+                </div>
+              </div>
+            </div><br><br>
+          </div>
+          
+        </div>
+        
+       
+      <app-buyer-profile></app-buyer-profile>
+    </div>
+    <div class="col-md-4 margin-tp" *ngIf="!isSidePanelOpen()">
+      <div class="row cust-padding">
+        <div class="col-md-6 bottom-border" style="width:100%;">
+          <h2 class="innerpanelheading">Demographics</h2>
+        </div>
+        <div class="col-md-6 bottom-border" style="padding: 0px;">
+          <button type="button" class="profile_btn profile_editbtn" (click)="openSidePanel('companyDemographics');openDemographicsDetail(iAboutUsModel.companyId)">
+              Edit
+          </button>
+        </div>
+      </div>
+      <div class="row cust-padding" *ngIf="!isDemographics">
+        <div class="col-md-12" class="descP">
+          <p class="p-t-10">
+            <strong>MFG.com Member Since:</strong><br />{{ iAboutUsModel?.createdDate ? (iAboutUsModel?.createdDate | date: "MM/dd/yy") : 'Member Since Date' }}
+          </p>
+          <!-- <p>
+            <strong>Company Type:</strong><br />{{ iAboutUsModel?.supplierType?.supplierTypeNameEn |Na }}
+          </p>
+          <p>
+            <strong># of Employees:</strong><br />{{ iAboutUsModel?.employeeCountRange | Na }}
+          </p> -->
+          <div class="m-t-10">
+          <strong>Languages:</strong><br />
+          <div *ngFor="let language of iAboutUsModel?.languages">
+            {{ language?.languageName ? language?.languageName : 'Language' }}
+          </div>
+          <div *ngIf="!iAboutUsModel.languages || (iAboutUsModel.languages.length === 0)"></div>
+          </div>
+          <div class="m-t-10">
+            <strong> # Of Employees</strong><br />
+            <div> {{ iAboutUsModel.employeeCountRange}} </div>
+          </div>
+          <p class="description-wraper p-t-10">
+            <strong>D-U-N-S Number:</strong><br /> {{ iAboutUsModel.dunsNumber ?  iAboutUsModel.dunsNumber : 'DUNS Number'}}
+          </p>
+          <p class="description-wraper p-t-10"><strong>Cage Code:</strong><br />{{ iAboutUsModel?.cageCode ? iAboutUsModel?.cageCode : 'Cage Code'}}</p>
+          <br />
+        </div>
+      </div>
+      <div class="row cust-padding heading-bottom-space-20">
+        <div class="col-md-6 bottom-border">
+          <h2 class="innerpanelheading">Contact</h2>
+        </div>
+        <div class="col-md-6 bottom-border">
+          <div class="col-md-12">
+            <button type="button" class="profile_btn profile_editbtn" (click)="openSidePanel('isProfileEditActive',0)">
+              Edit
+            </button>
+          </div>
+        </div>
+        <div class="contact-details">
+          <div><i class="fa fa-phone"></i> {{iContactViewModel.phoneNo ? iContactViewModel.phoneNo : 'Phone Number'}}</div> 
+          <div><i class="fa fa-envelope"></i>{{iContactViewModel.emailId ? iContactViewModel.emailId : 'Email Address' }}</div>
+          <div class="title-blue" (click)="websiteClick(iContactViewModel?.website)"><i class="fa fa-globe"></i>{{iContactViewModel.website ? iContactViewModel.website : 'Website' }}</div>
+          <div class="title-blue" (click)="websiteClick(iContactViewModel.facebook)"><i class="fa fa-facebook-square"></i>{{iContactViewModel.facebook ? iContactViewModel.facebook : '@facebook'}}</div>  
+          <div class="title-blue" (click)="websiteClick(iContactViewModel.tweeter)"><i class="fa fa-twitter-square"></i>{{iContactViewModel.tweeter ? iContactViewModel.tweeter : '@twitter'}}</div>  
+          <div class="title-blue" (click)="websiteClick(iContactViewModel.linkedIn)"><i class="fa fa-linkedin"></i>{{iContactViewModel.linkedIn ?  iContactViewModel.linkedIn : '@linkedin'}}</div>
+          <div class="title-blue" (click)="websiteClick(iContactViewModel.instagram)"><i class="fa fa-instagram"></i>{{iContactViewModel.instagram ?  iContactViewModel.instagram : '@instagram'}}</div>
+
+        </div>
+    </div>
+
+    <div class="row cust-padding">
+      <div class="col-md-6 bottom-border">
+        <h2 class="innerpanelheading">Certifications</h2>
+      </div>
+      <div class="col-md-6 bottom-border">
+        <div class="col-md-12">
+          <button type="button" class="profile_btn profile_editbtn" (click)="openSidePanel('companyCertifications')">
+            Edit
+          </button>
+        </div>
+      </div>
+      <div class="col-md-12 padding-zero" *ngIf="certificateViewModelList?.length !== 0">
+        <ul style="padding-top: 10px;">
+          <li *ngFor="let certificate of certificateViewModelList">
+            <p>
+              <strong class="title-blue  pointerCursor" (click)="downloadS3File(certificate.fileName, true)"> {{
+                certificate.certificateCode }}</strong><br />
+              {{ setProperDate(certificate.creationDate) | date }}
+              <span class="activeLink" (click)="removeCertificate(certificate)">Remove</span>
+            </p>
+          </li>
+        </ul>
+      </div>
+      <div  class="col-md-12 m-t-20 m-b-20 padding-zero" *ngIf="certificateViewModelList.length === 0"><b>Certification</b></div>
+    </div>
+    
+    <div>
+      <b>Price Award Pattern</b>
+      <hr><br>
+      <div class="row">
+        <div class="col-md-12">
+          <!-- <fusioncharts [id]="id" [width]="width" [height]="height" [type]="type" [dataFormat]="dataFormat"
+            [dataSource]="dataSource"></fusioncharts> -->
+            <!-- <div class="line-chart">
+              <canvas
+                class="test"
+                baseChart
+                chartType="line"
+                [data]="data"
+                [labels]="doughnutChartLabels"
+                [options]="chartOptions"
+                [legend]="true">
+                </canvas>
+            </div> -->
+            <div>
+              <canvas class="chart1" id="lineCanvas" #lineCanvas></canvas>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="priceArr.length === 0" style="margin-top:-200px"><b>No Data Available</b></div>
+      <!-- <div *ngIf="ispriceLoader" class="col-md-12" style="text-align:center;">
+        <div class="loader animation-start">
+          <span class="circle delay-1 size-2"></span>
+          <span class="circle delay-2 size-4"></span>
+          <span class="circle delay-3 size-6"></span>
+          <span class="circle delay-4 size-7"></span>
+          <span class="circle delay-5 size-7"></span>
+          <span class="circle delay-6 size-6"></span>
+          <span class="circle delay-7 size-4"></span>
+          <span class="circle delay-8 size-2"></span>
+        </div>
+      </div><br> -->
+    
+      <div class="row" style="text-align: center" *ngIf="priceArr.length && !ispriceLoader">
+        <div class="col-md-6">
+          <div style="margin-top: 10px;display: inline-flex;">
+            <button type="button" (click)="GetPriceAwardPattern(90)"
+              [ngClass]="(activePriceStatusFilterBtn == 90)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+              90 Days</button>
+            <button type="button"  style="margin-left: 10px;margin-right: 10px;" (click)="GetPriceAwardPattern(180)"
+              [ngClass]="(activePriceStatusFilterBtn == 180)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+              180 Days</button>
+            <button type="button" (click)="GetPriceAwardPattern(0)"
+              [ngClass]="(activePriceStatusFilterBtn == 0)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+              Max</button>
+          </div>
+        </div>
+      </div><br><br>
+    </div>
+
+    <div>
+      <b>Geographic Award Pattern</b>
+      <hr><br>
+      <div class="row" *ngIf="pieChartData[0].data.length && !isLoader">
+        <div>
+          <canvas baseChart class="chart" [chartType]="'pie'" [datasets]="pieChartData" [labels]="pieChartLabels"
+            [options]="pieChartOptions" [legend]="true" [colors]="pieChartColor">
+          </canvas>
+        </div>
+      </div>
+      <div *ngIf="pieChartData[0].data.length === 0">    
+        <div ><b>No Data Available</b></div>
+      </div>
+      <div *ngIf="isLoader" class="col-md-12" style="text-align:center;">
+        <div class="loader animation-start">
+          <span class="circle delay-1 size-2"></span>
+          <span class="circle delay-2 size-4"></span>
+          <span class="circle delay-3 size-6"></span>
+          <span class="circle delay-4 size-7"></span>
+          <span class="circle delay-5 size-7"></span>
+          <span class="circle delay-6 size-6"></span>
+          <span class="circle delay-7 size-4"></span>
+          <span class="circle delay-8 size-2"></span>
+        </div>
+      </div><br><br>
+      <div class="row" style="text-align: center" *ngIf="pieChartData[0].data.length && !isLoader">
+        <div class="col-md-6">
+          <div style="margin-top: 10px;display: inline-flex;">
+            <button type="button" (click)="getRFQCountGeographicLocation(90)"
+              [ngClass]="(activeStatusFilterBtn == 90)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+              90 Days</button>
+            <button type="button" style="margin-left: 10px;margin-right: 10px;" (click)="getRFQCountGeographicLocation(180)"
+              [ngClass]="(activeStatusFilterBtn == 180)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+              180 Days</button>
+            <button type="button" (click)="getRFQCountGeographicLocation(0)"
+              [ngClass]="(activeStatusFilterBtn == 0)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+              Max</button>
+          </div>
+        </div>
+      </div><br><br>
+    </div>
+  </div><br><br>
+
+
+
+
+
+
+  
+

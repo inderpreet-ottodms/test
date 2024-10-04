@@ -1,0 +1,39 @@
+.manu-list {
+    border: 1px solid #dee2e6;
+    margin: 0px;
+    margin-bottom: 15px;
+  }
+  
+  .manu-list:hover {
+    webkit-box-shadow: 0 0 4px 0 rgba(145, 154, 163, .5);
+    box-shadow: 0 0 4px 0 rgba(145, 154, 163, .5);
+  }
+  .thread:hover {
+    background-color: #ececec;
+  }
+  .pointerCursor {
+    cursor: pointer;
+  }
+  .manName {
+    color: #4a90e2;
+    font-size: 16px !important;
+  }
+  .editdelete {
+    border-radius: 3px;
+    background-color: #edeff7;
+    text-align: center;
+  }
+  .action-box {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: #4a90e2;
+  }
+  .rfq-star .fill-star {
+    font-size: 18px !important;
+    color: #4a90e2 !important;
+  }
+  
+  .rfq-star .star {
+    font-size: 18px !important;
+  }

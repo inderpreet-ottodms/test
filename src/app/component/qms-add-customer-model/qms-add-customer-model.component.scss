@@ -1,0 +1,15 @@
+.from-group{
+  margin: 5px 0px;
+}
+.btn-cancel {
+  background-color: #56c23e;
+  color:#fff;
+  border:1px solid #56c23e;
+  width: 90%;
+  cursor: pointer;
+}
+.btn-cancel:disabled{
+  color: #fff;
+  background-color: #bec4cb;
+  border:1px solid #bec4cb;
+}

@@ -1,0 +1,199 @@
+
+.myRFQ-noRFQActive-helper-text {
+    height: 29px;
+    font-family: Poppins;
+    font-size: 21px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #222222;
+  }
+  .You-dont-have-any-R , .Please-create-an-RFQ{
+    font-family: Poppins;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #222222;
+  }
+  .You-dont-have-any-R {
+    height: 29px;
+    font-size: 21px;
+    }
+    .Please-create-an-RFQ {
+    height: 45px;
+    font-size: 14px;
+    }
+    .Save-Rfq-button-active {
+    width: 331px;
+    height: 45px;
+    border-radius: 2px;
+    background-color: #2E58D6;
+    color:#fff;
+    }
+  .myRFQ-noRFQActive-helper-sub-text {
+    height: 45px;
+    font-family: Poppins;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #222222;
+  }
+  .btn-cancel-rfq {
+    width: 285px;
+    height: 45px;
+    border-radius: 2px;
+    background-color: #2E58D6;
+    color:#ffffff;
+  }
+  .btn-cancel{
+    border:2px solid #2E58D6;
+    color:#2E58D6;
+    background-color: white;
+    width:100%;
+  }
+  .btn-disable{
+    cursor:not-allowed;
+    width:100%;
+  }
+  .btn-clone{
+    background-color: #2E58D6;
+    color:#fff;
+    width:100%;
+  }
+  .btn-high{
+    color: #3176c0;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .Custome-WhiteSpace{
+    white-space: initial !important;
+  }
+  .top-row {
+    height: 40px;
+    background-color: #f6f7fb;
+    padding-top: 10px;
+    margin-bottom:15px;
+  }
+  .tdborderleft{
+    border-left: 1px solid #ded7d7;
+  }
+  .tdborderright{
+    border-right: 1px solid #ded7d7;
+  }
+  .rfqtable .rfqtd {
+    font-size: 16px;
+    font-weight: bold;
+    margin:9px auto;
+    color: #4a90e2;
+    padding:11px;
+    cursor:pointer;
+    white-space: initial !important;
+  }
+  .rfqtable span.rfqtd {
+    font-size: 16px;
+    font-weight: bold;
+    margin:9px auto;
+    color: #4a90e2;
+    padding:11px;
+    cursor:pointer;
+  }
+  .rfqtable {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    border-radius:3px;
+  }
+  .rfqtable thead tr th {
+    padding: 0px 8px;
+    border: 0 none !important;
+    border-top: 0 none !important;
+  }
+  .rfqtable tbody tr {
+    -moz-box-shadow: 0 0 1px 0 rgba(145, 154, 163, 0.5);
+    -webkit-box-shadow: 0 0 1px 0 rgba(145, 154, 163, 0.5);
+    box-shadow: 0 0 1px 0 rgba(145, 154, 163, 0.5);
+    border-radius:3px;
+    transition:0.3s;
+    background-color: #ffffff;
+    margin-bottom:11px;
+  }
+  .rfqtable tbody tr:hover {
+    -moz-box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+    -webkit-box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+    box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+    border-radius:3px;
+    background-color: #ffffff;
+  }
+  .min-height {
+    min-height: 500px;
+  }
+  .rfqtable td {
+    font-size: 12px;
+    font-weight: bold;
+    color: #222222;
+    vertical-align: middle !important;
+    border-top: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+  }
+  .View-All-Liked-RFQs {
+    color: #4a90e2 !important;
+    font-size:12px;
+  }
+  .rfqtable td span {
+    font-size: 12px;
+    color: #919aa3;
+  }
+  .tdbackgorungcolor {
+    background-color: #edeff7 !important;
+    text-align: center;
+    color: #3176c0 !important;
+
+  }
+  .editICon {
+    font-size: 20px !important;
+  }
+  .box-fit {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  .d-Turbine-3D-AutoCAD-Drawing {
+    width: 50px !important;
+    height: 50px !important;
+    -o-object-fit: contain;
+    object-fit: contain;
+}
+.label-part-detail {
+  height: 17px;
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+}
+.btn-edit-confirm {
+  width: 100%;
+  border-radius: 2px;
+  background-color: #2E58D6;
+  color:#ffffff;
+}
+
+.nobtn{
+  width: 100%;
+  height: 45px;
+  border-radius: 2px;
+  border: solid 2px #2E58D6;
+  background-color: #fff;
+  color: #2E58D6;
+}

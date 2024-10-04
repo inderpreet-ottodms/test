@@ -1,0 +1,451 @@
+<div class="">
+  <div class="row" *ngIf="!isSupplierProfileView()">
+    {{reloadPageOnContactdrawerClose()}}
+    <div [ngClass]="(isSidePanel())?'col-md-8 col-9':'col-md-12 col-12'">
+      <app-rfq-warning-banner></app-rfq-warning-banner>
+      <div class="background-white">
+        <div class="row myRFQ-custom-row-left-padding">
+          <div class="col-md-5 myRFQ-Header">Who viewed your profile?</div>
+        </div>
+        <div class="row myRFQ-custom-row-left-padding">
+          <div class="col-md-12">
+            <div class="myRFQ-rfq-main-div" >
+              <div style="padding:19px" [ngClass]="(!isLoader)?'':'loader-height'">
+                <div>
+                  <div class="row" style="padding:10px 0px">
+                    <div class="col-md-4">
+                      <div class='input-group add-on'>
+                        <input placeholder="Select Date Range" name='name' [disabled]="isLoader" [value]="displaydate" type="text" class="form-control"
+                          style="height: 39px;font-weight: bold;" />
+                        <div class="input-group-btn">
+                          <button class="btn btn-default" style="height: 39px;"  [disabled]="isLoader" (click)="openDateRage()">
+                            <i class="fa fa-calendar"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <select class="filter" [disabled]="isLoader" [(ngModel)]="selectSort" (ngModelChange)="Changesort()">
+                        <option value="0">All Ranges</option>
+                        <option value="Week">Past Week</option>
+                        <option value="Month">Past Month</option>
+                        <option value="Year">Last Year</option>
+                      </select>
+                      <div class="col-md-1 expand-icon-div">
+                      </div>
+                    </div>
+                    <div class="col-md-4" style="text-align: end;padding-top:7px;">
+                      
+                      <button type="button" *ngIf="rfqForm2Enabled"
+                      [ngClass]="selectedManufacture.length<1?'small-button':'small-button-deactive '"
+                       [disabled]="selectedManufacture.length<1" (click)="createRfq()">
+                      <span   class=" ">Create an RFQ </span>
+                      </button>
+                      
+                      <i  [ngClass]="(isTilesView)?'ti-layout-grid2 my-RFQ-list-view active':'ti-layout-grid2 my-RFQ-list-view '"
+                        (click)="openTilesView()"></i>
+                      <i  [ngClass]="(isGridView)?'ti-list my-RFQ-list-view active':'ti-list my-RFQ-list-view'"
+                        (click)="openGridView()"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf=" isTilesView == true && !isRfqAvailable">
+                  <div class="col-md-12">
+                    <div class="background-white">
+                      <div class="row">
+                        <br>
+                        <!-- ----------------------loop for card start------------------ -->
+                        <div [ngClass]="(isSidePanel())?'col-md-5 box-margin':'col-md-3'" *ngFor='let supplier of iSupplierViewModel' id={{supplier.contactId}}>
+                          <!-- card start -->
+                          <div class="card">
+                            <!-- card header start  -->
+                            <div class="row" style="margin-top:10px;" >
+                              <div class="col-sm-6" style="height:50px" (click)="openMenufacturerDrawer(supplier.contactIdEncrypt,supplier.contactName ,supplier.companyId,supplier.contactId ,supplier.companyName)">
+                                <img *ngIf="supplier.isPremium" src="assets/supplier/premium_logo.png" style="width: 40px; margin-top: -12px;">
+                                <span id="diamond-narrow"></span>
+                                <span class="premium" *ngIf="supplier.isPremium">Premium</span>
+                              </div>
+                              <div class="col-sm-6" style="height:50px" *ngIf="rfqForm2Enabled">
+                                 <div class="border-checkbox-section pull-right">
+                                  <div class="border-checkbox-group border-checkbox-group-primary">
+                                    <input class="border-checkbox" type="checkbox" 
+                                    id="supplier_{{supplier.companyId }}"                   
+                                      (change)="toggleManufactureSelctionForRFQ($event,supplier)">
+                                      <label class="border-checkbox-label" for="supplier_{{supplier.companyId}}"></label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- card header end  -->
+                            <!-- card body start  -->
+                            <div class="pointerCursor">
+
+                              <div class="card-img" (click)="openMenufacturerDrawer(supplier.contactIdEncrypt,supplier.contactName,supplier.companyId,supplier.contactId ,supplier.companyName)">
+                                <img class="imagwidtheight" *ngIf="(supplier.companyLogo === '' || supplier.companyLogo === null || supplier.companyLogo === 'string')" src="assets/company/avatar-manu-basic.svg">
+                                <img class="imagwidtheight" *ngIf="(supplier.companyLogo !== '' && supplier.companyLogo !== null && supplier.companyLogo !== 'string')" src="{{ defaultAwsPath + supplier.companyLogo }}" onError="this.src='assets/company/avatar-manu-basic.svg'">
+                              </div>
+                              <div class="card-title">
+                                <h2 class="pointerCursor text-truncate" (click)="openMenufacturerDrawer(supplier.contactIdEncrypt,supplier.contactName,supplier.companyId,supplier.contactId,supplier.companyName)">{{
+                                  supplier.companyName }}
+                                  <!-- <br>
+                                  <span class="badge badge-pill" [ngClass]="supplier.netPramoterScore | npsState" (click)="openMenufacturerDrawer(supplier.contactIdEncrypt,supplier.contactName,supplier.companyId,supplier.contactId ,supplier.companyName)"> {{ ((supplier?.netPramoterScore !== null) && (supplier?.netPramoterScore !== '')) ? supplier?.netPramoterScore : 'N/A' }}</span>&nbsp;<span>Net Promotor Score</span>
+                                  <br> -->
+                                  <div class="rfq-star"  (click)="openMenufacturerDrawer(supplier.contactIdEncrypt,supplier.contactName,supplier.companyId,supplier.contactId,supplier.companyName)">
+                                      <!-- <span style="color:#4a90e2;">{{ (supplier.noOfStars)? (supplier.noOfStars| number : '1.0-1'): '0'}}</span> -->
+                                      <span style="color:#212A37;">{{ (supplier.noOfStars)? (supplier.noOfStars | number : '1.0-1'): 'n/a'}}</span>
+                                      <ng-template #t let-fill="fill">
+                                      <span class="star" [class.full]="fill === 100">
+                                        <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+                                      </span>
+                                    </ng-template>
+                                    <ngb-rating [(rate)]="supplier.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+                                  </div>
+                                  <span (click)="openMenufacturerDrawer(supplier.contactIdEncrypt,supplier.contactName,supplier.companyId,supplier.contactId,supplier.companyName)"> {{ supplier.streetAddress }} {{ supplier.city }}<span *ngIf="supplier.state !== 'Unknown - Do not delete'">, {{ supplier.state }}</span>{{
+                                    supplier.country }}</span>
+                                </h2>
+                                  <button *ngIf="(!supplier.isLike)" class="btn" class="unfollow" (click)="likeSupplier(supplier.companyId, supplier.supplierEmail)" >Like</button>
+                                  <button *ngIf="(supplier.isLike)" class="btn" class="unfollow"  (click)="unLikeSupplier(supplier.companyId, supplier.supplierEmail)">Unlike</button>
+                              </div>
+                              <div class="card-sub-title" (click)="openMenufacturerDrawer(supplier.contactIdEncrypt,supplier.contactName,supplier.companyId,supplier.contactId,supplier.companyName)">
+                                <hr />
+                                <p>
+                                  <!-- <span  *ngFor="let item of supplier.capabilities | slice:0:4; let i=index" >{{ item.childDisciplineName }} <span>, </span> </span> -->
+                                  {{ getCapability( supplier.capabilities ) }}
+                                </p>
+                                <hr />
+                                <p>
+                                  <!-- <span  *ngFor="let item of supplier.certificates | slice:0:4; let i=index" >{{ item.certificateCode }} <span>, </span> </span> -->
+                                  {{ getCertificate( supplier.certificates ) }}
+                                </p>
+                                <hr />
+                                <p class="text-truncate">{{ supplier.telePhone }}</p>
+                                <hr/>   <!-- href="{{ supplier.webUrl }}" target="_blank" -->
+                                <p ><a class="company_url text-truncate" >{{ supplier.webUrl }}</a></p>
+                              </div>
+                            </div>
+                            <!-- card body end  -->
+                            <!-- card footer start  -->
+                            <div class="bottomaction">
+                              <ul>
+                                <li>
+                                  <a (click)="openMessageDrawer($event, supplier.contactId, 0, supplier.companyName)">
+                                    <i class="fa fa-envelope-o pointerCursor" aria-hidden="true" placement="top" container="body" ngbTooltip="Message Manufacturer"></i>
+                                  </a>
+                                </li>
+                                <li>
+                                  <a (click)="sendToCreateRFQ(supplier.companyId, supplier.companyName,supplier.territoryId)">
+                                    <img src="assets/rfq/arrow.png" srcset="assets/rfq/arrow@2x.png 2x, assets/rfq/arrow@3x.png 3x"
+                                      class="award-rfq-icon-class pointerCursor" placement="top" container="body" ngbTooltip="Create RFQ">
+                                  </a>
+                                </li>
+                                <li class="pull-right">
+                                  <a (click)="removeContact(supplier.companyId)">
+                                    <img src="assets/rfq/not-allow.png" srcset="assets/rfq/not-allow@2x.png 2x, assets/rfq/not-allow@3x.png 3x"
+                                      class="award-rfq-icon-class pointerCursor" placement="top" container="body" ngbTooltip="Remove Contact">
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                            <!-- card footer start  -->
+                          </div>
+                          <!-- card start -->
+                        </div>
+                        <!-- ----------------------loop for card end------------------ -->
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="!isRfqAvailable">
+                      <div class="col-md-4" *ngIf="!isLoader">
+                        <div class="dataTables_length" id="example_length">
+                          <label>Show
+                            <select name="example_length" aria-controls="example" class="" [(ngModel)]="pageSize"
+                              (change)="filterAll()">
+                              <option value="24">24</option>
+                              <option value="48">48</option>
+                              <option value="96">96</option>
+                            </select>
+                            entries</label>
+                        </div>
+                      </div>
+                      <div class="col-md-8" *ngIf="!isLoader">
+                        <div class="paginations">
+                          <div>
+                            <div id="radioBtn" class="btn-group">
+                              <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" class="btn btn-primary btn-sm notActive"
+                                (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                                Previous
+                              </a>
+                              <a *ngFor="let page of pagesIndex" (click)="setPage(page)" [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                                data-bs-toggle="fun" data-title="X">
+                                {{page}}
+                              </a>
+                              <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+                                (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                                Next
+                              </a>
+                            </div>
+                            <input type="hidden" name="fun" id="fun">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="!isRfqAvailable">
+                      <div class="col-md-12" *ngIf="!isLoader">
+                        <div class="pull-right padd-right">
+                          <label class="showreccount"> {{currentIndex }} of {{pageNumber}} </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+              <div>
+                <div class="row" *ngIf="isGridView == true && !isRfqAvailable">
+                  <div class="col-md-12">
+                    <div class="background-white">
+                      <div class="row">
+                        <br>
+                        <div class="col-md-12">
+                          <div class="table-responsive">
+                            <table class="table table-hover rfqtable">
+                              <thead>
+                                <tr>
+                                  <th>
+                                  <th >Manufacturer</th>
+                                  <th *ngIf="!isSidePanel()">Address</th>
+                                  <th>Phone</th>
+                                  <th *ngIf="!isSidePanel()">Website</th>
+                                  <th>Actions</th>
+                                  <th></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor='let supplier of iSupplierViewModel' id={{supplier.contactId}}>
+                                  <td class="tdborderleft cardtile-img">
+                                    <!-- <img src="assets/supplier/nml_logo.png" srcset="assets/rfq/default-rfq@2x.png 2x, assets/rfq/default-rfq@3x.png 3x" class="d-Turbine-3D-AutoCAD-Drawing"> -->
+                                    <img *ngIf="(supplier.companyLogo === '' || supplier.companyLogo === null || supplier.companyLogo === 'string')" src="assets/company/avatar-manu-basic-circle.svg"  class="d-Turbine-3D-AutoCAD-Drawing" style="border-radius: 50%;border: 1px solid #bec4cb;">
+                                    <img *ngIf="(supplier.companyLogo !== '' && supplier.companyLogo !== null && supplier.companyLogo !== 'string')" src="{{ defaultAwsPath + supplier.companyLogo }}" class="d-Turbine-3D-AutoCAD-Drawing" onError="this.src='assets/company/avatar-manu-basic-circle.svg'" style="border-radius: 50%;border: 1px solid #bec4cb;">
+                                  </td>
+                                  <td class="rfqtd text-truncate hand card-title" >
+                                    <h2 class="pointerCursor text-truncate name" (click)="openMenufacturerDrawer(supplier.contactIdEncrypt,supplier.contactName,supplier.companyId,supplier.contactId ,supplier.companyName)">{{
+                                      supplier.companyName  | dotLimit:'45' }}
+                                      <!-- <br>
+                                      <span [ngClass]="supplier.netPramoterScore | npsState">{{ ((supplier?.netPramoterScore !== null) && (supplier?.netPramoterScore !== '')) ? supplier?.netPramoterScore : 'N/A' }}</span>&nbsp;&nbsp;<span>Net
+                                        Promotor Score</span> -->
+                                    </h2>
+                                    <div class="rfq-star">
+                                        <!-- <span style="color:#4a90e2;">{{ (supplier.noOfStars)? (supplier.noOfStars| number : '1.0-1'): '0'}}</span> -->
+                                        <span style="color:#212A37;">{{ (supplier.noOfStars)? (supplier.noOfStars | number : '1.0-1'): 'n/a'}}</span>
+                                        <ng-template #t let-fill="fill">
+                                        <span class="star" [class.full]="fill === 100">
+                                          <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+                                        </span>
+                                      </ng-template>
+                                      <ngb-rating [(rate)]="supplier.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+                                    </div>
+                                  </td>
+                                  <td *ngIf="!isSidePanel()">
+                                    <p class="text-truncate address-truncate"> {{ supplier.streetAddress }}</p>
+                                    <p class="text-truncate address-truncate"> {{ supplier.city }}<span *ngIf="supplier.state !== 'Unknown - Do not delete'"> , {{ supplier.state}}</span> </p>
+                                    <p class="text-truncate address-truncate"> {{ supplier.country }}</p>
+                                  </td>
+                                  <!-- {{ supplier.telephoneNo |Na}}         -->
+                                  <td>{{ supplier.telePhone}} </td>
+                                  <!--href="{{ supplier.webUrl }}" target="_blank" -->
+                                  <!-- {{ supplier.webUrl }} -->
+                                  <td *ngIf="!isSidePanel()"><a class="company_url text-truncate">
+                                      {{ supplier.webUrl}}</a></td>
+                                  <td class="editdelete">
+                                    <a (click)="openMessageDrawer($event,supplier.contactId,0,supplier.companyName)">
+                                      <i class="fa fa-envelope-o pointerCursor" aria-hidden="true" placement="top" container="body" ngbTooltip="Message Manufacturer"></i>
+                                    </a>
+                                  </td>
+
+                                  <td class="editdelete">
+                                    <a (click)="sendToCreateRFQ(supplier.companyId, supplier.companyName,supplier.territoryId)" >
+                                      <img src="assets/rfq/arrow.png" srcset="assets/rfq/arrow@2x.png 2x, assets/rfq/arrow@3x.png 3x"
+                                        class="award-rfq-icon-class pointerCursor" placement="top" container="body" ngbTooltip="Create RFQ">
+                                    </a>
+                                  </td>
+                                  <td (click)="removeContact(supplier.companyId)" class="editdelete tdborderright">
+                                    <a>
+                                      <img src="assets/rfq/not-allow.png" srcset="assets/rfq/not-allow@2x.png 2x, assets/rfq/not-allow@3x.png 3x"
+                                        class="award-rfq-icon-class pointerCursor" placement="top" container="body" ngbTooltip="Remove Contact">
+                                    </a>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" *ngIf="!isRfqAvailable">
+                        <div class="col-md-4">
+                          <div class="dataTables_length" id="example_length">
+                            <label>Show
+                              <select name="example_length" aria-controls="example" class="" [(ngModel)]="pageSize"
+                                (change)="filterAll()">
+                                <option value="24">24</option>
+                                <option value="48">48</option>
+                                <option value="96">96</option>
+                              </select>
+                              entries</label>
+                          </div>
+                        </div>
+                        <div class="col-md-8">
+                          <div class="paginations">
+                            <div>
+                              <div id="radioBtn" class="btn-group">
+                                <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" class="btn btn-primary btn-sm notActive"
+                                  (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                                  Previous
+                                </a>
+                                <a *ngFor="let page of pagesIndex" (click)="setPage(page)" [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                                  data-bs-toggle="fun" data-title="X">
+                                  {{page}}
+                                </a>
+                                <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+                                (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                                Next
+                              </a>
+                              </div>
+                              <input type="hidden" name="fun" id="fun">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" *ngIf="!isRfqAvailable">
+                        <div class="col-md-12">
+                          <div class="pull-right padd-right">
+                            <label class="showreccount"> {{currentIndex }} of {{pageNumber}} </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- --------------------grid view ends------------------------- -->
+
+                <!-- ---------------------  loader start   --------------------  -->
+                <div *ngIf="isLoader" class="col-md-12" style="text-align:center;">
+                  <div class="loader animation-start">
+                    <span class="circle delay-1 size-2"></span>
+                    <span class="circle delay-2 size-4"></span>
+                    <span class="circle delay-3 size-6"></span>
+                    <span class="circle delay-4 size-7"></span>
+                    <span class="circle delay-5 size-7"></span>
+                    <span class="circle delay-6 size-6"></span>
+                    <span class="circle delay-7 size-4"></span>
+                    <span class="circle delay-8 size-2"></span>
+                  </div>
+                </div>
+                <!-- ---------------------  loader end   --------------------  -->
+                <!-- ---------------------  Empty Box start   --------------------  -->
+                <div class="myRFQ-rfq-no-available" *ngIf="isRfqAvailable">
+                  <div class="row" style="text-align: center;padding-top:106px">
+                    <div class="col-md-12">
+                      <div>
+                        <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+                          assets/rfq/no-rfq@3x.png 3x"
+                          class="myRFQ-Group">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row" style="padding-top:34px">
+                    <div class="col-md-12">
+                      <div class="myRFQ-noRFQActive-helper-text">You don’t have any Manufacturer Views at this time.</div>
+                    </div>
+                  </div>
+                </div>
+                <!-- ---------------------  Empty Box end   --------------------  -->
+              </div>
+              <!-- --------------------------------------Modal Popup Start----------------------------------- -->
+              <!-- <div class="custom-confirmation" *ngIf="isCancel1stStep"> -->
+              <p-confirmDialog header="Confirmation" icon="" width="629" height="220" #cd>
+                <p-footer>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <button type="button" class="btn btn-ignore-rfq btn-width " (click)="cd.reject()">No</button>
+                    </div>
+                    <div class="col-md-6">
+                      <button type="button" class="btn btn-cancel-rfq btn-width" label="Yes" (click)="cd.accept()">Yes</button>
+                    </div>
+                  </div>
+                </p-footer>
+              </p-confirmDialog>
+              <!-- </div> -->
+              <!-- --------------------------------------Modal Popup End----------------------------------- -->
+
+              <!-- <app-discover-list></app-discover-list> -->
+
+            </div>
+          </div>
+        </div>
+
+        <p-dialog header="Select Date Range" [(visible)]="isDatePupupShow" [modal]="true" [responsive]="true"  [autoZIndex]="false" [style]="{'z-index': 10001}"
+          [height]="450" styleClass="Rectangle-3">
+          <div>
+            <p class="clear" (click)="clearDate()">Clear</p>
+          </div>
+          <div class="row">
+            <div class="col-md-6 text-center">
+              <p-calendar [(ngModel)]="FirstDate" dateFormat="dd/mm/yyyy" [inline]="true"></p-calendar>
+            </div>
+            <div class="col-md-6 text-center">
+              <p-calendar [(ngModel)]="SecondDate" dateFormat="dd/mm/yy" [inline]="true"></p-calendar>
+            </div>
+          </div>
+          <p-footer>
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 text-center">
+                  <button type="button" style="width:284px;" class="btn btn-md btn-block waves-effect text-center m-b-20 cancleButton"
+                    (click)="hidePopup()">Cancel</button>
+                </div>
+                <div class="col-md-6 text-center">
+                  <button type="button" style="width:284px;" class="btn btn-md btn-block waves-effect text-center m-b-20 Rectanglebtn-active"
+                    label="Yes" (click)="applyDates()"> Apply</button>
+                </div>
+              </div>
+
+            </div>
+          </p-footer>
+        </p-dialog>
+      </div>
+    </div>
+    <div *ngIf="isSidePanel()" class="col-md-4 col-4 sideDrawer Drawer-Shadow">
+      <div *ngIf="isSupplierProfileDrawer()">
+        <app-quote-supplier-profile></app-quote-supplier-profile>
+      </div>
+      <div *ngIf="isMessageDrawer()">
+        <app-message-send-drawer></app-message-send-drawer>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="isSupplierProfileView()">
+            <div class="col-md-10"> </div>
+          <div class="col-md-2 floatRight" style="margin-top: 15px;margin-bottom: -20px;">
+              <button type="button" class="btn btn-submit-rfq-close-1 RectangleYes-2-1" (click)="goBack()">Go Back</button>
+          </div>
+  </div>
+  <div class="row" *ngIf="isSupplierProfileView()">
+    <div class="col-md-12">
+        <div>
+            <app-supplier-view-profile></app-supplier-view-profile>
+        </div>
+    </div>
+  </div>
+  <!-- -------------------- footer ---------------------- -->
+  <div class="row" style="bottom: 0px;width: 101%">
+    <div class="col-md-12" style="text-align:-webkit-right;padding:0px">
+      <div class="Site-Background-Copy">
+        <!-- <p class="Copyright-2018-MFG">Copyright © 2018 MFG.com, Inc. All Rights Reserved.</p> -->
+      </div>
+    </div>
+  </div>
+  <!-- -------------------- footer ---------------------- -->
+</div>
+<div *ngIf="isModelShow()">
+  <app-rating-model></app-rating-model>
+  </div>

@@ -1,0 +1,91 @@
+.form-group a {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #4a90e2;
+}
+
+.btn-cancel {
+  color: #56c23e;
+  background-color: #fff;
+}
+
+.btn-add {
+  border: 1px solid #56c23e;
+  background-color: #fff;
+  color: #56c23e;
+}
+.btn-add:disabled {
+ cursor: not-allowed;
+}
+.btn-save {
+  border: 1px solid #56c23e;
+  background-color: #56c23e;
+  color: #fff;
+}
+.btn-save:disabled {
+  cursor: not-allowed;
+}
+.select-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.select-box select {
+  width: 90%;
+}
+
+.select-box span:nth-child(2) {
+  color: #4a90e2;
+  cursor: pointer;
+}
+
+.btn-ignore-rfq {
+  width: 100%;
+  height: 45px;
+  border-radius: 2px;
+  border: solid 2px #81db6d;
+  background-color: #fff;
+  color: #81db6d
+}
+
+.btn-cancel-rfq {
+  width: 100%;
+  height: 45px;
+  border-radius: 2px;
+  background-color: #81db6d;
+  color: #ffffff;
+}
+
+::ng-deep .ngx-gen-select-container .items-container {
+  z-index: 99;
+}
+
+::ng-deep .ngx-gen-select-container .items-container .ngxItem {
+  z-index: 999;
+}
+
+.model-popup-text {
+  width: 562px;
+  height: 38px;
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.36;
+  letter-spacing: normal;
+  color: #222222;
+}
+.btn-block {
+  margin-top: 10px;
+}
+.modal-header {
+  border-bottom: 2px solid #000;
+}
+::ng-deep.ngx-gen-select-container .input-group > .input-group-append > .input-group-text{
+  border-left: 0px !important;
+}
+
+

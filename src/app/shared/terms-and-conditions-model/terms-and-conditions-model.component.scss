@@ -1,0 +1,70 @@
+.accept-button{
+  background-color: #2E58D6;
+  color:#fff;
+  padding: 5px 20px;
+  border-radius: 5px;
+  border: 2px solid #2E58D6;
+  width: 45%;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.cancel-button{
+  background-color: #fff;
+  color:gray;
+  padding: 5px 20px;
+  border-radius: 5px;
+  border: 2px solid gray;
+  width: 45%;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.read-button{
+  background-color: #fff;
+  color:#212A37;
+  padding: 5px 20px;
+  border-radius: 5px;
+  border: 2px solid #212A37;
+}
+.textcolor {
+  color: #2E58D6;
+  cursor: pointer;
+}
+.deactivatePopUp {
+  display: flex;
+}
+.deactivatePopUp i {
+ line-height: 3;
+ color: red;
+ font-size: 40px;
+ padding: 6px;
+}
+.deactivatePopUp p {
+  margin-top: 35px;
+}
+.cancel-button1{
+  background-color: #fff;
+  color:black;
+  font-weight: bold;
+  padding: 5px 20px;
+  border-radius: 5px;
+  border: 2px solid gray;
+  width: 45%;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.accept-button1{
+  background-color:red;
+  color:#fff;
+  padding: 5px 20px;
+  border-radius: 5px;
+  border: 2px solid red;
+  width: 45%;
+  cursor: pointer;
+  margin-left: 10px;
+}
+::ng-deep .modal-content  {
+ margin-top: 90px;
+}
+::ng-deep .modal-header {
+  border-bottom: none;
+}

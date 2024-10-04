@@ -1,0 +1,9 @@
+<div class="row count-viewer-container">
+    <a class="open-rfq link-color"*ngIf="showOpenRfqsSideDrawer" [routerLink]="['/rfq/openrfq', this.buyerID]" >
+        <span class="count-viewer ">{{noOfOpenRFQ}}</span> &nbsp; <span>Open RFQs</span>
+    </a>
+
+    <a *ngIf="!showOpenRfqsSideDrawer" class="disabled open-rfq " >
+        <span class="count-viewer">{{noOfOpenRFQ}}</span> &nbsp; <span>Open RFQs</span>
+    </a>
+</div>

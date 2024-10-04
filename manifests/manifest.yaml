@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: mfg-ui
+spec:
+    selector:
+        matchLabels:
+            app: mfg-ui
+    revisionHistoryLimit: 3
+    template:
+        metadata:
+            labels:
+                app: mfg-ui
+        spec:
+            containers:
+                -   name: mfg-ui
+                    image: ${aws_shared_services_account_id}.dkr.ecr.${region}.amazonaws.com/mfg-ui:sw-6fda4116-1711706300
+                    imagePullPolicy: Always
+                    resources:
+                        requests:
+                            memory: "200Mi"
+                            cpu: "20m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: mfg-ui
+spec:
+    selector:
+        app: mfg-ui
+    ports:
+        -   name: http
+            port: 80
+    type: ClusterIP

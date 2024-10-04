@@ -1,0 +1,326 @@
+<div class="background-white">
+  <div class="row row-border-bottom">
+    <div class="col-md-12 rightpanel"><br>
+      <i class="fa fa-times-circle pull-right custom-cursor icon" (click)="closePartDrawer()"></i>
+      <h2 class="panelheading heading-text pb-3">Edit Buyer Profile</h2>
+    </div>
+  </div><br>
+
+  <form *ngIf="!isLoader" class="md-float-material" [formGroup]="personalProfileForm" (ngSubmit)="onSaveContactInfo()">
+
+    <!-- <div class="row">
+      <div class="col-md-12">
+        <b>Personal Information</b>
+      </div>
+    </div>
+    <hr><br> -->
+    <!-- <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">First Name</label>
+          <input type="text" maxlength="50" class="form-control" placeholder="First Name" autocomplete="off"
+            formControlName="firstName">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isFieldValid('firstName')" errorMsg="First Name Is required">
+            </app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Last Name</label>
+          <input type="text" maxlength="50" class="form-control" placeholder="Last name" formControlName="lastName">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isFieldValid('lastName')" errorMsg="Last Name is required">
+            </app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Title</label>
+          <select id="jobPostingId" class="form-control" formControlName="title" name="title">
+            <option value="0" selected>Select Title</option>
+            <option value="Engineer">Engineer</option>
+            <option value="Buyer">Buyer</option>
+            <option value="Purchasing Manager">Purchasing Manager</option>
+          </select>
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isFieldValid('title')" errorMsg="Title Is required">
+            </app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Language Preferred</label>
+          <select id="jobPostingId" class="form-control" formControlName="languageId" name="languageId">
+            <option selected></option>
+            <option *ngFor="let language of iLanguageModelColl" [value]="language.languageId">
+              {{ language.languageName }}
+            </option>
+          </select>
+          <div class="editProfileerror-msg5">
+            <app-field-error-display [displayError]="isFieldValid('languageId')" errorMsg="Language Is required">
+            </app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Phone Number</label>
+          <input type="text" pattern="^[+]?[0-9]*" maxlength="17" id="phone" class="form-control"
+            placeholder="Phone Number" autocomplete="off" formControlName="phoneNo" (keyup)="onPaste($event)"
+            onKeyPress="if(this.value.length==17) return false;"
+            onkeydown="javascript: return (event.keyCode == 69  || event.keyCode == 189 || event.keyCode == 190)? false : true">
+          <div [hidden]="!personalProfileForm.get('phoneNo').hasError('maxlength')"
+            style="color: red; text-align: right">Mobile should be 17 digit</div>
+          <div [hidden]="!personalProfileForm.get('phoneNo').hasError('required')"
+            style="color: red; text-align: right">Please Enter company Phone number</div>
+          <div [hidden]="!personalProfileForm.get('phoneNo').hasError('pattern')" style="color: red; text-align: right">
+            Mobile number should be only numbers</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Email</label>
+          <input type="text" maxlength="50" class="form-control" placeholder="Email" formControlName="emailId" readonly>
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isFieldValid('emailId')" errorMsg="Email Is required">
+            </app-field-error-display>
+            <app-field-error-display [displayError]="isEmailPValid('emailId')" errorMsg="Email Is not in Proper format">
+            </app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="Email">Profile Options</label>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="Showdetailedratings"
+                          formControlName="showDeltailedRating">
+                        <label class="form-check-label" for="Showdetailedratings">Show detailed ratings in my
+                          profile </label>
+                      </div>
+                      <div class="form-check">
+                          <input type="checkbox" class="form-check-input" id="showRFQaward" formControlName="showRfqAwardStat">
+                          <label class="form-check-label" for="showRFQaward">Show RFQ award statistics in my
+                            profile</label>
+                        </div>
+                  </div>
+                </div>
+              </div> -->
+    <!-- <br> -->
+
+    <!-- <div class="row">
+      <div class="col-md-12">
+        <b>Company Information</b>
+      </div>
+    </div>
+    <hr><br>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Company</label>
+          <input type="text" maxlength="150" class="form-control" placeholder="Company" formControlName="name">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isFieldValid('name')" errorMsg="Company Name Is required">
+            </app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Duns</label>
+          <input type="text" maxlength="20" class="form-control" placeholder="Duns Number" autocomplete="off"
+            formControlName="dunsNumber">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isFieldValid('dunsNumber')" errorMsg="Duns Number Is required">
+            </app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="Email">Industry</label>
+                          <select id="jobPostingId" (change)="onIndustryChange()" class="form-control"
+                              formControlName="industryId" name="industryId">
+                              <option selected [value]=""> Select Industry Type</option>
+                              <option *ngFor="let industry of iIndustriesModel" [value]="industry.industryId">
+                                {{ industry.industryKey }}
+                              </option>
+                            </select>
+                            <div class="editProfileerror-msg">
+                              <app-field-error-display [displayError]="isFieldValid('industryId')" errorMsg="Industry Is required"></app-field-error-display>
+                            </div>
+                        </div>
+                      </div>
+                    </div> -->
+
+
+    <!-- <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Number of Employees</label>
+          <select id="jobPostingId" class="form-control" formControlName="employeeCountRangeId"
+            name="employeeCountRangeId">
+            <option [value]="0" selected># of Employees</option>
+            <option *ngFor="let employee of iEmployeesCountRangeModel" [value]="employee.employeeCountRangeId">
+              {{ employee.range }}
+            </option>
+          </select>
+          <div class="editProfileerror-msg">
+            <app-field-error-display [displayError]="isFieldValid('employeeCountRangeId')"
+              errorMsg="Select No of Employee Range"></app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+
+    <!-- <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Company Description</label>
+          <textarea rows="4" maxlength="5000" class="form-control" placeholder="Company Description(5000 word max)"
+            formControlName="description"></textarea>
+          <div class="error-msg4">
+            <app-field-error-display [displayError]="isFieldValid('description')"
+              errorMsg="Company Description Is required"></app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div> -->
+<!-- 
+    <div class="row">
+      <div class="col-md-12">
+        <b>Company Social Media Profiles</b>
+      </div>
+    </div>
+    <hr><br> -->
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Website</label>
+          <input type="text" maxlength="200" class="form-control" placeholder="Website" autocomplete="off"
+            formControlName="website">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isFieldValid('website')" errorMsg="Website Is required">
+            </app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Facebook</label>
+          <input type="text" maxlength="200" class="form-control" placeholder="Facebook" autocomplete="off"
+            formControlName="facebook">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isFieldValid('facebook')" errorMsg="Facebook Profile Is required">
+            </app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Twitter</label>
+          <input type="text" maxlength="200" class="form-control" placeholder="Twitter" autocomplete="off"
+            formControlName="tweeter">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isFieldValid('tweeter')" errorMsg="Twitter Profile Is required">
+            </app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">LinkedIn</label>
+          <input type="text" maxlength="200" class="form-control" placeholder="Linkedin" autocomplete="off"
+            formControlName="linkedIn">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isFieldValid('linkedIn')" errorMsg="Linkedin Profile Is required">
+            </app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Instagram</label>
+          <input type="text" maxlength="200" class="form-control" placeholder="Instagram" autocomplete="off"
+            formControlName="instagram">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isFieldValid('instagram')" errorMsg="Instagram Profile Is required">
+            </app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row-padding-top">
+      <div class="mb-2" style="width: -webkit-fill-available;">
+        <button type="button" class="Rectangle-3" (click)="closePartDrawer(1)">
+          <span class="button-lbl" >Cancel</span>
+        </button>
+      </div>
+      <div style="width: -webkit-fill-available;">
+        <button type="submit"
+          [ngClass]="(personalProfileForm.valid)?'btn Save-Equipment-active':'btn Save-Equipment-Deactive'"
+          [disabled]="!personalProfileForm.valid">Save</button>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="isLoader">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>
+</div>

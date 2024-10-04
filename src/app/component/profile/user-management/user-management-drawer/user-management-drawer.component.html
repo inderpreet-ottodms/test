@@ -1,0 +1,109 @@
+<div class="bg-white rounded shadow p-20 m-b-20">
+  <div class="row">
+    <div class="col-md-12">
+      <i
+        class="fa fa-times-circle pull-right color-blue"
+        (click)="closePartDrawer()"
+        placement="left"
+        ngbTooltip="Close"
+      ></i>
+      <h2 class="f-16 f-w-600">User Profile</h2>
+    </div>
+    <hr />
+    <div *ngIf="isLoader">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+    <div class="col-md-12" *ngIf="!isLoader">
+      <div class="row m-b-15 m-t-10">
+        <div class="col-md-12">
+          <span class="f-w-600">Name:</span>
+        </div>
+        <div class="col-md-12 m-b-10">
+          <span>{{ userDetails.firstName | Na }} {{ userDetails.lastName }}</span>
+        </div>
+        <div class="col-md-12">
+          <span class="f-w-600">Email:</span>
+        </div>
+        <div class="col-md-12 m-b-10" style="word-break: break-all">
+          <span>{{ userDetails.emailId | Na }}</span>
+        </div>
+        <div class="col-md-12">
+          <span class="f-w-600">Role:</span>
+        </div>
+        <div class="col-md-8 m-b-20" style="word-break: break-all">
+          <select class="form-control" (change)="updateRole(userDetails.id, $event.target.value, userDetails.isBuyer)" [ngModel]="userDetails.role" [disabled]="currentUserId === userDetails.contactId || status === 'Invited' || userDetails.id == null || userDetails.id == undefined">
+            <option value="">Select User Type</option>
+            <option  value="Admin">Admin</option>
+            <option  value="User">User</option>
+          </select>
+        </div>
+        <div class="col-md-12">
+          <div
+            *ngIf="
+            userDetails.isActive &&
+            status !== 'Invited' &&
+              currentUserId !== userDetails.contactId
+            "
+            style="width: 10%"
+            style="cursor: pointer"
+          >
+            <button
+              type="button"
+              class="btn deactivate-rfq-btn"
+              (click)="openModal()"
+            >
+              Deactivate
+            </button>
+          </div>
+          <div
+            *ngIf="!userDetails.isActive && userDetails.status !== 'Invited'"
+            style="width: 10%"
+            style="cursor: pointer"
+          >
+            <button
+              type="button"
+              class="btn active-rfq-btn"
+              (click)="setUserStatus(true)"
+            >
+              Activate
+            </button>
+          </div>
+          <div
+            *ngIf="
+            userDetails.status === 'Invited' ||
+              currentUserId === userDetails.contactId
+            "
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #content let-d="dismiss" data-backdrop="static" data-keyboard="false">
+
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Deactivate User</h4>
+  </div>
+  <div class="modal-body">
+    <div class="m-b-20">
+      <p>Are you sure you want to deactivate this user? They will not be able to log into the site.</p>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn button-green-border" (click)="closeModel();">No</button>
+    
+    <button type="button" class="btn button-green" data-bs-dismiss="modal" (click)="setUserStatus(false)">Yes</button>
+  </div>
+</ng-template>

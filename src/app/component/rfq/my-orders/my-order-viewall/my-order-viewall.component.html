@@ -1,0 +1,56 @@
+<div class="viewall-header">
+   <div class="part-header">
+        <div class="part-name">Part Name - All Statuses</div>
+        <i class="fa fa-times close-card" style="color: #2E58D6"
+        (click)="closeContactDrawer()"
+        ></i>
+   </div>
+   <div class="status-header">
+        <div class="status">Status</div>
+        <div class="status">Last Updated</div>
+   </div>
+
+   <div class="status-details" *ngFor="let item of partTracking1">
+        <div class="status-number">
+          <span class="img-status">  
+               <img *ngIf="item.type === 'completed'" src="assets/Path.png" />
+               <img *ngIf="item.type === 'current'" src="assets/ellipsesuccess.png">  
+               <img *ngIf="item.type === 'pending'" src="assets/images/ellipse.png">  
+          </span>
+             {{item.status}}
+          </div>
+        <div class="status-date">{{item.status_date}}</div>
+   </div>
+
+
+
+
+   <!-- <div class="status-details">
+        <div class="status-number">
+            <span class="img-status"><img src="assets/Path.png"></span>Status 1</div>
+        <div class="status-date">Date</div>
+   </div>
+   <div class="status-details">
+        <div class="status-number">
+            <span class="img-status"><img src="assets/Path.png"></span>Status 1</div>
+        <div class="status-date">Date</div>
+   </div>
+   <div class="status-details">
+        <div class="status-number">
+            <span class="img-status"><img src="assets/Path.png"></span>Status 1</div>
+        <div class="status-date">Date</div>
+   </div>
+   <div class="status-details">
+        <div class="status-number">
+            <span class="img-status"><img src="assets/ellipsesuccess.png"></span>In Production</div>
+        <div class="status-date">Date</div>
+   </div>
+   <div class="status-details">
+        <div class="status-number">
+            <span class="img-status">-</span>Status 1</div>
+   </div>
+   <div class="status-details">
+        <div class="status-number">
+            <span class="img-status">-</span>Status 1</div>  
+   </div> -->
+</div>

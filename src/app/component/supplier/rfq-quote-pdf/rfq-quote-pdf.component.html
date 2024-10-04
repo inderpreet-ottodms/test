@@ -1,0 +1,255 @@
+<div class="row" *ngIf="isPdfModel">
+  <div class="col-md-12">
+    <div class="background-white">
+      <div style="background-color: #fff; border: 1px solid gray;">
+        <div id="contentToConvert">
+          <table style="padding: 15px 30px;width:100%;">
+            <tr>
+              <td>
+                <table style="margin-top: 15px;">
+                  <td>
+                    <img
+                      [src]="(iContactViewModel.contactPictureFile) ? iContactViewModel.contactPictureFile : defaultUrl "
+                      onError="this.src='assets/company/avatar-manu-basic.svg'"
+                      style="width: 65px;height: 65px;border:2px solid #f6f7fb;border-radius:3px;">
+                  </td>
+                </table>
+                <p style=" margin-bottom: 0px; font-size: 23px; margin-top: 10px; ">
+                  <strong>{{ iContactViewModel?.company?.name }}</strong></p>
+                <table style="width: 100%; height: 116px;">
+                  <tbody>
+                    <tr>
+                      <td style="width: 20%;vertical-align:top">
+                        <p [innerHTML]="getAddressFormat(iContactViewModel.address)" style="white-space: normal;"></p>
+                      </td>
+                      <td style="width: 5%;vertical-align:top;">&nbsp;</td>
+                      <td style="width: 25%;vertical-align:top">Phone:
+                        {{iContactViewModel.phoneNo}}<br />{{iContactViewModel.website}}
+                      </td>
+                      <td style="width: 25%;vertical-align:top">
+                        <strong>Project Manager</strong><br />
+                        {{ iContactViewModel.firstName }}
+                        {{ iContactViewModel.lastName }}<br />{{ iContactViewModel.emailId }}<br />{{iContactViewModel.phoneNo}}
+                      </td>
+                      <td style="width: 25%"></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table style="width: 100%;margin:15px 0px;">
+                  <tbody>
+                    <tr>
+                      <td><strong style=" font-size: 22px; ">RFQ #:&nbsp;<label
+                            style="color:#4a90e2">{{irfqViewModel.rfqId}}</label>&nbsp;</strong>
+                        <span style=" font-size: 20px;margin-left:10px; "><strong>RFQ Name:&nbsp;</strong>
+                          {{irfqViewModel.rfqName}}</span></td>
+                      <td style="text-align: right;"> <label
+                          style="color:#4a90e2;font-size: 22px;"><strong>{{irfqViewModel.rfqCreatedOn | date: 'MM/dd/y'}}</strong></label>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p class="nomargin" style="margin-top: 25px; margin-bottom: 0px;font-size: 20px; "><strong>Buyer
+                    Information</strong></p>
+                <hr style=" border-color: #222222!important;margin:5px 0px; " />
+                <table style="width: 100%;">
+                  <tbody>
+                    <tr>
+                      <td style="width: 20%;vertical-align:top;">
+                        <span style="white-space: normal;margin-bottom:0px;">
+                          <strong>Company Name</strong> <br> {{iBuyerContactViewModel?.company?.name}}
+                        </span><br>
+                        <span [innerHTML]="getAddressFormat(iBuyerContactViewModel.address)" style="white-space: normal;">
+                        </span>
+
+                      </td>
+                      <td style="width: 5%;vertical-align:top;">&nbsp;</td>
+                      <td style="width: 25%;vertical-align:top;">
+                        <p><strong>Contact</strong> <br>{{ iBuyerContactViewModel.firstName }}
+                          {{ iBuyerContactViewModel.lastName }}<br />{{iBuyerContactViewModel.emailId}}<br />{{iBuyerContactViewModel.phoneNo}}
+                        </p>
+                      </td>
+                      <td style="width: 50%"></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p class="nomargin" style=" font-size: 20px; margin-bottom: 0px; margin-top: 15px 5px;  "> <strong>
+                    Quote Information</strong></p>
+                <hr style=" border-color: #222222!important;float: none!important;margin:5px 0px; " />
+                
+                <div style="margin-top:15px;" *ngFor="let item of iReviewPartsViewModelColl; let i = index">
+                  <table *ngIf="item.isQuoteItemAdded"
+                    style="border: 1px solid #f6f7fb;height: 187px; width: 100%;border-collapse: collapse;margin-top:15px;">
+                    <tbody>
+                      <tr style="height: 5px;">
+                        <td colspan="6" style="height: 5px;">&nbsp;</td>
+                      </tr>
+                      <tr style="margin-top:10px;">
+                        <td style="width:2%;">&nbsp;</td>
+                        <td style="width: 26%; font-weight: bold;">{{item.partName}}</td>
+                        <td style="width: 23%; ">&nbsp;</td>
+                        <td style="width: 23%; ">&nbsp;</td>
+                        <td style="width: 24%; ">&nbsp;</td>
+                        <td style="width:2%;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 18px;">
+                        <td style="width:2%;">&nbsp;</td>
+                        <td style="width: 26%; height: 18px;">{{item.partNumber}}</td>
+                        <td style="width: 23%; height: 18px;">&nbsp;</td>
+                        <td style="width: 23%; height: 18px;">&nbsp;</td>
+                        <td style="width: 24%; height: 18px;">&nbsp;</td>
+                        <td style="width:2%;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 18px;">
+                        <td style="width:2%;">&nbsp;</td>
+                        <td style="height: 18px;" colspan="1" *ngIf="item.categoryName !== ''"> <b>Manufacturing Process:</b>
+                          {{(item?.parentCategoryName) ? item.parentCategoryName : 'N/A'}}</td>
+                          <td style="height: 18px;" colspan="1" *ngIf="item.categoryName !== ''"> <b>Manufacturing Technique:</b>
+                            {{(item?.childCategoryName) ? item.childCategoryName : 'N/A'}}</td>
+                        <td style="height: 18px;" colspan="1" *ngIf="item.materialName !== ''"> <b>Material:
+                          </b>{{item.materialName}}&nbsp;</td>
+                        <td style="height: 18px;" colspan="2" *ngIf="item.postProductionProcessName !== ''"><b>Post Process: </b>{{item.postProductionProcessName}}</td>
+                        <td style="width:2%;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 20px;">
+                        <td colspan="6">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 18px;">
+                        <td style="width:2%;">&nbsp;</td>
+                        <td style="width: 27%; height: 18px;">&nbsp;</td>
+                        <td style="width: 23%; height: 18px;text-align: right;"> {{getpartqty(2,item.rfqPartId,i)}}</td>
+                        <td style="width: 23%; height: 18px;text-align: right;"> {{getpartqty(1,item.rfqPartId,i)}}</td>
+                        <td style="width: 23%; height: 18px;text-align: right;"> {{getpartqty(0,item.rfqPartId,i)}}</td>
+                        <td style="width:2%;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 19px;background-color: #f6f7fb">
+                        <td style="width:2%;">&nbsp;</td>
+                        <td style="width: 27%; height: 18px;">Price Per Unit</td>
+                        <td style="width: 23%; height: 18px;text-align: right;"> <span
+                            *ngIf="getperunitprice(2, item.rfqPartId,i) !==''">$</span>{{(getperunitprice(2,item.rfqPartId,i)) ? (getperunitprice(2,item.rfqPartId,i)) : ( ( getTotalQuantity(2, item.rfqPartId,i) )?'$0.0000':'' ) }}
+                        </td>
+                        <td style="width: 23%; height: 18px;text-align: right;"> <span
+                            *ngIf="getperunitprice(1, item.rfqPartId,i) !==''">$</span>{{(getperunitprice(1,item.rfqPartId,i)) ? (getperunitprice(1,item.rfqPartId,i)) : ( ( getTotalQuantity(1, item.rfqPartId,i) )?'$0.0000':'' ) }}
+                        </td>
+                        <td style="width: 23%; height: 18px;text-align: right;"> <span
+                            *ngIf="getperunitprice(0, item.rfqPartId,i) !==''">$</span>{{(getperunitprice(0,item.rfqPartId,i)) ? (getperunitprice(0,item.rfqPartId,i)) : ( ( getTotalQuantity(0, item.rfqPartId,i) !=='' )?'$0.0000':'' ) }}
+                        </td>
+                        <td style="width:2%;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 18px;">
+                        <td style="width:2%;">&nbsp;</td>
+                        <td style="width: 27%; height: 18px;">Tooling</td>
+                        <td style="width: 23%; height: 18px;text-align: right;"> <span
+                            *ngIf="gettoolingamount(2, item.rfqPartId,i) !==''">$</span>{{gettoolingamount(2,item.rfqPartId,i)}}
+                        </td>
+                        <td style="width: 23%; height: 18px;text-align: right;"> <span
+                            *ngIf="gettoolingamount(1, item.rfqPartId,i) !==''">$</span>{{gettoolingamount(1,item.rfqPartId,i)}}
+                        </td>
+                        <td style="width: 23%; height: 18px;text-align: right;"><span
+                            *ngIf="gettoolingamount(0, item.rfqPartId,i) !==''">$</span>{{gettoolingamount(0,item.rfqPartId,i)}}
+                        </td>
+                        <td style="width:2%;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 18px;background-color: #f6f7fb">
+                        <td style="width:2%;">&nbsp;</td>
+                        <td style="width: 27%; height: 18px;">Miscellaneous</td>
+                        <td style="width: 23%; height: 18px;text-align: right;"><span
+                            *ngIf="getmiscellaneousamount(2, item.rfqPartId,i) !==''">$</span>{{getmiscellaneousamount(2,item.rfqPartId,i)}}
+                        </td>
+                        <td style="width: 23%; height: 18px;text-align: right;"><span
+                            *ngIf="getmiscellaneousamount(1, item.rfqPartId,i) !==''">$</span>{{getmiscellaneousamount(1,item.rfqPartId,i)}}
+                        </td>
+                        <td style="width: 23%; height: 18px;text-align: right;"><span
+                            *ngIf="getmiscellaneousamount(0, item.rfqPartId,i) !==''">$</span>{{getmiscellaneousamount(0,item.rfqPartId,i)}}
+                        </td>
+                        <td style="width:2%;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 18px;">
+                        <td style="width:2%;">&nbsp;</td>
+                        <td style="width: 27%; height: 18px;">Shipping</td>
+                        <td style="width: 23%; height: 18px;text-align: right;"> <span
+                            *ngIf="getshippingamount(2, item.rfqPartId,i) !==''">$</span>{{getshippingamount(2,item.rfqPartId,i)}}
+                        </td>
+                        <td style="width: 23%; height: 18px;text-align: right;"><span
+                            *ngIf="getshippingamount(1, item.rfqPartId,i) !==''">$</span>{{getshippingamount(1,item.rfqPartId,i)}}
+                        </td>
+                        <td style="width: 23%; height: 18px;text-align: right;"> <span
+                            *ngIf="getshippingamount(0, item.rfqPartId,i) !==''">$</span>{{getshippingamount(0,item.rfqPartId,i)}}
+                        </td>
+                        <td style="width:2%;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 18px;">
+                        <td style="width:2%;">&nbsp;</td>
+                        <td style="width: 27%; height: 18px;font-weight: bold;">Subtotals</td>
+                        <td style="width: 23%; height: 18px;text-align: right;font-weight: bold;"> <span
+                            *ngIf="getTotalQuantity(2, item.rfqPartId,i) !==''">$</span>{{getTotalQuantity(2, item.rfqPartId,i)}}
+                        </td>
+                        <td style="width: 23%; height: 18px;text-align: right;font-weight: bold;"> <span
+                            *ngIf="getTotalQuantity(1, item.rfqPartId,i) !==''">$</span>{{getTotalQuantity(1, item.rfqPartId,i)}}
+                        </td>
+                        <td style="width: 23%; height: 18px;text-align: right;font-weight: bold;"> <span
+                            *ngIf="getTotalQuantity(0, item.rfqPartId,i) !==''">$</span>{{getTotalQuantity(0, item.rfqPartId,i)}}
+                        </td>
+                        <td style="width:2%;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 5px;">
+                        <td style="height: 5px;" colspan="6">&nbsp;</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p>&nbsp;</p>
+                <p class="nomargin" style="margin-top: 15px; margin-bottom: 0px;font-size: 20px; "
+                  *ngIf="supplierPaymentTerms !== null && supplierPaymentTerms !== ''"><strong>Quote Payment Terms</strong> </p>
+                <hr style=" border-color: #222222!important;margin:5px 0px; "
+                  *ngIf="supplierPaymentTerms !== null && supplierPaymentTerms !== ''" />
+                <p style="word-break: break-all" *ngIf="supplierPaymentTerms !== null && supplierPaymentTerms !== ''"> {{supplierPaymentTerms}}
+                </p>
+                <p *ngIf="supplierPaymentTerms !== null && supplierPaymentTerms !== ''">&nbsp;</p>
+                <p class="nomargin" style="margin-top: 15px; margin-bottom: 0px;font-size: 20px; "
+                  *ngIf="quoteMessage !== null && quoteMessage !== ''"><strong>Quote Message</strong> </p>
+                <hr style=" border-color: #222222!important;margin:5px 0px; "
+                  *ngIf="quoteMessage !== null && quoteMessage !== ''" />
+                <p style="word-break: break-all" *ngIf="quoteMessage !== null && quoteMessage !== ''"> {{quoteMessage}}
+                </p>
+                <p *ngIf="quoteMessage !== null && quoteMessage !== ''">&nbsp;</p>
+                <p class="nomargin" style="margin-top: 15px; margin-bottom: 0px;font-size: 20px; "><strong> Additional
+                    Information</strong></p>
+                <hr style=" border-color: #222222!important;margin:5px 0px 10px; " />
+                <table style="height: 69px;" width="100%">
+                  <tbody>
+                    <tr>
+                      <td style="width: 141px;font-weight: bold;">Payment Terms</td>
+                      <!-- <td style="width: 143px;font-weight: bold;">Estimated Delivery</td>
+                    <td style="width: 143px;font-weight: bold;">Shipping Method</td> -->
+                    </tr>
+                    <tr>
+                      <td style="vertical-align:initial;">
+                        <span *ngIf="irfqViewModel.payment_term_id == 1">
+                          Net 15
+                        </span>
+                        <span *ngIf="irfqViewModel.payment_term_id == 2">
+                          Net 30
+                        </span>
+                        <span *ngIf="irfqViewModel.payment_term_id == 3">
+                          Net 45
+                        </span>
+                        <span *ngIf="irfqViewModel.payment_term_id == 4">
+                          Net 60
+                        </span>
+                        <span *ngIf="irfqViewModel.payment_term_id == null">
+                          NA
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>

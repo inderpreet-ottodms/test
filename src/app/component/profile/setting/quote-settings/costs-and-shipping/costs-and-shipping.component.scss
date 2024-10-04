@@ -1,0 +1,218 @@
+@import '../../../../../../styles.scss';
+
+.form-group a
+{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #4a90e2;
+}
+.form-group .extra-bottom-margin
+{
+    margin-bottom: 10px;
+}
+.graycolor {
+    background-color: #e2e2e5;
+    padding: 5px;
+    margin: 5px;
+    float: left;
+  }
+
+  .addItem-model-container
+  {
+    width: 602px;
+    height: 321px;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+    background-color: #ffffff;
+  }
+  .addItem-model-container .title
+  {
+    width: 274px;
+    height: 33px;
+    font-family: Poppins;
+    font-size: 24px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #222222;
+  }
+
+  .modal-content
+  {
+      border: 0px;
+  }
+
+  .modal-content .input-value
+  {
+    width: 100%;
+    height: 35px;
+    border-radius: 2px;
+    border: solid 1px #bec4cb;
+    background-color: #ffffff;
+    padding: 10px;
+  }
+
+  .modal-content .action-container
+  {
+    margin-top: 10px;
+    position: relative;
+    margin-top: 50px;
+  }
+
+  .modal-content .action-container .filled-button
+  {
+    width: 185px;
+    height: 45px;
+    border-radius: 2px;
+    background-color: #56c23e;
+    color: white;
+    border: 0px;
+    border-radius: 2px;
+    float: right;
+  }
+  .modal-content .action-container .filled-button:disabled
+  {
+    width: 185px;
+    height: 45px;
+    border-radius: 2px;
+    opacity: .7;
+    cursor: not-allowed!important;
+    color: white;
+    border: 0px;
+    border-radius: 2px;
+    float: right;
+  }
+  .modal-content .action-container .no-filled-button
+  {
+    width: 165px;
+    height: 45px;
+    border-radius: 2px;
+    background-color: white;
+    color: #56c23e;
+    border: 2px solid #56c23e;
+    border-radius: 2px;
+    float: right;
+    margin-right: 27px;
+  }
+.modal-content .action-container .no-filled-button:disabled
+{
+    width: 165px;
+    height: 45px;
+    border-radius: 2px;
+    background-color: white;
+    color: #56c23e;
+    border: 2px solid #56c23e;
+    border-radius: 2px;
+    float: right;
+    margin-right: 27px;
+    opacity: .7;
+    cursor: not-allowed!important;
+}
+
+  .modal-content .action-container .clear-action
+  {
+    width: 165px;
+    height: 45px;
+    border-radius: 2px;
+    background-color: white;
+    color: #56c23e;
+    border: 1px solid #56c23e;
+    border-radius: 2px;
+    float: left;
+    margin-right: 9px;
+  }
+
+  .model-popup-text
+  {
+    width: 562px;
+    height: 38px;
+    font-family: Poppins;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.36;
+    letter-spacing: normal;
+    color: #222222;
+  }
+  .line
+  {
+    border: 0px;
+    border-top: 2px solid #222222;
+    margin-left: -16px;
+    width: 106%;
+  }
+  .I-am-a-person-that {
+    font-family: Poppins;
+    font-size: 14px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #222222;
+  }
+  .times
+  {
+    width: 9px;
+    height: 16px;
+    font-family: FontAwesome5Pro;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.14;
+    letter-spacing: normal;
+    text-align: center;
+    color: #222222;
+    cursor: pointer;
+  }
+
+  .btn-ignore-rfq {
+    width: 100%;
+    height: 45px;
+    border-radius: 2px;
+    border: solid 2px #81db6d;
+    background-color:#fff;
+    color:#81db6d
+  }
+  .btn-cancel-rfq {
+    width: 100%;
+    height: 45px;
+    border-radius: 2px;
+    background-color: #81db6d;
+    color:#ffffff;
+  }
+//   .close
+//   {
+//     margin-top: 0px;
+//     color: #4A90E2;
+//     border: 3px solid #4A90E2;
+//     border-radius: 54px;
+//     padding: 0px 4px 1px 4px;
+//     /* height: 10px; */
+//     font-size: 14px;
+//     font-weight: bolder;
+//   }
+  .error-message
+  {
+    padding: 0px;
+    color: red;
+    font-size: 9pt;
+  }
+  .decimal {
+    width:100%;
+  }
+
+  .invoiceNumberBtn {
+    border-radius: 3px;
+    background-color: #ffffff;
+    border: solid 2px #4a90e2;
+    color:#4a90e2;
+    padding: 5px 40px!important;
+  }
+.invoiceNumberBtn:disabled {
+  cursor: not-allowed!important;
+}

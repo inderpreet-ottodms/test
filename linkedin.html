@@ -1,0 +1,184 @@
+<html>
+
+<head>
+  <title></title>
+  <style>
+    body {
+      background: -webkit-gradient(linear, left top, right top, from(#00447c), to(#4a90e2));
+      background: linear-gradient(to right, #00447c, #4a90e2);
+    }
+
+    img {
+      width: 165px;
+      height: 35px;
+    }
+
+    .container {
+      margin-top: 60px;
+      text-align: center;
+    }
+
+    .body {
+      margin-top: 30px;
+    }
+
+    .body span {
+      font-size: 22px;
+      color: #fff;
+    }
+
+    .lds-roller {
+      display: inline-block;
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+
+    .lds-roller div {
+      animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      transform-origin: 40px 40px;
+    }
+
+    .lds-roller div:after {
+      content: " ";
+      display: block;
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #1abc9c;
+      margin: -4px 0 0 -4px;
+    }
+
+    .lds-roller div:nth-child(1) {
+      animation-delay: -0.036s;
+    }
+
+    .lds-roller div:nth-child(1):after {
+      top: 63px;
+      left: 63px;
+    }
+
+    .lds-roller div:nth-child(2) {
+      animation-delay: -0.072s;
+    }
+
+    .lds-roller div:nth-child(2):after {
+      top: 68px;
+      left: 56px;
+    }
+
+    .lds-roller div:nth-child(3) {
+      animation-delay: -0.108s;
+    }
+
+    .lds-roller div:nth-child(3):after {
+      top: 71px;
+      left: 48px;
+    }
+
+    .lds-roller div:nth-child(4) {
+      animation-delay: -0.144s;
+    }
+
+    .lds-roller div:nth-child(4):after {
+      top: 72px;
+      left: 40px;
+    }
+
+    .lds-roller div:nth-child(5) {
+      animation-delay: -0.18s;
+    }
+
+    .lds-roller div:nth-child(5):after {
+      top: 71px;
+      left: 32px;
+    }
+
+    .lds-roller div:nth-child(6) {
+      animation-delay: -0.216s;
+    }
+
+    .lds-roller div:nth-child(6):after {
+      top: 68px;
+      left: 24px;
+    }
+
+    .lds-roller div:nth-child(7) {
+      animation-delay: -0.252s;
+    }
+
+    .lds-roller div:nth-child(7):after {
+      top: 63px;
+      left: 17px;
+    }
+
+    .lds-roller div:nth-child(8) {
+      animation-delay: -0.288s;
+    }
+
+    .lds-roller div:nth-child(8):after {
+      top: 56px;
+      left: 12px;
+    }
+
+    @keyframes lds-roller {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .m-t-30 {
+      margin-top: 30px;
+    }
+
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $.urlParam = function (name) {
+      var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	  if(results != null && results != undefined){
+      return results[1] || 0;
+	  } else{
+	  return null;
+	  }
+    }
+    $(document).ready(function () {
+      var code = ($.urlParam('code')!= undefined && $.urlParam('code') != null && $.urlParam('code') != '')? $.urlParam('code'): '';
+      var state =  ($.urlParam('state')!= undefined && $.urlParam('state') != null && $.urlParam('state') != '')? $.urlParam('state'): '';
+      var error = ($.urlParam('error')!= undefined && $.urlParam('error') != null && $.urlParam('error') != '')? $.urlParam('error'): '';
+      var error_description =($.urlParam('error_description')!= undefined && $.urlParam('error_description') != null && $.urlParam('error_description') != '')? $.urlParam('error_description'): '';
+      if(error != null && error != undefined && error != ''){
+        window.location.href = "https://app.mfg.com/#/auth/login/simple";
+      }
+      else if(code != null && code != undefined && code != ''){
+        window.location.href = "https://app.mfg.com/#/auth/linkedin?code="+code+"&sate="+state;
+      }
+      
+    });
+
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <img alt="MFG Logo" src="https://s3.us-east-2.amazonaws.com/mfg.mp2020/636810714479365316_S3_logo.png">
+    </div>
+    <div class="body">
+      <span>Please wait ......... </span>
+      <div class="m-t-30">
+        <div class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+</body>
+
+</html>

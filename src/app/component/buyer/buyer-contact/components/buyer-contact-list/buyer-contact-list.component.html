@@ -1,0 +1,466 @@
+{{ checkIfFollowUnFollowChange() }}
+<div class="p-20">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="btn-group">
+        <!-- As per ticket M2-4108 Removed All tab and Archived tab 08-oct-2021 (AJ) -->
+        <!-- <button type="button" (click)="setStatusFilter('All')" [ngClass]="
+                    activeStatusFilterBtn == 'All'
+                      ? 'btn my-RFQ-state-filter-button-active'
+                      : 'btn my-RFQ-state-filter-button-inactive'
+                  ">
+          All
+        </button>
+        <button type="button" (click)="setStatusFilter('Archived')" [ngClass]="
+                    activeStatusFilterBtn == 'Archived'
+                      ? 'btn my-RFQ-state-filter-button-active'
+                      : 'btn my-RFQ-state-filter-button-inactive'
+                  ">
+          Archived
+        </button> -->
+        <button type="button" (click)="setStatusFilter('LikedManuf')" [ngClass]="
+                    activeStatusFilterBtn == 'LikedManuf'
+                      ? 'btn my-RFQ-state-filter-button-active'
+                      : 'btn my-RFQ-state-filter-button-inactive'
+                  ">
+          Liked Manufacturers
+        </button>
+        <button type="button" (click)="setStatusFilter('Blacklisted')" [ngClass]="
+                activeStatusFilterBtn == 'Blacklisted'
+                  ? 'btn my-RFQ-state-filter-button-active'
+                  : 'btn my-RFQ-state-filter-button-inactive'
+              ">
+          Blacklisted
+        </button>
+      </div>
+    </div>
+    <div class="col-md-6 text-right p-t-10">
+      <i [ngClass]="
+          isTilesView
+            ? 'ti-layout-grid2 my-RFQ-list-view active'
+            : 'ti-layout-grid2 my-RFQ-list-view '
+        " (click)="openTilesView()"></i>
+      <i [ngClass]="
+          isGridView
+            ? 'ti-list my-RFQ-list-view active'
+            : 'ti-list my-RFQ-list-view'
+        " (click)="openGridView()"></i>
+    </div>
+  </div>
+  <div class="row contact_filter p-b-10 p-t-10 p-r-0 p-l-0">
+    <div [ngClass]="isSidePanel() ? 'col-md-6' : 'col-md-3'">
+      <angular2-multiselect [data]="iCustomProcessViewModelColl" [(ngModel)]="selectedProcesses" name="Processdrop"
+        [settings]="processsettings" (onDeSelect)="onParentProcessDeSelect($event)"
+        (onSelect)="onParentProcessSelect($event)" (onSelectAll)="onParentProcessSelectAll($event)"
+        (onDeSelectAll)="onParentProcessDeSelectAll($event)">
+      </angular2-multiselect>
+    </div>
+    <div [ngClass]="isSidePanel() ? 'col-md-6' : 'col-md-3'">
+      <angular2-multiselect [data]="iCustomChildProcessViewModelColl" [(ngModel)]="selectedChildProcessItems"
+        name="Processdrop" [settings]="childProcessSettings" (onDeSelect)="onChildProcessDeSelect($event)"
+        (onSelect)="onChildProcessSelect($event)" (onSelectAll)="onChildProcessSelectAll($event)"
+        (onDeSelectAll)="onChildProcessDeSelectAll($event)">
+      </angular2-multiselect>
+    </div>
+    <div [ngClass]="isSidePanel() ? 'col-md-6 m-t-10' : 'col-md-3'">
+      <angular2-multiselect [data]="iCountryModel" name="processdrop" [(ngModel)]="selectedcountry"
+        [settings]="countrySettings" (onDeSelect)="filterAll()" (onSelect)="filterAll()" (onSelectAll)="filterAll()"
+        (onDeSelectAll)="filterAll()">
+      </angular2-multiselect>
+    </div>
+    <div [ngClass]="isSidePanel() ? 'col-md-6 m-t-10' : 'col-md-3'">
+      <angular2-multiselect [data]="iCertificateList" [(ngModel)]="selectedCertificate" name="postsProcess"
+        [settings]="certificatesettings" (onDeSelect)="filterAll()" (onSelect)="filterAll()" (onSelectAll)="filterAll()"
+        (onDeSelectAll)="filterAll()">
+      </angular2-multiselect>
+    </div>
+    <div class="m-t-10 col-md-6 offset-6">
+      <div class="input-container">
+        <i class="fa fa-search icon-search" (click)="filterAll()" placement="top" container="body"
+          ngbTooltip="Search"></i>
+        <input class="search search-text" [(ngModel)]="searchFilterValue" placeholder="Search" type="text"
+          (keypress)="searchByKey($event)" (input)="checkSearch(searchFilterValue)" />
+        <i class="fa fa-times-circle icon cursor-pointer" (click)="removeTextValue()" placement="top" container="body"
+          ngbTooltip="Remove Text"></i>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="isTilesView == true && !isRfqAvailable">
+    <div class="col-md-12">
+      <div>
+        <div class="row">
+          <br />
+          <!-- ----------------------loop for card start------------------ -->
+          <div [ngClass]="isSidePanel() ? 'col-md-5 box-margin' : 'col-md-3'" *ngFor="let supplier of items"
+            id="{{ supplier.followContactId }}">
+            <!-- card start -->
+            <div class="card" [ngClass]="
+                supplier.contactIdEncrypt === currentRfq() ? 'actievPart' : ''
+              ">
+              <!-- card body start -->
+              <div class="cursor-pointer" (click)="
+                  openMenufacturerDrawer(
+                    supplier.contactIdEncrypt,
+                    supplier.contactName,
+                    supplier.followContactId,
+                    supplier.companyName
+                  )
+                ">
+                <div class="card-img">
+                  <img class="imagwidtheight" *ngIf="
+                      supplier.logoOfCompany === '' ||
+                      supplier.logoOfCompany === null ||
+                      supplier.logoOfCompany === 'string'
+                    " src="assets/company/avatar-manu-basic.svg" />
+                  <img class="imagwidtheight" *ngIf="
+                      !(
+                        supplier.logoOfCompany === '' ||
+                        supplier.logoOfCompany === null ||
+                        supplier.logoOfCompany === 'string'
+                      )
+                    " src="{{ supplier.logoOfCompany }}" onError="this.src='assets/company/avatar-manu-basic.svg'" />
+                </div>
+                <div class="f-w-600 text-center" (click)="
+                    readMore(
+                      $event,
+                      supplier.companyId,
+                      supplier.followContactId,
+                      supplier.contactIdEncrypt
+                    )
+                  ">
+                  <h2 class="cursor-pointer text-truncate f-16 color-blue m-t-15 colorBlue">
+                    {{ supplier.companyName }}
+                    <br />
+                  </h2>
+                  <div class="rfq-star">
+                    <span style="color: #212A37; font-size: 14px">
+                      {{
+                        supplier.noOfStars
+                          ? (supplier.noOfStars | number: "1.0-1")
+                          : "n/a"
+                      }}
+                    </span>
+                    <ng-template #t let-fill="fill">
+                      <span class="star" [class.full]="fill === 100">
+                        <span class="fill-star" [style.width.%]="fill">
+                          &#9733;
+                        </span>
+                        &#9733;
+                      </span>
+                    </ng-template>
+                    <ngb-rating [(rate)]="supplier.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+                  </div>
+                </div>
+                <div class="card-sub-title">
+                  <hr />
+                  <div class="address_div">
+                    <p class="color-gray f-12 p-l-15 p-r-15 m-0" [innerHTML]="getAddressFormat(supplier.address)"></p>
+                  </div>
+                  <hr />
+                  <p class="text-truncate color-gray f-12 p-l-15 p-r-15 m-0">{{ supplier.telephoneNo | Na }}</p>
+                  <hr />
+                  <p class="color-gray f-12 p-l-15 p-r-15 m-0">
+                    <a class="d-block p-b-10 color-blue text-truncate colorBlue">
+                      {{ supplier.webUrl | Na }}
+                    </a>
+                  </p>
+                </div>
+              </div>
+              <!-- card body end -->
+              <!-- card footer start -->
+              <div class="bottomaction">
+                <ul>
+                  <li>
+                    <a (click)="
+                        openMessageDrawer(
+                          $event,
+                          supplier.followContactId,
+                          0,
+                          supplier.companyName,
+                          supplier.contactIdEncrypt
+                        )
+                      ">
+                      <i class="fa fa-envelope-o cursor-pointer f-16" aria-hidden="true" placement="top"
+                        container="body" ngbTooltip="Message Manufacturer"></i>
+                    </a>
+                  </li>
+                  <li class="pull-right"
+                    *ngIf="activeStatusFilterBtn !== 'Archived' && activeStatusFilterBtn !== 'LikedManuf'">
+                    <a (click)="removeContact(supplier.companyId)">
+                      <img src="assets/rfq/not-allow.png" srcset="
+                          assets/rfq/not-allow@2x.png 2x,
+                          assets/rfq/not-allow@3x.png 3x
+                        " class="award-rfq-icon-class cursor-pointer" placement="top" container="body"
+                        ngbTooltip="Remove Blacklist" />
+                    </a>
+                  </li>
+                  <li class="pull-right" *ngIf="activeStatusFilterBtn === 'LikedManuf'">
+                    <a (click)="unlikeContact(supplier.companyId,supplier.email)">
+                      <img src="assets/rfq/not-allow.png" srcset="
+                          assets/rfq/not-allow@2x.png 2x,
+                          assets/rfq/not-allow@3x.png 3x
+                        " class="award-rfq-icon-class cursor-pointer" placement="top" container="body"
+                        ngbTooltip="Unlike" />
+                    </a>
+                  </li>
+                  <li class="pull-right" *ngIf="activeStatusFilterBtn === 'Archived'">
+                    <a (click)="removeArchivedContact(supplier.companyId)">
+                      <i class="fa fa-trash cursor-pointer f-16" aria-hidden="true" placement="top" container="body"
+                        ngbTooltip="Remove Contact"></i>
+                    </a>
+                  </li>
+
+                </ul>
+              </div>
+              <!-- card footer start -->
+            </div>
+            <!-- card start -->
+          </div>
+          <!-- ----------------------loop for card end------------------ -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- -----------------------grid view starts--------------------------- -->
+  <div class="row" *ngIf="isGridView == true && !isRfqAvailable">
+    <div class="col-md-12">
+      <div class="row m-l-5 m-r-5">
+        <div class="col-md-1"></div>
+        <div class="col-md-3">
+          <span class="f-12 f-w-600" (click)="sortOnContactName()">
+            Manufacturer
+            <!-- <i [ngClass]="(toggleManufacturer)?'fa fa-sort-asc':'fa fa-sort-desc'"></i> -->
+          </span>
+        </div>
+        <div class="col-md-3">
+          <span class="f-12 f-w-600">Address</span>
+        </div>
+        <div class="col-md-2">
+          <span class="f-12 f-w-600">Phone</span>
+        </div>
+        <div class="col-md-2">
+          <span class="f-12 f-w-600">Website</span>
+        </div>
+        <div class="col-md-1">
+          <span class="f-12 f-w-600">Actions</span>
+        </div>
+      </div>
+      <div class="row list-box" *ngFor="let supplier of items" id="{{ supplier.followContactId }}" [ngClass]="
+          supplier.contactIdEncrypt === currentRfq() ? 'actievPart' : ''
+        ">
+        <div class="col-md-1 d-flex align-items-center" (click)="
+            openMenufacturerDrawer(
+              supplier.contactIdEncrypt,
+              supplier.contactName,
+              supplier.followContactId,
+              supplier.companyName
+            )
+          ">
+          <img *ngIf="
+              supplier.logoOfCompany === '' ||
+              supplier.logoOfCompany === null ||
+              supplier.logoOfCompany === 'string'
+            " src="assets/company/avatar-manu-basic-circle.svg"
+            class="d-Turbine-3D-AutoCAD-Drawing wid-50 hei-50 rounded-circle"
+            style="border: 1px solid #c9c9c9; width: 50px; height: 50px" />
+          <img *ngIf="
+              !(
+                supplier.logoOfCompany === '' ||
+                supplier.logoOfCompany === null ||
+                supplier.logoOfCompany === 'string'
+              )
+            " src="{{ supplier.logoOfCompany }}" class="d-Turbine-3D-AutoCAD-Drawing wid-50 hei-50 rounded-circle"
+            onError="this.src='assets/company/avatar-manu-basic-circle.svg'"
+            style="border: 1px solid #c9c9c9; width: 50px; height: 50px" />
+        </div>
+        <div class="col-md-3 d-flex align-items-center">
+          <div class="text-truncate m-b-10 m-t-10">
+            <h2 class="cursor-pointer color-blue f-16 m-b-0" (click)="
+                readMore(
+                  $event,
+                  supplier.companyId,
+                  supplier.followContactId,
+                  supplier.contactIdEncrypt
+                )
+              " placement="top" container="body" [ngbTooltip]="supplier.companyName">
+              {{ supplier.companyName }}
+              <br />
+            </h2>
+            <div class="rfq-star" style="position: static">
+              <span style="color: #212A37; font-size: 14px">
+                {{
+                  supplier.noOfStars
+                    ? (supplier.noOfStars | number: "1.0-1")
+                    : "n/a"
+                }}
+              </span>
+              <ng-template #t let-fill="fill">
+                <span class="star" [class.full]="fill === 100">
+                  <span class="fill-star" [style.width.%]="fill">
+                    &#9733;
+                  </span>
+                  &#9733;
+                </span>
+              </ng-template>
+              <ngb-rating [(rate)]="supplier.noOfStars" [starTemplate]="t" [readonly]="true" max="5">
+              </ngb-rating>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 d-flex align-items-center" (click)="
+            openMenufacturerDrawer(
+              supplier.contactIdEncrypt,
+              supplier.contactName,
+              supplier.followContactId,
+              supplier.companyName
+            )
+          ">
+          <p class="f-12 m-t-10 m-b-10 m-l-0 m-r-0" [innerHTML]="getAddressFormat(supplier.address)"></p>
+        </div>
+        <div class="col-md-2 d-flex align-items-center">
+          <span class="f-12">{{ supplier.telephoneNo | Na }}</span>
+        </div>
+        <div class="col-md-2 d-flex align-items-center">
+          <a class="d-block p-b-10 color-blue text-truncate f-12" (click)="websiteClick(supplier?.webUrl)"
+            placement="top" container="body" [ngbTooltip]="supplier.webUrl">
+            {{ supplier.webUrl | Na }}
+          </a>
+        </div>
+        <div class="col-md-1 d-flex align-items-center justify-content-around bg-light-blue p-l-0 p-r-0">
+          <a (click)="
+              openMessageDrawer(
+                $event,
+                supplier.followContactId,
+                0,
+                supplier.companyName,
+                supplier.contactIdEncrypt
+              )
+            ">
+            <i class="fa fa-envelope-o cursor-pointer color-blue f-16" aria-hidden="true" placement="top"
+              container="body" ngbTooltip="Message Manufacturer"></i>
+          </a>
+          <a (click)="removeContact(supplier.companyId)" class=" "
+            *ngIf="activeStatusFilterBtn !== 'Archived' && activeStatusFilterBtn !== 'LikedManuf'">
+            <img src="assets/rfq/not-allow.png" placement="top" container="body" ngbTooltip="Remove Blacklist"
+              srcset=" assets/rfq/not-allow@2x.png 2x, assets/rfq/not-allow@3x.png 3x "
+              class="award-rfq-icon-class cursor-pointer" />
+          </a>
+
+          <a (click)="unlikeContact(supplier.companyId,supplier.email)" class=" "
+            *ngIf="activeStatusFilterBtn === 'LikedManuf'">
+            <img src="assets/rfq/not-allow.png" placement="top" container="body" ngbTooltip="Unlike"
+              srcset=" assets/rfq/not-allow@2x.png 2x, assets/rfq/not-allow@3x.png 3x "
+              class="award-rfq-icon-class cursor-pointer" />
+          </a>
+          <a (click)="removeArchivedContact(supplier.companyId)" class=" " *ngIf="activeStatusFilterBtn === 'Archived'">
+            <i class="fa fa-trash cursor-pointer f-16 color-blue" aria-hidden="true" placement="top" container="body"
+              ngbTooltip="Remove Contact"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- --------------------grid view ends------------------------- -->
+  <!-- ------------------------- Pagination start----------------------- -->
+  <div class="row" *ngIf="!isRfqAvailable">
+    <div class="col-md-4">
+      <div class="dataTables_length" id="example_length">
+        <label>
+          Show
+          <select name="example_length" aria-controls="example" class [(ngModel)]="inputLength"
+            (ngModelChange)="ChangeinputLength()">
+            <option value="24">24</option>
+            <option value="48">48</option>
+            <option value="96">96</option>
+          </select>
+          entries
+        </label>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="paginations">
+        <div>
+          <div id="radioBtn" class="btn-group">
+            <a [ngClass]="{ disabled: currentIndex == 1 || pageNumber == 0 }" class="btn btn-primary btn-sm notActive"
+              (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+              Previous
+            </a>
+            <a *ngFor="let page of pagesIndex" (click)="setPage(page)" [ngClass]="currentIndex == page
+                  ? 'btn btn-primary btn-sm active'
+                  : 'btn btn-primary btn-sm notActive'" data-bs-toggle="fun" data-title="X">
+              {{ page }}
+            </a>
+            <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+                (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                Next
+              </a>
+            <!-- <a [ngClass]="currentIndex == pageNumber || pageNumber == 0
+                  ? 'btn btn-primary btn-sm active'
+                  : 'btn btn-primary btn-sm notActive'" (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+              Next
+            </a> -->
+          </div>
+          <input type="hidden" name="fun" id="fun" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="!isRfqAvailable">
+    <div class="col-md-12">
+      <div class="pull-right padd-right">
+        <label class="showreccount">{{ currentIndex }} of {{ pageNumber }}</label>
+      </div>
+    </div>
+  </div>
+  <!-- ------------------------- Pagination end----------------------- -->
+  <!-- ---------------------  Empty Box start   -------------------- -->
+  <div class="myRFQ-rfq-no-available" *ngIf="isRfqAvailable">
+    <div class="row" style="text-align: center; padding-top: 60px">
+      <div class="col-md-12">
+        <div>
+          <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x, assets/rfq/no-rfq@3x.png 3x"
+            class="myRFQ-Group" />
+        </div>
+      </div>
+    </div>
+    <div class="row p-t-35">
+      <div class="col-md-12">
+        <div class="f-22 f-w-600 text-center color-gray m-b-50">
+          You don’t have any Contacts at this time.
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ---------------------  Empty Box end   -------------------- -->
+</div>
+<p-confirmDialog header="Confirmation" icon width="629" height="220" #cd>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6">
+        <button type="button" class="btn button-green-border" (click)="cd.reject()">
+          No
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn button-green" label="Yes" (click)="cd.accept()">
+          Yes
+        </button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>
+<!-- </div> -->
+<!-- ---------------------  loader start   -------------------- -->
+<div class="loading" *ngIf="isLoader">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div>
+<!-- ---------------------  loader end   -------------------- -->

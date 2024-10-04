@@ -1,0 +1,274 @@
+
+ <div class="background-white">
+    <div *ngIf="isLoader">
+        <div class="loader animation-start">
+          <span class="circle delay-1 size-2"></span>
+          <span class="circle delay-2 size-4"></span>
+          <span class="circle delay-3 size-6"></span>
+          <span class="circle delay-4 size-7"></span>
+          <span class="circle delay-5 size-7"></span>
+          <span class="circle delay-6 size-6"></span>
+          <span class="circle delay-7 size-4"></span>
+          <span class="circle delay-8 size-2"></span>
+        </div>
+      </div>
+    <div class="row" *ngIf="!isLoader">
+      <div class="col-md-12 rightpanel" >
+        <i class="fa fa-times-circle pull-right" (click)="closeQuoteReviewDrawer()"></i>
+        <h2 class="panelheading  section-heading-bottom  pb-3">Quote # {{iQuotesViewModel.quoteId}} Details</h2>
+      </div>
+      <div class="col-md-12" *ngIf="!isDraftPage()">
+        <div class="row probability_section" >
+          <div class="col-md-4">
+              Probability
+          </div>
+          <div class="col-md-8">
+              <select class="form-control" [(ngModel)]="sortProFilterValue" [disabled]='getProbVisibility()'
+                (change)="addProbabilitytoQMS()">
+                <option [value]="data.qmsProbabilityId" *ngFor="let data of  probabilityAll">{{data.qmsProbability}}</option>
+              </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12" *ngIf="!isDraftPage()">
+        <hr *ngIf="!isDraftPage()">
+        <div class="row probability_section" >
+          <div class="col-md-4">
+              Status
+          </div>
+          <div class="col-md-8">
+            <select class="form-control statusDropwidth"  [(ngModel)]="iQuotesViewModel.emailStatusId" [disabled]='getProbVisibility()'
+            (change)="changeQmsStatus($event)">
+            <option [value]="data.qmsEmailStatusId" *ngFor="let data of  qmsAllStatus">{{data.qmsEmailStatus}}</option>
+          </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+          <hr *ngIf="!isDraftPage()">
+        <div class="row btn_section">
+          <div [ngClass]="!isDraftPage() ? 'col-md-6' : 'col-md-12'" style="text-align: center;">
+              <button [ngClass]="!isDraftPage() ? '' : 'edit_btn'" class= "edit_quote_btn" (click)="openEditQms()">Edit Quote</button>
+          </div>
+          <div class="col-md-6" *ngIf="!isDraftPage()">
+              <button class= "view_pdf_btn" (click)="openQMSDetailsPage(iQuotesViewModel.qmsQuoteId,iQuotesViewModel.quoteId)">View Quote</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+      <div class="row btn_section">
+        <div class="col-md-6" *ngIf="!isDraftPage()">
+            <button class= "edit_quote_btn"(click)="openCreateInvoicePage()" >Create Invoice</button>
+        </div>
+        <div class="col-md-6" *ngIf="!isDraftPage()">
+            <button class= "view_pdf_btn" (click)="callPdf()">View PDF</button>
+        </div>
+      </div>
+    </div>
+      <div class="col-md-12">
+        <div *ngIf="isLoaderPDF">
+          <div class="loader animation-start">
+            <span class="circle delay-1 size-2"></span>
+            <span class="circle delay-2 size-4"></span>
+            <span class="circle delay-3 size-6"></span>
+            <span class="circle delay-4 size-7"></span>
+            <span class="circle delay-5 size-7"></span>
+            <span class="circle delay-6 size-6"></span>
+            <span class="circle delay-7 size-4"></span>
+            <span class="circle delay-8 size-2"></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 basic_info_section">
+          <hr>
+        <div class="sub_heading">
+          Basic Information
+        </div>
+        <div class="sub_section">
+          <p class="sub_section_heading">Quote Reference</p>
+          <p class="sub_section_response text-wrap"><span placement="top" data-container="body" ngbTooltip="{{iReviewQuoteBasicInfoViewModel?.qmsQuoteName}}">{{ (iReviewQuoteBasicInfoViewModel?.qmsQuoteName) ? (iReviewQuoteBasicInfoViewModel.qmsQuoteName) : 'N/A' }}</span></p>
+        </div>
+        <!-- <div class="sub_section">
+          <p class="sub_section_heading">Reference Number</p>
+          <p class="sub_section_response">{{ (iReviewQuoteBasicInfoViewModel.quoteRefNo) ? (iReviewQuoteBasicInfoViewModel.quoteRefNo) : 'N/A' }}</p>
+        </div> -->
+        <div class="sub_section">
+          <p class="sub_section_heading">Customer</p>
+          <p class="sub_section_response">{{ (iReviewQuoteBasicInfoViewModel.customer) ? (iReviewQuoteBasicInfoViewModel.customer) : 'N/A' }}</p>
+        </div>
+        <div class="sub_section">
+            <p class="sub_section_heading">Contact Name</p>
+            <p class="sub_section_response">{{ (iReviewQuoteBasicInfoViewModel.contactName) ? (iReviewQuoteBasicInfoViewModel.contactName) : 'N/A' }}</p>
+          </div>
+      </div>
+      <div class="col-md-12 basic_info_section part_section">
+        <hr>
+        <div class="sub_heading">
+            Parts
+        </div>
+        <div class="row" *ngIf="isFileDownloaded !== 0">
+            <div class="loader animation-start">
+              <span class="circle delay-1 size-2"></span>
+              <span class="circle delay-2 size-4"></span>
+              <span class="circle delay-3 size-6"></span>
+              <span class="circle delay-4 size-7"></span>
+              <span class="circle delay-5 size-7"></span>
+              <span class="circle delay-6 size-6"></span>
+              <span class="circle delay-7 size-4"></span>
+              <span class="circle delay-8 size-2"></span>
+            </div>
+          </div>
+           <div *ngFor="let item of IQmsPartQuantityListColl | groupBy:'qmsQuotePartId'; let i = index">
+              <!-- <div style="padding:10px 10px 10px 20px;" *ngIf="(item.value[0].partNo === '')">N/A</div> -->
+            <div class="panel panel-default pt-1 bg-row-light mb-2 mt-3">
+                <div class="panel-heading section-heading-bottom clearfix collapsed">
+                  <div class="panel-title text-left pull-left">
+                    <p class="sub-section-heading pl-3" placement="top" data-container="body" ngbTooltip="{{item.value[0].partName}}">{{item.value[0].partName | titlecase | dotLimit:'20'}}</p>
+                    <p class="section-line2-text pl-3" *ngIf="(item.value[0].partNo !== '')">{{item.value[0].partNo}}</p>
+                  </div>
+                  <div class="btn-group pull-right ">
+                    <a class="pr-3" placement="left" [ngbPopover]="reviewpopAttachment" container="body" #q1="ngbPopover"
+                      (document:click)="q1.close()" (click)="$event.stopPropagation()"><img src='assets/attachment.svg'
+                        class="img-attachment"><span class="attachement-count-text" >({{item.value[0].qmsPartAttachments?.length + 1}})</span>
+                    </a>
+                    <a class="collapsed" data-bs-toggle="collapse" [attr.data-target]="'#' + i">
+                    </a>
+
+                    <ng-template #reviewpopAttachment>
+                      <div class="review-pop-partfiles">
+                        <div class="text-right" *ngIf='!!item.value[0].qmsPartAttachments && (item.value[0].qmsPartAttachments?.length !== 0 && item.value[0].qmsPartAttachments?.length >= 1)'>
+                          <label style="color: #4a90e2;" class="part-attachment-name active pointerCursor text-left" (click)="downloadAllFiles(item.value[0].qmsPartAttachments, item.value[0].qmsQuoteFileName, item.value[0].qmsQuotePartId,iReviewQuoteBasicInfoViewModel.qmsQuoteName)">
+                            Download All
+                          </label>
+                        </div>
+                        <div  class="text-truncate">
+                          <div class="row">
+                            <div class="col-md-12 text-truncate">
+                              <label class="part-attachment-name downloadLink" title="Download - {{item.value[0].qmsQuoteFileName | originalName }}" (click)="downloadS3File(item.value[0].qmsQuoteFileName, true)">
+                                {{item.value[0].qmsQuoteFileName | originalShortName : 20 }}</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngFor='let file of item.value[0].qmsPartAttachments' class="text-truncate">
+                          <label class="part-attachment-name downloadLink" (click)="downloadS3File(file, true)" title="Download - {{file | originalName }}">
+                            {{file   | originalShortName : 20 }}
+                          </label>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+                <div class="panel-body collapse" [attr.id]="i" style="padding-top:12px !important;">
+                  <div *ngFor="let partQty of item.value; let j = index">
+                  <div class="row part_section_row">
+                      <div class="col-md-8" >
+                          <div class="Part-Details-Label sub-section-label-text"> Quantity {{j+1}}</div>
+                          <div class="Part-Details-Value">  {{partQty.partqty}}
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="Part-Details-Label sub-section-label-text"> Unit</div>
+                          <div class="Part-Details-Value">{{partQty.partQtyUnit}}</div>
+                        </div>
+                  </div>
+                  <div *ngFor="let freeType1 of partQty.qmsQuotePartQuantityFeeTypeList | groupBy:'quantityLevel'">
+                    <div *ngIf="freeType1.key == j">
+                    <div *ngFor="let freeType of freeType1.value" >
+                  <div class="row part_section_row" >
+                    <div class="col-md-8" >
+                        <div class="Part-Details-Label sub-section-label-text"> Free Type</div>
+                        <div class="Part-Details-Value">  {{freeType.feeType}}
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="Part-Details-Label sub-section-label-text"> Cost</div>
+                        <div class="Part-Details-Value"><span>$</span>{{getspecailValue(freeType.value)}}</div>
+                      </div>
+                  </div>
+              </div>
+               <div class="row part_section_row" style="padding-bottom: 10px;">
+                  <div class="col-md-8" >
+                      <b>Subtotal</b>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="Part-Details-Value"><b><span >$</span>{{getspecailValue(partQty.qtylevelSum)}}</b></div>
+                    </div>
+              </div>
+            </div>
+                  </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+      <div class="col-md-12 basic_info_section">
+          <hr>
+        <div class="sub_heading">
+            RFQ Details
+        </div>
+
+        <div class="sub_section">
+          <p class="sub_section_heading"> Who pays for shipping?</p>
+          <p class="sub_section_response">{{ whoPaysForShippingText | Na }}</p>
+        </div>
+        <div class="sub_section">
+          <p class="sub_section_heading">Payment Terms</p>
+          <p class="sub_section_response">{{ (iQuotesViewModel?.paymentTerms) ? (iQuotesViewModel.paymentTerms) : 'N/A' }}</p>
+        </div>
+        <div class="sub_section">
+          <p class="sub_section_heading">Quote Valid Until</p>
+          <p class="sub_section_response">{{ (iQuotesViewModel.quoteValidUntil) ? (iQuotesViewModel.quoteValidUntil | date:  'MM/dd/yyyy') : 'N/A'}}</p>
+        </div>
+        <div class="sub_section">
+          <p class="sub_section_heading">Shipping Method</p>
+          <p class="sub_section_response">{{ (iQuotesViewModel.shippingMethod) ? (iQuotesViewModel.shippingMethod) : 'N/A' }}</p>
+        </div>
+        <div class="sub_section">
+            <p class="sub_section_heading">Lead Time</p>
+            <div *ngIf="iQuotesViewModel.qmsQuoteLeadTimeAddList === undefined || iQuotesViewModel.qmsQuoteLeadTimeAddList === null">N/A</div>
+                    <div *ngFor="let leadTime of iQuotesViewModel.qmsQuoteLeadTimeAddList">
+                      <p class="sub_section_response"><span>{{ leadTime.leadTimeName }}</span> - <span>{{ leadTime.leadTimeValue }}</span> <span>{{ leadTime.leadTimeRange }}</span></p>
+                    </div>
+
+          </div>
+      </div>
+      <div class="col-md-12 text-center ">
+          <button class= "close_btn" (click)="closeQuoteReviewDrawer()">Close</button>
+      </div>
+    </div>
+  </div>
+  {{isPdfDownload()}}
+  <div *ngIf="isEmilPdfPreview" style="display:none">
+    <app-qms-pdf [qmsId]=mqsQuoteId (isPdfDownload)="pdfDownload($event)"></app-qms-pdf>
+  </div>
+
+  <ng-template #qmsBeta let-d="dismiss" data-backdrop="static" data-keyboard="false">
+    <form #modelForm="ngForm">
+  <div class="modal-header">
+    <h4 class="modal-title">Invoice Starting Number</h4>
+    <button type="button" class="close" data-bs-dismiss="modal" (click)="d('notNow');" style="z-index: 100;">
+        <i class="fa fa-times-circle" aria-hidden="true" style="z-index: 1000;color:#4a90e2;"></i></button>
+  </div>
+  <div class="modal-body">
+<div class="row">
+  <div class="col-md-6 m-b-5">
+    <label class="f-w-600">Invoice Number</label>
+      <input class="form-control" name="invoiceNo" placeholder="Invoice Number" type="text" #invoiceNo [(ngModel)]="invoiceId" required
+      pattern="^[1-9]+[0-9]*$" />
+      <div
+          *ngIf="modelForm.form.controls.invoiceNo?.invalid && (modelForm.form.controls.invoiceNo?.dirty || modelForm.form.controls.invoiceNo?.touched)"
+          class="">
+          <p style="color:red" *ngIf="modelForm.form.controls.invoiceNo.errors.pattern">Please enter numeric value and invoice number should not start with zero.</p>
+        </div>
+  </div>
+</div>
+  </div>
+  <div class="modal-footer-section">
+      <div class="btn-cancel-section text-center m-10" data-bs-dismiss="modal">
+          <button type="button" style="padding: 10px 40px;" class="btn btn-cancel m-r-20" data-bs-dismiss="modal" (click)="d('notNow');">Cancel</button>
+          <button style="padding: 10px 45px;" [disabled]="!modelForm.form.valid" (click)="saveInvoiceNumber()" type="button" class="btn btn-green" data-bs-dismiss="modal" (click)="d('notNow');">Save</button>
+      </div>
+
+  </div>
+  </form>
+</ng-template>

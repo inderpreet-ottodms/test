@@ -1,0 +1,323 @@
+.pull-right {
+  float: right !important;
+}
+
+.active {
+  color: #448ada;
+}
+
+.my-RFQ-list-view {
+  padding: 7px;
+  background-color: #ffffff;
+  border: solid 1px #bec4cb;
+  cursor: pointer;
+}
+
+.filter {
+  width: 100%;
+  padding: 5px;
+  border-radius: 2px;
+  border: solid 1px #bec4cb;
+  margin-bottom: 15px;
+}
+
+.recent {
+  width: 100%;
+  padding: 5px;
+  border-radius: 2px;
+  border: solid 1px #bec4cb;
+  margin-bottom: 15px;
+}
+
+.filter:focus {
+  background: #fff;
+}
+
+.search {
+  width: 100%;
+  padding: 6px;
+  border-radius: 2px;
+  border: solid 1px #bec4cb;
+}
+
+.my-RFQ-state-filter-button-active {
+  width: 95px;
+  height: 35px;
+  border-radius: 2px;
+  background-color: #f6f7fb;
+  border: solid 1px #bec4cb;
+  font-size: 12px;
+  text-align: center;
+  color: #919aa3;
+}
+
+.my-RFQ-state-filter-button-inactive {
+  width: 95px;
+  height: 35px;
+  background-color: #ffffff;
+  border: solid 1px #bec4cb;
+  font-size: 12px;
+  text-align: center;
+  color: #2E58D6;
+}
+
+/*----------------------------------------Cards classes-----------------------------------*/
+.card {
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 0 3px 0 rgba(12, 12, 12, 0.5);
+  border-radius: 3px;
+  transition: 0.3s;
+  padding: 2px;
+  margin-bottom: 19px;
+}
+
+.card:hover {
+  box-shadow: 0 5px 10px 0 rgba(12, 12, 12, 0.65);
+}
+
+.card .box {
+  left: 0;
+  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  padding-top: 10px;
+}
+
+.card .box .img {
+  width: 190px;
+  height: 190px;
+  background-color: #f6f7fb;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #919aa3;
+}
+
+.resimg {
+  width: 100%;
+  height: 100%;
+}
+
+.card .box .imgRes {
+  width: 190px;
+  height: 190px;
+  background-color: #f6f7fb;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #919aa3;
+}
+
+.box-fit {
+  width: 100%;
+  height: 100%;
+}
+
+.card .box h2 {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 9px auto 0px;
+  text-align: center;
+  color: #2E58D6;
+}
+
+.card .bottomaction {
+  height: 40px;
+  width: 100%;
+  padding-top: 7px;
+  border-radius: 3px;
+  background-color: #edeff7;
+}
+
+.card .bottomaction ul {
+  margin: 0;
+  padding: 0;
+}
+
+.card .bottomaction ul li {
+  list-style: none;
+  float: left;
+}
+
+.card .bottomaction ul li a {
+  display: block;
+  color: #2E58D6;
+  margin: 0 10px;
+  font-size: 20px;
+  transition: 0.5s;
+  text-align: center;
+}
+
+.card .bottomaction ul li:hover a {
+  color: #e91e63;
+  transform: rotateY(360deg);
+}
+
+/*----------------------------------------Cards classes End-----------------------------------*/
+.myRFQ-Group {
+  width: 213px;
+  height: 106px;
+  object-fit: contain;
+}
+
+.editdelete {
+  border-radius: 3px;
+  background-color: #edeff7;
+  text-align: center;
+}
+
+.bottomaction ul {
+  display: flex;
+  justify-content: space-between;
+}
+
+.paginations {
+  float: right;
+  margin-bottom: 15px;
+}
+
+#radioBtn .notActive {
+  color: #2E58D6;
+  padding: 5px 15px 5px 15px;
+  background-color: #fff;
+}
+
+#radioBtn .active {
+  background-color: #bec4cb;
+  color: #fff;
+  box-shadow: none;
+  padding: 5px 15px 5px 15px;
+}
+
+.card-date {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 0px !important;
+  margin-bottom: 5px;
+}
+
+.list-box {
+  border: 1px solid #e2e2e5;
+  margin: 10px 5px;
+  border-radius: 3px;
+}
+
+.list-box:hover {
+  -webkit-box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+  box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+}
+
+.list-box .col-md-1 > span {
+  white-space: nowrap;
+  flex: 1; /* ADJUSTED */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  min-width: 0;
+}
+.list-box .sub-header > div {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding: 10px 0px;
+}
+
+.quote-date-left {
+  font-size: 11px;
+  font-weight: 600;
+  width: 100%;
+  text-align: right;
+}
+.quote-date-right {
+  font-size: 11px;
+  width: 100%;
+  text-align: right;
+}
+
+.box-1 {
+  position: relative;
+  background: #fff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+.ribbon {
+  width: 80px;
+  height: 78px;
+  overflow: hidden;
+  position: absolute;
+}
+.ribbon::before,
+.ribbon::after {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  display: block;
+  border: 5px solid #2980b9;
+}
+.ribbon span {
+  position: absolute;
+  display: block;
+  width: 73px;
+  padding: 5px 0;
+  background-color: #3498db;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  color: #fff;
+  font: 700 9px/1 "Lato", sans-serif;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+/* top left*/
+.ribbon-top-left {
+  top: 0;
+  left: 0;
+}
+.ribbon-top-left::before,
+.ribbon-top-left::after {
+  border-top-color: transparent;
+  border-left-color: transparent;
+}
+.ribbon-top-left::before {
+  top: 0;
+  right: 0;
+}
+.ribbon-top-left::after {
+  bottom: 0;
+  left: 0;
+}
+.ribbon-top-left span {
+  right: 26px;
+  top: 10px;
+  transform: rotate(-45deg);
+}
+ .btn-green-border{
+  border: 2px solid #81db6d;
+  background-color: #fff;
+  padding: 3px 10px;
+  font-size: 14px;
+  color: #81db6d;
+  margin-right: 15px;
+}
+.colorBlue {
+  color:#2E58D6 !important
+}
+ .btn-green-border:disabled{
+  border: 2px solid #bec4cb;
+  background-color: #bec4cb;
+  color: #fff;
+  cursor: not-allowed;
+}
+.btn-width{
+  width: 284px;
+}
+.icon-img img{
+  height: 25px;
+}
+
+::ng-deep .border-checkbox-section .border-checkbox-group-primary .border-checkbox-label:before{
+  border: 2px solid #2E58D6
+}
+
+::ng-deep .border-checkbox-section .border-checkbox-group-primary .border-checkbox:checked + .border-checkbox-label:after{
+  border-color: #2E58D6;
+}

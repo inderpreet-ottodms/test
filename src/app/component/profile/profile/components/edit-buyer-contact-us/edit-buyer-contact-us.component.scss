@@ -1,0 +1,87 @@
+.background-white{
+	background:#FFF;
+	padding: 19px;
+	border-radius:5px;
+	margin-bottom:19px;
+	border-radius: 5px;
+	box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+}
+.rightpanel i {
+  color: #4a90e2;
+  font-size: 19px;
+  border-bottom: solid 2px #e2e2e5;
+}
+
+.panelheading {
+  font-size: 16px;
+  font-weight: bold;
+  color: #222;
+  margin-top: 2px !important;
+  line-height: 22px;
+}
+.panelheading span {
+  font-size: 12px;
+  font-weight: bold;
+  color: #919aa3;
+}
+.form-group{
+	margin-bottom: 0px !important;
+}
+.Save-Equipment-active {
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  padding: 0px !important;
+  background-color: #2E58D6;
+  color:white;
+  cursor: pointer;
+}
+.row-border-bottom {
+  border-bottom: 2px solid #e0dfdf;
+}
+.row-padding-top {
+  padding-top: 15px;
+}
+.Rectangle-3{
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  border: solid 2px #212A37;
+  background-color: white;
+  color: #212A37;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+}
+.Save-Equipment-Deactive {
+  width: 150px;
+  height: 35px;
+  padding: 0px !important;
+ font-family: Poppins;
+ font-size: 16px;
+ font-weight: 600;
+ font-style: normal;
+ font-stretch: normal;
+ line-height: normal;
+ letter-spacing: normal;
+ text-align: center;
+ color: #ffffff;
+ border-radius: 2px;
+ background-color: #bec4cb;
+ cursor: default
+}
+.Email {
+  height: 17px;
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+}

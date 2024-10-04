@@ -1,0 +1,327 @@
+<div class="row" *ngIf="isPdfModel">
+  <div class="col-md-12">
+    <div class="background-white">
+      <div style="background-color: #fff; border: 1px solid gray;">
+
+        <div id="contentToConvert">
+          <table style="padding: 15px 30px;width:100%;">
+            <tr>
+              <td>
+                <table style="margin-top: 15px;">
+                  <td>
+                    <img
+                      [src]="(iContactViewModel.contactPictureFile) ? iContactViewModel.contactPictureFile : defaultUrl "
+                      onError="this.src='assets/company/avatar-manu-basic.svg'"
+                      style="width: 65px;height: 65px;border:2px solid #e2e2e5;border-radius:3px;">
+                    <!-- <img [src]="defaultUrl" style="width: 65px;height: 65px;border:2px solid #e2e2e5;border-radius:3px;"> -->
+                  </td>
+                </table>
+                <p style=" margin-bottom: 0px; font-size: 23px; margin-top: 10px; ">
+                  <strong>{{ iContactViewModel.company.name }}</strong></p>
+                <table style="width: 100%; height: 116px;">
+                  <tbody>
+                    <tr>
+                      <td style="width: 20%;vertical-align:top">
+                        <p [innerHTML]=" getAddressFormat(iContactViewModel.address)" style="white-space: normal;"></p>
+                      </td>
+                      <td style="width: 5%;vertical-align:top;">&nbsp;</td>
+                      <td style="width: 25%;vertical-align:top">Phone:
+                        {{iContactViewModel.phoneNo}}<br />{{iContactViewModel.website}}
+                      </td>
+                      <td style="width: 25%;vertical-align:top">
+                        <strong>Project Manager</strong><br />
+                        {{ iContactViewModel.firstName }}
+                        {{ iContactViewModel.lastName }}<br />{{ iContactViewModel.emailId }}<br />{{iContactViewModel.phoneNo}}
+                      </td>
+                      <td style="width: 25%"></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table style="width: 100%;margin:15px 0px;">
+                  <tbody>
+                    <tr>
+                      <td><strong style=" font-size: 22px; ">LiveQuote #:&nbsp;<label
+                            style="color:#4a90e2">{{iQuotesViewModel.quoteId}}</label>&nbsp;</strong>
+                        <span style=" font-size: 20px;margin-left:10px; "><strong>Quote Reference:&nbsp;</strong>
+                          {{iQuotesViewModel.qmsQuoteName}}</span></td>
+                      <td style="text-align: right;"> <label
+                          style="color:#4a90e2;font-size: 22px;"><strong>{{iQuotesViewModel.createdDate | date: 'MM/dd/y'}}</strong></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong style=" font-size: 18px; ">Valid Until :&nbsp;<label
+                            style="color:#4a90e2">{{iQuotesViewModel.quoteValidUntil | date: 'MM/dd/y'}}</label>&nbsp;</strong>
+
+                    </tr>
+                  </tbody>
+                </table>
+                <p class="nomargin" style="margin-top: 25px; margin-bottom: 0px;font-size: 20px; "><strong>Customer
+                    Information</strong></p>
+                <hr style=" border-color: #222222!important;margin:5px 0px; " />
+                <table style="width: 100%;">
+                  <tbody>
+                    <tr>
+                      <td style="width: 20%;vertical-align:top;">
+                        <p style="white-space: normal;">
+                          <strong>Company Name</strong> <br> {{iReviewQuoteBasicInfoViewModel.customer}}<br />
+                          {{iReviewQuoteBasicInfoViewModel.address}} </p>
+                      </td>
+                      <td style="width: 5%;vertical-align:top;">&nbsp;</td>
+                      <td style="width: 25%;vertical-align:top;">
+                        <p><strong>Contact</strong> <br>
+                          {{iReviewQuoteBasicInfoViewModel.contactName}}<br />{{iReviewQuoteBasicInfoViewModel.email}}<br />{{iReviewQuoteBasicInfoViewModel.phone}}
+                        </p>
+                      </td>
+                      <td style="width: 50%"></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p class="nomargin" style=" font-size: 20px; margin-bottom: 0px; margin-top: 15px 5px;  "> <strong>
+                    Quote Information</strong></p>
+                <hr style=" border-color: #222222!important;float: none!important;margin:5px 0px; " />
+                <div style="border: 1px solid #e2e2e5;margin-top:15px;"
+                  *ngFor="let item of IQmsPartQuantityListColl | groupBy:'qmsQuotePartId'">
+                  <table style="height: 187px; width: 100%;border-collapse: collapse;margin-top:15px;">
+                    <tbody>
+                      <tr style="height: 18px;">
+                        <td style="width:2%;">&nbsp;</td>
+                        <td style="width: 26%; height: 18px;font-weight: bold;">{{getPartInfo(item.key)}}</td>
+                        <td style="width: 14%; height: 18px;">&nbsp;</td>
+                        <td style="width: 14%; height: 18px;">&nbsp;</td>
+                        <td style="width: 14%; height: 18px;">&nbsp;</td>
+                        <td style="width: 14%; height: 18px;">&nbsp;</td>
+                        <td style="width: 14%; height: 18px;">&nbsp;</td>
+                        <td style="width:2%;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 18px;">
+                        <td style="width:2%;">&nbsp;</td>
+                        <td style="width: 26%; height: 18px;">{{item.value[0].partNo}}</td>
+                        <td style="width: 14%; height: 18px;">&nbsp;</td>
+                        <td style="width: 14%; height: 18px;">&nbsp;</td>
+                        <td style="width: 14%; height: 18px;">&nbsp;</td>
+                        <td style="width: 14%; height: 18px;">&nbsp;</td>
+                        <td style="width: 14%; height: 18px;">&nbsp;</td>
+                        <td style="width:2%;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 18px;">
+                        <td style="width:2%;">&nbsp;</td>
+                        <td style="height: 18px;" colspan="2" *ngIf="getPartProcess(item.key) !== ''"> <b>Process:</b>
+                          {{getPartProcess(item.key)}}</td>
+                        <td style="height: 18px;" colspan="2" *ngIf="getPartMaterial(item.key) !== ''"> <b>Material:
+                          </b>{{getPartMaterial(item.key)}}&nbsp;</td>
+                        <td style="height: 18px;" colspan="2" *ngIf="getPartPostProcess(item.key) !== ''"><b>Post
+                            Process / Finish: </b>{{getPartPostProcess(item.key)}}</td>
+                        <td style="width:2%;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 18px;" *ngIf="item.value[0].qmsQuotePartCertificateList.length">
+                        <td style="width:2%;">&nbsp;</td>
+                        <td style="height: 18px;" colspan="4"> <b>Certificate :</b>
+                          <span
+                            *ngFor="let certificate of item.value[0].qmsQuotePartCertificateList; let i = index">{{ certificate.certificateName }}
+                            <span
+                            *ngIf="i < item.value[0].qmsQuotePartCertificateList.length-1;">,</span>
+                          </span>
+
+                        </td>
+                        <td style="width:2%;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 20px;"></tr>
+                      <tr style="height: 18px;">
+                        <td style="width:2%;">&nbsp;</td>
+                        <td style="width: 26%; height: 18px;">&nbsp;</td>
+                        <td style="width: 14%; height: 18px;text-align: right;"> {{getpartqty(0,item.key)}}</td>
+                        <td style="width: 14%; height: 18px;text-align: right;"> {{getpartqty(1,item.key)}}</td>
+                        <td style="width: 14%; height: 18px;text-align: right;"> {{getpartqty(2,item.key)}}</td>
+                        <td style="width: 14%; height: 18px;text-align: right;"> {{getpartqty(3,item.key)}}</td>
+                        <td style="width: 14%; height: 18px;text-align: right;"> {{getpartqty(4,item.key)}}</td>
+                        <td style="width:2%;">&nbsp;</td>
+                      </tr>
+                      <tr [ngStyle]="{'background-color':(j%2 == 0) ? '#f6f7fb' : '' }"
+                        *ngFor="let feetye of item.value[0].qmsQuotePartQuantityFeeTypeList |groupBy:'feeTypeId';let j = index"
+                        style="height: 19px;border-left: 1px solid e2e2e5;border-right: 1px solid e2e2e5;">
+                        <td style="width:2%;">&nbsp;</td>
+                        <td style="width: 26%; height: 19px;">
+                          {{feetye.value[0].feeType}}
+                        </td>
+                        <td style="width: 14%; height: 19px;text-align: right;"> <span
+                            *ngIf="getFeeTypeCost(0,feetye.value)!==''">$</span>{{(getFeeTypeCost(0, feetye.value)) ? (getFeeTypeCost(0, feetye.value)) : getShowZero()}}
+                        </td>
+                        <td style="width: 14%; height: 19px;text-align: right;"> <span
+                            *ngIf="getFeeTypeCost(1,feetye.value)!==''">$</span>{{(getFeeTypeCost(1,feetye.value)) ? (getFeeTypeCost(1,feetye.value)) : getShowZero()}}
+                        </td>
+                        <td style="width: 14%; height: 19px;text-align: right;"> <span
+                            *ngIf="getFeeTypeCost(2,feetye.value)!==''">$</span>{{(getFeeTypeCost(2,feetye.value)) ? (getFeeTypeCost(2,feetye.value)) : getShowZero()}}
+                        </td>
+                        <td style="width: 14%; height: 19px;text-align: right;"> <span
+                            *ngIf="getFeeTypeCost(3,feetye.value)!==''">$</span>{{(getFeeTypeCost(3,feetye.value)) ? (getFeeTypeCost(3,feetye.value)) : getShowZero()}}
+                        </td>
+                        <td style="width: 14%; height: 19px;text-align: right;"> <span
+                            *ngIf="getFeeTypeCost(4,feetye.value)!==''">$</span>{{(getFeeTypeCost(4,feetye.value)) ? (getFeeTypeCost(4,feetye.value)) : getShowZero()}}
+                        </td>
+                        <td style="width:2%;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 18px;">
+                        <td style="width:2%;">&nbsp;</td>
+                        <td style="width: 26%; height: 18px;font-weight: bold;">Subtotals</td>
+                        <td style="width: 14%; height: 18px;font-weight: bold;text-align: right;">
+                          <span *ngIf="getFeetypeTotal(0, item.key) !==''">$</span>{{getFeetypeTotal(0, item.key) }}
+                        </td>
+                        <td style="width: 14%; height: 18px;font-weight: bold;text-align: right;"> <span
+                            *ngIf="getFeetypeTotal(1, item.key) !==''">$</span>{{getFeetypeTotal(1, item.key)}}</td>
+                        <td style="width: 14%; height: 18px;font-weight: bold;text-align: right;"> <span
+                            *ngIf="getFeetypeTotal(2, item.key) !==''">$</span>{{getFeetypeTotal(2, item.key)}}</td>
+                        <td style="width: 14%; height: 18px;font-weight: bold;text-align: right;"> <span
+                            *ngIf="getFeetypeTotal(3, item.key) !==''">$</span>{{getFeetypeTotal(3, item.key)}}</td>
+                        <td style="width: 14%; height: 18px;font-weight: bold;text-align: right;"> <span
+                            *ngIf="getFeetypeTotal(4, item.key) !==''">$</span>{{getFeetypeTotal(4, item.key)}}</td>
+                        <td style="width:2%;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 10px;"></tr>
+                    </tbody>
+                  </table>
+
+
+                  <div style="border-top: 1px solid #e2e2e5;"
+                    *ngIf="item.value[0].qmsSpecialFeesListViewModel != undefined  && item.value[0].qmsSpecialFeesListViewModel.length != 0">
+                    <table style="height: 50px; width: 100%;">
+                      <tbody>
+                        <tr style="height: 18px;">
+                          <td style="width:1%;"></td>
+
+                          <td style="width: 26%; height: 19px; font-weight: bold">
+                            Special Fee
+                          </td>
+                          <td style="width: 1%; height: 19px; text-align: right">
+
+                          </td>
+                          <td style="width: 28%; height: 19px;">
+                            &nbsp;
+                          </td>
+                          <td style="width: 14%; height: 19px;text-align: right;">
+                            &nbsp;
+                          </td>
+                          <td style="width: 14%; height: 19px;text-align: right;">
+                            &nbsp;
+                          <td style="width: 14%; height: 19px;text-align: right;">
+                            &nbsp;
+                          </td>
+
+                          <td style="width:2%;">&nbsp;</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <table style="height: 100px; width: 100%;">
+                      <tbody>
+
+                        <tr [ngStyle]="{'background-color':(i%2 == 0) ? '#f6f7fb' : '' }"
+                          style="height: 19px;border-left: 1px solid e2e2e5;border-right: 1px solid e2e2e5;"
+                          *ngFor="let fee of item.value[0].qmsSpecialFeesListViewModel ; let i=index">
+
+                          <td style="width:2%;">&nbsp;</td>
+
+                          <td style="width: 5%; height: 19px;">
+                            {{fee.feeType}}
+                          </td>
+                          <td style="width: 6%; height: 19px; text-align: right">
+                            ${{getspecailValue(fee.value)}}
+                          </td>
+                          <td style="width: 44%; height: 19px;">
+                            &nbsp;
+                          </td>
+                          <td style="width: 14%; height: 19px;text-align: right;">
+                            &nbsp;
+                          </td>
+                          <td style="width: 14%; height: 19px;text-align: right;">
+                            &nbsp;
+                          <td style="width: 14%; height: 19px;text-align: right;">
+                            &nbsp;
+                          </td>
+
+                          <td style="width:2%;">&nbsp;</td>
+
+                        </tr>
+
+                        <tr style="height: 25px;border-left: 1px solid e2e2e5;border-right: 1px solid e2e2e5;">
+
+                          <td style="width:2%;">&nbsp;</td>
+
+                          <td style="width: 5%; height: 19px; font-weight: bold">
+                            SubTotal &nbsp; &nbsp;&nbsp;&nbsp;
+                          </td>
+                          <td style="width: 14%; height: 19px; text-align: right; font-weight: bold">
+                            ${{getspecailValue(item.value[0].subSpecialTotal)}}
+                          </td>
+                          <td style="width: 37%; height: 19px;">
+                            &nbsp;
+                          </td>
+                          <td style="width: 14%; height: 19px;text-align: right;">
+                            &nbsp;
+                          </td>
+                          <td style="width: 14%; height: 19px;text-align: right;">
+                            &nbsp;
+                          <td style="width: 14%; height: 19px;text-align: right;">
+                            &nbsp;
+                          </td>
+
+                          <td style="width:2%;">&nbsp;</td>
+
+                        </tr>
+                      </tbody>
+                    </table>
+
+                  </div>
+
+
+
+
+                </div>
+
+
+
+                <p>&nbsp;</p>
+                <p class="nomargin" style="margin-top: 15px; margin-bottom: 0px;font-size: 20px; "
+                  *ngIf="iQuotesViewModel.notes !== null && iQuotesViewModel.notes !== ''"><strong>Notes</strong> </p>
+                <hr style=" border-color: #222222!important;margin:5px 0px; "
+                  *ngIf="iQuotesViewModel.notes !== null && iQuotesViewModel.notes !== ''" />
+                <p style="word-break: break-all"
+                  *ngIf="iQuotesViewModel.notes !== null && iQuotesViewModel.notes !== ''"> {{iQuotesViewModel.notes}}
+                </p>
+                <p>&nbsp;</p>
+                <p class="nomargin" style="margin-top: 15px; margin-bottom: 0px;font-size: 20px; "><strong> Additional
+                    Information</strong></p>
+                <hr style=" border-color: #222222!important;margin:5px 0px 15px; " />
+                <table style="height: 69px;" width="100%">
+                  <tbody>
+                    <tr>
+                      <td style="width: 141px;font-weight: bold;">Payment Terms</td>
+                      <td style="width: 143px;font-weight: bold;">Lead Time</td>
+                      <td style="width: 143px;font-weight: bold;">Shipping Method</td>
+                      <td style="width: 141px;font-weight: bold;"> Who pays for shipping?</td>
+                      <!-- <td style="width: 143px;font-weight: bold;">Shipping</td> -->
+                    </tr>
+                    <tr>
+                      <td style="width: 141px;"> {{iQuotesViewModel.paymentTerms}}</td>
+                      <td style="width: 143px;">
+                          <div *ngIf="iQuotesViewModel.qmsQuoteLeadTimeAddList === undefined || iQuotesViewModel.qmsQuoteLeadTimeAddList === null">Na</div>
+                        <div *ngFor="let leadTime of iQuotesViewModel.qmsQuoteLeadTimeAddList">
+                        <span>{{ leadTime.leadTimeName }}</span> - <span>{{ leadTime.leadTimeValue }}</span> <span>{{ leadTime.leadTimeRange }}</span>
+                      </div></td>
+                      <td style="width: 143px;"> {{iQuotesViewModel.shippingMethod|Na}}</td>
+                      <!-- <td style="width: 143px;">Not Included</td> -->
+                      <td style="width: 143px;"> {{whoPaysForShippingText |Na}}</td>
+                    </tr>
+
+                  </tbody>
+                </table>
+                <!-- <p class="nomargin" style="margin-bottom:0px;"><strong>Note</strong></p>
+              <p class="nomargin" style="margin-top:0px;">By placing an order of parts listed on this formal quotation, customer agrees to abide by Quickparts Terms and Conditions of Sale</p> -->
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>

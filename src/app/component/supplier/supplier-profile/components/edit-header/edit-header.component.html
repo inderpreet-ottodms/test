@@ -1,0 +1,155 @@
+<div class="background-white">
+  <div class="row row-border-bottom">
+    <div class="col-md-12 rightpanel">
+      <i class="fa fa-times-circle pull-right" (click)="closeHeaderDrawer()" placement="top" container="body"
+        ngbTooltip="Close"></i>
+      <h2 class="panelheading heading-text pb-3">Edit Header</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" *ngIf="iContactViewModel.company">
+      <div class="row input-top-padding">
+        <div class="col-md-12">
+          <label
+            [ngClass]="(companyName.errors && (companyName.dirty || companyName.touched ))?'Label-focus-red':(labelFocus === 'companyName')? 'Label-focus':'Label-class'"
+            *ngIf="checkIfCompanyNameLabelNeeded()">Company Name</label>
+          <label class="Label-class" *ngIf="!checkIfCompanyNameLabelNeeded()"></label>
+          <input type="text" class="form-control" maxlength="50" placeholder="Company Name Here" autocomplete="off"
+            (focus)="setFocus('companyName')" (blur)="setFocus('no')" [(ngModel)]="iContactViewModel.company.name"
+            required #companyName="ngModel">
+          <div *ngIf="companyName.errors && (companyName.dirty || companyName.touched )"
+            style="color: red; text-align: right">
+            Please Enter Company Name
+          </div>
+        </div>
+      </div>
+      <div class="row input-top-padding">
+        <div class="col-md-12">
+          <label
+            [ngClass]="(companyPhone.errors && (companyPhone.dirty || companyPhone.touched ))?'Label-focus-red':(labelFocus === 'companyPhone')? 'Label-focus':'Label-class'"
+            *ngIf="checkIfPhoneLabelNeeded()">Company Phone</label>
+          <label class="Label-class" *ngIf="!checkIfPhoneLabelNeeded()"></label>
+          <input type="text" pattern="^[+]?[0-9]*" class="form-control" [maxlength]='phoneNumberlimit'
+            placeholder="Company Phone number" autocomplete="off" (focus)="setFocus('companyPhone')"
+            (blur)="setFocus('no')" [(ngModel)]="iContactViewModel.phoneNo" required #companyPhone="ngModel"
+            (keyup)="onPaste($event)"
+            onKeyPress="if(this.value.length== phoneNumberlimit ||  event.keyCode == 45) return false;"
+            onkeydown="javascript: return (event.keyCode == 69  || event.keyCode == 189  || event.keyCode == 190)? false : true">
+          <div [hidden]="!companyPhone.hasError('maxlength')" style="color: red; text-align: right">Company phone number should be {{phoneNumberlimit}} digit</div>
+          <div [hidden]="!companyPhone.hasError('required')" style="color: red; text-align: right">Please Enter company phone number</div>
+          <div [hidden]="!companyPhone.hasError('pattern')" style="color: red; text-align: right">Company phone number should be only numbers</div>
+        </div>
+      </div>
+      <div class="row input-top-padding">
+        <div class="col-md-12"><label class="Label-class">Profile Logo</label></div>
+        <div class="col-md-12" *ngIf="isFileUpladed == true">
+          <div class="loader animation-start">
+            <span class="circle delay-1 size-2"></span>
+            <span class="circle delay-2 size-4"></span>
+            <span class="circle delay-3 size-6"></span>
+            <span class="circle delay-4 size-7"></span>
+            <span class="circle delay-5 size-7"></span>
+            <span class="circle delay-6 size-6"></span>
+            <span class="circle delay-7 size-4"></span>
+            <span class="circle delay-8 size-2"></span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div *ngIf="supplierLogoPath === ''" class="upload-company-logo-box" ng2FileDrop
+            [uploader]="profileLogoUploader" [ngClass]="{'nv-file-over': hasBaseDropZoneOver}">
+            <div class="row">
+              <div class="col-md-12">
+                <img src="assets/supplier/logoUploadGuide.png"
+                  srcset="assets/supplier/logoUploadGuide@2x.png 2x, assets/supplier/logoUploadGuide@3x.png 3x"
+                  class="upload-logo-guide-margin">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <span class="upload-logo-guide-text">Drag & drop a logo for your profile picture.(150x150)</span>
+              </div>
+            </div>
+          </div>
+          <!-- <div [ngClass]="{'nv-file-over': hasBaseDropZoneOver}">
+              <img *ngIf="supplierLogoPath !== ''" class="uploaded-company-logo-box" [src]="supplierLogoPath" onerror="this.src='assets/company/avatar-manu-basic.svg'">
+            </div> -->
+          <div ng2FileDrop [uploader]="profileLogoUploader" [ngClass]="{'nv-file-over': hasBaseDropZoneOver}">
+            <img *ngIf="supplierLogoPath !== ''" class="uploaded-company-logo-box" [src]="supplierLogoPath"
+              onerror="this.src='assets/company/avatar-manu-basic.svg'">
+          </div>
+        </div>
+        <div class="col-md-6 guide-for-upload-logo1">
+          <span class="guide-for-upload-logo">Drag & Drop or </span>
+          <div class="gallary-browse-file-text">
+            <!-- <span class="or"> or</span> -->
+            <span class="cursor-pointer">browse your files</span>
+            <input type="file" ng2FileSelect [uploader]="profileLogoUploader" class="custom-file-input cursor-pointer"
+              style="top:-45px;color:#337ab7" accept="image/jpeg, image/png" />
+          </div>
+          <span>to add or edit. <br>PNG or JPG files only</span>
+          <!-- <div *ngIf="supplierLogoPath !== ''" class="remove-padding-right Remove-Copy">
+              <a (click)="deleteFileRemove1()">
+                <span class="upload-part-detail-remove pointerCursor" style="color:#337ab7 !important">Remove</span>
+              </a>
+            </div> -->
+        </div>
+        <div class="col-md-12" *ngIf="profileUploadLogoError !== ''" style="color: red;">
+          {{profileUploadLogoError}}
+        </div>
+        <div class="col-md-12"><span class="error-text" style="color: red;">{{errorLogoMsg}}</span></div>
+      </div>
+
+      <div class="row input-top-padding">
+        <div class="col-md-12"><label class="Label-class">Background Image</label></div>
+        <div class="col-md-12" *ngIf="isFileUpladed1 == true">
+          <div class="loader animation-start">
+            <span class="circle delay-1 size-2"></span>
+            <span class="circle delay-2 size-4"></span>
+            <span class="circle delay-3 size-6"></span>
+            <span class="circle delay-4 size-7"></span>
+            <span class="circle delay-5 size-7"></span>
+            <span class="circle delay-6 size-6"></span>
+            <span class="circle delay-7 size-4"></span>
+            <span class="circle delay-8 size-2"></span>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div *ngIf="hederPath === ''" class="upload-company-bg-box" >
+              <div>
+                <img src="assets/supplier/logoUploadGuide.png"
+                  srcset="assets/supplier/logoUploadGuide@2x.png 2x, assets/supplier/logoUploadGuide@3x.png 3x"
+                  class="upload-bg-guide-margin">
+              </div>&nbsp;
+                <span class="upload-bg-guide-text">Image for your background.</span>
+          </div>
+          <div *ngIf="hederPath !== ''">
+            <img class="uploaded-company-bg-box" [src]="hederPath">
+          </div>
+          <button *ngIf="hederPath === ''" class="btn profile_btn" (click)="openCropModel()">Add</button>
+          <button *ngIf="hederPath !== ''" class="btn profile_btn" (click)="openCropModel()">Edit</button>
+        </div>
+        <!-- <div class="col-md-12" *ngIf="profileUploadBgError !== ''" style="color: red;">
+          {{profileUploadBgError}}
+        </div> -->
+        <!-- <div class="col-md-12"><span class=" error-text" style="color: red;">{{errorBannerMsg}}</span></div> -->
+        <!-- <div class="col-md-12 guide-for-upload-bg1"> -->
+          <!-- <span class="guide-for-upload-bg">Drag & Drop or </span> -->
+          <!-- <div class="gallary-browse-file-text"> -->
+          <!-- <span class="or"> or</span> -->
+          <!-- <span class="cursor-pointer" style="color:#337ab7">browse your files</span> -->
+          <!-- <input type="file" ng2FileSelect [uploader]="profileBgUploader" class="custom-file-input cursor-pointer" style="top:-20px;color:#337ab7;height:20px" accept="image/jpeg, image/png" /> -->
+          <!-- </div> -->
+          <!-- <p style="margin-top:-26px;"> to add or edit. <br> PNG or JPG files only. Please note your image will be center cropped if larger than 1053x200 pixels.</p> -->
+        <!-- </div> -->
+      </div>
+
+      <div class="dropimagebuttons">
+        <button type="button" class="cancelbutton1" (click)="closeEditHeader()">Cancel</button>
+        <button type="button"
+          [ngClass]="(isNotAllowHeaderSave() || companyPhone.hasError('pattern'))?'disabled-btn1':'enabled-btn1'"
+          [disabled]="isNotAllowHeaderSave() || companyPhone.hasError('pattern') " (click)="saveHeader()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<app-image-crop *ngIf="showCropModel" (closeModelEvent)="closeCropModel($event)"></app-image-crop>

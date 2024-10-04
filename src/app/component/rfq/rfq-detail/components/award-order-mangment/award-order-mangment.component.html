@@ -1,0 +1,990 @@
+<!-- Award Modal POP UP 1 -->
+<!-- style="width: '565'; height: 500; min-width: 570" -->
+<p-dialog
+  header="Award Your Parts"
+  class="award-heading"
+  [(visible)]="isAward"
+  [modal]="true"
+  [responsive]="true"
+  [minY]="70"
+  [maximizable]="true"
+  [draggable]="false"
+  (onHide)="onIsAward()"
+>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="container-progress">
+        <div>
+          <div>
+            <ul class="progressbar" style="margin: 0 0 -3px 0px">
+              <li class="actived" [class.navi]=""></li>
+              <li [class.actived]="" [class.navi]=""></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="select-manfur">Select Manufacturer</h3>
+            <p class="select-manfur-p">
+              Select a manufacturer, and a quantity & price for your parts.
+            </p>
+            <div class="award-box">
+              <p class="award-to-p">Award to</p>
+              <div class="award-dropdowm">
+                <select
+                  class="form-control"
+                  style="
+                    padding: 2px;
+                    font-size: 13px;
+                    height: 30px;
+                    font-weight: 600;
+                  "
+                  (change)="
+                    setSupplierId($event.target.value);
+                    chkExp($event.target.value)
+                  "
+                  [(ngModel)]="dropDownID"
+                >
+                  <option value="undefined" selected>
+                    Select Manufacturer
+                  </option>
+                  <option
+                    *ngFor="let supplier of manufactureData"
+                    [value]="supplier.id"
+                  >
+                    {{ supplier.name }}
+                  </option>
+                </select>
+              </div>
+              <div class="avg-star-rating">
+                <span
+                  style="
+                    color: #4a90e2;
+                    position: relative;
+                    top: -3px;
+                    padding-right: 5px;
+                    font-size: 13px;
+                    font-family: 'Poppins';
+                  "
+                  >{{ rating ? (rating | number : "1.0-1") : "n/a" }}</span
+                >
+                <ng-template #t let-fill="fill">
+                  <span
+                    class="star"
+                    style="font-size: 25px"
+                    [class.full]="fill === 100"
+                  >
+                    <span class="fill-star" [style.width.%]="fill">&#9733;</span
+                    >&#9733;
+                  </span>
+                </ng-template>
+
+                <ngb-rating
+                  [(rate)]="rating"
+                  [starTemplate]="t"
+                  [readonly]="true"
+                  max="5"
+                ></ngb-rating>
+              </div>
+            </div>
+
+            <div
+              *ngIf="isReqoute"
+              style="color: red; font-size: 11px; margin-top: 2px; width: 480px"
+            >
+              This Quote has Expired. Select Request Re-Quote Button to Update
+              below to get updated pricing to send a purchase order.
+            </div>
+            <div class="award-box1-header">
+              <div
+                class="award-box1"
+                [ngStyle]="{
+                  height:
+                    selectedId != 16 &&
+                    selectedId != 17 &&
+                    selectedId != 18 &&
+                    selectedId != 20
+                      ? 'auto'
+                      : 'auto'
+                }"
+              >
+                <div
+                  *ngFor="
+                    let Part of awardingModelQuoteDetailsViewModel;
+                    let i = index
+                  "
+                >
+                  <p class="parts-p" *ngIf="i === 0">Parts</p>
+                  <div
+                    [ngClass]="
+                      selectedId != 16 &&
+                      selectedId != 17 &&
+                      selectedId != 18 &&
+                      selectedId != 20
+                        ? 'part-details'
+                        : 'part-details1'
+                    "
+                  >
+                    <div class="part-name pname">
+                      <span><b>{{ Part.partName }}</b></span>
+                    </div>
+                    <div class="part-number pnumb">
+                      <span>{{ Part.partNumber }}</span>
+                    </div>
+                    <div
+                      class=" qty-select pselect"
+                      *ngIf="
+                        selectedId != 16 &&
+                        selectedId != 17 &&
+                        selectedId != 18 &&
+                        selectedId != 20
+                      "
+                    >
+                      <select
+                        class="form-control"
+                        style="
+                          font-size: 11px;
+                          height: 25px;
+                          text-align: left;
+                          padding: 0px;
+                          font-weight: 600;
+                        "
+                        [disabled]="!quantityEnabled || isReqoute"
+                        (click)="
+                          getAwardingModelQuoteQuantityData(selectedId, Part, i)
+                        "
+                        (change)="
+                          onSelectQuantity(
+                            Part.rfqPartId,
+                            $event.target.value,
+                            i
+                          )
+                        "
+                      >
+                        <option [value]="-1">
+                          Select Quantity &amp; Price
+                        </option>
+                        <option
+                          [value]="data.rfqQuoteItemsId"
+                          *ngFor="let data of Part.rfqQuoteItemList"
+                        >
+                          {{ data.awardedQty }} parts @ $ {{ data.totalPrice }}
+                        </option>
+
+                        <option [value]="null">Other</option>
+                      </select>
+                      <!-- <pre>{{Part | json}}</pre> -->
+                      <!-- <select class="form-control" *ngIf="(Part.quantityList.length !== 1)"
+                            (change)="makeQuantitySelection( selectedId, $event.target.value,Part.rfqPartId)"
+                            [ngModel]="Part.rfqQuoteItemsId">
+                            <option style="font-weight: 600;"  value="null">Select Quantity &amp; Price</option>
+                            <option style="font-weight: 600;" *ngFor="let quantity of Part.quantityList" [value]="quantity.rfqQuoteItemsId">
+                              {{quantity.quantityDetails}}</option> -->
+                      <!-- </select> -->
+                    </div>
+                  </div>
+                  <!--|| Dont showOthers  -->
+                  <div
+                    class="parts-selection"
+                    *ngIf="
+                      selectedId == 16 ||
+                      selectedId == 17 ||
+                      selectedId == 18 ||
+                      selectedId == 20
+                    "
+                  >
+                    <div
+                      class="quantity"
+                      *ngIf="
+                        selectedId == 16 ||
+                        selectedId == 17 ||
+                        selectedId == 18 ||
+                        selectedId == 20
+                      "
+                    >
+                      <input
+                        type="text"
+                        class="form-control quantity-input"
+                        #qty1="ngModel"
+                        pattern="^[1-9][0-9]*$"
+                        name="quantity"
+                        [(ngModel)]="Part.unit"
+                        #qty="ngModel"
+                        placeholder="Quantity"
+                        [disabled]="selectedId == 18"
+                        appDecimal
+                        onPaste="return false"
+                        (change)="unitCheck(i, Part.unit, Part.rfqPartId)"
+                      />
+                      <label
+                        *ngIf="selectedId != 18"
+                        class="pull-right optionText"
+                        >Optional</label
+                      >
+                      <div
+                        *ngIf="
+                          qty1.hasError('pattern') &&
+                          (qty1.dirty || qty1.touched)
+                        "
+                        style="color: red"
+                      >
+                        Quantity should be greater then zero.
+                      </div>
+                    </div>
+                    <div
+                      class="pieces"
+                      *ngIf="
+                        selectedId == 16 ||
+                        selectedId == 17 ||
+                        selectedId == 18 ||
+                        selectedId == 20
+                      "
+                    >
+                      <select
+                        class="form-control quantity-input"
+                        [(ngModel)]="Part.awardedUnitTypeId"
+                        [disabled]="selectedId == 18"
+                        (change)="
+                          awardedUnitTypeCheck(
+                            i,
+                            Part.awardedUnitTypeId,
+                            Part.rfqPartId
+                          )
+                        "
+                      >
+                        <option
+                          *ngFor="let unit of iQuantityUnitColl"
+                          [value]="unit.id"
+                        >
+                          {{ unit.value }}
+                        </option>
+                      </select>
+                      <label
+                        *ngIf="selectedId != 18"
+                        class="pull-right optionText"
+                        >Optional</label
+                      >
+                    </div>
+                    <div
+                      class="price"
+                      *ngIf="
+                        selectedId == 16 ||
+                        selectedId == 17 ||
+                        selectedId == 18 ||
+                        selectedId == 20
+                      "
+                    >
+                      <input
+                        type="text"
+                        class="form-control quantity-input"
+                        [(ngModel)]="Part.price"
+                        placeholder="$ Price Per Unit"
+                        [disabled]="selectedId == 18"
+                        onPaste="return false"
+                        appDecimal
+                        (change)="priceCheck(i, Part.price, Part.rfqPartId)"
+                      />
+                      <label
+                        *ngIf="selectedId != 18"
+                        class="pull-right optionText"
+                      ></label>
+                    </div>
+                  </div>
+                  <!-- show for others div -->
+                  <div class="parts-selection otherParts" *ngIf="showOthers">
+                    <div *ngFor="let value of indexArray">
+                      <div class="quantity" *ngIf="value.i === i">
+                        <input
+                          type="text"
+                          class="form-control quantity-input"
+                          #qty1="ngModel"
+                          pattern="^[1-9][0-9]*$"
+                          name="quantity"
+                          [(ngModel)]="Part.unit"
+                          #qty="ngModel"
+                          placeholder="Quantity"
+                          [disabled]="selectedId == 18"
+                          appDecimal
+                          onPaste="return false"
+                          (change)="
+                            showOthersUnitCheck(i, Part.unit, Part.rfqPartId)
+                          "
+                        />
+                        <label
+                          *ngIf="selectedId != 18"
+                          class="pull-right optionText"
+                        ></label>
+                        <div
+                          *ngIf="
+                            qty1.hasError('pattern') &&
+                            (qty1.dirty || qty1.touched)
+                          "
+                          style="color: red"
+                        >
+                          Quantity should be greater then zero.
+                        </div>
+                      </div>
+                      <div class="pieces" *ngIf="value.i === i">
+                        <select
+                          class="form-control quantity-input"
+                          [(ngModel)]="Part.awardedUnitTypeId"
+                          [disabled]="selectedId == 18"
+                          (change)="
+                            showOthersawardedUnitTypeCheck(
+                              i,
+                              Part.awardedUnitTypeId,
+                              Part.rfqPartId
+                            )
+                          "
+                        >
+                          <option
+                            *ngFor="let unit of iQuantityUnitColl"
+                            [value]="unit.id"
+                          >
+                            {{ unit.value }}
+                          </option>
+                        </select>
+                        <label
+                          *ngIf="selectedId != 18"
+                          class="pull-right optionText"
+                        ></label>
+                      </div>
+                      <div class="price" *ngIf="value.i === i">
+                        <input
+                          type="text"
+                          class="form-control quantity-input"
+                          [(ngModel)]="Part.price"
+                          placeholder="$ Price Per Unit"
+                          [disabled]="selectedId == 18"
+                          onPaste="return false"
+                          appDecimal
+                          (change)="
+                            showOthersPriceCheck(i, Part.price, Part.rfqPartId)
+                          "
+                        />
+                        <label
+                          *ngIf="selectedId != 18"
+                          class="pull-right optionText"
+                        ></label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-container">
+    <div class="cancel-btn" (click)="closePopUp()">
+      <h2 class="cancel-btn-h2">Cancel</h2>
+    </div>
+    <div
+      class="requote-btn"
+      [ngClass]="isReqoute ? '' : 'requoteActive'"
+      (click)="reQuote()"
+    >
+      <h2 class="requote-btn-h2" [ngClass]="isReqoute ? '' : 'requote'">
+        Request Re-Quote
+      </h2>
+    </div>
+    <div
+      class="next-btn"
+      [ngClass]="nextBtn ? '' : 'nextDeActive'"
+      (click)="stepNext()"
+    >
+      <h2 class="next-btn-h2" [ngClass]="nextBtn ? '' : 'nxtDeActive'">Next</h2>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- Award Modal POP UP 2 -->
+<p-dialog
+  header="Award Your Parts"
+  class="award-heading"
+  style="width: '575'; height: 491"
+  [(visible)]="isAwardStep2"
+  [modal]="true"
+  [responsive]="true"
+  [draggable]="false"
+  (onHide)="onIsAward1()"
+>
+  <div class="row order-tile">
+    <div class="col-md-12">
+      <div class="col-md-12 container-class">
+        <div class="container-progress">
+          <ul class="progressbar" style="margin: 0 0 -4px -40px">
+            <li class="actived" [class.navi]="isFirstTabCompleted"></li>
+            <li
+              [class.actived]="isFirstTabCompleted && !isSecondTabCompleted"
+              [class.navi]="isSecondTabCompleted"
+            ></li>
+          </ul>
+          <span class="order-title">Send Purchase Order </span>
+          <span
+            ><p class="order-content1">
+              How would you like to send your PO?
+            </p></span
+          >
+        </div>
+        <!-- [ngClass]="(selectedId > 20)?'':'disableDiv'" -->
+        <div *ngIf="selectedId < 20">
+          <div class="order-box" id="radioBtn">
+            <div
+              class="other-order-row"
+              (click)="sendMFG('Send MFG Standard')"
+              [ngClass]="
+                activeStatusFilterBtn1 == 'Send MFG Standard'
+                  ? 'active'
+                  : 'notActive'
+              "
+            >
+              <!-- (click)="sendMFG('Send MFG Standard')" -->
+              <img src="assets/vector-stroke.png" />
+              <span style="width: 156px">Send MFG Standard</span>
+            </div>
+            <div
+              class="other-order-row"
+              (click)="uploadMyOwnFile('Upload My Own')"
+              [ngClass]="
+                activeStatusFilterBtn1 == 'Upload My Own'
+                  ? 'active'
+                  : 'notActive'
+              "
+            >
+              <!-- (click)="uploadMyOwnFile('Upload My Own')" -->
+              <img src="assets/vector-stroke.png" />
+              <span style="width: 123px">Upload My Own</span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="selectedId > 20">
+          <div class="order-box" id="radioBtn">
+            <div
+              class="order-row"
+              (click)="sendMFG('Send MFG Standard')"
+              [ngClass]="
+                activeStatusFilterBtn1 == 'Send MFG Standard'
+                  ? 'active'
+                  : 'notActive'
+              "
+            >
+              <!-- (click)="sendMFG('Send MFG Standard')" -->
+              <img src="assets/vector-stroke.png" />
+              <span style="width: 156px">Send MFG Standard</span>
+            </div>
+            <div
+              class="order-row"
+              (click)="uploadMyOwnFile('Upload My Own')"
+              [ngClass]="
+                activeStatusFilterBtn1 == 'Upload My Own'
+                  ? 'active'
+                  : 'notActive'
+              "
+            >
+              <!-- (click)="uploadMyOwnFile('Upload My Own')" -->
+              <img src="assets/vector-stroke.png" />
+              <span style="width: 123px">Upload My Own</span>
+            </div>
+            <!-- <div *ngIf="showSpinner" class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div> -->
+          </div>
+        </div>
+        <div class="file-upload" *ngIf="isUploadMyOwnFile">
+          <!-- <div *ngIf="showSpinner" class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div> -->
+
+          <!-- <div *ngIf="showSpinner">
+            <div class="loader animation-start">
+              <span class="circle delay-1 size-2"></span>
+              <span class="circle delay-2 size-4"></span>
+              <span class="circle delay-3 size-6"></span>
+              <span class="circle delay-4 size-7"></span>
+              <span class="circle delay-5 size-7"></span>
+              <span class="circle delay-6 size-6"></span>
+              <span class="circle delay-7 size-4"></span>
+              <span class="circle delay-8 size-2"></span>
+            </div>
+          </div> -->
+
+          <div>
+            <input class="file-format" type="text" readonly="true" />
+          </div>
+          <div *ngIf="iPartUploadedFileNameList?.FileNameList.length > 0">
+            <div
+              class="row part-bg"
+              *ngFor="
+                let item of iPartUploadedFileNameList?.FileNameList;
+                let i = index
+              "
+            >
+              <div style="color: #4a90e2">
+                <span
+                  class="upload-part-detail-list"
+                  (click)="downloadS3File(item.CompleteFileName, true)"
+                  title="Download - {{ item.CompleteFileName | originalName }}"
+                  >{{ getOriginalFineName(item.CompleteFileName) }}
+                </span>
+              </div>
+              <div>
+                <a (click)="removeSavedPartDetailFile(item, i)">
+                  <span class="upload-part-detail-remove"
+                    ><i class="fa fa-trash" style="color: #4a90e2"></i
+                  ></span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div *ngIf="showSpinner" class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div> -->
+          <div
+            [ngClass]="
+              iPartUploadedFileNameList?.FileNameList.length === 1
+                ? 'disableCls'
+                : ''
+            "
+          >
+            <div
+              id="partFileAddedError"
+              ng2FileDrop
+              for="file-upload"
+              (click)="file.click()"
+              [ngClass]="{ 'nv-file-over': hasBaseDropZoneOver }"
+              (fileOver)="fileOverBase($event)"
+              [uploader]="uploader"
+            >
+              <div *ngIf="showSpinner">
+                <div class="loader animation-start">
+                  <span class="circle delay-1 size-2"></span>
+                  <span class="circle delay-2 size-4"></span>
+                  <span class="circle delay-3 size-6"></span>
+                  <span class="circle delay-4 size-7"></span>
+                  <span class="circle delay-5 size-7"></span>
+                  <span class="circle delay-6 size-6"></span>
+                  <span class="circle delay-7 size-4"></span>
+                  <span class="circle delay-8 size-2"></span>
+                </div>
+              </div>
+              <div>
+                <div class="m-l-0" *ngIf="!showSpinner">
+                  <img
+                    src="assets/downloadIcon.png"
+                    aria-hidden="true"
+                    class="dragdrop-img"
+                  />
+
+                  <p class="p-l-10 addMoreFiles">
+                    <span class="drapdrop">
+                      Drag and drop a .pdf file here or
+                    </span>
+                    <br />
+                    <span
+                      [ngClass]="
+                        iPartUploadedFileNameList?.FileNameList.length === 0
+                          ? 'colorBlue'
+                          : 'colorGray'
+                      "
+                      style="cursor: pointer !important"
+                      >click to upload</span
+                    >
+                  </p>
+                </div>
+                <input
+                  id="file-upload"
+                  type="file"
+                  ng2FileSelect
+                  [uploader]="partDetailUploader"
+                  (change)="onFileSelected($event)"
+                  #file
+                  accept="application/pdf"
+                  style="display: none"
+                />
+                <input
+                  type="file"
+                  #fileInput
+                  ng2FileSelect
+                  [uploader]="uploader"
+                  style="display: none"
+                  accept="application/pdf"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="order-body" [ngClass]="selectedId > 20 ? '' : 'disableDiv'">
+          <div style="margin-bottom: 10px">
+            <div *ngIf="!isUploadMyOwnFile">
+              <span class="purchase-text">Purchase order number</span>
+              <p class="purchase-p" *ngIf="!isUploadMyOwnFile">
+                *Use the number we generated for you or enter your own.
+              </p>
+            </div>
+            <div *ngIf="isUploadMyOwnFile">
+              <span class="purchase-text" *ngIf="isUploadMyOwnFile"
+                >Purchase order number (Required)</span
+              >
+              <p class="purchase-p">
+                *Please make sure this is the same number on your attached
+                document.
+              </p>
+            </div>
+            <input
+              type="text"
+              name="purchaseOrder"
+              [ngClass]="selectedId > 20 ? '' : 'disableDiv'"
+              [(ngModel)]="purchaseOrder"
+              class="order-number"
+              maxlength="30"
+            />
+            <!-- [(ngModel)]="purchaseOrder"  -->
+          </div>
+          <div *ngIf="purchaseEmpty">
+            <h6 style="color: red">PO number cannot be empty</h6>
+          </div>
+          <span class="response-text">I'd like a response by</span>
+          <input
+            class="order-number"
+            onkeydown="return false"
+            type="date"
+            [ngClass]="selectedId > 20 ? '' : 'disableDiv'"
+            [min]="minDate | date : 'yyyy-MM-dd'"
+            [max]="maxDate | date : 'yyyy-MM-dd'"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="award-btn-container">
+    <div class="award-modalStep">
+      <div class="award-modalStep-div" (click)="gotoAwardBack()">
+        <h2 class="award-modalStep-h2">Back</h2>
+      </div>
+      <!-- (click)="gotoAwardBack()" -->
+      <div class="award-step-cancel" (click)="cancelAward()">
+        <h2 class="award-step-cancel-h2">Cancel</h2>
+      </div>
+    </div>
+    <!-- (click)="cancelAward()" -->
+    <div>
+      <!-- <div class="col-md-4">
+          <button [disabled]="checkToDisableAwardButton()" type="button" class="btn btn-clone" label="Award"
+            (click)="awardActual()"><i class="fa fa-spinner fa-spin" *ngIf="isAwardDone"></i> Award</button>
+        </div> -->
+
+      <button
+        class="award-step2-btn"
+        [disabled]="purchaseEmpty"
+        [ngClass]="[
+          !purchaseEmpty ? '' : 'requoteActive',
+          isUploadMyOwnFile &&
+          iPartUploadedFileNameList?.FileNameList.length === 0
+            ? 'nextDeActive'
+            : ''
+        ]"
+        (click)="awardStepTwo()"
+      >
+        <h2
+          [ngClass]="[
+            !purchaseEmpty ? '' : 'requote',
+            isUploadMyOwnFile &&
+            iPartUploadedFileNameList?.FileNameList.length === 0
+              ? 'nxtDeActive'
+              : ''
+          ]"
+          class="award-step2-btn-h2"
+        >
+          Award
+        </h2>
+      </button>
+      <!-- (click)="awardStepTwo()" -->
+    </div>
+  </div>
+</p-dialog>
+
+<!-- Awarded in Non-MFG Manufacturer Region pop-up -->
+
+<p-dialog
+  header="Award Your Parts"
+  class="award-heading"
+  [(visible)]="isAwardNonMfg"
+  [modal]="true"
+  [responsive]="true"
+  [minY]="70"
+  [maximizable]="true"
+  [draggable]="false"
+  (onHide)="onIsAwardNonMfg()"
+>
+  <div class="row" style="height: 325px">
+    <div class="col-md-12">
+      <div class="container-progress">
+        <div>
+          <div style="margin-left: 30px">
+            <h3 class="awardToHeader">Awarded in Non-MFG Manufacturer</h3>
+            <div class="region-box">
+              <h5 class="award-to-p" style="padding-bottom: 10px; margin-top: 25px;" >Region</h5>
+              <div class="award-dropdowm">
+                <select
+                  class="form-control"
+                  style="
+                    padding: 2px;
+                    font-size: 13px;
+                    height: 30px;
+                    font-weight: 600;
+                  "
+                  (change)="setRegionId($event.target.value)"
+                >
+                  <option value="undefined" selected>Select a Region</option>
+                  <option
+                    *ngFor="let region of regionList"
+                    [value]="region.territoryClassificationId"
+                  >
+                    {{ region.territoryClassificationName }}
+                  </option>
+                </select>
+              </div>
+              <h5 class="companyName">Manufacturer company name</h5>
+              <input
+                type="text"
+                class="form-control freeText"
+                [(ngModel)]="companyName"
+                placeholder="Enter Manufacturer company name"
+                [disabled]="!companyNameActive"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-container">
+    <div class="cancel-btn" style="width: 175px;" (click)="closeNonMfgPopUp()">
+      <h2 class="cancel-btn-h2">Cancel</h2>
+    </div>
+    <button
+      class="next-btn"
+      (click)="saveAnotherPopData('Non-MFG')"
+      style="width: 175px;"
+      [disabled]="companyNameUpdate"
+    >
+      <h2 class="next-btn-h2">
+        Update
+      </h2>
+    </button>
+  </div>
+</p-dialog>
+
+<!-- Awarded in Another Manufacturer Region -->
+<p-dialog
+  header="Award Your Parts"
+  class="award-heading"
+  [(visible)]="isAwardAnotherMfg"
+  [modal]="true"
+  [responsive]="true"
+  [minY]="70"
+  [maximizable]="true"
+  [draggable]="false"
+  (onHide)="onIsAwardMfgHide()"
+>
+  <div class="row" style="height: 325px">
+    <div class="col-md-12">
+      <div class="container-progress">
+        <div>
+          <div style="margin-left: 30px">
+            <h3 class="awardToHeader">
+              Awarded in Another Manufacturer Region
+            </h3>
+            <div class="region-box">
+              <h5 class="award-to-p" style="padding-bottom: 10px;margin-top: 20px;">Region</h5>
+              <div class="award-dropdowm">
+                <select
+                  class="form-control"
+                  style="
+                    padding: 2px;
+                    font-size: 13px;
+                    height: 40px;
+                    font-weight: 600;
+                  "
+                  (change)="setRegionId($event.target.value)"
+                >
+                  <option value="undefined" selected>Select a Region</option>
+                  <option
+                    *ngFor="let region of regionList"
+                    [value]="region.territoryClassificationId"
+                  >
+                    {{ region.territoryClassificationName }}
+                  </option>
+                </select>
+              </div>
+              <h5 class="companyName">Manufacturer company name</h5>
+         
+              <p-autoComplete
+                [(ngModel)]="selectedCompany"
+                [suggestions]="filteredCompany"
+                (completeMethod)="filterCompany($event)"
+                field="awardedCompanyName"
+                [minLength]="1"
+                size="54"
+                placeholder="Enter Manufacturer company name"
+                [disabled]="!showCompanyDropdown"
+              ></p-autoComplete>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-container">
+    <div class="cancel-btn" style="width: 175px;" (click)="closeAnotherMfgPopUp()">
+      <h2 class="cancel-btn-h2">Cancel</h2>
+    </div>
+    <button
+      class="next-btn"
+      style="width: 175px;"
+      (click)="saveAnotherPopData('Another')"
+      [disabled]="disableUpdate"
+      >
+      <h2 class="next-btn-h2">
+        Update
+      </h2>
+    </button>
+  </div>
+</p-dialog>
+
+<!-- Awarded to MFG Manufacturer Offline -->
+<p-dialog
+  header="Award Your Parts"
+  class="award-heading"
+  [(visible)]="isAwardMfgOffline"
+  [modal]="true"
+  [responsive]="true"
+  [minY]="70"
+  [maximizable]="true"
+  [draggable]="false"
+  (onHide)="onIsOfflineHide()"
+>
+  <div class="row" style="height: 325px">
+    <div class="col-md-12">
+      <div class="container-progress">
+        <div>
+          <div style="margin-left: 30px">
+            <h3 class="awardToHeader">Awarded to MFG Manufacturer Offline</h3>
+            <div class="region-offline-box">
+              <h5 class="award-to-p" style="padding-bottom: 10px; ">Region</h5>
+              <div class="award-dropdowm">
+                <select
+                  class="form-control"
+                  style="
+                    padding: 2px;
+                    font-size: 13px;
+                    height: 40px;
+                    font-weight: 600;
+                  "
+                  (change)="setRegionId($event.target.value)"
+                >
+                  <option value="undefined" selected>Select a Region</option>
+                  <option
+                    *ngFor="let region of regionList"
+                    [value]="region.territoryClassificationId"
+                  >
+                    {{ region.territoryClassificationName }}
+                  </option>
+                </select>
+              </div>
+              <h5 class="companyName">Manufacturer company name</h5>
+              <p-autoComplete
+                [(ngModel)]="selectedCompany"
+                [suggestions]="filteredCompany"
+                (completeMethod)="filterCompany($event)"
+                field="awardedCompanyName"
+                [minLength]="1"
+                size="54"
+                placeholder="Enter Manufacturer company name"
+                [disabled]="!showCompanyDropdown"
+              ></p-autoComplete>
+              <!-- label Why offline -->
+              <h5 class="companyName"> Why Offline?</h5>
+              <textarea
+                placeholder="Start typing here"
+                [(ngModel)]="reasonName"
+                class="reasonName"
+                maxlength="500" 
+              
+                >
+              </textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-container">
+    <div class="cancel-btn" style="width: 175px;" (click)="closeOfflineMfgPopUp()">
+      <h2 class="cancel-btn-h2">Cancel</h2>
+    </div>
+    <button
+      class="next-btn"
+      (click)="saveOfflinePopData('Offline')"
+      style="width: 175px;"
+    
+    >
+      <h2 class="next-btn-h2">
+        Update
+      </h2>
+    </button>
+  </div>
+</p-dialog>
+
+<!-- Not Awarded Pop-up -->
+<p-dialog
+  header="Award Your Parts"
+  class="award-heading"
+  [(visible)]="notAwarded"
+  [modal]="true"
+  [responsive]="true"
+  [minY]="70"
+  [maximizable]="true"
+  [draggable]="false"
+  (onHide)="onNotAwardedHide()"
+>
+  <div class="row" style="height: 325px">
+    <div class="col-md-12">
+      <div class="container-progress">
+        <div>
+          <div style="margin-left: 30px">
+            <h3 class="awardToHeader">Not Awarded</h3>
+            <div class="region-offline-box">
+              <textarea
+                placeholder="What is the reason for not awarding the parts?"
+                [(ngModel)]="notAwardedComment"
+                class="not-award-reason"
+                maxlength="500" 
+                >
+              </textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-container">
+    <div class="cancel-btn" style="width: 175px;" (click)="closeNotAwardedPopUp()">
+      <h2 class="cancel-btn-h2">Cancel</h2>
+    </div>
+    <button
+      class="next-btn"
+      style="width: 175px;"
+      (click)="saveAnotherPopData('notAwarded')"
+      [disabled]="notAwardedUpdate"
+    >
+      <h2 class="next-btn-h2" >
+        Update
+      </h2>
+    </button>
+  </div>
+</p-dialog>

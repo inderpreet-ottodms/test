@@ -1,0 +1,108 @@
+<div class="background-white">
+  {{ checkMessageChange() }}
+  <div class="row">
+    <div class="col-md-12 rightpanel">
+      <i class="fa fa-times-circle pull-right" (click)="closePartDrawer()" placement="top" ngbTooltip="Close"></i>
+      <h2 class="panelheading">Message To:</h2>
+    </div>
+    <hr>
+    <div *ngIf="isLoader">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+    <div class="col-md-12" *ngIf="!isLoader">
+      <div *ngIf="userAccount !== 'Basic'">
+
+
+        <div class="row"
+          *ngIf="messageDetails.firstName != null && messageDetails.firstName != undefined && messageDetails.firstName != ''">
+          <div class="col-md-6 m-b-10">
+            <span class="f-w-600">Name</span>:
+          </div>
+          <div class="col-md-6 m-b-10" style="word-break: break-all">
+            <span>{{messageDetails.firstName}} {{messageDetails.lastName}}</span>
+          </div>
+          <div class="col-md-6 m-b-10">
+            <span class="f-w-600">Company</span>:
+          </div>
+          <div class="col-md-6 m-b-10" style="word-break: break-all">
+            <span>{{messageDetails.company}}</span>
+          </div>
+          <div class="col-md-6 m-b-10">
+            <span class="f-w-600">Email</span>:
+          </div>
+          <div class="col-md-6 m-b-10" style="word-break: break-all">
+            <span>{{messageDetails.email}}</span>
+          </div>
+          <div class="col-md-6 m-b-10">
+            <span class="f-w-600">Phone No.</span>:
+          </div>
+          <div class="col-md-6 m-b-10">
+            <span>{{messageDetails.phoneNo}}</span>
+          </div>
+          <div class="col-md-6 m-b-10" style="word-break: break-all">
+            <span class="f-w-600">Email Subject</span>:
+          </div>
+          <div class="col-md-6 m-b-10" style="word-break: break-all">
+            <span>{{messageDetails.emailSubject}}</span>
+          </div>
+          <div class="col-md-6" style="word-break: break-all">
+            <span class="f-w-600">Email Description</span>:
+          </div>
+          <div class="col-md-6" style="word-break: break-all">
+            <span>{{messageDetails.emailMessage}}</span>
+          </div>
+          <div class="col-md-12">
+              <div *ngIf="messageDetails.isNdaRequired === true && (messageDetails.isNdaAccepted === false ||messageDetails.isNdaAccepted === null) ; else showDownloadAll">
+                  <span class="color" *ngIf="messageDetails.messageFileNames !== null &&messageDetails.messageFileNames.length > 1" (click)="openNdaModel()"><b>Download All</b></span>
+              </div>
+              <ng-template #showDownloadAll>
+                  <span class="color" *ngIf="messageDetails.messageFileNames !== null && messageDetails.messageFileNames.length > 1" (click)="downloadAllFiles(messageDetails.messageFileNames)"><b>Download All</b></span>
+              </ng-template>
+          </div>
+          <div class="col-md-12">
+                  <div *ngFor=" let file of messageDetails.messageFileNames" class="fileArea">
+                    <span *ngIf="messageDetails.isNdaRequired === true && (messageDetails.isNdaAccepted === false ||messageDetails.isNdaAccepted === null); else showDownload" class="color" (click)="openNdaModel()">{{file| originalShortName: 28}}</span>
+                    <ng-template #showDownload>
+                        <span class="color" (click)="downloadS3File(file, true)">{{file| originalShortName: 28}}</span>
+                    </ng-template>
+                  </div>
+          </div>
+        </div>
+        <div class="row"
+          *ngIf="messageDetails.firstName == null || messageDetails.firstName == undefined || messageDetails.firstName == ''">
+          <div class="col-md-12 m-b-10">
+            <span class="f-w-600">Sorry, No message found.</span>
+          </div>
+        </div>
+
+      </div>
+      <div *ngIf="userAccount === 'Basic'">
+        <div class="row" style="text-align: center">
+          <div class="col-md-12 m-t-25">
+            <app-upgrade-account-btn [quoteRFQ]=false [RfqId]="0" [btnClass]=1></app-upgrade-account-btn>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 m-t-5" style="text-align: center">
+            <button type="button" class="btn btn-upgrade" data-bs-dismiss="modal" (click)="openContactModal()">Contact Sales </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<app-nda-model *ngIf="showNdaModel" [msgId]="msgId" (modalCloseEvent)="closeNDAModelEvent($event)"></app-nda-model>
+<app-contact-sales-model *ngIf="toShowContactModel" (modelUpdateInfoChange)="toShowContactModel= $event">
+</app-contact-sales-model>

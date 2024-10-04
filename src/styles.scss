@@ -1,0 +1,45 @@
+/* You can add global styles to this file, and also import other style files */
+.content-title-container
+{
+    margin-top:10px;
+}
+.content-title-container .content-title
+{
+    font-family: Poppins;
+    font-size: 24px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #222222;
+}
+.content-container
+{
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    -webkit-box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+    box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+    margin-top: 10px;
+}
+
+.cursor-pointer
+{
+    cursor: pointer;
+}
+
+.clearFix
+{
+    clear: both;
+}
+
+.ui-dialog .ui-dialog-content  {
+    overflow-x: hidden !important;
+  }
+  /*
+  due to bootstrap update all anchor were displaying underline added globally
+  */
+  a{
+    text-decoration: none !important;;
+  }

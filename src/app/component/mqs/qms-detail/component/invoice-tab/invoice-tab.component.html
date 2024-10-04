@@ -1,0 +1,179 @@
+<div class="row m-t-10">
+  <div class="col-md-12">
+    <a class="btn btn-green" (click)="onNavigate(null)">Create Invoice</a>
+  </div>
+</div>
+<div class="row qms-section">
+  <div class="col-md-12">
+    <div class="row">
+      <div [ngClass]="'col-md-12'">
+        <div class="lead-body">
+          <div class="row" *ngIf="isInvoicesAvailable">
+            <!-- {{reloadPageOnQuotedrawerClose()}} -->
+            <div class="col-12">
+              <div class="row quote-heading-section">
+                <div class="col-md-2 lead-subhead"><span>Invoice Number</span> </div>
+                <div class="col-md-1 lead-subhead invoice-date"><span>Date</span> </div>
+                <div class="col-md-2 lead-subhead"><span>Customer Name</span> </div>
+                <div class="col-md-2 lead-subhead"><span>Invoice Reference</span> </div>
+                <div class="col-md-2 lead-subhead"><span>Status </span> </div>
+                <div class="col-md-3 lead-subhead action-btn"><span>Actions</span></div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="isLoader" class="loading">
+            <div class="loader animation-start">
+              <span class="circle delay-1 size-2"></span>
+              <span class="circle delay-2 size-4"></span>
+              <span class="circle delay-3 size-6"></span>
+              <span class="circle delay-4 size-7"></span>
+              <span class="circle delay-5 size-7"></span>
+              <span class="circle delay-6 size-6"></span>
+              <span class="circle delay-7 size-4"></span>
+              <span class="circle delay-8 size-2"></span>
+            </div>
+          </div>
+          <div class="row" *ngIf="isInvoicesAvailable">
+            <div class="col-md-12">
+              <div class="row lead-info" *ngFor="let invoice of items">
+                <div class="col-md-2 lead-subhead p-t-20 p-b-20">
+                  <span class="invoice-no" style="cursor: pointer;"
+                    (click)="onNavigate(invoice.qmsQuoteInvoiceId)" >
+                        {{invoice.invoiceNo ? invoice.invoiceNo : 'N/A'}}
+                    </span>
+                </div>
+                <div class="col-md-1 lead-subhead  text-wrap p-t-20 p-b-20 invoice-date">
+                  <span placement="top" data-container="body"
+                    ngbTooltip="{{invoice.invoiceCreated}}">{{invoice.invoiceCreated ? invoice.invoiceCreated : 'N/A'}}</span>
+                </div>
+                <div class="col-md-2 lead-subhead  text-truncate  p-t-20 p-b-20">
+                  <span class="lead-name" ngbTooltip="{{invoice.customer}}" placement="top" data-container="body"
+                    (click)="openCompanyDrawer(invoice.qmsContactIdEncrypt,$event)">{{invoice.customer ? invoice.customer : 'N/A'}}</span>
+                </div>
+                <div class="col-md-2 lead-subhead  text-wrap p-t-20 p-b-20">
+                  <span placement="top" data-container="body"
+                    ngbTooltip="{{invoice.quoteReferenceNo}}">{{invoice.quoteReferenceNo ? invoice.quoteReferenceNo : 'N/A'}}</span>
+                </div>
+                <div class="col-md-2 lead-subhead  text-wrap p-t-20 p-b-20">
+                  <!-- <span placement="top" data-container="body">Sent</span> -->
+                  <select class="form-control status-drop-down"  [(ngModel)]="invoice.statusId"  [disabled]="isLoader" (change)="changeQmsInvoiceStatus(invoice.qmsQuoteInvoiceId,$event)">
+                  <option [value]="data.qmsStatusId" *ngFor="let data of  invoiceStatusList">{{data.status}}</option>
+                  </select>
+                </div>
+                <div class="col-md-3 lead-subhead actiondiv">
+                  <!-- [routerLink]="['/qms/updateinvoice/', invoice.qmsQuoteInvoiceId]" -->
+                  <span [ngClass]="isSidePanel()?'iconQmsDrawer':'iconQms'"
+                    (click)="onNavigate(invoice.qmsQuoteInvoiceId)">
+                    <i class="fa fa-edit" placement="top" container="body" ngbTooltip="Edit Invoice"></i>
+                  </span><!-- [routerLink]="['/qms/invoicePdf/', invoice.qmsQuoteInvoiceId]" -->
+                  <span [ngClass]="isSidePanel()?'iconQmsDrawer':'iconQms'">
+                    <i class="fa fa-file-pdf-o"
+                        aria-hidden="true" placement="top" container="body"
+                        ngbTooltip="View PDF"
+                        data-bs-toggle="modal" data-bs-target="#myModal"
+                        (click)="showInvoicePreview(qmsQuoteIdEncrypt, invoice.qmsQuoteInvoiceId, false, invoice.qmsContactId, invoice.customer, invoice.qmsQuoteId)"></i>
+                       
+                  </span>
+                  <span (click)="showInvoicePreview(qmsQuoteIdEncrypt, invoice.qmsQuoteInvoiceId, true, invoice.qmsContactId, invoice.customer)" [ngClass]="isSidePanel()?'iconQmsDrawer':'iconQms'">
+                    <i class="fa fa-envelope" placement="top" container="body" ngbTooltip="Email Invoice"
+                      ></i>
+                  </span>
+                  <span [ngClass]="isSidePanel()?'iconQmsDrawer':'iconQms'">
+                    <i class="fa fa-trash pointer-cursor" placement="top" container="body" ngbTooltip="Delete Invoice"
+                      (click)="deleteInvoice(invoice.qmsQuoteInvoiceId)"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="myRFQ-rfq-no-available" *ngIf="!isInvoicesAvailable">
+            <div class="row noinvoice-padding">
+              <div class="col-md-12">
+                <div>
+                  <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+                        assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+                </div>
+              </div>
+            </div>
+            <div class="row noinvoice-text">
+              <div class="col-md-12">
+                <div class="myRFQ-noRFQActive-helper-text">No Invoices found at this time.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="myModal" class="modal fade" role="dialog" >
+    <div class="modal-dialog custom-model addItem-model-container modal-lg">
+      <div class="modal-content">
+        <div class="modal-body">
+            <div class="col-md-12 col-sm-12 col-lg-12">
+                <button type="button" class="close"
+                        aria-label="Close" style="margin-top:0px;"
+                        data-bs-dismiss="modal">
+                  <span aria-hidden="true" >&times;</span>
+                </button>
+              </div>
+          <div class="row" style="padding-bottom: 7px;">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <span (click)="generateInvoicePDF()" class="title"> {{pdfButtonTitle}} </span>
+            </div>
+          </div>
+          <hr class="line" />
+          <div class="row">
+              <!-- {{invoicePreviewData | json}} -->
+              <div class="col-md-12 col-sm-12 col-lg-12 model-popup-text"
+                    style="max-height: 100%; overflow-y: auto;">
+                    <app-invoice-pdf [(invoiceDetails)]="invoicePreviewData" [decimalValueDefault]='decimalValueDefault'></app-invoice-pdf>
+                    <!-- {{invoicePreviewData | json}} -->
+              </div>
+          </div>
+          <!-- <hr class="line" />
+          <div class="action-container">
+            <input type="button" class="clear-action" value="Cancel" (click)="closeMe()" />
+            <div class="clearFix"></div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isMailed">
+    <app-invoice-pdf [(invoiceDetails)]="invoicePreviewData" [decimalValueDefault]='decimalValueDefault'></app-invoice-pdf>
+  </div>
+
+  <ng-template #qmsBeta let-d="dismiss" data-backdrop="static" data-keyboard="false">
+      <form #modelForm="ngForm">
+    <div class="modal-header">
+      <h4 class="modal-title">Invoice Starting Number</h4>
+      <button type="button" class="close" data-bs-dismiss="modal" (click)="d('notNow');" style="z-index: 100;">
+          <i class="fa fa-times-circle" aria-hidden="true" style="z-index: 1000;color:#4a90e2;"></i></button>
+    </div>
+    <div class="modal-body">
+  <div class="row">
+    <div class="col-md-6 m-b-5">
+      <label class="f-w-600">Invoice Number</label>
+        <input class="form-control" placeholder="Invoice Number" name="invoiceNo" type="text" #invoiceNo [(ngModel)]="invoiceId" required
+        pattern="^[1-9]+[0-9]*$" />
+        <div
+            *ngIf="modelForm.form.controls.invoiceNo?.invalid && (modelForm.form.controls.invoiceNo?.dirty || modelForm.form.controls.invoiceNo?.touched)"
+            class="">
+            <p style="color:red" *ngIf="modelForm.form.controls.invoiceNo.errors.pattern">Please enter numeric value and invoice number should not start with zero.</p>
+          </div>
+    </div>
+  </div>
+    </div>
+    <div class="modal-footer-section">
+        <div class="btn-cancel-section text-center m-10" data-bs-dismiss="modal">
+            <button type="button" style="padding: 10px 40px;" class="btn btn-cancel m-r-20" data-bs-dismiss="modal" (click)="d('notNow');">Cancel</button>
+            <button style="padding: 10px 45px;" [disabled]="!modelForm.form.valid" (click)="saveInvoiceNumber()" type="button" class="btn btn-green" data-bs-dismiss="modal" (click)="d('notNow');">Save</button>
+        </div>
+  
+    </div>
+    </form>
+  </ng-template>

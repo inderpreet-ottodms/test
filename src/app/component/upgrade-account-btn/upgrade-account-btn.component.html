@@ -1,0 +1,19 @@
+{{checkAccountType()}}
+<button [class]="getBtnClass()"  *ngIf="isBtnShow" type="button" (click)="upgradeClick()" [attr.name]="btnTitle">{{btnText}}</button>
+<app-upgrade-account *ngIf="showUpgradeAccountModal" [quoteRFQ]="quoteRFQ" [RfqId]="RfqId"  [isCustomer]="isCustomerModelOpen" (contactSaleModel)="openSaleModel()" (modalCloseEvent)="closeModal($event)"></app-upgrade-account>
+<app-contact-sales-model *ngIf="toShowContactModel" (modelUpdateInfoChange)="toShowContactModel= $event" [rfqId]="RfqId">
+</app-contact-sales-model>
+
+
+<div *ngIf="isLoader" class="loading">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<div class="col-sm-12 col-lg-12 col-md-12 summary-container">
+  <div class="col-sm-2 col-lg-2 col-md-2 pull-left">
+    <img *ngIf="isPremium()" src="{{ buyerSummary.companyLogoUrl=='' || buyerSummary.companyLogoUrl==null
+                ? 'assets/company/avatar-manu-basic.svg'
+                : buyerSummary.companyLogoUrl }}"
+          (click)="showProfile()"
+                >
+    <div *ngIf="!isPremium()" (click)="showProfile()" class="col-md-12 rfq-buyer-logo site-logo"></div>
+  </div>
+  <div class="col-sm-9 col-lg-9 col-md-9 text-right pull-right">
+    <span   *ngIf="!isPremium()"  style="color:#4a90e2; font-weight: bold; font-size: 15pt;">Upgrade to Quote</span>
+    <span class="company-title" *ngIf="isPremium()" (click)="showProfile()">{{buyerSummary.companyname}}</span>
+    <!-- <i class="fa fa-external-link" aria-hidden="true"></i> -->
+    <!-- <i class="fa fa-info-circle" aria-hidden="true"></i> -->
+
+    <div class="rfq-star">
+        <span style="color:#4a90e2;">{{ buyerSummary.rating==null ? 'n/a' : buyerSummary.rating | number : '1.0-1'}}</span>
+        <ng-template #t let-fill="fill">
+          <span class="star" [class.full]="fill === 100">
+            <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+          </span>
+        </ng-template>
+        <ngb-rating [(rate)]="buyerSummary.rating" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+    </div>
+    <div class="col-sm-12 col-lg-12 col-md-12">
+      <span class="joining-text">Member Since: {{buyerSummary.joinedOn | date : 'MM/dd/yyyy'}}</span>
+    </div>
+
+  </div>
+  <div class="clearFix"></div>
+</div>

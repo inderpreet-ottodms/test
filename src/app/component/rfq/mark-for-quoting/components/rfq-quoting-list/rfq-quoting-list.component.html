@@ -1,0 +1,424 @@
+<!-- <p-dialog header="Clone RFQ" [(visible)]="display" [modal]="true" [responsive]="true" [contentStyle]="{'overflow':'visible'}" [autoZIndex]="false" [style]="{'z-index': 10001}"> -->
+  <!-- <div class="row" style="padding-bottom: 28px">
+    <div class="col-md-12">
+      <p class="What-would-you-like">
+        <span>What would you like to name your new RFQ?</span>
+      </p>
+    </div>
+  </div> -->
+  <!-- <div class="row" style="padding-bottom: 25px">
+    <div class="col-md-12">
+        <label  class="label-part-detail">What would you like to name your new RFQ?</label>
+      <input type="text" placeholder="RFQ Name*" [(ngModel)]="cloneRfqName" class="form-control" />
+    </div>
+  </div>
+  <div class="row" style="padding-bottom: 25px">
+    <div class="col-md-6">
+        <label  class="label-part-detail">Select your part(s) delivery date </label>
+      <p-calendar  [readonlyInput]="true" [(ngModel)]="cloneDeliveryDate" [style]="{'width':'100%','border-bottom-color':'none'}"
+                        [inputStyle]="{'width':'82%' ,'padding':'7px','border-bottom-color':'none'}" name="deliveryDate" placeholder="Delivery date *" [minDate]="minDate"
+                        [showIcon]="true" #deleveryDate="ngModel"></p-calendar>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <p class="clone-below-text">
+        <span>NOTE: You will find your new RFQ in the Draft RFQs section of the left navigation.</span>
+      </p>
+    </div>
+  </div>
+  <p-footer>
+    <div class="row" style="padding-top: 25px">
+      <div class="col-md-6" >
+        <button type="button" class="btn btn-cancel" (click)="display=false">Cancel</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" [ngClass]="(!isvalid())? 'btn btn-clone':'btn btn-disable'" label="Yes" [disabled]="isvalid()"
+          (click)="submitClone()"> Submit RFQ</button>
+      </div>
+    </div>
+  </p-footer>
+</p-dialog> -->
+<div class="custom-confirmation" *ngIf="isCencel">
+  <p-confirmDialog header="Confirmation" icon="" width="629" height="220" #cd>
+    <p-footer>
+      <div class="row">
+        <div class="col-md-6">
+          <button type="button" class="btn my-RFQ-btn-ignore-rfq" (click)="cd.reject()">No</button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn my-RFQ-btn-cancel-rfq" label="Yes" (click)="cd.accept()"> Move to Draft</button>
+        </div>
+      </div>
+    </p-footer>
+  </p-confirmDialog>
+</div>
+<div class="custom-confirmation" *ngIf="isDelete">
+  <p-confirmDialog header="Confirmation" icon="" width="629" height="220" #cd>
+    <p-footer>
+      <div class="row">
+        <div class="col-md-6">
+          <button type="button" class="btn my-RFQ-btn-ignore-rfq" (click)="cd.reject()">Cancel</button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn my-RFQ-btn-cancel-rfq" label="Yes" (click)="cd.accept()"> Delete RFQ</button>
+        </div>
+      </div>
+    </p-footer>
+  </p-confirmDialog>
+</div>
+
+<div style="padding:19px;min-height: 600px;" [ngClass]="(!isLoader)?'':'loader-height'">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="btn-group">
+        <button type="button" (click)="setStatusFilterTemp('All')"
+          [ngClass]="(activeStatusFilterBtn == 'All')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+          All</button>
+        <button type="button" (click)="setStatusFilterTemp('Active')"
+        [ngClass]="(activeStatusFilterBtn == 'Active')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+          Active</button>
+        <button type="button" (click)="setStatusFilterTemp('Archived')"
+        [ngClass]="(activeStatusFilterBtn == 'Archived')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+        Deleted</button>
+      </div>
+    </div>
+    <div class="col-md-6 pull-right" style="text-align: end;">
+      <i _ngcontent-c4="" [ngClass]="(isTilesView)?'ti-layout-grid2 my-RFQ-list-view active':'ti-layout-grid2 my-RFQ-list-view '"
+        (click)="openTilesView()"></i>
+      <i _ngcontent-c4="" [ngClass]="(isGridView)?'ti-list my-RFQ-list-view active':'ti-list my-RFQ-list-view'" (click)="openGridView()"></i>
+    </div>
+  </div>
+
+  <div class="row" style="padding-top:10px">
+    <!-- <div class="col-md-3 col-sm-3">
+      <select class="filter" [(ngModel)]="stateFilterValue" (change)="stateFilter()">
+        <option value="">All Status</option>
+        <option value="3">Quoting</option>
+        <option value="15">Award</option>
+        <option value="6">Complete</option>
+      </select>
+    </div> -->
+    <div class="col-md-3 col-sm-3">
+      <select class="recent" [(ngModel)]="sortFilterValue" (change)="sortFilter()">
+        <option value="Recent">Recent</option>
+        <option value="Oldest">Oldest</option>
+        <option value="A - Z">A - Z</option>
+        <option value="Z - A">Z - A</option>
+      </select>
+    </div>
+    <div class="col-md-3 col-sm-3"></div>
+    <div class="col-md-3 col-sm-3 col-xs-12 pull-right offset-3"> <!-- searchFilter($event.target.value) -->
+      <div class="input-container">
+          <i class="fa fa-search icon-search" (click)="stateFilter()" placement="top" container="body" ngbTooltip="Search"></i>
+        <input class="search search-text" [(ngModel)]="searchFilterValue"  placeholder="Search" type="text" (keypress) = "searchByKey($event)" (input)="checkSearch(searchFilterValue)"/>
+        <i class="fa fa-times-circle icon" (click)="removeTextValue()" placement="top" container="body" ngbTooltip="Remove Text"></i>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row" *ngIf="isTilesView == true">
+    <div class="col-md-12">
+      <div class="background-white">
+        <div class="row">
+          <br>
+          <div [ngClass]="(isSidePanel())?'col-md-6':'col-md-3'" *ngFor='let rfq of items' id={{rfq.rfqId}}  >
+            <div class="card" [class.actievPart]="rfq.rfqId === currentRfq()">
+              <div class="box pointerCursor" (click)="openPartDetails(rfq.rfqId)">
+                <div class="quote" *ngIf="(rfq.rfqStatusId == 3)">
+                  <a class="pull-right"><i class="fa fa-quote-right"></i></a>
+                </div>
+                <div class="star" *ngIf="(rfq.rfqStatusId == 15)">
+                  <a class="pull-right"><i class="fa fa-star"></i></a>
+                </div>
+                <div class="hourglass" *ngIf="(rfq.rfqStatusId == 2)">
+                  <a class="pull-right"><i class="fa fa-hourglass"></i></a>
+                </div>
+                <div class="hourglass" *ngIf="(rfq.rfqStatusId == 1)">
+                  <a class="pull-right"><i class="fa fa-hourglass"></i></a>
+                </div>
+                <div class="hourglass" *ngIf="(rfq.rfqStatusId == 13)">
+                  <a class="pull-right"><i class="fa fa-hourglass"></i></a>
+                </div>
+                <div *ngIf="(rfq.rfqStatusId == 6)">
+                  <img src="assets/rfq/faCheck.png"
+                    srcset="assets/rfq/faCheck@2x.png 2x, assets/rfq/faCheck@3x.png 3x"
+                    class="checkCircleClass pull-right resimg">
+                </div>
+                <div class="img">
+                    <img class="resimg" *ngIf="(!rfq.rfqThumbnail || rfq.rfqThumbnail === '') && !rfq.isMfgCommunityRfq" src="assets/supplier/comming-soon.png" >
+                    <img class="resimg" *ngIf="(!rfq.rfqThumbnail || rfq.rfqThumbnail === '') && rfq.isMfgCommunityRfq" src="assets/directrfq.png" >
+
+                    <img *ngIf="!(!rfq.rfqThumbnail || rfq.rfqThumbnail === '')" [src]="getLoadableImg(rfq.rfqThumbnail)"
+                    class="box-fit resimg" >
+                </div>
+                <h2 class="pointerCursor text-truncate" placement="top" data-container="body" ngbTooltip="{{rfq.rfqName}}" (click)="detailRfq(rfq.rfqId, rfq.rfqName)">{{rfq.rfqName}}
+                  <br>
+                  <span >RFQ #{{rfq.rfqId}} </span>
+                </h2>
+                <p class="text-truncate rfq-loc"><span placement="top" data-container="body" ngbTooltip="{{rfq.manufacturingLocation}}">{{rfq.manufacturingLocation}}</span></p>
+                <!-- <p *ngIf="(rfq.rfqStatusId == 3)">Quoting </p>
+                <p *ngIf="(rfq.rfqStatusId == 15)">Award</p>
+                <p *ngIf="(rfq.rfqStatusId == 6)">Complete</p>
+                <p *ngIf="(rfq.rfqStatusId == 2)">Pending Release</p>
+                <p *ngIf="(rfq.rfqStatusId == 13)">Archived</p> -->
+                <p>{{rfq.rfqStatus}}</p>
+              </div>
+              <div class="bottomaction">
+                <ul *ngIf="(rfq.rfqStatusId !== 13)">
+                  <!-- <li>
+                    <a *ngIf="!isReadyToAward(rfq.quotesNeededBy)" (click)="editRfq(rfq.rfqId, rfq.rfqName)">
+                      <i class="fa fa-edit pointerCursor"></i>
+                    </a>
+                    <a *ngIf="isReadyToAward(rfq.quotesNeededBy)" (click)="awardRfq(rfq.rfqId)">
+                      <img src="assets/rfq/awardIt.png"
+                        srcset="assets/rfq/awardIt@2x.png 2x, assets/rfq/awardIt@3x.png 3x"
+                        class="award-rfq-icon-class pointerCursor">
+                    </a>
+                  </li> -->
+                  <!-- style="margin-left: 23%;" -->
+                  <li>
+                    <a (click)="cloneModel(rfq.rfqId,rfq.manufacturingLocationId,rfq.deliveryDate)">
+                      <i class="fa fa-clone pointerCursor" placement="top" container="body" ngbTooltip="Clone RFQ"></i>
+                    </a>
+                  </li>
+                  <li class="pull-right">
+                    <a (click)="cancelRfq(rfq.rfqId)">
+                      <i class="fa fa-times-circle pointerCursor" placement="top" container="body" ngbTooltip="Move to Draft"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="!isRfqAvailable">
+          <div class="col-md-2">
+            <div class="dataTables_length" id="example_length">
+              <label>Show
+                <select name="example_length" aria-controls="example" class="" [(ngModel)]="inputLength" (ngModelChange)="ChangeinputLength()">
+                  <option value="24">24</option>
+                  <option value="48">48</option>
+                  <option value="96">96</option>
+                </select>
+                entries</label>
+            </div>
+          </div>
+          <div class="col-md-10">
+            <div class="paginations">
+              <div  >
+                <div id="radioBtn" class="btn-group">
+                  <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" class="btn btn-primary btn-sm notActive"
+                    (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                    Previous
+                  </a>
+                  <a *ngFor="let page of pagesIndex" (click)="setPage(page)" [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                    data-bs-toggle="fun" data-title="X">
+                    {{page}}
+                  </a>
+                  <a [ngClass]="(currentIndex == pageNumber || pageNumber == 0)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                    (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                    Next
+                  </a>
+                </div>
+                <input type="hidden" name="fun" id="fun">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="!isRfqAvailable">
+          <div class="col-md-12">
+              <div class="pull-right padd-right">
+                  <label class="showreccount"> {{currentIndex   }} of {{pageNumber}} </label>
+                </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row" *ngIf="isGridView == true && !isRfqAvailable">
+    <div class="col-md-12">
+      <div class="background-white">
+        <div class="row">
+          <br>
+          <div class="col-md-12">
+            <div class="table-responsive">
+              <table class="table table-hover rfqtable">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Date Created</th>
+                    <th>Status</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <!-- <th></th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor='let rfq of items' id={{rfq.rfqId}}  [ngClass]="(rfq.rfqId === currentRfq())?'actievPart':''">
+                    <td class="rfqtd text-truncate hand tdborderleft" (click)="detailRfq(rfq.rfqId, rfq.rfqName)">{{rfq.rfqName}}
+                      <br>
+                      <span>RFQ #{{rfq.rfqId}}</span><br>
+                      <span>{{rfq.manufacturingLocation}}</span>
+                    </td>
+                    <td class="hand" (click)="openPartDetails(rfq.rfqId)">{{rfq.rfqCreatedOn | date: 'MM/dd/yyyy'}}</td>
+                    <!-- <ng-container [ngSwitch]="true">
+                      <td *ngSwitchCase="rfq.rfqStatusId == 3">Quoting</td>
+                      <td *ngSwitchCase="rfq.rfqStatusId == 15">Award</td>
+                      <td *ngSwitchCase="rfq.rfqStatusId == 6">Complete</td>
+                      <td *ngSwitchCase="rfq.rfqStatusId == 2">Pending Release</td>
+                      <td *ngSwitchCase="rfq.rfqStatusId == 13">Archived</td>
+                      <td *ngSwitchDefault></td>
+                    </ng-container> -->
+                    <td class="hand" (click)="openPartDetails(rfq.rfqId)">{{rfq.rfqStatus}}</td>
+                    <ng-container [ngSwitch]="true">
+                      <td *ngSwitchCase="rfq.rfqStatusId == 3"><i class="fa fa-quote-right"></i></td>
+                      <td *ngSwitchCase="rfq.rfqStatusId == 15"><i class="fa fa-star"></i></td>
+                      <td *ngSwitchCase="rfq.rfqStatusId == 2 || rfq.rfqStatusId == 13 || rfq.rfqStatusId == 1"><i class="fa fa fa-hourglass"></i></td>
+                      <td *ngSwitchCase="rfq.rfqStatusId == 6"><img src="assets/rfq/faCheck.png"
+                        srcset="assets/rfq/faCheck@2x.png 2x, assets/rfq/faCheck@3x.png 3x"
+                        class="checkCircleClass"></td>
+                      <td *ngSwitchDefault></td>
+                    </ng-container>
+                    <ng-container *ngIf="(rfq.rfqStatusId === 13)">
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </ng-container>
+                    <ng-container *ngIf="(rfq.rfqStatusId !== 13)">
+                      <!-- <td class="editdelete" *ngIf="!isReadyToAward(rfq.quotesNeededBy)" (click)="editRfq(rfq.rfqId, rfq.rfqName)">
+                        <i class="fa fa-edit"></i>
+                      </td>
+                      <td class="editdelete" *ngIf="isReadyToAward(rfq.quotesNeededBy)" (click)="awardRfq(rfq.rfqId)">
+                        <img src="assets/rfq/awardIt.png"
+                          srcset="assets/rfq/awardIt@2x.png 2x, assets/rfq/awardIt@3x.png 3x"
+                          class="award-rfq-icon-class">
+                      </td> -->
+                      <td class="editdelete" (click)="cloneModel(rfq.rfqId, rfq.manufacturingLocationId,rfq.deliveryDate)">
+                        <i class="fa fa-clone" placement="top" container="body" ngbTooltip="Clone RFQ"></i>
+                      </td>
+                      <ng-container [ngSwitch]="true">
+                        <!-- <td *ngSwitchCase="(rfq.rfqStatusId === 2)" (click)="cancelRfq(rfq.rfqId)" class="editdelete tdborderright">
+                          <i class="fa fa-times-circle"></i>
+                        </td>
+                        <td *ngSwitchCase="(rfq.rfqStatusId === 1)" (click)="deleteRfq(rfq.rfqId)" class="editdelete tdborderright">
+                          <i class="fa fa-trash"></i>
+                        </td> -->
+                        <td  (click)="cancelRfq(rfq.rfqId)" class="editdelete tdborderright">
+                          <i class="fa fa-times-circle" placement="top" container="body" ngbTooltip="Move to Draft"></i>
+                        </td>
+                        <!-- <td *ngSwitchDefault></td> -->
+                      </ng-container>
+                    </ng-container>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="!isRfqAvailable">
+          <div class="col-md-2">
+            <div class="dataTables_length" id="example_length">
+              <label>Show
+                <select name="example_length" aria-controls="example" class="" [(ngModel)]="inputLength" (ngModelChange)="ChangeinputLength()">
+                    <option value="24">24</option>
+                    <option value="48">48</option>
+                    <option value="96">96</option>
+                </select>
+                entries</label>
+            </div>
+          </div>
+          <div class="col-md-10">
+            <div class="paginations">
+              <div  >
+                <div id="radioBtn" class="btn-group">
+                  <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" class="btn btn-primary btn-sm notActive"
+                    (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                    Previous
+                  </a>
+                  <a *ngFor="let page of pagesIndex" (click)="setPage(page)" [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                    data-bs-toggle="fun" data-title="X">
+                    {{page}}
+                  </a>
+                  <a [ngClass]="(currentIndex == pageNumber || pageNumber == 0)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                    (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                    Next
+                  </a>
+                </div>
+                <input type="hidden" name="fun" id="fun">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="!isRfqAvailable">
+          <div class="col-md-12">
+              <div class="pull-right padd-right">
+                  <label class="showreccount"> {{currentIndex   }} of {{pageNumber}} </label>
+                </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isLoader">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>
+
+  <div class="myRFQ-rfq-no-available" *ngIf="isRfqAvailable">
+    <div class="row" style="text-align: center;padding-top:106px">
+      <div class="col-md-12">
+        <div>
+          <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+        assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-top:34px">
+      <div class="col-md-12">
+        <div class="myRFQ-noRFQActive-helper-text">You don’t have any RFQs active at this time.</div>
+      </div>
+    </div>
+    <div class="row" style="padding-top:10px">
+      <div class="col-md-12">
+        <div class="myRFQ-noRFQActive-helper-sub-text">Please create an RFQ or check for ones Draft Rfqs.</div>
+      </div>
+    </div>
+    <div class="row myRFQ-noRFQBodyBtn-spacing">
+      <div class="col-md-6" style="text-align:right">
+        <button type="submit" [routerLink]="['/rfq/draftrfqs/']"
+          [ngClass]="toggleNoRFQBodyBtn?'myRFQ-noRFQBodyBtn-inActive':'myRFQ-noRFQBodyBtn-Active'"
+          (mouseover)="changeInProg(true)" (mouseout)="changeInProg(false)"
+          [disabled]="isRFQInProgBodyBtnDisabled" (click)="onRFQInProgBodyClick()">
+          <span [ngClass]="toggleNoRFQBodyBtn?'myRFQ-noRFQBodyBtn-inActive-text':'myRFQ-noRFQBodyBtn-Active-text'"
+          >Draft RFQs</span>
+        </button>
+      </div>
+      <div class="col-md-6" style="text-align:left">
+        <button type="submit" 
+          [ngClass]="toggleNoRFQBodyBtn?'myRFQ-noRFQBodyBtn-Active':'myRFQ-noRFQBodyBtn-inActive'"
+          (mouseover)="changeCrRFQ(true)" (mouseout)="changeCrRFQ(false)"
+          [disabled]="isCreateRFQBodyBtnDisabled" (click)="onCreateRFQBodyClick()">
+          <span [ngClass]="toggleNoRFQBodyBtn?'myRFQ-noRFQBodyBtn-Active-text':'myRFQ-noRFQBodyBtn-inActive-text'"
+          >Create an RFQ</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf=isCloneModel>
+    <app-clone-rfq [id]="cloneRfqId"></app-clone-rfq>
+    </div>

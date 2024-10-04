@@ -1,0 +1,205 @@
+<div>
+    <div class="panel panel-default" style="padding: 5px;">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-md-8" style="text-align: left">
+            <div class="Part-Library-Header">Part Library</div>
+          </div>
+          <div class="col-md-4" style="text-align: right">
+            <img src="assets/rfq/close-3.svg" class="Close-3" (click)="closePartDetails()">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12" style="text-align: left;">
+            <p style="font-size:11px">Add parts from your library to your RFQ.</p>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="part-serach-box">
+              <i class="fa fa-search icon-search" (click)="onSearchChange()" placement="top" container="body" ngbTooltip="Search"></i>
+              <input type="text" placeholder="Search" class="form-control Search-Box search-text" name="partDrawer" [(ngModel)]="partDrawerSearch" (keypress) = "searchByKey($event)" (input)="checkSearch(partDrawerSearch)"/>
+              <span style="right: 5px;position: absolute;top: 90px;">
+                <i class="fa fa-times-circle icon" (click)="removeTextValue()" 
+              placement="top" container="body"
+               ngbTooltip="Remove Text" style="position: relative;" ></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div *ngFor='let part of iPartLibraryModelDetailsColl'>
+              <div [ngClass]="(!part?.PartLibraryModel?.isPartWithOldCapability && (part.isMouseOver ||  part.ShowDetials))?'bk-Color-Grayed':(part?.PartLibraryModel?.isPartWithOldCapability)?'oldProcess-color':'bk-Color-White'" (mouseover)="part.isMouseOver= true"
+                (mouseout)="part.isMouseOver= false">
+                <div [ngClass]="(part.ShowDetials)?'row Part-Box-detail':'row Part-Box-contracted'">
+                  <div class="col-md-3" style="margin-left: 10px" (click)="showHideRFQPartDrawerDetails(part)" >
+                    <img [src]="getImageForPart(part?.PartLibraryModel)" style="width:50px;height:50px">
+                  </div>
+                  <div class="col-md-5" style="font-size: 9px;padding-top:6px" (click)="showHideRFQPartDrawerDetails(part)" >
+                    <span class="Part-Name pointerCursor">{{part?.PartLibraryModel?.partName}}</span>
+                    <br>
+                    <span class="Part-Number">{{part?.PartLibraryModel?.partNumber}}</span>
+                  </div>
+                  <div class="col-md-3" style="text-align: right">
+                    <div class="row" (click)="showHideRFQPartDrawerDetails(part)" >
+                      <div class="col-md-12" style="color:#4099ff">
+                        <i *ngIf="part.ShowDetials" class="fa fa-caret-down"></i>
+                        <i *ngIf="!part.ShowDetials" class="fa fa-caret-right"></i>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="(part?.PartLibraryModel?.isPartWithOldCapability !== true)">
+                      <div class="col-md-1 offset-5 Add-Part-Details" style="cursor: pointer;" (click)="addPartToRFQ(part?.PartLibraryModel)">Add</div>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="part.ShowDetials">
+
+                  <div class="row Detail-Seperator">
+                    <div class="col-md-12" style="text-align: right">
+                      <div  placement="top" [ngbPopover]="popAttachment"
+                      container="body" #q="ngbPopover" (document:click)="q.close()"
+                      (click)="$event.stopPropagation()">
+                      <i class="fa fa-paperclip blueColor pin-mrak-size"></i>&nbsp; <span
+                        class="pin-mrak-size-count">({{part.PartLibraryModel.partsFiles.length}})</span>
+                      <ng-template #popAttachment>
+                        <div
+                          [ngClass]="(part.PartLibraryModel.partsFiles.length > 3)?'Combined-Shape-attachment':'Combined-Shape-attachment-min'">
+                          <div class="row downloadAll text-right"
+                            *ngIf='!!part.PartLibraryModel.partsFiles && (part.PartLibraryModel.partsFiles.length !== 0 && part.PartLibraryModel.partsFiles.length >= 1)'>
+                            <div class="col-md-12 text-right" style="text-align:right">
+                              <label style="color: #4a90e2;" class="active pointerCursor text-right"
+                                (click)="downloadAllFiles(part.PartLibraryModel.partsFiles, true,part.PartLibraryModel.primaryPartFile)">Download All</label>
+                            </div>
+                          </div>
+                          <!-- <div>
+                            <div class="row">
+                              <div class="col-md-7">
+                                <label class="part-attachment-name pointerCursor"
+                                  title="Download - {{part.PartLibraryModel.primaryPartFile | originalName}}"
+                                  (click)="downloadS3File(part.PartLibraryModel.primaryPartFile, true)">{{part.PartLibraryModel.primaryPartFile| shortAwsName:'20'}}</label>
+                              </div>
+                            </div>
+                          </div> -->
+                          <div *ngFor='let attachment of part.PartLibraryModel.partsFiles'>
+                            <div class="row">
+                              <div class="col-md-7">
+                                <label class="part-attachment-name pointerCursor"
+                                  title="Download - {{attachment | originalName}}"
+                                  (click)="downloadS3File(attachment, true)">{{attachment| shortAwsName:'20'}}</label>
+                              </div>
+                              <!-- <div class="col-md-5 text-center">
+                                <label class="Remove-attachment"
+                                  (click)="removePartAttachment(attachment, part.PartLibraryModel.partId,part.PartLibraryModel.rfqPartId)">Remove</label>
+                              </div> -->
+                            </div>
+                          </div>
+                        </div>
+                      </ng-template>
+
+                    </div>
+                  </div>
+                  </div>
+
+
+                  <div class="row box-fit">
+                    <div class="col-md-12">
+                      <div class="Part-Detail-seperator-Line"></div>
+                    </div>
+                  </div>
+                  <div class="row Detail-Seperator">
+                    <div *ngIf="part?.PartLibraryModel?.isPartWithOldCapability">
+                      <span style="color:red" class="p-l-15">
+                        Part is no longer supported
+                      </span>
+                    </div>
+                    <div *ngFor='let partQuantity of part?.PartLibraryModel?.rfqPartQuantityList'>
+                      <div class="col-md-6">
+                        <div class="Part-Details-Label">{{partQuantity.QuantityLevel}} Quantity</div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="Part-Details-Value">{{partQuantity.PartQty}}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row Detail-Seperator">
+                    <div class="col-md-6">
+                      <div class="Part-Details-Label">Unit</div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="Part-Details-Value">{{part?.PartLibraryModel?.partQtyUnitName}}</div>
+                    </div>
+                  </div>
+                  <div class="row Detail-Seperator">
+                    <div class="col-md-6">
+                      <div class="Part-Details-Label">Delivery Date</div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="Part-Details-Value">{{part?.PartLibraryModel?.deliveryDate}}</div>
+                    </div>
+                  </div>
+                  <div class="row Detail-Seperator">
+                    <div class="col-md-6">
+                      <div class="Part-Details-Label">Manufacturing Process</div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="Part-Details-Value"> {{ (part?.PartLibraryModel?.parentCategoryName !== undefined && part?.PartLibraryModel?.parentCategoryName !== null )? part?.PartLibraryModel?.parentCategoryName : 'N/a' }}</div>
+                    </div>
+                  </div> <br>
+
+                  <div class="row Detail-Seperator">
+                    <div class="col-md-6">
+                      <div class="Part-Details-Label">Manufacturing Technique</div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="Part-Details-Value"> {{ (part?.PartLibraryModel?.childCategoryName !== undefined && part?.PartLibraryModel?.childCategoryName !== null )? part?.PartLibraryModel?.childCategoryName : 'N/a' }}</div>
+                    </div>
+                  </div> <br>
+                  <div class="row Detail-Seperator">
+                    <div class="col-md-6">
+                      <div class="Part-Details-Label">Material</div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="Part-Details-Value">{{part?.PartLibraryModel?.materialName}}</div>
+                    </div>
+                  </div>
+                  <div class="row Detail-Seperator">
+                    <div class="col-md-6">
+                      <div class="Part-Details-Label">Post-Prod. Process</div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="Part-Details-Value">{{part?.PartLibraryModel?.postProductionProcessName}}</div>
+                    </div>
+                  </div>
+
+                  <div class="row Last-Details-Field"
+                  *ngIf="part?.PartLibraryModel?.customPartDescription !== '' && part?.PartLibraryModel?.customPartDescription !== null && part?.PartLibraryModel?.customPartDescription !== undefined">
+                  <div class="col-md-12">
+                    <div class="Part-Details-Label">Part Specification</div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="Part-Details-Value">{{part?.PartLibraryModel?.customPartDescription}}</div>
+                  </div>
+                </div>
+                  <div class="row Last-Details-Field">
+                    <div class="col-md-12">
+                      <div class="Part-Details-Label">Description</div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="Part-Details-Value">{{part?.PartLibraryModel?.partDescription}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="iPartLibraryModelDetailsColl?.length <= 0">
+              <div class="no-result-alligment">
+                <span class="no-groups-added-text ">No Results</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

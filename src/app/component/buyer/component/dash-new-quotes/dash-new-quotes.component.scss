@@ -1,0 +1,539 @@
+.top-row {
+    height: 40px;
+    background-color: #f6f7fb;
+    padding-top: 10px;
+    margin-bottom:15px;
+  }
+  .status-div {
+    background-color: #edeff7;
+    border-radius: 3px;
+    margin: 2px 0px;
+    margin-left: -2px;
+}
+.my-RFQ-btn-ignore-rfq {
+    width: 284px;
+    height: 45px;
+    border-radius: 2px;
+    border: solid 2px #2E58D6;
+    background-color:#fff;
+    color:#2E58D6
+  }
+  .min-height {
+    min-height: 250px;
+  }
+  .my-RFQ-btn-cancel-rfq {
+    width: 285px;
+    height: 45px;
+    border-radius: 2px;
+    background-color: #2E58D6;
+    color:#ffffff;
+  }
+  .expand-icon-div {
+    color: #4099ff;
+      font-size: 17px;
+      text-align: left !important;
+  }
+  .pull-right {
+    float: right !important;
+  }
+  .pull-left {
+    float: left !important;
+  }
+  .hourglass i {
+    font-size: 12px;
+    color: #f8e71c;
+  }
+  .active {
+    color:#448ada;
+  }
+  .my-RFQ-list-view {
+    padding: 7px;
+    background-color: #ffffff;
+    border: solid 1px #bec4cb;
+    cursor: pointer;
+  }
+  .filter{
+      width:100%;
+      padding:5px;
+      border-radius: 2px;
+      border: solid 1px #bec4cb;
+      margin-bottom:15px;
+  }
+  .recent{
+      width:100%;
+      padding:5px;
+      border-radius: 2px;
+      border: solid 1px #bec4cb;
+      margin-bottom:15px;
+  }
+  .filter:focus{
+      background:#FFF;
+  }
+  .search{
+      width:100%;
+      padding:6px;
+      border-radius: 2px;
+      border: solid 1px #bec4cb;
+  }
+  .btn-ignore-rfq-clone {
+    width: 175px;
+    height: 45px;
+    border-radius: 2px;
+    border: solid 2px #2E58D6;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #2E58D6;
+    background-color:#fff;
+  }
+
+  .btn-submit-rfq-close {
+    width: 175px;
+    height: 45px;
+    border-radius: 2px;
+    background-color: #2E58D6;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+  }
+  .btn-ignore-rfq {
+    width: 284px;
+    height: 45px;
+    border-radius: 2px;
+    border: solid 2px #2E58D6;
+    background-color:#fff;
+    color:#2E58D6
+  }
+  .btn-cancel-rfq {
+    width: 285px;
+    height: 45px;
+    border-radius: 2px;
+    background-color: #2E58D6;
+    color:#ffffff;
+  }
+  .my-RFQ-state-filter-button-active {
+    width: 95px;
+    height: 35px;
+    border-radius: 2px;
+    background-color: #f6f7fb;
+    border: solid 1px #bec4cb;
+    font-family: Poppins;
+    font-size: 12px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #919aa3;
+  }
+  .my-RFQ-state-filter-button-inactive {
+    width: 95px;
+    height: 35px;
+    background-color: #ffffff;
+    border: solid 1px #bec4cb;
+    font-family: Poppins;
+    font-size: 12px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #2E58D6;
+  }
+  /*----------------------------------------Cards classes-----------------------------------*/
+  .card {
+      width:100%;
+      background:#fff;
+      box-shadow: 0 0 3px 0 rgba(145, 154, 163, 0.5);
+      border-radius:3px;
+      transition:0.3s;
+      padding:2px;
+      margin-bottom:19px;
+  }
+  .card:hover {
+      box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+    }
+  .card .box {
+      left:0;
+      text-align:center;
+      padding:20px;
+      box-sizing:border-box;
+      width:100%;
+  }
+
+  .quote i{
+      font-size: 12px;
+      color: #f8e71c;;
+  }
+  .star i{
+      font-size: 12px;
+      color: #2E58D6;
+  }
+  .checkCircleClass {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    font-family: FontAwesome5Free;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #bec4cb;
+  }
+  .card .box .img{
+      width: 190px;
+      height: 190px;
+      background-color: #f6f7fb;
+      margin:0 auto;
+      border-radius:50%;
+      overflow:hidden;
+  }
+  .card .box h2 {
+      font-size: 16px;
+      font-weight: bold;
+      margin:9px auto;
+      text-align: center;
+      color: #2E58D6;
+  }
+  .card .box h2 span {
+      font-size: 12px;
+      font-weight: bold;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      text-align: center;
+      color: #919aa3;
+  }
+  .card .box p {
+      color:#262626;
+      font-size: 12px;
+      font-weight:bold;
+      margin-bottom:1px;
+  }
+  .card .bottomaction {
+      height: 40px;
+      width:100%;
+      padding-top:7px;
+      border-radius: 3px;
+      background-color: #edeff7;
+  }
+  .card .bottomaction ul {
+      margin:0;
+      padding:0;
+  }
+  .card .bottomaction ul li {
+      list-style:none;
+      float:left;
+  }
+  .card .bottomaction ul li a {
+      display:block;
+      color:#2E58D6;
+      margin:0 10px;
+      font-size:20px;
+      transition:0.5s;
+      text-align:center;
+  }
+  .card .bottomaction ul li:hover a {
+      color:#e91e63;
+      transform:rotateY(360deg);
+  }
+  .pointerCursor {
+    cursor: pointer;
+  }
+  /*----------------------------------------Cards classes End-----------------------------------*/
+
+  .myRFQ-rfq-inProgress-btn-disabled {
+    width: 176px;
+    height: 35px;
+    border-radius: 2px;
+    color: gray;
+    margin-right: 30px;
+  }
+  .myRFQ-Group {
+    width: 213px;
+    height: 106px;
+    object-fit: contain;
+  }
+  .myRFQ-noRFQActive-helper-text {
+    height: 29px;
+    font-family: Poppins;
+    font-size: 21px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #222222;
+  }
+  .myRFQ-noRFQActive-helper-sub-text {
+    height: 45px;
+    font-family: Poppins;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #222222;
+  }
+  .myRFQ-noRFQBodyBtn-spacing {
+    margin-bottom: 40px;
+    margin-top:10px
+  }
+  .myRFQ-noRFQBodyBtn-inActive {
+    width: 331px;
+    height: 45px;
+    border-radius: 2px;
+    background-color: #ffffff;
+  }
+  .myRFQ-noRFQBodyBtn-inActive-text {
+    height: 23px;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #2E58D6;
+  }
+  .myRFQ-noRFQBodyBtn-Active-text {
+    height: 23px;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+  }
+  .myRFQ-noRFQBodyBtn-Active {
+    width: 331px;
+    height: 45px;
+    border-radius: 2px;
+    background-color: #2E58D6;
+  }
+  .award-rfq-icon-class {
+    width: 15px;
+    height: 16px;
+    object-fit: contain;
+    font-family: FontAwesome;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #2E58D6;
+  }
+  @media screen and (max-width: 767px) {
+    .table-responsive {
+      border: none !important;
+    }
+  }
+  .rfqtable {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    border-radius:3px;
+  }
+  .rfqtable thead tr th {
+    padding: 0px 8px;
+    border: 0 none !important;
+    border-top: 0 none !important;
+  }
+  .rfqtable tbody tr {
+    -moz-box-shadow: 0 0 1px 0 rgba(145, 154, 163, 0.5);
+    -webkit-box-shadow: 0 0 1px 0 rgba(145, 154, 163, 0.5);
+    box-shadow: 0 0 1px 0 rgba(145, 154, 163, 0.5);
+    border-radius:3px;
+    transition:0.3s;
+    background-color: #ffffff;
+    margin-bottom:11px;
+  }
+  .rfqtable tbody tr:hover {
+    -moz-box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+    -webkit-box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+    box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+    border-radius:3px;
+    background-color: #ffffff;
+  }
+  .rfqtable td {
+    font-size: 12px;
+    // font-weight: bold;
+    color: #222222;
+    vertical-align: middle !important;
+    border-top: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+  }
+  .icon-first {
+    font-size: 16px !important;
+    font-weight: normal!important;
+    padding-left:10px;
+    cursor:pointer;
+  }
+  .icon-second {
+    font-size: 16px !important;
+    font-weight: normal !important;
+    padding-right:10px;
+    cursor:pointer;
+  }
+  .quote-main-row  {
+    -moz-box-shadow: 0 0 1px 0 rgba(145, 154, 163, 0.5);
+    -webkit-box-shadow: 0 0 1px 0 rgba(145, 154, 163, 0.5);
+    box-shadow: 0 0 1px 0 rgba(145, 154, 163, 0.5);
+    border: 1px solid #dee2e6;
+    border-radius:3px;
+    transition:0.3s;
+    background-color: #ffffff;
+    margin-bottom:11px;
+    margin-left: 0px;
+    margin-right:0px;
+  }
+  .quote-main-row:hover {
+    -moz-box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+    -webkit-box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+    box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+    border-radius:3px;
+    background-color: #ffffff;
+  }
+  .quote-main-col {
+    padding-top: 13px;
+    padding-bottom: 6px;
+  }
+  .text-right {
+    text-align: right !important;
+  }
+  .btn-declined-deactive{
+      border-radius: 2px;
+      background-color: #fff;
+      font-size: 14px;
+    width: 80px;
+    height: 27px;
+      border: 1px solid #bec4cb;
+      text-align:center;
+      font-weight: bold;
+      color:#bec4cb;
+  }
+  .text-center {
+    text-align: center !important;
+  }
+  .first-td-left {
+    border-left: 1px solid #dee2e6 !important;
+  }
+  .last-td-right {
+    border-right: 1px solid #dee2e6 !important;
+  }
+  .View-All-Liked-RFQs {
+    color: #2E58D6 !important;
+    font-size:14px;
+  }
+  .Save-Rfq-button-active {
+    width: 331px;
+    height: 45px;
+    border-radius: 2px;
+    background-color: #2E58D6 !important;
+    color:#fff;
+  }
+  .rfqtable td i {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2E58D6;
+  }
+  .rfqtable .rfqtd {
+    font-size: 16px;
+    font-weight: bold;
+    margin:9px auto;
+    color: #2E58D6;
+    padding:11px;
+    cursor:pointer;
+  }
+  .rfqtable td span {
+    font-size: 12px;
+    // font-weight: bold;
+    color: #919aa3;
+  }
+  .rfqtable th {
+    font-size: 12px;
+    font-weight: bold;
+  }
+  .editdelete{
+    border-radius: 3px;
+    background-color: #edeff7;
+    text-align: center;
+  }
+  .tdbackgorungcolor {
+    background-color: #edeff7 !important;
+    text-align: center;
+    padding-left:0px;
+    padding-right:0px;
+  }
+  .tdborderleft{
+    border-left: 1px solid #ded7d7;
+  }
+  .tdborderright{
+    border-right: 1px solid #ded7d7;
+  }
+
+  // /*----------------------------------------RightPanel Accordion-------------------------------------*/
+
+  .rfqtable td i.fa-quote-right,.rfqtable td i.fa-hourglass{
+    color:#f8e71c;
+    font-size: 12px;
+  }
+  p-footer .btn{
+    width: 100%;
+  }
+  .btn-cancel{
+    border:2px solid #2E58D6;
+    color:#2E58D6;
+  }
+  .btn-disable{
+    cursor:not-allowed;
+  }
+  .btn-clone{
+    background-color: #2E58D6;
+    color:#fff;
+  }
+  .fa-edit,.fa-trash,.fa-times-circle,.hand,.fa-clone{
+    cursor: pointer;
+  }
+  .Net-Promotor-Scor {
+    font-size: 12px;
+    color: #919aa3;
+  }
+  .badge {
+    color:#fff !important;
+    border-radius: 8px;
+  }
+  .badge-danger {
+    background-color: #ed4141;
+  }
+  .badge-success {
+  background-color: #81db6d;
+  }
+  .badge-warning {
+  background-color: #f5a623;
+  }

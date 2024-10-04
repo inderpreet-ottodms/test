@@ -1,0 +1,42 @@
+
+  <div class="row">
+    <p-confirmDialog width="629" height="220" #cd>
+      <p-footer >
+        <div class="row">
+          <div class="col-md-6">
+            <button type="button" class="btn btn-ignore-rfq" (click)="cd.reject()">No</button>
+          </div>
+          <div class="col-md-6">
+            <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="cd.accept()"> Yes</button>
+          </div>
+        </div>
+      </p-footer>
+    </p-confirmDialog>
+    {{checkForPartEditCancelConfirm()}}
+    <div [ngClass]="(isSidePanel())?'col-md-8 col-9':'col-md-12 col-12'">
+      <app-rfq-warning-banner></app-rfq-warning-banner>
+      <div >
+        <div class="row myRFQ-custom-row-left-padding">
+          <div class="col-md-12">
+            <div class="myRFQ-rfq-main-div" >
+              <app-part-list></app-part-list>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 pull-left">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isSidePanel()" class="col-md-4 col-4" style="padding-right:0px;position:fixed;width:380px;right: 0;overflow-y: auto;height:100%;padding-bottom:150px">
+      <app-edit-part-drawer></app-edit-part-drawer>
+    </div>
+  </div>
+  <div class="row" style="bottom: 0px;width: 101%">
+    <div class="col-md-12" style="text-align:-webkit-right;padding:0px">
+      <div class="Site-Background-Copy">
+        <!-- <p class="Copyright-2018-MFG">Copyright © 2018 MFG.com, Inc. All Rights Reserved.</p> -->
+      </div>
+    </div>
+  </div>

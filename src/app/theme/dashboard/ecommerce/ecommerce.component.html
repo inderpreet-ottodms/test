@@ -1,0 +1,1313 @@
+{{ getProfileModel() }}
+<div class="row" style="padding: 10px" *ngIf="!isBuyerCommpleteProfile()">
+  <div
+    class="page-body"
+    [ngClass]="isSidePanel() ? 'col-md-8 col-9' : 'col-md-12 col-12'"
+    style="padding-top: 10px; font-family: Poppins !important"
+  >
+    <div class="row" *ngIf="accountPastBillMessage">
+      <div class="col-md-12">
+        <div class="cus-alert-danger">
+          <div>
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
+            <span class="m-l-5">Attention Needed: </span>
+          </div>
+
+          <p [innerHTML]="accountPastBillMessage"></p>
+          <div
+            style="
+              width: auto;
+              background-color: #fff;
+              color: #000;
+              position: absolute;
+              top: 15px;
+              padding: 0px;
+              right: 33px;
+            "
+            (click)="closePastbillBanner()"
+          >
+            <i class="fa fa-times-circle" aria-hidden="true"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row text-center">
+      <div class="col-md-12 m-t-10">
+        <span class="f-14">Looking for some help?</span>
+        <a
+          class="color-blue f-14"
+          data-bs-target="#wearehereModal"
+          data-bs-toggle="modal"
+        >
+          We are here!</a
+        >
+      </div>
+    </div>
+
+    <div *ngIf="accountVerifyMessage" class="attentionNeeded"><img style="margin-right: 20px;" src="assets/warning-fill.svg" alt=""/> <div> <b>Attention Needed :</b> Your email address has not been verified. Please check your inbox and click the link in the email from MFG. If you have not received the email, click “Resend”. Your profile will not be published until you are verified. </div> <span style="color: #2e58d6; cursor: pointer; padding: 10px;"(click)="sendVerificationLink()">Resend</span> </div>
+    <div class="row">
+      <div class="col-md-7 Welcome-to-mfg-padding">
+        <span class="Welcome-to-mfg-title"
+          >Welcome to the Manufacturing Marketplace!</span
+        >
+      </div>
+      <div class="col-md-5 m-t-10 text-right">
+        <div class="row">
+          <div class="col-md-12">
+            <button *ngIf="!isPremium() && this.userDetailsLocation !='Asia'" (click)="setRecommnededForYouBanner()" [routerLink]="['/packages']" class="upgradeQuoteBtn">Upgrade Your Account</button>
+
+            <app-upgrade-account-btn
+              *ngIf="!isPremium() && this.userDetailsLocation =='Asia'"
+              [quoteRFQ]="false"
+              [RfqId]="0"
+            ></app-upgrade-account-btn>
+            <button
+              type="button"
+              class="upgrade-btn profile-btn pointerCursor"
+              (click)="reloadAdminComp($event)"
+              name="my_company_profile"
+            >
+              <span class="upgrade-btn-text">My Company Profile</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12" *ngIf="showProgressModel === true">
+        <div class="row">
+          <div class="col-md-6 col-xl-3">
+            <div
+              class="card order-card"
+              style="border: 1px solid #81db6d !important; cursor: pointer"
+              (click)="navigateToAwardView()"
+            >
+              <div class="card-block">
+                <div style="display: flex; justify-content: space-between">
+                  <h6>Awarded RFQs</h6>
+                  <i class="fa fa-trophy"></i>
+                </div>
+                <h2 class="text-left">
+                  <span>{{ iSupplierRFQViewModel.awardedRfqCount }}</span>
+                </h2>
+                <p class="m-b-0">New Awards</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div
+              class="card order-card"
+              style="border: 1px solid #ff5471 !important; cursor: pointer"
+              (click)="navigateToNewMessageView()"
+            >
+              <div class="card-block">
+                <div style="display: flex; justify-content: space-between">
+                  <h6>New Messages</h6>
+                  <i class="fa fa-envelope" style="font-size: 24px"></i>
+                </div>
+                <h2 class="text-left">
+                  <span>{{ iSupplierRFQViewModel.newMessages }}</span>
+                </h2>
+                <p class="m-b-0">new message</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-xl-3" *ngIf="this.accountType == 'Starter'">
+            <div
+              class="card order-card"
+              style="border: 1px solid #ffb946 !important; cursor: pointer"
+            
+            >
+              <div class="card-block">
+                <div style="display: flex; justify-content: space-between">
+                  <h6>SUBSCRIPTION</h6>
+
+                  <button type="button" style="    font-size: 10px;background-color: #41526C;
+                  color: white;" (click)="upgradePlan()">
+                    Upgrade Account
+                  </button>
+                </div>
+
+                <h2 class="text-left"><span>Starter</span></h2>
+
+                <p class="m-b-0"[routerLink]="['/supplier/myAccount/']">View Details</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-xl-3" *ngIf="this.accountType != 'Starter'">
+            <div
+              class="card order-card"
+              style="border: 1px solid #2e58d6; cursor: pointer"
+              (click)="navigateToInprogressView()"
+            >
+              <div class="card-block">
+                <div style="display: flex; justify-content: space-between">
+                  <h6>Re-quote RFQs</h6>
+                  <i class="fa fa-quote-right"></i>
+                </div>
+                <h2 class="text-left">
+                  <span>{{ iSupplierRFQViewModel.reQuoteRfq }}</span>
+                </h2>
+                <p class="m-b-0">You have RFQs to Re-Quote</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3" *ngIf="region === null">
+            <div
+              class="card order-card"
+              style="border: 1px solid #ffb946 !important; cursor: pointer"
+              (click)="navigateToSpecialInvitesView()"
+            >
+              <div class="card-block">
+                <div style="display: flex; justify-content: space-between">
+                  <h6>Special Invites_kkkkkkkkkk</h6>
+                  <img
+                    src="assets/user-friends-solid.svg"
+                    style="color: #fff; max-height: 30px"
+                  />
+                </div>
+                <h2 class="text-left">
+                  <span>{{
+                    iSupplierRFQViewModel.specialInvitedRfqUnreadCount
+                  }}</span>
+                </h2>
+                <p class="m-b-0">unread invites from the buyer</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12" *ngIf="showProgressModel === false">
+        <app-profile-progress
+          (profileChangeEvent)="profileChange($event)"
+        ></app-profile-progress>
+      </div>
+
+      <!--Added new condition for showing tile as per region and account type Date: 12-OCT-2021(M2-3940) -->
+      <div class="col-md-12 community-section">
+        <!--boost your profile -->
+        <div
+          class="community-image-wrap"
+          *ngIf="isBoostYourProfileImg && !showOrder"
+          style="cursor: pointer"
+          (click)="openUpgradeToSilverModel()"
+        >
+          <div
+            class="card order-card community-banner"
+            style="
+              border: 0px !important;
+              border: 0px !important;
+              position: relative;
+              height: 215px;
+              overflow: hidden;
+              display: block;
+              margin-bottom: 0;
+            "
+          >
+            <img
+              src="../../../../assets/mfg_upgrade_to_silver_tile.png"
+              class="img-fluid"
+              name="community_banner"
+            />
+          </div>
+        </div>
+        <!--ready for more  -->
+        <div
+          class="community-image-wrap col-md-4"
+          style="cursor: pointer"
+          *ngIf="isReadyForMoreImg"
+        >
+          <div
+            class="card order-card community-banner"
+            style="
+              border: 0px !important;
+              border: 0px !important;
+              position: relative;
+              height: 215px;
+              overflow: hidden;
+              display: block;
+              cursor: pointer;
+              margin-bottom: 0;
+            "
+            (click)="upgradeClick(false)"
+          >
+            <img
+              src="assets/mfg_product_upgradeaccount.png"
+              class="img-fluid"
+              name="community_banner"
+            />
+          </div>
+        </div>
+
+        <div
+        class="col-md-4 community-image-wrap"
+        style="cursor: pointer"
+        *ngIf=" starterPackage && accountType !== 'Platinum' && accountType !== 'Gold'"
+      >
+        <div
+          class="growth-package-size growth-img"
+          style="cursor: pointer"
+          [routerLink]="['/packages']"
+        >
+          <div class="starter-bg" (click)="starterPackageActive()">
+            <div>
+              <div>
+                <div>
+                  <span style="float: right;">
+                    <img src="assets/starter.svg">
+                    </span>
+                  <h5 class="starter-package" style="color: #212a37">
+                    Starter Package
+                  </h5>
+                </div>
+                <div
+                  class="starter-description"
+                  style="margin-top: 5px; color: #212a37"
+                >
+                  Start your free trial to access discounted raw materials, an
+                  upgraded manufacturer profile, and more!
+                </div>
+              </div>
+            </div>
+            <div>
+              <div>
+                <p class="learnMoreStarter mb-0"> <u>Learn more</u></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <!-- ============================================================= -->
+                <!-- material package start -->
+                <div
+                class="col-md-4 community-image-wrap"
+                style="cursor: pointer"
+                *ngIf="showMaterialTile"
+              >
+                <div
+                  class="growth-package-size growth-img"
+                  style="cursor: pointer"
+                >
+                  <div class="starter-bg" style=" background-color: #212a37;" (click)="redirectToMaterials()">
+                    <div>
+                      <div>
+                        <div>
+                          <span style="float: right;">
+                            <img src="assets/materials.svg">
+                            </span>
+                          <h4 class="growth-package-h4" >
+                            MFG Materials
+                          </h4>
+                        </div>
+                        <div
+                          class="growth-p">
+                          Purchase the highest quality materials for the lowest
+                          possible cost through our exclusive partnerships on MFG
+                          Materials.
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        <a type="button" 
+                        href="javascript:void(0);" class="btn small-button"
+                         style="margin-right: 25px;"> Get Materials </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+      
+
+<div
+class="col-md-4 community-image-wrap"
+style="cursor: pointer"
+*ngIf="showMaterialTileForBasic"
+>
+<div
+  class="growth-package-size growth-img"
+  style="cursor: pointer"
+>
+  <div class="starter-bg" (click)="redirectToMaterials()">
+    <div>
+      <div>
+        <div>
+          <span style="float: right;">
+            <img src="assets/materials.svg">
+            </span>
+          <h4 class="materials" style="color: #212a37">
+            MFG Materials
+          </h4>
+        </div>
+        <div
+          class="materials-description"
+          style="color: #212a37;font-size: 15px;"
+        >
+        Premium subscribers can purchase the high-quality materials for low prices. Check out the selection and upgrade your account to purchase!
+        </div>
+      </div>
+    </div>
+    <div>
+      <p class="shop-materials mb-0"> <u>Browse Now</u> </p>
+    </div>
+  </div>
+</div>
+</div>
+
+<div
+class="col-md-4 community-image-wrap"
+style="cursor: pointer"
+*ngIf="isEligibleForGrowthPackage && !showOrder"
+>
+<div
+  class="growth-package-size growth-img"
+  style="cursor: pointer"
+  [routerLink]="['/packages']"
+>
+  <div class="growth-vector-img" (click)="growthPackageActive()">
+    <div>
+      <div>
+        <div>
+          <span style="float: right;">
+            <img src="assets/growth.svg">
+            </span>
+          <h4 class="growth-package-h4">Growth Package</h4>
+        </div>
+        <div class="growth-description">
+          Get all the Starter Package features, plus the ability to
+          quote on 2 jobs per month. Take your business to the next
+          level.
+        </div>
+      </div>
+    </div>
+    <div>
+      <div>
+        <p class="learnMoreStarter mb-0" style=" color: white;">
+          <u>Learn more</u>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+        <div
+        class=" col-md-4 community-image-wrap"
+        style="cursor: pointer"
+        *ngIf="isRemainingTileShow && !showOrder"
+      >
+        <div class="growth-package-size growth-img" style="cursor: pointer"  [routerLink]="['/packages']">
+          <div class="growth-vector-img"(click)="growthPackageActive()">
+            <div>
+              <div>
+                <div>
+                  <span style="float: right;">
+                    <img src="assets/growth.svg">
+                    </span>
+                  <h4 class="growth-package-h4">Growth Package</h4></div>
+                <div class="growth-remaining" style="font-size: 14px;">
+                  {{ isUnlockRfqCount }} of {{unlockRfqCountDefaultValue}} Remaining
+                </div>
+                <p *ngIf="remainingStatus && !cancellationRequested" class="growth-p">
+                  You have <b>{{ noOfDaysLeft }}</b> days to use your
+                  remaining RFQ unlocks. Get quoting!
+                </p> 
+
+                <p *ngIf="refreshCountShowStatus && !cancellationRequested" class="growth-p">
+                  You’ve unlocked all your RFQs for this month. Unlocks will
+                  refresh in <b>{{ noOfDaysLeft }}</b> days.
+                </p>
+
+
+                <p *ngIf=" !refreshCountShowStatus && cancellationRequested" class="growth-p">
+                  You have <b>{{ noOfDaysLeft }}</b> days to use your
+                  remaining RFQ unlocks. Your unlocks will not refresh because you have canceled your subscription.!
+                </p> 
+
+                <p *ngIf="refreshCountShowStatus && cancellationRequested" class="growth-p">
+                  You’ve unlocked all your RFQs for this month.
+                   Your unlocks will not refresh because you have canceled your subscription.!
+                </p> 
+                
+              </div>
+
+              <div>
+                <p class="unlock-rfq">
+                  <u>Unlock more <span *ngIf="refreshCountShowStatus == true">leads</span></u> 
+                </p>
+              </div>
+            </div>
+            <ng-template #growthpack>
+              <div>
+                Growth Package<br />With the growth package you have the
+                ability to unlock a certain amount of RFQs each month
+                <!-- <span class="learn-more">learn-more</span> -->
+              </div>
+            </ng-template>
+            
+             
+            
+          </div>
+        </div>
+      </div>
+
+        <!--grow your business -->
+        <div
+          class="community-image-wrap"
+          style="cursor: pointer"
+          *ngIf="isGrowingYourBusinessImg && !showOrder"
+        >
+          <div
+            class="card order-card community-banner"
+            style="
+              border: 0px !important;
+              border: 0px !important;
+              position: relative;
+              height: 215px;
+              overflow: hidden;
+              display: block;
+              cursor: pointer;
+              margin-bottom: 0;
+            "
+            (click)="redirectToProduct()"
+          >
+            <img
+              src="assets/mfg_product_info.png"
+              class="img-fluid"
+              name="community_banner"
+            />
+          </div>
+        </div>
+
+
+<!-- ==========================Premium Package================================= -->
+
+<div
+class="col-md-4 community-image-wrap"
+style="cursor: pointer"
+*ngIf="this.accountType == 'Basic' && this.userDetailsLocation !='Asia'"
+>
+<div
+  class="growth-package-size growth-img"
+  style="cursor: pointer"
+  [routerLink]="['/packages']"
+ (click)="isPremiumClicked()"
+>
+  <div class="starter-bg" >
+    <div>
+      <div>
+        <div>
+          <span class="prem-img" style="float: right;">
+            <img src="assets/Premium.svg">
+            </span>
+          <h4 class="materials" style="color: #212a37;width:80%">
+            Premium Package
+          </h4>
+        </div>
+        <div
+          class="materials-description"
+          style="color: #212a37"
+        >
+        Quote unlimited jobs and get curated new leads each week, plus all Growth Package features. Elevate your business.
+        </div>
+      </div>
+    </div>
+      <div>
+        <p class="shop-materials mb-0" [ngClass]="[starterPackage && accountType !== 'Platinum' && accountType !== 'Gold' ? 'shop-materials-extra' : ''||starterPackage == 'false' && accountType == 'Basic'?'shop-materials-extra' : 'shop-materials' ]"> <u>Learn More</u> </p>
+    </div>
+  </div>
+</div>
+</div>  
+<!-- ====================LeadStream Activity======================================= -->
+
+        <div *ngIf="this.accountType != 'Basic'" class="community-text-wrap">
+          <div class="card">
+            <div
+              (click)="navigateToLeadStream(0)"
+              class="card-block"
+              style="cursor: pointer; padding-bottom: 0px"
+            >
+              <div>
+                <h5
+                  style="line-height: 55px; border-bottom: 2px solid aliceblue"
+                >
+                  LEADSTREAM ACTIVITY
+                </h5>
+              </div>
+              <div class="row">
+                <div
+                  class="col-md-12"
+                  style="position: relative; overflow: auto"
+                >
+                  <perfect-scrollbar
+                    *ngIf="allActivityCount"
+                    [config]="{
+                      useBothWheelAxes: true,
+                      suppressScrollX: false,
+                      suppressScrollY: true
+                    }"
+                    fxFlex
+                  >
+                    <div class="flex-contain" *ngIf="allActivityCount">
+                      <div
+                        class="lead-box"
+                        (click)="navigateToLeadStream(0)"
+                        *ngIf="allActivityCount"
+                      >
+                        <div class="lead-icon" style="position: relative">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="21"
+                            height="21"
+                            viewBox="0 0 21 21"
+                          >
+                            <image
+                              id="globe-solid"
+                              width="21"
+                              height="21"
+                              xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAABgElEQVQ4jbWVvUoDQRSFP42FxoBipU1SCZZa+QhWim9gCKiF8SUEC0ux9CXUSqyNf08gksYkYKOikJh0RwZvcLKzswrRA0vYc+792Jns3EVS7MpJKlm2IenMfjE/F+kjMKy4KqklaUlSRYOqmN+yugCeBM5KqhniRFJB0nMC+mL+id27+rkY1AV1r3lN0pbStW15X3Uf7C+55hX1JOUlnacipQvLe5531d+KPrSaaLqxgk6A+1LH8uuE7ziM8aVJ4JBv3QFTwDFxufwIuPUqHIcRSTNAMdHaAASUokh4dP0pvU239L1gcVLZrizFavZHgYXgGeDdlpcll7+l5PMOWghs6AITgTsol38ELhQctB3YMG7gLLk8n5K3HfQ+sGHatiBL71aX1MN//PsN956+ApvAnBe49/QcKAeob+0BK8Cy5z0BB8OeqFrC3x327E9I6npecPbTptT6D1Nq1btPnVL+PL20wtO/mKf+Vuz8MPkXJTV/O/mT8Ng3qhj9Rkl8AmNj3REGi0zxAAAAAElFTkSuQmCC"
+                            />
+                          </svg>
+                          <span class="badge unread-badge">{{
+                            allActivityCount
+                          }}</span>
+                        </div>
+                        <span>All Activity</span>
+                      </div>
+                      <div
+                        class="lead-box"
+                        (click)="navigateToLeadStream(1)"
+                        *ngIf="profileCount "
+                      >
+                        <div class="lead-icon" style="position: relative">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="21"
+                            height="17"
+                            viewBox="0 0 21 17"
+                          >
+                            <image
+                              id="address-card-solid"
+                              width="21"
+                              height="17"
+                              xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAARCAYAAAAyhueAAAABGUlEQVQ4ja3Uvy5EQRTH8c+ujaAi0dCIf4VoiESUNLIRtUI8hRdBIxEvoKMhW4lEsg8goRE2Gg2FVrBXbnaKmzv3RmTvr5qZ8zvfnJOZM7UkSWAaU/rXCzoNbOIKAxVAf7BVR7MioMBpptB6FOpP9SJgF/tYxC4+IscfahSET3EQ1g8YxXEmfo+9KIsTrCqBPuf2T7n9DA6jrF5nyqA7OMInagVVveMiymIS82XQFdzhGktYy8UHMYYkdz5UVml6STdhvY1XXGIDI5nkokEZLoJ+YR3tyN6DtEOLbyXtL2M8D70tAQrjdxae2hzOI0dGWehESPiOXD3NRiclykIX8Fhs+5/SiUovp0p1U2gr/C5VKOW0qv9P6fwC/s0zsO67rsgAAAAASUVORK5CYII="
+                            />
+                          </svg>
+                          <span class="badge unread-badge">{{
+                            profileCount
+                          }}</span>
+                        </div>
+                        <span>Profile</span>
+                      </div>
+                      <div
+                        class="lead-box"
+                        (click)="navigateToLeadStream(4)"
+                        *ngIf="websiteCount"
+                      >
+                        <div class="lead-icon" style="position: relative">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="21"
+                            height="17"
+                            viewBox="0 0 21 17"
+                          >
+                            <image
+                              id="browser-solid"
+                              width="21"
+                              height="17"
+                              xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAARCAYAAAAyhueAAAAAmklEQVQ4je2QTQrCQAxGn0PR8R7iepbdegGv4BV6BK9iu/Eq7ryNWGo/GQh0cDNKZyP0g5CEkJcfJEVrJQ2ap8E4rCStgSfltKkAl+AuwB04AgfgBly/GBeAk8Uunu6To4O9o7H8bHnOQsLw1cfE2vze/M62yKlO6/GnHnhkmn7R1pVjTVqgC/RfoGNh5hihPdABr5mw2N8B/Rs9oapRlzWg1QAAAABJRU5ErkJggg=="
+                            />
+                          </svg>
+                          <span class="badge unread-badge">{{
+                            websiteCount
+                          }}</span>
+                        </div>
+                        <span>Website</span>
+                      </div>
+                      <div
+                        class="lead-box"
+                        (click)="navigateToLeadStream(5)"
+                        *ngIf="phoneCount"
+                      >
+                        <div class="lead-icon" style="position: relative">
+                          <svg
+                            aria-hidden="true"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            width="21"
+                            height="17"
+                          >
+                            <path
+                              fill="#ffffff"
+                              d="M370.43 192.25A64 64 0 0 0 314.86 160H197.14a64 64 0 0 0-55.57 32.25L36.22 376.62A32 32 0 0 0 32 392.5V448a32 32 0 0 0 32 32h384a32 32 0 0 0 32-32v-55.5a32 32 0 0 0-4.22-15.88zM256 384a72 72 0 1 1 72-72 72 72 0 0 1-72 72zm250.18-261C436.76 65 347.38 32 256 32S75.24 65 5.82 123A16.45 16.45 0 0 0 0 135.64V192a16 16 0 0 0 16 16h70.11a16 16 0 0 0 14.31-8.85L128 128c39.9-17.28 83.2-24 128-24 44.77 0 88.07 6.72 128 24l27.58 71.15a16 16 0 0 0 14.31 8.85H496a16 16 0 0 0 16-16v-56.36a16.45 16.45 0 0 0-5.82-12.64z"
+                              class=""
+                            ></path>
+                          </svg>
+                          <span class="badge unread-badge">{{
+                            phoneCount
+                          }}</span>
+                        </div>
+                        <span>Phone</span>
+                      </div>
+                      <div
+                        class="lead-box"
+                        (click)="navigateToLeadStream(6)"
+                        *ngIf="emailCount"
+                      >
+                        <div class="lead-icon" style="position: relative">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="21"
+                            height="16"
+                            viewBox="0 0 21 16"
+                          >
+                            <image
+                              id="envelope-solid"
+                              width="21"
+                              height="16"
+                              xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAQCAYAAAD52jQlAAABFklEQVQ4ja2TIUsEURRGz26QRUR0wSAWuyCuP0Bsmi0Giz/ALojNoOIv0G6wKVi3iSBGQcQgFsuCQdRdg3Lkwgi781hYd+a0mXvfme/d9wZ1Q321OG11T6USQqBOecxWgckShcFESPeT18NzCdzHTKvqmvpWYKo/6k7mqkTSZ6AFLAK3Q2R8AZaBM+AGmKfrS7tqTT1KcvTnQq2r6107XSDX3lSn1VW11VelX+qWOqqe5GqJ1Ey2ksmbSVUfYqE6p94l1T7SPw7UEXVb/VC/1WN1TN1UP5MVA0iD6yxRzHo8S3+adOWk8UeZnGcvUb8COsASUEs6emkMIv0vjbin7ZKlnZAelig8Bx5j+/EwA0wVFL4DT4C/YXxMojPHAIwAAAAASUVORK5CYII="
+                            />
+                          </svg>
+                          <span class="badge unread-badge">{{
+                            emailCount
+                          }}</span>
+                        </div>
+                        <span>Email</span>
+                      </div>
+                      <div
+                        class="lead-box"
+                        (click)="navigateToLeadStream(7)"
+                        *ngIf="specialInviteCount"
+                      >
+                        <div class="lead-icon" style="position: relative">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="17"
+                            height="23"
+                            viewBox="0 0 17 23"
+                          >
+                            <image
+                              id="file-invoice-dollar-solid"
+                              width="17"
+                              height="23"
+                              xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAXCAYAAADtNKTnAAABTUlEQVQ4jZWUsS8EQRSHP3ccpU4iolGJRhQ0lPwBJBJRCp2I6k4vOZEoVaJDJVFr6UREo1CQK1DIFVc5QvJk4mEyb3dm70s2O9n5zbfvzWanS0TKwBhQIp82cA+MAA9mVkS2Jc2tiLhsS0TqOv673NuHjDlODdjxE91B/AB40XEFqOa0WdV7LUty7vXcA2wCfUYRiELJqYnGcaLrULIAPHqtXmolFX02A5SDNc+hZB5o6rjkLR4FToDXjLrOQsmyifyzZJ780Mja+Y5JSRrAFPBuZjxiErfwCLgCjoEPk1DCPfFZVME4sAUMA7MmlZBcAHvAipnpoJ01YBWY1H+lbRIFJLvazhywD2yYhBJr5w340mpawI1JFJAc6tsF6NUvlUlMsg5MANP6Pw2ahBLbE4c7NuvAQCwUq8TR/3vwxHCVPKVCCZpFT/s8PoG7b3u+dQVXUWNLAAAAAElFTkSuQmCC"
+                            />
+                          </svg>
+                          <span class="badge unread-badge">{{
+                            specialInviteCount
+                          }}</span>
+                        </div>
+                        <span>Special Invite</span>
+                      </div>
+                      <div
+                        class="lead-box"
+                        (click)="navigateToLeadStream(8)"
+                        *ngIf="viewedQuoteCount"
+                      >
+                        <div class="lead-icon" style="position: relative">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="16"
+                            height="21"
+                            viewBox="0 0 16 21"
+                          >
+                            <image
+                              id="file-contract-solid"
+                              width="16"
+                              height="21"
+                              xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAVCAYAAABPPm7SAAABGUlEQVQ4jd3UPytFcRgH8I9L+TsYlIxK3cWVwQtAJrMoGQxeghfA4l0o12JgEGUUk8Egk8UgC1FWBt1HJ+fUvee43GuSb33r1+/7/L7Pn/N0OiICxjGkOe7whhqeGqIiYix+xkZErEbEc0RUkqQZSxhomreIpMpTVDKllAvZwkzKxcLzTzSYdOXEKfSn5+8qy0ym8waj6E7PvTntEee5u/lkEJN1I1yLiMGU5br7k4gYrtMy9iWfcRJXhSJbQzU/xLbxjw1esJdsekFp0WATyzgsKDnkF0ma9QBlbOM2XbCFQuQXBtfYxyt2MYcH3OMCE+jBUrMWznCZ9j+LFRzjCDfYSfmWPfgbm5j8pn6LWtJCJ9Yx0qbLO6ofwcOjrJnIFJsAAAAASUVORK5CYII="
+                            />
+                          </svg>
+                          <span class="badge unread-badge">{{
+                            viewedQuoteCount
+                          }}</span>
+                        </div>
+                        <span>Quote</span>
+                      </div>
+                      <div
+                        class="lead-box"
+                        (click)="navigateToLeadStream(9)"
+                        *ngIf="readMessageCount"
+                      >
+                        <div class="lead-icon" style="position: relative">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                          >
+                            <image
+                              id="comment-alt-solid"
+                              width="20"
+                              height="20"
+                              xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAm0lEQVQ4je3UMQrCQBCF4T/BG3iFtMFWPIZFTpHDSMBzeAW7WNlYW+QAFgELuyeTiEgWl0WXVPtgYBmGDwaWQVIhqdX/MaPI7AGsiZOTgYqEDcmdTgITmMCZwM7p/p7OwBp4RMDMqLPXsVkC5WRgB6wmvQY4ONSYC3CzA/utjh8nt5e09cy+axGwyhmogGvI3r5vcwf2wCYUA3gCCmumW4t1ZPoAAAAASUVORK5CYII="
+                            />
+                          </svg>
+                          <span class="badge unread-badge">{{
+                            readMessageCount
+                          }}</span>
+                        </div>
+                        <span>Messages</span>
+                      </div>
+                      <div
+                        class="lead-box"
+                        (click)="navigateToLeadStream(10)"
+                        *ngIf="buyerAwardRfqCount"
+                      >
+                        <div class="lead-icon" style="position: relative">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="21"
+                            height="21"
+                            viewBox="0 0 21 21"
+                          >
+                            <image
+                              id="file-certificate-solid"
+                              width="21"
+                              height="21"
+                              xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAABiElEQVQ4ja2UvSuFURzHP+RdiYXBpJSiiM3GX6B0F1lYDDarMlhMCgODUtgNFoOXskiRDWVRFpEUJom+Oveee517fufmJd86dfp9z/N5nuf3csokkVA10AaUWaugW7+pAe6LHAdNrGl9rzG/PiSNhoxy8/6cqkyktBxjExjNnygF/a2KwP8FJQB3VBgrp2tgHegG+oz7BTkHlqJ4TVx995JOX80W4AqY8qs5engfmHO1juIXYeW7JO1GNT+W1CepQdLpDzrCKZMHDhurWBOShkw0rSzUpeAosDckjUta8T3odCmpXtJWEpP40tYgMBsNwmTgzUgaNAirTHk0iqtR0teCfSVQZ3ogoRjaFB1pjKCvFmHloG9BdB6o9XvXXguB9+DB38vnbifIzK2kbUk3QexEUq2kQ5NBq0JLDUh6NXZO777lRoyTViY/pod+gp4Sv+bG9AXYM04JhRfKc/pIFrgItBunhP7zliooBX0EloG7v0LjW6ofOPNt5vLdm711oAdo/RERDj4Bj2NMG4mPBSYAAAAASUVORK5CYII="
+                            />
+                          </svg>
+                          <span class="badge unread-badge">{{
+                            buyerAwardRfqCount
+                          }}</span>
+                        </div>
+                        <span>RFQs Award </span>
+                      </div>
+                      <div
+                        class="lead-box"
+                        (click)="navigateToLeadStream(11)"
+                        *ngIf="communityProfileCount"
+                      >
+                        <div class="lead-icon" style="position: relative">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="21"
+                            height="17"
+                            viewBox="0 0 21 17"
+                          >
+                            <image
+                              id="address-card-solid"
+                              width="21"
+                              height="17"
+                              xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAARCAYAAAAyhueAAAABGUlEQVQ4ja3Uvy5EQRTH8c+ujaAi0dCIf4VoiESUNLIRtUI8hRdBIxEvoKMhW4lEsg8goRE2Gg2FVrBXbnaKmzv3RmTvr5qZ8zvfnJOZM7UkSWAaU/rXCzoNbOIKAxVAf7BVR7MioMBpptB6FOpP9SJgF/tYxC4+IscfahSET3EQ1g8YxXEmfo+9KIsTrCqBPuf2T7n9DA6jrF5nyqA7OMInagVVveMiymIS82XQFdzhGktYy8UHMYYkdz5UVml6STdhvY1XXGIDI5nkokEZLoJ+YR3tyN6DtEOLbyXtL2M8D70tAQrjdxae2hzOI0dGWehESPiOXD3NRiclykIX8Fhs+5/SiUovp0p1U2gr/C5VKOW0qv9P6fwC/s0zsO67rsgAAAAASUVORK5CYII="
+                            />
+                          </svg>
+                          <span class="badge unread-badge">{{
+                            communityProfileCount
+                          }}</span>
+                        </div>
+                        <span>Directory Profile View</span>
+                      </div>
+                      <div
+                        class="lead-box"
+                        (click)="navigateToLeadStream(12)"
+                        *ngIf="communityPhoneCount"
+                      >
+                        <div class="lead-icon" style="position: relative">
+                          <svg
+                            aria-hidden="true"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            width="21"
+                            height="17"
+                          >
+                            <path
+                              fill="#ffffff"
+                              d="M370.43 192.25A64 64 0 0 0 314.86 160H197.14a64 64 0 0 0-55.57 32.25L36.22 376.62A32 32 0 0 0 32 392.5V448a32 32 0 0 0 32 32h384a32 32 0 0 0 32-32v-55.5a32 32 0 0 0-4.22-15.88zM256 384a72 72 0 1 1 72-72 72 72 0 0 1-72 72zm250.18-261C436.76 65 347.38 32 256 32S75.24 65 5.82 123A16.45 16.45 0 0 0 0 135.64V192a16 16 0 0 0 16 16h70.11a16 16 0 0 0 14.31-8.85L128 128c39.9-17.28 83.2-24 128-24 44.77 0 88.07 6.72 128 24l27.58 71.15a16 16 0 0 0 14.31 8.85H496a16 16 0 0 0 16-16v-56.36a16.45 16.45 0 0 0-5.82-12.64z"
+                              class=""
+                            ></path>
+                          </svg>
+                          <span class="badge unread-badge">{{
+                            communityPhoneCount
+                          }}</span>
+                        </div>
+                        <span>Directory Phone</span>
+                      </div>
+                      <div
+                        class="lead-box"
+                        (click)="navigateToLeadStream(13)"
+                        *ngIf="communityEmailCount"
+                      >
+                        <div class="lead-icon" style="position: relative">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="21"
+                            height="16"
+                            viewBox="0 0 21 16"
+                          >
+                            <image
+                              id="envelope-solid"
+                              width="21"
+                              height="16"
+                              xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAQCAYAAAD52jQlAAABFklEQVQ4ja2TIUsEURRGz26QRUR0wSAWuyCuP0Bsmi0Giz/ALojNoOIv0G6wKVi3iSBGQcQgFsuCQdRdg3Lkwgi781hYd+a0mXvfme/d9wZ1Q321OG11T6USQqBOecxWgckShcFESPeT18NzCdzHTKvqmvpWYKo/6k7mqkTSZ6AFLAK3Q2R8AZaBM+AGmKfrS7tqTT1KcvTnQq2r6107XSDX3lSn1VW11VelX+qWOqqe5GqJ1Ey2ksmbSVUfYqE6p94l1T7SPw7UEXVb/VC/1WN1TN1UP5MVA0iD6yxRzHo8S3+adOWk8UeZnGcvUb8COsASUEs6emkMIv0vjbin7ZKlnZAelig8Bx5j+/EwA0wVFL4DT4C/YXxMojPHAIwAAAAASUVORK5CYII="
+                            />
+                          </svg>
+                          <span class="badge unread-badge">{{
+                            communityEmailCount
+                          }}</span>
+                        </div>
+                        <span>Directory Email</span>
+                      </div>
+                      <div
+                        class="lead-box"
+                        (click)="navigateToLeadStream(14)"
+                        *ngIf="communityRfqCount"
+                      >
+                        <div class="lead-icon" style="position: relative">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="17"
+                            height="23"
+                            viewBox="0 0 17 23"
+                          >
+                            <image
+                              id="file-invoice-dollar-solid"
+                              width="17"
+                              height="23"
+                              xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAXCAYAAADtNKTnAAABTUlEQVQ4jZWUsS8EQRSHP3ccpU4iolGJRhQ0lPwBJBJRCp2I6k4vOZEoVaJDJVFr6UREo1CQK1DIFVc5QvJk4mEyb3dm70s2O9n5zbfvzWanS0TKwBhQIp82cA+MAA9mVkS2Jc2tiLhsS0TqOv673NuHjDlODdjxE91B/AB40XEFqOa0WdV7LUty7vXcA2wCfUYRiELJqYnGcaLrULIAPHqtXmolFX02A5SDNc+hZB5o6rjkLR4FToDXjLrOQsmyifyzZJ780Mja+Y5JSRrAFPBuZjxiErfwCLgCjoEPk1DCPfFZVME4sAUMA7MmlZBcAHvAipnpoJ01YBWY1H+lbRIFJLvazhywD2yYhBJr5w340mpawI1JFJAc6tsF6NUvlUlMsg5MANP6Pw2ahBLbE4c7NuvAQCwUq8TR/3vwxHCVPKVCCZpFT/s8PoG7b3u+dQVXUWNLAAAAAElFTkSuQmCC"
+                            />
+                          </svg>
+                          <span class="badge unread-badge">{{
+                            communityRfqCount
+                          }}</span>
+                        </div>
+                        <span>Simple RFQ</span>
+                      </div>
+                      <div
+                        class="lead-box"
+                        (click)="navigateToLeadStream(15)"
+                        *ngIf="communityWebSiteCount"
+                      >
+                        <div class="lead-icon" style="position: relative">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="21"
+                            height="17"
+                            viewBox="0 0 21 17"
+                          >
+                            <image
+                              id="browser-solid"
+                              width="21"
+                              height="17"
+                              xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAARCAYAAAAyhueAAAAAmklEQVQ4je2QTQrCQAxGn0PR8R7iepbdegGv4BV6BK9iu/Eq7ryNWGo/GQh0cDNKZyP0g5CEkJcfJEVrJQ2ap8E4rCStgSfltKkAl+AuwB04AgfgBly/GBeAk8Uunu6To4O9o7H8bHnOQsLw1cfE2vze/M62yKlO6/GnHnhkmn7R1pVjTVqgC/RfoGNh5hihPdABr5mw2N8B/Rs9oapRlzWg1QAAAABJRU5ErkJggg=="
+                            />
+                          </svg>
+                          <span class="badge unread-badge">{{
+                            communityWebSiteCount
+                          }}</span>
+                        </div>
+                        <span>Directory WebSite</span>
+                      </div>
+                      <div
+                        class="lead-box"
+                        (click)="setActive(16)"
+                        [ngClass]="{ active: selectedBox === 16 }"
+                        *ngIf="profileViewCount"
+                      >
+                        <div class="lead-icon" style="position: relative">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="21"
+                            height="17"
+                            viewBox="0 0 21 17"
+                          >
+                            <image
+                              id="address-card-solid"
+                              width="21"
+                              height="17"
+                              xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAARCAYAAAAyhueAAAABGUlEQVQ4ja3Uvy5EQRTH8c+ujaAi0dCIf4VoiESUNLIRtUI8hRdBIxEvoKMhW4lEsg8goRE2Gg2FVrBXbnaKmzv3RmTvr5qZ8zvfnJOZM7UkSWAaU/rXCzoNbOIKAxVAf7BVR7MioMBpptB6FOpP9SJgF/tYxC4+IscfahSET3EQ1g8YxXEmfo+9KIsTrCqBPuf2T7n9DA6jrF5nyqA7OMInagVVveMiymIS82XQFdzhGktYy8UHMYYkdz5UVml6STdhvY1XXGIDI5nkokEZLoJ+YR3tyN6DtEOLbyXtL2M8D70tAQrjdxae2hzOI0dGWehESPiOXD3NRiclykIX8Fhs+5/SiUovp0p1U2gr/C5VKOW0qv9P6fwC/s0zsO67rsgAAAAASUVORK5CYII="
+                            />
+                          </svg>
+                          <span class="badge unread-badge">{{
+                            profileViewCount
+                          }}</span>
+                        </div>
+                        <span>In App Profile View</span>
+                      </div>
+                      <div
+                        class="lead-box"
+                        (click)="setActive(17)"
+                        [ngClass]="{ active: selectedBox === 17 }"
+                        *ngIf="communityProfileLikeCount"
+                      >
+                        <div class="lead-icon" style="position: relative">
+                          <svg
+                            aria-hidden="true"
+                            focusable="false"
+                            data-icon="thumbs-up"
+                            width="21"
+                            height="17"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                          >
+                            <path
+                              fill="#ffffff"
+                              d="M104 224H24c-13.255 0-24 10.745-24 24v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V248c0-13.255-10.745-24-24-24zM64 472c-13.255 0-24-10.745-24-24s10.745-24 24-24 24 10.745 24 24-10.745 24-24 24zM384 81.452c0 42.416-25.97 66.208-33.277 94.548h101.723c33.397 0 59.397 27.746 59.553 58.098.084 17.938-7.546 37.249-19.439 49.197l-.11.11c9.836 23.337 8.237 56.037-9.308 79.469 8.681 25.895-.069 57.704-16.382 74.757 4.298 17.598 2.244 32.575-6.148 44.632C440.202 511.587 389.616 512 346.839 512l-2.845-.001c-48.287-.017-87.806-17.598-119.56-31.725-15.957-7.099-36.821-15.887-52.651-16.178-6.54-.12-11.783-5.457-11.783-11.998v-213.77c0-3.2 1.282-6.271 3.558-8.521 39.614-39.144 56.648-80.587 89.117-113.111 14.804-14.832 20.188-37.236 25.393-58.902C282.515 39.293 291.817 0 312 0c24 0 72 8 72 81.452z"
+                            ></path>
+                          </svg>
+                          <span class="badge unread-badge">{{
+                            communityProfileLikeCount
+                          }}</span>
+                        </div>
+                        <span>Liked your profile in community</span>
+                      </div>
+                    </div>
+                  </perfect-scrollbar>
+                  <div
+                    *ngIf="!allActivityCount"
+                    style="
+                      min-height: 110px;
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: center;
+                    "
+                  >
+                    <span class="lead-help-text">
+                      Want to see who is looking at your profile? Upgrade your
+                      account for access to Leadstream.
+                    </span>
+                    <div class="m-t-15">
+                      <a class="link" (click)="navigateToLeadStream(0)"
+                        >Learn More</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-12 col-md-12">
+        <div class="card" style="margin: 10px;">
+          <div class="card-block">
+            <div>
+              <div class="tabbable-panel">
+                <div class="tabbable-line--sup-dash">
+                  <ul class="nav nav-tabs">
+                    <li
+                      [ngClass]="isMyRFq ? 'active' : ''"
+                      (click)="openMyRFq()"
+                    >
+                      <a href="Javascript:void(0);" >RFQs</a>
+                    </li>
+                    <li
+                      [ngClass]="isLikedRFq ? 'active' : ''"
+                      (click)="openLikedRFq()"
+                    >
+                      <a href="Javascript:void(0);" data-bs-toggle="tab">LIKED RFQs</a>
+                    </li>
+                    <li
+                      [ngClass]="isSpecialInvites ? 'active' : ''"
+                      (click)="openSpecialInvites()"
+                    >
+                      <a href="Javascript:void(0);" data-bs-toggle="tab"
+                        >SPECIAL INVITES</a
+                      >
+                    </li>
+                    <li
+                      [ngClass]="isQuotedRfq ? 'active' : ''"
+                      (click)="openQuotedRfq()"
+                    >
+                      <a href="Javascript:void(0);" data-bs-toggle="tab">QUOTED RFQs</a>
+                    </li>
+                    <li
+                      [ngClass]="isFollowedBuyers ? 'active' : ''"
+                      (click)="openFollowedBuyers()"
+                    >
+                      <a href="Javascript:void(0);" data-bs-toggle="tab">FOLLOWED BUYERS</a>
+                    </li>
+                  </ul>
+                  <div class="tab-content">
+                    <div id="myrfq" *ngIf="isMyRFq">
+                      <app-my-rfq></app-my-rfq>
+                    </div>
+                    <div id="aboutus" *ngIf="isLikedRFq">
+                      <app-liked-rfq></app-liked-rfq>
+                    </div>
+                    <div id="capabilities"*ngIf="isSpecialInvites">
+                    <app-specialinvite-rfq></app-specialinvite-rfq>
+                    </div>
+                    <div id="contactus" *ngIf="isQuotedRfq">
+                      <app-quoted-rfq></app-quoted-rfq>
+                    </div>
+                    <div id="ratings" *ngIf="isFollowedBuyers">
+                      <app-followedbuyer-rfq></app-followedbuyer-rfq>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4 sideDrawer Drawer-Shadow" *ngIf="isSidePanel()">
+    <div *ngIf="isRfqDrawer()">
+      <app-supplier-rfq-detail-sidepanel
+        [rfqId]="getCurrentRfqId()"
+      ></app-supplier-rfq-detail-sidepanel>
+    </div>
+    <div *ngIf="isBuyerMiniProfile()">
+      <app-mini-buyer-profile></app-mini-buyer-profile>
+    </div>
+    <div *ngIf="isMessageRfqPanel()">
+      <app-message-send-drawer></app-message-send-drawer>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="isBuyerCommpleteProfile()">
+  <div class="col-md-12" style="text-align: right; margin-top: 2px">
+    <button type="button" class="btn btn-back" (click)="goBack()">
+      Go Back to Dashboard
+    </button>
+  </div>
+  <div class="col-md-12">
+    <app-buyer-view-profile></app-buyer-view-profile>
+  </div>
+</div>
+
+<app-capability
+  *ngIf="showCapability"
+  [toSetLocalStore]="1"
+  (changeCapabilityEvent)="profileChange($event)"
+>
+</app-capability>
+
+<app-upgrade-account
+  *ngIf="showUpgradeAccountModal"
+  [isCustomer]="isCustomer"
+  [quoteRFQ]="isQuoteRfq"
+  [RfqId]="0"
+  (contactSaleModel)="openSaleModel()"
+  (modalCloseEvent)="closeModal($event)"
+></app-upgrade-account>
+<app-contact-sales-model
+  *ngIf="toShowContactModel"
+  (modelUpdateInfoChange)="toShowContactModel = $event"
+>
+</app-contact-sales-model>
+
+<app-upgrade-to-silver
+  *ngIf="showSilverUpgradeModal"
+  [RfqId]="0"
+  (contactSaleModel)="openUpgradeToSilverModel()"
+  (modalCloseEvent)="closeSilverModal($event)"
+></app-upgrade-to-silver>
+
+<div *ngIf="isModelShow()">
+  <app-rating-model></app-rating-model>
+</div>
+
+<app-publish-decision-model
+  *ngIf="showPublishModel"
+  (openNoPublishEvent)="showNoPublishModelChange($event)"
+>
+</app-publish-decision-model>
+<app-not-publish-decision-model
+  *ngIf="showNoPublishModel"
+  (openPublishEvent)="showPublishModelChange($event)"
+>
+</app-not-publish-decision-model>
+
+<div class="modal fade" id="wearehereModal" role="dialog">
+  <div class="flexDialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="w-fit">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">How Can We Help?</h4>
+            <button
+              type="button"
+              style="color: #2e58d6"
+              class="close"
+              data-bs-dismiss="modal"
+            >
+              <i class="fa fa-times-circle" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="helpModelList">
+              <ul>
+                <li class="helpModelList-list" (click)="requstDemo()">
+                  <i class="fa fa-television iconList"></i
+                  ><span class="f-16-modal">Request a Demo</span>
+                </li>
+                <li class="helpModelList-list">
+                  <i class="fa fa-envelope-o iconList"></i
+                  ><span class="f-16-modal">support@mfg.com</span>
+                </li>
+                <li class="helpModelList-list" style="margin-bottom: 30px">
+                  <i class="fa fa-phone iconList"></i
+                  ><span class="f-16-modal">+1 888-404-9686</span>
+                  <p class="p-flex">(M-F, 8am - 5pm ET )</p>
+                </li>
+              </ul>
+            </div>
+            <div class="row modal-footer1" style="padding: 0 0 20px 0">
+              <div class="col-md-12 text-center">
+                <button
+                  style="width: 50%"
+                  type="button"
+                  class="btn button-green"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Success Modal start -->
+<div class="col-md-12 m-t-10">
+  <a
+    class="color-blue f-14"
+    data-bs-target="#successModel"
+    data-bs-toggle="modal"
+    id="modal-1"
+    >successModel</a
+  >
+</div>
+
+<div class="modal fade show" id="successModel" role="dialog">
+  <div class="flexDialog">
+    <div class="modal-dialog">
+      <!-- Model -->
+      <div class="w-fit1" style="width: 100%">
+        <div class="modal-content">
+          <div class="modal-header" style="border: none">
+            <button
+              type="button"
+              style="color: #2e58d6"
+              class="close"
+              data-bs-dismiss="modal"
+              (click)="closeGrowthSuccessModal()"
+            >
+              <img src="assets/images/growth-package/Vector4.png" />
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4
+              class="modal-title"
+              style="text-align: center; margin-bottom: 20px; margin-top: -20px"
+            >
+              <img src="assets/images/growth-package/Success Model.png" />
+            </h4>
+            <h4 class="modal-title" style="text-align: center; margin: 15px 0">
+              Welcome to the Growth Package!
+            </h4>
+
+            <p style="margin-left: 12px">
+              Your RFQ limit has been refreshed and your new features have been
+              enabled. You will notice a few new elements on your dashboard to
+              keep track of your subscription. Enjoy!
+            </p>
+          </div>
+          <div class="row modal-footer1" style="padding: 0 0 30px">
+            <div class="col-md-12 text-center">
+              <button
+                style="width: 50%"
+                type="button"
+                class="btn button-green"
+                data-bs-dismiss="modal"
+                (click)="startQuote()"
+              >
+                Get Started
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Success Modal end -->
+
+<div class="modal fade" id="cacheConfirmModel" role="dialog">
+  <div class="flexDialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="w-fit" style="position: relative; top: 210px">
+        <div class="modal-content content-backgroud">
+          <div class="modal-header" style="border: none">
+            <button
+              type="button"
+              style="color: #2e58d6"
+              class="close"
+              data-bs-dismiss="modal"
+            >
+              <i class="fa fa-times-circle" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="modal-body body-margin">
+            <p
+              class="text-align"
+              style="text-align: center; margin: -5px 60px 40px"
+            >
+              Are you sure you want to use your Growth package to unlock this
+              RFQ?
+            </p>
+
+            <div class="modal-footer1" style="padding: 0 0 20px 0">
+              <div
+                class="col-md-12 text-center"
+                style="display: flex; justify-content: space-around"
+              >
+                <button
+                  style="width: 30%"
+                  type="button"
+                  class="btn button-green"
+                  data-bs-dismiss="modal"
+                  (click)="goRfqDetailsPage()"
+                >
+                  Yes
+                </button>
+                <button
+                  style="width: 30%"
+                  type="button"
+                  class="btn button-green"
+                  data-bs-dismiss="modal"
+                  (click)="goBackbutton()"
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

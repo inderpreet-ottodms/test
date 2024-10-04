@@ -1,0 +1,176 @@
+<div class="row">
+  <div class="col-sm-6"
+    *ngIf="billingInfoViewModel.activeSubscriptionPlan != null && billingInfoViewModel.activeSubscriptionPlan != undefined &&  billingInfoViewModel.activeSubscriptionPlan != ''">
+    <div class="card">
+      <div class="dropup">
+        <h5 class="card-title">Your Plan</h5>
+        <span style="margin: 15px;"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+            <path
+              d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+          </svg></span>
+        <div class="dropup-content">
+          <a *ngIf="showCancelSubs" (click)="getCustomerPortalLogIn()">View my Subscription</a>
+          <a *ngIf="showCancelSubs && !cancellationRequested && !hideSub" (click)="cancelSubscription()" style="color: #B3261E;">Cancel Subscription</a>
+          <a *ngIf="cancellationRequested" (click)="resumeSubscription()" style="color: #38ef0f;">Resume Canceled Subscription</a>
+        </div>
+
+      </div>
+      <hr>
+      <div class="card-body" style="padding-top: 0px;">
+        <div class="col-md-12" style="display: flex">
+          <div class="col-md-4"><b>PLAN</b></div>
+          <div class="col-md-4"><b>RATE</b></div>
+          <div *ngIf="!cancellationRequested" class="col-md-4"><b>NEXT RENEWAL</b></div>
+          <div *ngIf="cancellationRequested" class="col-md-4"><b>WILL BE CANCELLED AT</b></div>
+        </div>
+
+        <div class="col-md-12" style="display: flex">
+          <div class="col-md-4">{{ billingInfoViewModel.activeSubscriptionPlan}}</div>
+          <div class="col-md-4">{{ billingInfoViewModel.subscriptionPlanPrice}} /month</div>
+          <div class="col-md-4">{{ billingInfoViewModel.nextRenewalDate}}</div>
+        </div>
+
+      </div>
+      <div *ngIf="banner" class="rectangle"> <img src="assets/warning-fill.svg" alt=""/> {{ billingInfoViewModel.numberOfTrialDaysLeft}} days of free trial period remaining.
+        <button type="button" class="close" aria-label="Close" (click)="closeBanner()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="plan-upgrad"><button (click)="upgradePlan()" class="btn btn-primary"
+          style="background-color: #2E58D6;">Upgrade Plan</button>
+        <span>
+          <a href="https://www.mfg.com/terms-of-use/" style="color: #2E58D6;">Terms & Conditions</a>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6"
+    *ngIf="billingInfoViewModel.activeSubscriptionPlan == null || billingInfoViewModel.activeSubscriptionPlan == undefined ||  billingInfoViewModel.activeSubscriptionPlan == ''">
+    <div class="card">
+      <div class="dropup">
+        <h5 class="card-title">Your Plan</h5>
+
+        <span style="margin: 15px;"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+            <path
+              d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+          </svg></span>
+          <div class="dropup-content">
+            <a *ngIf="showCancelSubs" (click)="getCustomerPortalLogIn()">View my Subscription</a>
+            <a *ngIf="showCancelSubs" (click)="cancelSubscription()" style="color: #B3261E;">Cancel Subscription</a>
+          </div>
+
+      </div>
+
+      <hr>
+      <div class="card-body">
+        <p class="card-text">No plan information found.</p>
+      </div>
+      <div *ngIf="banner" class="rectangle"><img src="assets/warning-fill.svg" alt=""/>{{ billingInfoViewModel.numberOfTrialDaysLeft}} days of free trial period remaining.
+        <button type="button" class="close" aria-label="Close" (click)="closeBanner()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="plan-upgrad" *ngIf="showUpgrade"><button (click)="upgradePlan()" class="btn btn-primary"
+          style="background-color: #2E58D6;">Upgrade Plan</button>
+        <span>
+          <a href="https://www.mfg.com/terms-of-use/" style="color: #2E58D6;">Terms & Conditions</a>
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="col-md-6">
+    <div class="card capability-card">
+      <h5 class="card-title">Your RFQ Capability To Quote</h5>
+      <hr>
+      <div class="card-body">
+        <p *ngFor="let data of subscriptionCapability" class="card-text">{{data.parentDisciplineName}}</p>
+        <p *ngIf="subscriptionCapability == null || subscriptionCapability == undefined || subscriptionCapability.length == 0"
+          class="card-text">No RFQ Capability To Quote.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<p-dialog header="Cancel Plan" [(visible)]="isAutoRenew" [modal]="true" [responsive]="true" styleClass="Rectangle-3"
+  [autoZIndex]="false" style="z-index: 10001;width: 600;">
+  <div class="row">
+    <div class="col-md-12">
+      <span class="show-success">Are you sure you want to cancel you plan? If yes, then you will be contacted by sales
+        within 24 hours.</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" style="margin-top:20px;text-align:center">
+      <button type="button" class="btn btnAccept" (click)="accept(1)">Yes</button>
+      <button type="button" class="btn btnReject" (click)="accept(2)">No</button>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- Below pop-up is for free trial -->
+<p-dialog header="Cancel Subscription" [(visible)]="subsCancelled" [modal]="true" [responsive]="true" styleClass="Rectangle-3"
+  [autoZIndex]="false" style="z-index: 10001;width: 475px;">
+  <h5>Are you sure you want to cancel your free trial?</h5>
+  <div class="row">
+    <div class="col-md-12" style="padding-top: 20px;"> 
+      <span class="show-success">You will not be charged, and You will lose access to Free trail features at the end of your billing cycle Date: {{ billingInfoViewModel.nextRenewalDate}}</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" style="margin-top:20px;text-align:center; display:flex; justify-content: flex-end;">
+      <button type="button" class="btn btnCancel" (click)="cancel()">Cancel</button>
+      <button type="button" class="btn btnCancelSubs" (click)="cancelStarterPack()">Cancel Subscription</button>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- Below pop-up is for starter Package -->
+<p-dialog header="Cancel Subscription" [(visible)]="cancelStarter" [modal]="true" [responsive]="true" styleClass="Rectangle-3"
+  [autoZIndex]="false" style="z-index: 10001;width: 475px;">
+  <h5>Are you sure you want to cancel your Starter Package subscription?</h5>
+  <div class="row">
+    <div class="col-md-12" style="padding-top: 20px;"> 
+      <span class="show-success">You will lose access to Starter features at the end of your billing cycle, Date: {{ billingInfoViewModel.nextRenewalDate}}</span>
+      
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" style="margin-top:20px;text-align:center; display:flex; justify-content: flex-end;">
+      <button type="button" class="btn btnCancel" (click)="cancel()">Cancel</button>
+      <button type="button" class="btn btnCancelSubs" (click)="cancelStarterPack()">Cancel Subscription</button>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- Below pop-up is for Growth Package -->
+<p-dialog header="Cancel Subscription" [(visible)]="cancelGrowth" [modal]="true" [responsive]="true" styleClass="Rectangle-3"
+  [autoZIndex]="false" style="z-index: 10001;width: 475px;">
+  <h5>Are you sure you want to cancel your Growth Package subscription?</h5>
+  <div class="row">
+    <div class="col-md-12" style="padding-top: 20px;"> 
+      <span class="show-success">You will lose access to Growth Package features at the end of your billing cycle, Date: {{ billingInfoViewModel.nextRenewalDate}}</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" style="margin-top:20px;text-align:center; display:flex; justify-content: flex-end;">
+      <button type="button" class="btn btnCancel" (click)="cancel()">Cancel</button>
+      <button type="button" class="btn btnCancelSubs" (click)="cancelStarterPack()">Cancel Subscription</button>
+    </div>
+  </div>
+</p-dialog>
+
+
+<app-upgrade-account *ngIf="showUpgradeAccountModal" [isCustomer]="isCustomer" [quoteRFQ]="isQuoteRfq" [RfqId]=0
+  (contactSaleModel)="openSaleModel()" (modalCloseEvent)="closeModal($event)"></app-upgrade-account>
+
+  <app-contact-sales-model *ngIf="toShowContactModel" (modelUpdateInfoChange)="toShowContactModel= $event">
+  </app-contact-sales-model>
+
+<div *ngIf="isLoader" class="full-page-overlay">
+  <div class="rfqLoader"></div>
+</div>

@@ -1,0 +1,312 @@
+<section>{{getRfqInfo()}}
+  <div class="">
+    <div class="row breadcumb-box">
+      <div class="col-md-12">
+        <div class="breadcumb-text">
+          <span class="Selectable" [routerLink]="['/rfq/myrfq']">My RFQs</span><span class="current-page"
+            placement="top" data-container="body" ngbTooltip="{{irfqViewModel?.rfqName}}"> /
+            {{irfqViewModel?.rfqName | dotLimit:'40'}}</span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!isSupplierProfileView()">
+
+
+      <div class="row" *ngIf="!isCompare()">
+        <div [ngClass]="(isSidePanel())?'col-md-8':'col-md-12'">
+          <app-rfq-warning-banner></app-rfq-warning-banner>
+          <br>
+          <!-- RFQ Header -->
+          <div class="flex-container mb-3">
+            <div class="flex-box img">
+              <app-rfq-image [rfqId]="rfqImageId" [userType]="'buyer'"
+                [isMfgCommunityRfq]="irfqViewModel.isCommunityRfq"
+                *ngIf="rfqImageId != null && rfqImageId != undefined"></app-rfq-image>
+            </div>
+            <div class="rfq-text-info texts">
+
+              <div>
+                <div>
+                  <div class="cuHeightRfqName">
+                    <div>
+                      <p class="RFQ-Name-Goes-Here"><span placement="top" data-container="body"
+                          ngbTooltip="{{irfqViewModel?.rfqName}}"
+                          style="word-break: break-all;">{{irfqViewModel?.rfqName}}</span></p>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <div class="otherRfqDetails"><span class="cuWidth"> RFQ # :</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="normalFont">{{irfqViewModel?.rfqId}}</span>
+                      </div>
+                      <div class="otherRfqDetails"><span class="cuWidth">Created:</span>&nbsp;
+                        <span class="normalFont">{{irfqViewModel?.rfqCreatedOn | date: 'MM/dd/y' }}</span>
+                      </div>
+                      <div class="otherRfqDetails">
+                        <span class="cuWidth">Status : </span>&nbsp;&nbsp;&nbsp;
+                        <span class="normalFont" *ngIf="(irfqViewModel?.rfqStatusId == 1 )">Draft</span>
+                        <span class="normalFont" *ngIf="(irfqViewModel?.rfqStatusId == 2)">Pending Approval</span>
+                        <span class="normalFont" *ngIf="(irfqViewModel?.rfqStatusId == 3)">Quoting</span>
+                        <span class="normalFont" *ngIf="(irfqViewModel?.rfqStatusId == 5)">Closed</span>
+                        <span class="normalFont" *ngIf="(irfqViewModel?.rfqStatusId == 6)">Awarded</span>
+                        <span class="normalFont" *ngIf="(irfqViewModel?.rfqStatusId == 9)">Award Declined</span>
+                        <span class="normalFont" *ngIf="(irfqViewModel?.rfqStatusId == 13)">Deleted</span>
+                        <span class="normalFont" *ngIf="(irfqViewModel?.rfqStatusId == 14)">In-Complete</span>
+                        <span class="normalFont" *ngIf="(irfqViewModel?.rfqStatusId == 15)">Award</span>
+                        <span class="normalFont" *ngIf="(irfqViewModel?.rfqStatusId == 16)">Awarded</span>
+                        <span class="normalFont" *ngIf="(irfqViewModel?.rfqStatusId == 17)">Awarded</span>
+                        <span class="normalFont" *ngIf="(irfqViewModel?.rfqStatusId == 18)">Not Awarded</span>
+                        <span class="normalFont" *ngIf="(irfqViewModel?.rfqStatusId == 20 )">Awarded</span>
+                        <!-- <label class="normalFont">{{irfqViewModel?.rfqStatus}}</label> -->
+                      </div>
+                    </div>
+                    
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+            <div class="award">
+              <ul class="circle-icons">
+                <li (click)="cloneModel(irfqViewModel.rfqId)" data-bs-toggle="tooltip" data-html="true"
+                  data-placement="top" title="Clone">
+                  <a>
+                    <i class="fa fa-clone"></i>
+                  </a>
+                </li>
+                <li *ngIf="irfqViewModel?.isEditEnable" (click)="cancelRfq(irfqViewModel.rfqId)"
+                  data-bs-toggle="tooltip" data-html="true" data-placement="top" title="Move to Draft">
+                  <a>
+                    <i class="fa fa-times"></i>
+                  </a>
+                </li>
+                <li *ngIf="!irfqViewModel?.isEditEnable" style="cursor:  not-allowed;" data-bs-toggle="tooltip"
+                  data-html="true" data-placement="top" title="Move to Draft">
+                  <a style="cursor:  not-allowed;">
+                    <i class="fa fa-times" style="cursor:  not-allowed;"></i>
+                  </a>
+                </li>
+                <li *ngIf="irfqViewModel?.rfqStatusId === 3 && irfqViewModel?.isEditEnable"
+                  (click)="setRfqDetail(irfqViewModel.rfqId, irfqViewModel.rfqName ,irfqViewModel?.rfqStatusId)"
+                  data-bs-toggle="tooltip" data-html="true" data-placement="top" title="Edit">
+                  <a data-bs-target="#editConfirmModel" data-bs-toggle="modal">
+                    <i class="fa fa-edit"></i>
+                  </a>
+                </li>
+
+                <li *ngIf="irfqViewModel?.rfqStatusId !== 3 && irfqViewModel?.isEditEnable"
+                  (click)="editRfq()"
+                  data-bs-toggle="tooltip" data-html="true" data-placement="top" title="Edit">
+                  <a>
+                    <i class="fa fa-edit"></i>
+                  </a>
+                </li>
+                <li *ngIf="!irfqViewModel?.isEditEnable" style="cursor: not-allowed;" data-bs-toggle="tooltip"
+                  data-html="true" data-placement="top" title="Edit">
+                  <a style="cursor:  not-allowed;">
+                    <i style="cursor:  not-allowed;" class="fa fa-edit"></i>
+                  </a>
+                </li>
+                <li>
+                  <a data-bs-toggle="tooltip" data-html="true" (click)="transferRfq()" data-placement="top"
+                    title="Transfer">
+                    <i class="fa fa-exchange"></i>
+                  </a>
+                </li>
+              </ul>
+              <button (click)="awardPart()"
+                [disabled]="(irfqViewModel.withOrderManagement && irfqViewModel?.rfqStatusId == 6)||!irfqViewModel?.isAwardingEnabled || irfqViewModel?.rfqStatusId == 1 || irfqViewModel?.rfqStatusId == 2 || disableUpdateAward"
+                class="btn mb-3" type="button"
+                [ngClass]="((irfqViewModel.withOrderManagement && irfqViewModel?.rfqStatusId == 6)||(!irfqViewModel.isAwardingEnabled)|| disableUpdateAward)?'btn btn-award-disabled ':'btn btn-edit-confirm'">Update
+                Award Status
+              </button>
+            </div>
+          </div>
+
+          {{checkForCompare()}} {{isReqFromNotification()}}
+          <div class="background-white">
+            <div class="tabbable-panel">
+              <div class="tabbable-line-detail">
+                <ul class="nav nav-tabs">
+                  <li [ngClass]="isRfqTabOpen?'active':''" (click)="onRfq()" class="licus-detail">
+                    <a [ngClass]="(isSidePanel())?'res-padding-a ':''" class="liacus" href="Javascript:void(0);"
+                      data-bs-toggle="tab">RFQ</a>
+                  </li>
+                  <li [ngClass]="isRfqNdaTabOpen?'active':''" (click)="onNDAs()" class="licus-detail">
+                    <a #ndaTab [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" class="liacus"
+                      data-bs-toggle="tab">NDAs</a>
+                  </li>
+                  <li [ngClass]="isRfqDistributionTabOpen?'active':''" (click)="onDistribution()" class="licus-detail">
+                    <a #quotesTab [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" class="liacus"
+                      data-bs-toggle="tab">RFQ INSIGHT </a>
+                  </li>
+                  <li [ngClass]="isRfqQuotesTabOpen?'active':''" (click)="onQuotes()" class="licus-detail">
+                    <a #quotesTab [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" class="liacus"
+                      data-bs-toggle="tab">QUOTES</a>
+                  </li>
+                  <!-- *ngIf="isRfqOrderTabOpen" -->
+                  <li  [ngClass]="isRfqOrderTabOpen?'active':''" *ngIf="showOrder" (click)="onOrderTab()" class="licus-detail">
+                    <a #orderTab [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" class="liacus"
+                      data-bs-toggle="tab">ORDER</a>
+                  </li>
+
+                  <li  [ngClass]="isRfqInvoiceTabOpen?'active':''"  *ngIf="invoiceSent" (click)="onInvoiceTab()" class="licus-detail">
+                    <a #invoiceTab [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" class="liacus"
+                      data-bs-toggle="tab">INVOICES</a>
+                  </li>
+                  <li [ngClass]="isRfqMessageTabOpen?'active':''" (click)="onMessages()" class="licus-detail">
+                    <a #msgTab [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" class="liacus"
+                      data-bs-toggle="tab">MESSAGES</a>
+                  </li>
+                  
+                  <li [ngClass]="isRfqRevisionTabOpen?'active':''" (click)="onRevisions()" class="licus-detail">
+                    <a [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" data-bs-toggle="tab">HISTORY</a>
+                  </li>
+                </ul>
+                <div class="tab-content">
+                  <div *ngIf="isRfqTabOpen" [ngClass]="isRfqTabOpen?'active':''" class="tab-pane" id="rfq">
+                    <app-rfq-tab [rfqId]="rfqId"></app-rfq-tab>
+                  </div>
+                  <div *ngIf="isRfqNdaTabOpen" [ngClass]="isRfqNdaTabOpen?'active':''" class="tab-pane" id="nda">
+                    <app-rfq-nda [rfqId]="rfqId"></app-rfq-nda>
+                  </div>
+                  <div *ngIf="isRfqQuotesTabOpen" [ngClass]="isRfqQuotesTabOpen?'active':''" class="tab-pane"
+                    id="quotes">
+                    <app-rfq-quotes [rfqId]="rfqId" [isDashQuote]="isDashQuote"
+                      [createDate]="irfqViewModel?.rfqCreatedOn | date: 'MM/dd/y'"
+                      [rfqStatus]="irfqViewModel?.rfqStatusId" [withOrderManagement]="irfqViewModel.withOrderManagement"  ></app-rfq-quotes>
+                  </div>
+                
+                  <div *ngIf="isRfqOrderTabOpen" [ngClass]="isRfqOrderTabOpen?'active':''" class="tab-pane"
+                    id="order">
+                    <app-rfq-order-managment [rfqId]="rfqId"></app-rfq-order-managment>
+                  </div>
+                  <div *ngIf="isRfqMessageTabOpen" [ngClass]="isRfqMessageTabOpen?'active':''" class="tab-pane"
+                    id="messages">
+                    <app-rfq-messages [rfqId]="rfqId"></app-rfq-messages>
+                  </div>
+                  <div *ngIf="isRfqRevisionTabOpen" [ngClass]="isRfqRevisionTabOpen?'active':''" class="tab-pane"
+                    id="revisions">
+                    <app-rfq-revisions [rfqId]="rfqId"></app-rfq-revisions>
+                  </div>
+                  <div *ngIf="isRfqDistributionTabOpen" [ngClass]="isRfqDistributionTabOpen?'active':''"
+                    class="tab-pane" id="revisions">
+                    <app-distribution [rfqId]="rfqId"></app-distribution>
+                  </div>
+                  <div *ngIf="isRfqInvoiceTabOpen" [ngClass]="isRfqInvoiceTabOpen?'active':''" class="tab-pane"
+                    id="invoice">
+                    <app-rfq-invoices ></app-rfq-invoices>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scroll-top-wrapper ">
+            <span class="scroll-top-inner">
+              <i class="fa fa-arrow-up"></i>
+            </span>
+          </div>
+        </div>
+        <div *ngIf="isSidePanel()" class="sideDrawer Drawer-Shadow">
+          <div *ngIf="iscontactsidepanel()">
+            <app-contact-side-panel></app-contact-side-panel>
+          </div>
+          <div *ngIf="isTransferRfqPanel()">
+            <app-transfer-rfq></app-transfer-rfq>
+          </div>
+          <div *ngIf="isMessageRfqPanel()">
+            <app-message-send-drawer></app-message-send-drawer>
+          </div>
+          <div *ngIf="isMessageThreadPanel()">
+            <app-message-thread-drawer [messageThreadId]="getMessageIdForThread()"></app-message-thread-drawer>
+          </div>
+          <div *ngIf="isSupplierProfileDrawer()">
+            <app-quote-supplier-profile></app-quote-supplier-profile>
+          </div>
+          <div *ngIf="isrfqViewAllDrawer()">
+            <app-rfq-order-viewall></app-rfq-order-viewall>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isCompare()">
+      <div style="padding-top:22px ">
+        <app-compare-quotes></app-compare-quotes>
+      </div>
+    </div>
+    <div *ngIf="isSupplierProfileView()">
+      <div class="row">
+        <div class="col-md-12" style="text-align:end">
+          <button type="button" class="small-button-s-p" (click)="goBackToRFQDetails()">
+            <span class="">Back To Rfq Detail </span>
+          </button>
+        </div>
+      </div>
+      <div style="padding-top:22px ">
+        <app-supplier-view-profile></app-supplier-view-profile>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<p-confirmDialog width="629" height="220" #cd>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-ignore-rfq" (click)="cd.reject()">No</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="cd.accept()"> Move to Draft</button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>
+<div *ngIf="isModelShow()">
+  <app-rating-model></app-rating-model>
+</div>
+<div class="modal fade" id="editConfirmModel" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Confirmation</h4>
+        <button type="button" style="color: #4a90e2;" class="close" data-bs-dismiss="modal"><i class="fa fa-times-circle"
+            aria-hidden="true"></i></button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <p style="font-size: 14px; margin-top: 20px; font-weight: normal;">This RFQ is currently open for quoting.
+          Editing the RFQ will cause any current quotes to be retracted. Do you wish to continue?' </p>
+      </div>
+      <div class="row modal-footer1" style="padding: 10px">
+        <div class="col-md-6">
+          <button type="button" class="btn nobtn" data-bs-dismiss="modal">No</button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-edit-confirm" data-bs-dismiss="modal"
+            (click)="editRfq()">Yes</button>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf=isCloneModel>
+  <app-clone-rfq [id]="cloneRfqId"></app-clone-rfq>
+</div>
+<div *ngIf=isAwardPartModel>
+  <app-rfq-award-model (closeModelEventHandler)="closeAwardModel()" [rfqId]="irfqViewModel.rfqId"></app-rfq-award-model>
+</div>
+
+<!-- new award model order-->
+<div *ngIf="awardModalStep1">
+  <app-award-order-managment (closeModelEventHandler)="closeAwardModelAward($event)"></app-award-order-managment>
+</div>
+<div class="full-page-overlay" *ngIf="showPageDataLoding">
+  <div class="rfqLoader"></div>
+</div>

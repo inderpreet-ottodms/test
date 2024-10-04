@@ -1,0 +1,28 @@
+.label-add-more{
+    font-size: 9pt;
+    color: #4a90e2;
+    font-weight: normal !important;
+    text-shadow: 0px 0px 0px black;
+    cursor: pointer;
+}
+.label-add-more-remove
+{
+    font-size: 9pt;
+    color: #4a90e2;
+    font-weight: normal!important;
+    text-shadow: 0px 0px 0px black;
+    cursor: pointer;
+    color: red;
+}
+.subtotal-display-container
+{
+    font-size: 10pt;
+    float: left;
+    text-align: right;
+    // padding-right: 56px;
+    border-top: 1px dashed silver;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-weight: bold;
+    background-color: #F7F3F2;
+}

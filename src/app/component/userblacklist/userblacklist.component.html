@@ -1,0 +1,61 @@
+<div class="row" *ngIf="!isBlacklist">
+  <div class="col-md-12 circle-icons" (click)="openModal()">
+    <div style="display: inline; ">
+      <img placement="top" container="body" ngbTooltip="Blacklist Manufacturer" src="assets/images/group/group-2.png"
+        srcset="assets/images/group/group-2@2x.png 2x, assets/images/group/group-2@3x.png 3x">
+    </div>
+    <span style="margin-left: 5px">Blacklist Manufacturer</span>
+  </div>
+
+</div>
+<div class="row" *ngIf="isBlacklist">
+  <div class="col-md-12 circle-icons" (click)="removeBlacklistUser()">
+    <i *ngIf="(isBlacklist)" style="font-size: 20px;" class="fa fa-user iconDisabled" placement="top" container="body"
+      ngbTooltip="Remove from Blacklist"></i>
+    <span style="margin-left: 5px">Remove Block</span>
+
+  </div>
+</div>
+
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Blacklist Manufacturer</h4>
+        <button type="button" class="close" data-bs-dismiss="modal"><i class="fa fa-times-circle"
+            aria-hidden="true"></i></button>
+      </div>
+      <div class="modal-body">
+        <p>You are attempting to block this manufacturer from seeing any future RFQs you create in the future as
+          well as removing you from their search. Are you sure you want to blacklist this manufacturer?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ignore-rfq " data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-cancel-rfq" data-bs-dismiss="modal"
+          (click)="setBlacklist()">Block</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #content let-d="dismiss" data-backdrop="static" data-keyboard="false">
+
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Blacklist Manufacturer</h4>
+  </div>
+  <div class="modal-body">
+    <div class="m-b-20">
+      <p>You are attempting to block this manufacturer from seeing any future RFQs you create in the future as
+        well as removing you from their search. Are you sure you want to blacklist this manufacturer?</p>
+    </div>
+
+  </div>
+  <div style="display: flex; padding: 7px;">
+    <button type="button" class="btn btn-ignore-rfq " (click)="closeErrorCSVModel();">Cancel</button>
+    <button type="button" class="btn btn-cancel-rfq" style="margin-left: 60px;" data-bs-dismiss="modal" (click)="setBlacklist()">Black</button>
+
+  </div>
+</ng-template>

@@ -1,0 +1,109 @@
+<!-- {{tempResponse|json}} -->
+<div class="page-container" style="height: 100%;">
+  <br><br><br>
+  <img class="img-fluidlogo" alt="MFG-Logo" src="assets/mfg_rebrand.svg" style="width: 160px;">
+  <br><br><br>
+  <h2>Hello!</h2>
+  <h6 style="font-weight: normal;">Let's get you connected.</h6>
+
+  <div class="process-container col-sm-4 ml-auto">
+
+    <div class="process-wrap d-flex align-items-center justify-content-center flex-wrap">
+      <div class="redirection-from-container">
+        <h4>{{redirectFrom}}</h4>
+      </div>
+      <div class="redirection-process-view-container m-l-20 m-r-20">
+        <i class="fa fa-arrow-circle-right" *ngIf="proceedToRedirection"></i>
+        <i class="fa fa-spinner fa-spin" style="color: gray;" *ngIf="!proceedToRedirection"></i>
+      </div>
+      <div class="redirection-to-container">
+        <h4>{{redirectTo}}</h4>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- <p style="position: relative; top:1px; left: 1px; float:left;">Redirection in {{redirectionTime}} Sec.</p> -->
+
+  <div class="col-sm-12 col-lg-12 col-md-12 vertical-center" *ngIf="1!=1">
+    <span class="text-span">{{redirectFrom}}&nbsp;&nbsp;&nbsp;</span>
+    <span class="logo-container">
+      <i class="fa fa-arrow-right" aria-hidden="true" style="font-size: 32pt;"></i>
+      <!-- <i class="fa fa-refresh fa-spin fa-3x fa-fw" *ngIf="memberInfo==null"></i> -->
+    </span>
+    <span class="text-span">&nbsp;&nbsp;&nbsp;{{redirectTo}}</span>
+    <div class="col-sm-12 col-lg-12 col-md-12" style="height: 15px; position: relative; margin-top: 0px;">
+      <!-- <b *ngIf="redirectFrom=='Community'">User verification</b> -->
+      <!-- <b *ngIf="redirectFrom!='Community'">Fetching your identity</b> -->
+      <br>
+      <div class="col-sm-12 col-md-12 col-lg-12" style="display: contents;" *ngIf="redirectFrom=='Community'">
+        <i class="fa fa-check verification-pending" aria-hidden="true" *ngIf=" memberInfo!=null"
+          [ngClass]="memberInfo!=null ? 'verification-success' : 'verification-pending'"></i>
+        <i class="fa fa-refresh fa-spin fa-3x fa-fw" *ngIf="memberInfo==null" style="font-size: 12pt;"></i>
+
+        <span style="padding: 7px;
+                                    letter-spacing: 0px;
+                                    display: inline-block;
+                                    margin: 1px 0px;
+                                    position: relative;
+                                    top: -2px;">{{emailAddress}}</span>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-12" style="display: contents; text-align: left;"
+        *ngIf="redirectFrom=='Marketplace'">
+        <div style="margin: 0px auto; border: solid 0px red; display: inline-block; min-width: 300px;">
+          <div class="col-sm-12 col-md-12 col-lg-12" style="padding: 0px;">
+            <!-- <i class="fa fa-refresh fa-spin fa-3x fa-fw" 
+                            *ngIf="emailAddress!=marketplaceEmailAddress" style="font-size: 12pt;"></i> -->
+            <i class="fa fa-check verification-success" aria-hidden="true"></i>
+
+            <span style="padding: 7px;
+                                    letter-spacing: 0px;
+                                    display: inline-block;
+                                    margin: 0px 0px;
+                                    position: relative;
+                                    top: -2px;">{{emailAddress!='' ? emailAddress : marketplaceEmailAddress}}</span>
+          </div>
+
+          <div class="col-sm-12 col-md-12 col-lg-12" style="padding: 0px; margin-top: -10px;">
+            <i class="fa fa-refresh fa-spin fa-3x fa-fw"
+              *ngIf="emailAddress!=marketplaceEmailAddress && activationInProcess=='NO'" style="font-size: 12pt;"></i>
+            <i class="fa fa-check verification-pending" aria-hidden="true"
+              *ngIf="emailAddress==marketplaceEmailAddress && activationInProcess!='NO'"
+              [ngClass]="emailAddress==marketplaceEmailAddress ? 'verification-success' : 'verification-pending'"></i>
+
+            <span style="padding: 7px;
+                            letter-spacing: 0px;
+                            display: inline-block;
+                            margin: 0px 0px;
+                            position: relative;
+                            top: -2px;">{{communityUserStatusMessage}}</span>
+
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-12" style="padding: 0px; margin-top: -9px;"
+            *ngIf="activationInProcess!='NO'">
+            <i class="fa fa-refresh fa-spin fa-3x fa-fw" *ngIf="activationInProcess=='STARTED'"
+              style="font-size: 12pt;"></i>
+            <i class="fa fa-check verification-pending" aria-hidden="true" *ngIf="activationInProcess=='DONE'"
+              [ngClass]="activationInProcess=='DONE' ? 'verification-success' : 'verification-pending'"></i>
+
+            <span style="padding: 7px;
+                            letter-spacing: 0px;
+                            display: inline-block;
+                            margin: 0px 0px;
+                            position: relative;
+                            top: -2px;">{{activationStatusMessage}}</span>
+
+          </div>
+        </div>
+      </div>
+      <!-- <span style="padding: 7px;
+                letter-spacing: 0px;
+                display: inline-block;
+                margin: 1px 0px;
+                position: relative;
+                top: -2px;">{{emailAddress!='' ? emailAddress : marketplaceEmailAddress}}</span> -->
+
+    </div>
+    <!-- <span><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span> -->
+  </div>
+</div>

@@ -1,0 +1,67 @@
+.title{
+  font-size: 20px;
+  color: black;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+  font-weight: bold;
+}
+.circle-icons{
+color:#4a90e2;
+font-size: 16px;
+font-weight: bold;
+}
+.bottom-border {
+  border-bottom: 2px solid #cac7c7;
+}
+/*----------------------------------------Modal Popup-------------------------------------*/
+.modal-header {
+	padding-bottom: 5px;
+}
+.modal-title{
+	font-size: 21px !important;
+	font-weight:bold !important;
+}
+.modal-footer .btn-group button {
+	height:40px;
+	border-top-left-radius : 0;
+	border-top-right-radius : 0;
+	border: none;
+	border-right: 1px solid #ddd;
+}
+/*----------------------------------------Modal Popup-------------------------------------*/
+
+.btn-ignore-rfq {
+  width: 284px;
+  height: 45px;
+  border-radius: 2px;
+  border: solid 2px #212A37;
+  background-color:#fff;
+  color:#212A37
+}
+.btn-cancel-rfq {
+  width: 285px;
+  height: 45px;
+  border-radius: 2px;
+  background-color: #2E58D6;
+  color:#ffffff;
+}
+.displyInline {
+  display:inline;
+}
+.innerpanelheading{
+	font-size: 16px;
+	font-weight: bold;
+	color: #222;
+	width:100%;
+  margin-top:17px;
+}
+.bottom-border {
+  border-bottom: solid 1px #e2e2e5 !important;
+}
+.personalInfo {
+  padding-left: 15px;
+  padding-top: 10px;
+}
+.f-s-14 {
+  font-size: 14px;
+}

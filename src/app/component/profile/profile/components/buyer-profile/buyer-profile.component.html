@@ -1,0 +1,245 @@
+<div class="background-white" class="row">
+  <div class="col-md-12">
+    {{reloadPageOndrawerClose()}}
+    <!-- <div class="row bottom-border">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <p class="title">Personal Information</p>
+      </div>
+    </div> -->
+    <!-- <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <button type="button" class="profile_btn profile_editbtn" (click)="openSidePanel('isProfileEditActive',0)">
+          Edit Profile
+        </button>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="row  form-group">
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <b>First Name </b> <br>
+            {{iProfileViewModel.firstName|Na}}
+          </div>
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <b>Last Name </b> <br>
+            {{iProfileViewModel.lastName|Na}}
+          </div>
+
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <b>Title </b> <br>
+            {{iProfileViewModel.title|Na}}
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <!-- <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="row form-group">
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <b>Language Preferred </b> <br>
+            {{findLanguage?.languageName|Na}}
+          </div>
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <b>Phone Number</b> <br>
+            {{iProfileViewModel.phoneNo|Na}}
+          </div>
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <b>Email</b> <br>
+            {{iProfileViewModel.emailId|Na}}
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</div>
+<!-- <div class="row">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <div class="row form-group bottom-border">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <p class="title">Company Information</p>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-sm-4 col-md-4 col-lg-4 ">
+            <b>Company</b> <br>
+            {{iProfileViewModel.name|Na}}
+          </div>
+          <div class=" col-sm-4 col-md-4 col-lg-4">
+            <b>Duns</b><br>
+            {{iProfileViewModel.dunsNumber|Na}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-sm-4 col-md-4 col-lg-4 ">
+            <b>Number of Employees</b> <br>
+            {{countRange|Na}}
+          </div>
+          <div class=" col-sm-8 col-md-8 col-lg-8" style="word-break: break-all;">
+            <b>Company Description</b> <br>
+            <p [innerHTML]="iProfileViewModel.description | sanitizeNolimit"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-sm-4 col-md-4 col-lg-4 ">
+            <b>Facebook</b> <br>
+            {{iProfileViewModel.facebook|Na}}
+          </div>
+          <div class=" col-sm-4 col-md-4 col-lg-4">
+            <b>Twitter</b><br>
+            {{iProfileViewModel.tweeter|Na}}
+          </div>
+          <div class=" col-sm-4 col-md-4 col-lg-4">
+            <b>LinkedIn </b><br>
+            {{iProfileViewModel.linkedIn|Na}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div> -->
+<div class="row">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <!-- <div class="row  bottom-border">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <p class="title">Mailing Address</p>
+      </div>
+
+    </div> -->
+    <!-- <div class="row form-group">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <button type="button" *ngIf="!isMailingAvaible" class="profile_btn"
+              (click)="openSidePanel('isEditMailing', '0')">
+              Add Mailing Address
+            </button>
+            <button type="button" *ngIf="isMailingAvaible" class="profile_btn profile_editbtn"
+              (click)="openSidePanel('isEditMailing', '1')">
+              Edit Mailing Address
+            </button>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="isMailingAvaible && mailingAddressData.showOnlyStateCity">
+            {{mailingAddressData.city | Na}} , {{mailingAddressData.state | Na}}
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="isMailingAvaible && !mailingAddressData.showOnlyStateCity"
+            [innerHTML]="getAddressFormat( mailingAddressData )">
+          </div>
+        </div>
+      </div>
+    </div><br> -->
+    <!-- <div class="row  bottom-border">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <p class="title">Shipping Address</p>
+      </div>
+    </div> -->
+    <div class="row cust-padding p-t-20">
+      <div class="col-md-6 bottom-border">
+        <span><h2 class="innerpanelheading">Personal Information</h2></span>
+      </div>
+      <div class="col-md-6 bottom-border">
+        <button type="button" class="profile_btn profile_editbtn"
+        (click)="openSidePanel('isEditPersonalInformation', 0)">
+        Edit
+      </button>
+      </div>
+      <div class="personalInfo">
+        <div>
+          <span><h5 class="f-s-14">Name</h5></span>
+          <span class="p-t-10">{{iContactViewModel.firstName ? iContactViewModel.firstName : 'First Name' }} {{iContactViewModel.lastName ? iContactViewModel.lastName : 'Last Name'}}</span>
+        </div>
+
+        <div style="padding-top: 10px;">
+          <span><h5 class="f-s-14">Title</h5></span>
+          <span class="p-t-10">{{iContactViewModel.title ? iContactViewModel.title : 'Title'}}</span>
+        </div>
+
+        <div  style="padding-top: 10px;">
+          <span><h5 class="f-s-14">Preferred Language</h5></span>
+          <span class="p-t-10">{{iContactViewModel?.language?.languageName ? iContactViewModel?.language?.languageName : 'Language Name'}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="row cust-padding p-t-20">
+      <div class="col-md-6 bottom-border">
+        <span><h2 class="innerpanelheading">Shipping Address</h2></span>
+      </div>
+      <div *ngIf="(shippingAddressData?.length < 3)" class="col-md-6 bottom-border">
+        <button type="button" class="profile_btn profile_editbtn"
+        (click)="openSidePanel('isEditShipping' ,0)">
+        Edit
+      </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <!-- <div *ngIf="(shippingAddressData?.length < 5)" class="col-sm-12 col-md-12 col-lg-12" style="padding-left: 1px;">
+          <button type="button" class="profile_btn profile_editbtn" style="margin-bottom:0px;"
+            (click)="openSidePanel('isEditShipping' ,0)">
+            Add Shipping Address
+          </button>
+        </div> -->
+
+        <ul *ngIf="(shippingAddressData?.length > 0)" style="margin-top:10px;">
+          <li class="form-group" *ngFor="let address of shippingAddressData; let i =index">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-12">
+                    <b>{{address.siteLabel }}</b>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="displyInline" [innerHTML]="getAddressFormat( address.addresses )"></div>
+                    <div class="displyInline">
+                      <a style="margin-left:5px;color:#4a90e2"
+                        (click)="openSidePanel('isEditShipping' ,address.siteId)">
+                        <span class="pcoded-micon">
+                          <i class="ti-pencil"></i>
+                          <b class="ng-tns-c2-0 cusror-pointer">Edit</b>
+                        </span>
+                      </a>
+                      ||
+                      <a style="color:red" (click)="deleteShippingAddress(address.addressId)">
+                        <span class="pcoded-micon">
+                          <i class="ti-trash"></i>
+                          <b class="ng-tns-c2-0 cusror-pointer">Delete</b>
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="p-t-20">
+      <app-buyer-raiting></app-buyer-raiting>
+    </div>
+</div>
+
+
+<p-confirmDialog header="Confirmation" icon="" width="629" height="220" #cd>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6">
+        <button type="button" style="width:284px;" class="btn btn-ignore-rfq" (click)="cd.reject()">No</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" style="width:284px;" class="btn btn-cancel-rfq" label="Yes" (click)="cd.accept()">Yes</button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>

@@ -1,0 +1,358 @@
+<div class="row top-row " *ngIf="!isRfqAvailable">
+  <div class="col-md-12">
+    Showing 10 latest
+    <a class="View-All-Liked-RFQs m-l-10" [routerLink]="['/supplier/supplierMyRfq']">View All My RFQs</a>
+  </div>
+</div>
+<div *ngIf="!isRfqAvailable">
+  <div class="row">
+    <div class="col-md-4"><span style=" font-weight: bold; margin-left: 20px; ">Company</span></div>
+    <div class="col-md-8"><span style=" font-weight: bold;">RFQ Info</span></div>
+  </div>
+  <div class="row rfq-row" *ngFor='let rfq of items' id={{rfq.rfqId}}
+    [ngClass]="(rfq.rfqId === currentRfq())?'actievPart':''">
+    <div class="box-1" *ngIf="rfq.isMfgCommunityRfq == true">
+      <div class="ribbon ribbon-top-left"><span>Directory</span></div>
+    </div>
+    <div class="col-md-4 rfq-border">
+      <div class="row" style="padding: 5px 10px; ">
+        <div class="col-md-12 rfq-quote-date">
+          <div class="row">   
+            <div class="img-space" [ngClass]="(rfq.noOfQuotes !== 0)? 'col-md-6':'col-md-12'">
+              <ng-template #growthpack>
+                <div><span class="unlock-growth">Unlock with Growth Package</span><br><span style="width: 800px;">
+                  With the growth package you have the
+                     ability to unlock a certain amount of RFQs each month.
+                     <!-- <span class="learn-more"> Learn more</span> -->
+                </span> 
+                </div>
+          </ng-template>
+          <!-- Need to add here condition -->
+          <div>
+              <span class="icon-img" style="margin-right: 5px;" *ngIf="rfq.actionForGrowthPackage == 'Unlock Rfq Button' && accountType == 'Growth Package'"><img src="assets/images/growth-package/Growth Icon.png" [ngbTooltip]="growthpack"></span>
+              <span class="icon-img" *ngIf="rfq.isRfqWithMissingInfo"><img src="assets/Shapeways_10PartialRFQs.svg" [ngbTooltip]="missingInfo" style="height: 20px;"></span>
+              <span class="icon-img" *ngIf="rfq.withOrderManagement"><img src="assets/images/Badge.png" [ngbTooltip]="orderManagement" style="margin-left: 4px;"></span>
+              <ng-template #orderManagement>
+                <div>
+                  <span class="unlock-growth">This RFQ requires Order Management on MFG.</span> 
+                </div>
+              </ng-template>
+              <ng-template #missingInfo>
+                <div><span class="unlock-growth">RFQ may be missing info. Please contact the buyer before quoting.
+                     <!-- <span class="learn-more"> Learn more</span> -->
+                </span> 
+                </div>
+              </ng-template>
+              <ng-template #htmlContent>
+                <div *ngIf="!checkForDay(rfq.quotesNeededBy)"> Close Date
+                  {{ utcDate(rfq.quotesNeededBy) |date :'MM/dd/yyyy'}} </div>
+                <div *ngIf="checkForDay(rfq.quotesNeededBy)"> Close Date 
+                </div>
+                <div *ngIf="rfq.releaseDate !== '' && rfq.releaseDate !== null"> Release Date
+                  {{ rfq.releaseDate |date :'MM/dd/yyyy' }} </div>
+              </ng-template>
+          </div>
+          <div>
+              <span class="pull-left"
+                *ngIf="(rfq.quotesNeededBy !== null && rfq.quotesNeededBy !=='' && rfq.releaseDate !== '' && rfq.releaseDate !== null)"
+                placement="top" data-container="body" [ngbTooltip]="htmlContent">
+                <span>Quote by: </span>
+                <span *ngIf="!checkForDay(rfq.quotesNeededBy)" style="color:#000;">
+                  {{ utcDate(rfq.quotesNeededBy) | date: 'MM/dd/yyyy'}}</span>
+              </span>
+              <span class="pull-left"
+                *ngIf="(rfq.quotesNeededBy !== null && rfq.quotesNeededBy !=='' && (rfq.releaseDate === '' || rfq.releaseDate === nul) )"
+                placement="top" data-container="body" [ngbTooltip]="htmlContent">
+                <span>Quote by: </span>
+                <span *ngIf="!checkForDay(rfq.quotesNeededBy)" style="color:#000;">
+                  {{ utcDate(rfq.quotesNeededBy) | date: 'MM/dd/yyyy'}}</span>
+              </span>
+              <span class="pull-left" *ngIf="(rfq.quotesNeededBy === null)">MM/dd/yyyy</span>
+              </div>
+            </div>
+            <div class="col-md-6" *ngIf="rfq.noOfQuotes !== 0 && rfq.noOfQuotes < 10">
+              <span class="pull-right"># of Quotes: ({{rfq.noOfQuotes}})</span>
+            </div>
+            <div class="col-md-6" *ngIf="rfq.noOfQuotes > 10">
+              <span class="pull-right"># of Quotes: (10+)</span>
+            </div>
+          </div>
+
+        </div>
+        <div [ngClass]="( isSidePanel() ) ? 'col-md-3' : 'col-md-2' " style="padding: 0px;">
+          <div  *ngIf="!isPremium()"
+            class="ccol-md-12 rfq-buyer-logo site-logo"></div>
+          <div class="col-md-12 rfq-buyer-logo site-logo" *ngIf="accountType == 'Starter'||(isPremium() && 
+          rfq.isSubscriptionSupplier && !rfq.isAllowQuoting) || ((rfq.actionForGrowthPackage == 'Upgrade to Quote' || rfq.actionForGrowthPackage == 'Unlock Rfq Button')&& accountType == 'Growth Package')">
+          </div>
+          <img class="rfq-buyer-logo"
+            *ngIf="isPremium() && ((rfq.isSubscriptionSupplier && rfq.isAllowQuoting ) || !rfq.isSubscriptionSupplier) && rfq.actionForGrowthPackage === 'No Action'"
+            (click)="showBuyerProfile(rfq.contactIdEncrypt, rfq.rfqId)"
+            src="{{ rfq.companyLogoPath ?defaultAwsPath + rfq.companyLogoPath :'assets/company/avatar-manu-basic.svg' }}">
+
+
+        </div>
+        <div [ngClass]="( isSidePanel() ) ? 'col-md-9' : 'col-md-10' " class=" company-name" style="margin-bottom:0px;">
+          <h6 *ngIf="(accountType == 'Growth Package' && rfq.rfqAccess == null) || (accountType == 'Starter' && rfq.rfqAccess == null) || (accountType != 'Starter' && !isPremium() && this.userDetailsLocation !='Asia') || ((accountType != 'Starter' && accountType != 'Growth Package') && isPremium() && rfq.isSubscriptionSupplier && !rfq.isAllowQuoting)"
+            style="cursor: auto;">
+            <button (click)="goToRfqDdetails(rfq.rfqId)" class="upgradeQuoteBtn">Unlock to Quote</button>
+            <!-- <app-upgrade-account-btn [quoteRFQ]=true [RfqId]="currentRfqId"></app-upgrade-account-btn> -->
+          </h6>
+
+          <h6 style="cursor: auto;" *ngIf="!isPremium() && this.userDetailsLocation =='Asia'">
+            <app-upgrade-account-btn [quoteRFQ]=true [RfqId]="currentRfqId"></app-upgrade-account-btn>
+          </h6>
+          <h6
+            *ngIf=" isPremium() && ((rfq.isSubscriptionSupplier && rfq.isAllowQuoting ) || !rfq.isSubscriptionSupplier) && rfq.actionForGrowthPackage === 'No Action'"
+            (click)="showBuyerProfile(rfq.contactIdEncrypt, rfq.rfqId)" class="pointerCursor"
+            style="margin-bottom: 0px;">
+            <span placement="top" data-container="body"
+              ngbTooltip="{{rfq.companyName}}">{{rfq.companyName | dotLimit:'20'}}</span>
+          </h6>
+
+          <div class="rfq-star">
+
+            <span
+              style="color:#212A37;margin-left:0px;">{{ (rfq.noOfStars)? (rfq.noOfStars | number : '1.0-1'): 'n/a' }}</span>
+            <ng-template #t let-fill="fill">
+              <span class="star" [class.full]="fill === 100">
+                <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+              </span>
+            </ng-template>
+            <ngb-rating [(rate)]="rfq.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+          </div>
+
+          <span class="badge badge-pill" style=" color: #000;margin-left:0px;padding-left: 0px;">{{rfq.state}} ,
+            {{rfq.country}} </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 rfq-border" style="border-right: 0px;"
+      (click)="openSidePanel(rfq.rfqId, rfq.isRfqLike, rfq.isRfqDisLike)">
+      <div class="row" style=" padding: 5px 10px;">
+        <div class="col-md-2">
+          <div style="display:flex;align-items: center; justify-content: center; height:100%;">
+            <img *ngIf="(!rfq.rfqThumbnail || rfq.rfqThumbnail === '') && !rfq.isMfgCommunityRfq"
+              src="assets/supplier/3-d-big.png"
+              srcset="assets/supplier/3-d-big@2x.png 2x, assets/supplier/3-d-big@3x.png 3x"
+              style="width: 75px;height: 75px;border-radius: 50%; border: 1px solid #bec4cb;">
+
+            <img *ngIf="(!rfq.rfqThumbnail || rfq.rfqThumbnail === '') && rfq.isMfgCommunityRfq"
+              src="assets/directrfq.png" srcset="assets/directrfq@2x.png 2x, assets/directrfq@3x.png 3x"
+              style="width: 75px;height: 75px;border-radius: 50%; border: 1px solid #bec4cb;">
+
+            <img *ngIf="!(!rfq.rfqThumbnail || rfq.rfqThumbnail === '')" [src]="getLoadableImg(rfq.rfqThumbnail)"
+              class="box-fit img " style="width: 75px;height: 75px;border-radius: 50%; border: 1px solid #bec4cb;">
+          </div>
+        </div>
+        <div class="col-md-4 company-name pointerCursor" style="margin-bottom:0px;margin-top: 15px;"
+          (click)="goToRfqDdetails(rfq.rfqId)">
+          <h6 style="margin-left: 0px; margin-bottom: 3px;">
+            <span placement="top" data-container="body"
+              ngbTooltip="{{rfq.rfqName}}">{{rfq.rfqName| dotLimit:'15'}}</span>
+          </h6>
+          <p class="nps">RFQ #{{rfq.rfqId}} - ({{rfq.rfqPartCount}}) Parts</p>
+        </div>
+        <div style="padding-top: 3%;" class="pointerCursor col-md-6">
+          <p style="font-size:13px;margin-bottom: 3px;">
+            <span placement="top" container="body" ngbTooltip=" {{ getQuantityToolTip(rfq) }} ">{{rfq.partQty}}
+              {{rfq.partQtyUnit}}</span>
+          </p>
+          <p style="font-size:13px;margin-bottom: 3px;">{{rfq.partsMaterialName| dotLimit:'19'}}</p>
+          <p style="font-size:13px;margin-bottom: 3px;">{{rfq.partCategoryName| dotLimit:'19'}}</p>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-md-2 tdbackgorungcolor rfq-border" style="border-left: 0px; padding: 0px;padding-left: 2px;">
+      <div *ngIf="!rfq.specialInstructions"
+        style="display:flex;align-items: center; justify-content: space-between; height:100%;">
+
+        <div style="width: 40px;padding: 5px;">
+          <a (click)="likeRfq(rfq.rfqId)" *ngIf="!rfq.isRfqLike">
+            <i class="fa fa-thumbs-o-up fa-size" aria-hidden="true" placement="top" container="body"
+              ngbTooltip="Like RFQ"></i>
+          </a>
+          <a (click)="removelikeRfq(rfq.rfqId)" *ngIf="rfq.isRfqLike">
+            <i class="fa fa-thumbs-up fa-size" aria-hidden="true" placement="top" container="body"
+              ngbTooltip="Remove Like RFQ"></i>
+          </a>
+        </div>
+        <div style="width: 40px;padding: 5px;color:#212A37;cursor: not-allowed;">
+          <a style="font-size: 18px;cursor: not-allowed;">
+            <i class="fa fa-info-circle" style="cursor: not-allowed;" aria-hidden="true"></i>
+          </a>
+
+        </div>
+        <div style="width: 40px;padding: 5px;">
+          <a (click)="removeDisLikeRfq(rfq.rfqId)" *ngIf="rfq.isRfqDisLike">
+            <i class="fa fa-thumbs-down fa-size" aria-hidden="true" placement="top" container="body"
+              ngbTooltip="Remove Dislike RFQ"></i>
+          </a>
+          <a (click)="disLikeRfq(rfq.rfqId)" *ngIf="!rfq.isRfqDisLike">
+            <i class="fa fa-thumbs-o-down fa-size" aria-hidden="true" placement="top" container="body"
+              ngbTooltip="Dislike RFQ"></i>
+          </a>
+        </div>
+        <!-- <div style="width: 40px;padding: 5px;color:#4a90e2;">
+            <a style="font-size: 18px;"(click)="openFeedbackModel(rfq.companyName, rfq.buyerCompanyId)"><i placement="top" container="body" ngbTooltip="Buyer Feedback" class="fa fa-exclamation-circle" aria-hidden="true"></i></a>
+          </div> -->
+      </div>
+      <div *ngIf="rfq.specialInstructions"
+        style="display:flex;align-items: center; justify-content: space-between; height:100%;">
+
+        <div style="width: 40px;padding: 5px;">
+          <a (click)="likeRfq(rfq.rfqId)" *ngIf="!rfq.isRfqLike">
+            <i class="fa fa-thumbs-o-up fa-size" aria-hidden="true" placement="top" container="body"
+              ngbTooltip="Like RFQ"></i>
+          </a>
+          <a (click)="removelikeRfq(rfq.rfqId)" *ngIf="rfq.isRfqLike">
+            <i class="fa fa-thumbs-up fa-size" aria-hidden="true" placement="top" container="body"
+              ngbTooltip="Remove Like RFQ"></i>
+          </a>
+        </div>
+        <div style="width: 40px;padding: 5px;color:#4a90e2;">
+          <a style="font-size: 18px;">
+            <i placement="top" [ngbPopover]="popAttachment" container="body" #q="ngbPopover"
+              (document:click)="q.close()" (click)="$event.stopPropagation()" class="fa fa-info-circle"
+              aria-hidden="true"></i>
+          </a>
+          <ng-template #popAttachment>
+            <p *ngIf="rfq.specialInstructions">{{rfq.specialInstructions}} … <br>
+              <span style="color:#4a90e2;cursor: pointer;" (click)="goToRfqDdetails(rfq.rfqId)">Read more</span>
+            </p>
+          </ng-template>
+        </div>
+        <div style="width: 40px;padding: 5px;">
+          <a (click)="removeDisLikeRfq(rfq.rfqId)" *ngIf="rfq.isRfqDisLike">
+            <i class="fa fa-thumbs-down fa-size" aria-hidden="true" placement="top" container="body"
+              ngbTooltip="Remove Dislike RFQ"></i>
+          </a>
+          <a (click)="disLikeRfq(rfq.rfqId)" *ngIf="!rfq.isRfqDisLike">
+            <i class="fa fa-thumbs-o-down fa-size" aria-hidden="true" placement="top" container="body"
+              ngbTooltip="Dislike RFQ"></i>
+          </a>
+        </div>
+        <!-- <div style="width: 40px;padding: 5px;color:#4a90e2;">
+            <a style="font-size: 18px;" (click)="openFeedbackModel(rfq.companyName)"><i placement="top" container="body" ngbTooltip="Buyer Feedback" class="fa fa-exclamation-circle" aria-hidden="true"></i></a>
+          </div> -->
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div *ngIf="isRfqAvailable">
+
+  <div class="row rfq-row">
+    <div class="col-md-4 rfq-border">
+      <div class="row" style="padding: 5px 10px; ">
+        <div class="col-md-12 rfq-quote-date">
+          <div class="row">
+
+            <div class="col-md-6">
+              <span style="color: #b5b5b5;">Quote by: Date</span>
+            </div>
+          </div>
+
+        </div>
+        <div [ngClass]="( isSidePanel() ) ? 'col-md-3' : 'col-md-2' " style="padding: 0px;">
+          <div style="background-color:#e1e1e1;height: 50px;border-radius: 50%;">
+          </div>
+        </div>
+        <div [ngClass]="( isSidePanel() ) ? 'col-md-9' : 'col-md-10' " style="margin-bottom:0px;">
+          <h6 style="margin-bottom: 3px;">
+            <span style="color: #b5b5b5;">ACME, LTD</span>
+          </h6>
+          <div class="rfq-star-gray">
+            <span style="color:#919aa3;font-size: 14px;">5</span>
+            <ng-template #t let-fill="fill">
+              <span class="star" [class.full]="fill === 100"> <span class="fill-star"
+                  [style.width.%]="fill">&#9733;</span>&#9733;
+              </span>
+            </ng-template>
+            <ngb-rating [rate]="'5'" [starTemplate]="t" [readonly]="true" max="5">
+            </ngb-rating>
+          </div>
+
+          <div>
+            <p style="font-size: 12px;color:#919aa3" class="m-b-0"> United States </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 rfq-border" style="border-right: 0px;">
+      <div class="row" style=" padding: 5px 10px;">
+        <div class="col-md-2">
+          <div style="display:flex;align-items: center; justify-content: center; height:100%;">
+            <img src="assets/supplier/3-d-big.png"
+              style="width: 75px;height: 75px;border-radius: 50%; border: 1px solid #bec4cb;opacity: 0.2">
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-bottom:0px;margin-top: 15px;">
+          <h6 style=" margin-left: 0px;" style="color: #b5b5b5;">
+            RFQ Name Goes Here
+          </h6>
+          <p class="nps" style="color: #b5b5b5;">RFQ #</p>
+        </div>
+        <div style="padding-top: 3%;" class="col-md-6">
+          <p style="font-size:13px;margin-bottom: 3px;">
+            <span style="color: #b5b5b5;">Units</span>
+          </p>
+          <p style="font-size:13px;color: #b5b5b5;margin-bottom: 3px;">Material here</p>
+          <p style="font-size:13px;color: #b5b5b5;margin-bottom: 3px;">Process here</p>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-md-2 tdbackgorungcolor rfq-border" style="border-left: 0px;">
+      <div style="display:flex;align-items: center; justify-content: space-between; height:100%;">
+        <div style="width: 40px;padding: 5px;">
+          <a>
+            <i class="fa fa-thumbs-up fa-size" aria-hidden="true" placement="top" container="body" ngbTooltip="Like RFQ"
+              style="color: #b5b5b5;"></i>
+          </a>
+        </div>
+        <div style="width: 40px;padding: 5px;">
+          <a style="font-size: 18px;"><i class="fa fa-info-circle" aria-hidden="true" style="color: #b5b5b5;"></i></a>
+        </div>
+        <div style="width: 40px;padding: 5px;">
+          <a>
+            <i class="fa fa-thumbs-down fa-size" aria-hidden="true" placement="top" container="body"
+              ngbTooltip="Dislike RFQ" style="color: #b5b5b5;"></i>
+          </a>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="modal fade" id="unlockRfqModal" role="dialog">
+  <div class="flexDialog">
+   <div class="modal-dialog">
+     <!-- Modal content-->
+     <div class="w-fit" style="position: relative;top: 210px;">
+      <div class="modal-content content-backgroud"> 
+        <div class="modal-header" style="border: none;">
+          
+          <button type="button" style="color: #2E58D6;" class="close" data-bs-dismiss="modal"><i class="fa fa-times-circle"
+              aria-hidden="true"></i></button>
+        </div>
+        <div class="modal-body body-margin"> 
+         <p class="text-align" style="text-align: center;margin: -5px 60px 40px;">Are you sure you want to use your Growth package to unlock this RFQ?</p>     
+         
+          <div class="modal-footer1" style="padding: 0 0 20px 0">
+              <div class="col-md-12 text-center" style="display: flex;justify-content:space-around">
+                <button style="width: 30%;" type="button"  class="btn button-green" data-bs-dismiss="modal" (click)="goRfqDetailsPage()">Yes</button>
+                <button style="width: 30%;" type="button" class="btn button-green" data-bs-dismiss="modal" (click)= "goBackbutton()">No</button>
+           
+              </div>
+          </div>
+      </div>
+    </div>
+    </div>
+   </div>
+  </div>  
+ </div>

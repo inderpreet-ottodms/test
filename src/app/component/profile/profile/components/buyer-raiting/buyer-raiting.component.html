@@ -1,0 +1,162 @@
+<div class="row">
+  <div [ngClass]="(isSidePanelOpen())?'col-md-12':'col-md-8'">
+    <div *ngIf="isLoader">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+    <h2 class="innerpanelheading">Ratings & Reviews
+      <!-- <p style="font-size:3px;margin-bottom: 5px;"> <a style="color:#4a90e2" href="https://www.promoter.io/blog/calculate-net-promoter-score/" target="_blank">What's this?</a></p> -->
+    </h2>
+    <div class="row avg-star-rating">
+      <!-- <div class="col-md-12"> -->
+          <div>
+            <span><b>5.00 </b>({{  (avgNoOfStars)? (avgNoOfStars | number : '1.0-1'): 'n/a' }})</span>
+            <ng-template #t let-fill="fill">
+              <span class="star" [class.full]="fill === 100">
+                <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+              </span>
+            </ng-template>
+
+            <ngb-rating [(rate)]="avgNoOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+          </div>
+          <!-- <div>
+            <span>{{  (avgNoOfStars)? (avgNoOfStars | number : '1.0-1'): 'n/a' }}</span>
+          </div>
+          <div>
+            <span>{{totalReviews}} Reviews</span>
+          </div> -->
+      <!-- </div> -->
+      <!-- <div class="col-md-4">
+        <dl>
+          <dd [ngClass]="getBarClass( total5StarRatingPer )"><span class="text">5 star</span></dd>
+          <dd [ngClass]="getBarClass( total4StarRatingPer )"><span class="text">4 star</span></dd>
+          <dd [ngClass]="getBarClass( total3StarRatingPer )"><span class="text">3 star</span></dd>
+          <dd [ngClass]="getBarClass( total2StarRatingPer )"><span class="text">2 star</span></dd>
+          <dd [ngClass]="getBarClass( total1StarRatingPer )"><span class="text">1 star</span></dd>
+        </dl>
+      </div> -->
+    </div>
+
+
+    {{reloadResponses()}}
+    <!-- <h2 class="innerpanelheading" style="margin-top: 20px;" *ngIf="!(items.length === 0)">
+      Latest Responses<span class="required">{{ (responseStartNumber)? responseStartNumber + 1 : 1 }} - {{responseEndNumber}} of {{responseArray.length}}
+        Reviews</span>
+    </h2> -->
+    <div *ngIf="(items.length === 0)">
+      <div class="myRFQ-rfq-no-available">
+        <!-- <div class="row" style="text-align: center;padding-top:106px">
+          <div class="col-md-12">
+            <div>
+              <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+              assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+            </div>
+          </div>
+        </div> -->
+        <div class="row" style="padding-top:34px">
+          <div class="col-md-12">
+            <div class="myRFQ-noRFQActive-helper-text">No Responses found at this time.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="(items.length !== 0)">
+      <div *ngFor="let item of items; let i = index">
+        <div class="row" *ngIf="!item.parentId">
+          <!-- <div class="col-xs-3 col-sm-2 col-md-2 text-center">
+            <div class="supplier-detail">
+              <img [src]="responseLogo(item.imageURL)" style="border: 1px solid #bec4cb;"
+                class="img-circle supplier-image" onerror="this.src='assets/company/avatar-manu-basic-circle.svg'">
+              <h2>{{item.contactName}}</h2>
+            </div>
+          </div> -->
+          <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="">
+              <table class="table table-hover supplier-table">
+                <tbody>
+                  <tr>
+                    <td [ngClass]="activeItems[i] ? 'active-border': 'in-active-border'">
+                      <!-- <div class="circle-queue">{{formatScore(item.score)}}</div> -->
+                      <div class="rating-star">
+                        <!-- <span style="color:#4a90e2;font-size: 14px;">{{ (item.noOfStars)? (item.noOfStars| number : '1.0-1') : 0 }}</span> -->
+                        <span class="rating-number" style="font-size: 14px;">{{ (item.noOfStars)? (item.noOfStars | number : '1.0-1') : 'n/a' }}</span>
+                        <ng-template #t let-fill="fill">
+                          <span class="star" [class.full]="fill === 100">
+                            <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+                          </span>
+                        </ng-template>
+
+                        <ngb-rating [(rate)]="item.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+                        <span style="float: right;">{{formatDate(item.createdDate)}}</span>
+                      </div>
+                      <span>{{item.comment}}</span>
+                      <div class="text-italic">
+                        -{{item.contactName}}, {{item.companyName}}
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="isReplyAllow(item.parentId, i+1 )">
+          <div class="col-xs-12 col-sm-12 col-md-12 text-right">
+            <span *ngIf="!activeItems[i]" class="reply-link" (click)="openSidePanel(i)">Reply</span>
+            <span *ngIf="activeItems[i]" class="reply-link-disabled">Reply</span>
+          </div>
+        </div>
+        <div class="row" *ngIf="item.parentId">
+          <!-- <div class="col-xs-3 col-sm-2 col-md-2 text-center"></div> -->
+          <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="">
+              <table class="table table-hover supplier-table-reply" style="margin-top: -49px">
+                <tbody>
+                  <tr>
+                    <td>
+                      <div style="display:inline">
+                        <span>{{item.comment}}</span>
+                      </div>
+                      <!-- <div style="display:inline" class="pull-right">
+                        <img [src]="replyLogo(item.imageURL)" style="border: 1px solid #bec4cb;"
+                          class="img-circle circle-queue-reply"
+                          onerror="this.src='assets/company/avatar-manu-basic-circle.svg'">
+                      </div> -->
+
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <br>
+      </div>
+
+      <div class="paginations">
+        <div class="input-group">
+          <div id="radioBtn" class="btn-group">
+            <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" class="btn btn-primary btn-sm notActive"
+              (click)="prevPage()" data-bs-toggle="fun" data-title="Y">Previous</a>
+            <a *ngFor="let page of pagesIndex" (click)="setPage(page)"
+              [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+              data-bs-toggle="fun" data-title="X">{{page}}</a>
+            <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+              (click)="nextPage()" data-bs-toggle="fun" data-title="N">Next</a>
+          </div>
+          <input type="hidden" name="fun" id="fun">
+        </div>
+      </div>
+    </div>
+    <br>
+  </div>
+  <div class="col-md-4" *ngIf="!isSidePanelOpen()"></div>
+</div>

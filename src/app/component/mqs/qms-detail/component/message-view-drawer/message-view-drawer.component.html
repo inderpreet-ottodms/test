@@ -1,0 +1,52 @@
+<div class="background-white">
+  <div class="row">
+    <div class="col-md-12 rightpanel">
+      <i class="fa fa-times-circle pull-right" (click)="closeMessageDrawer()"></i>
+      <h2 class="panelheading">Message To:</h2>
+    </div>
+    <hr>
+    <div class="col-md-12"><br>
+      <div class="contactName"> {{ qmsEmailMessagesViewModel.toContName }} </div>
+      <form>
+        <div class="form-group">
+          <label class="Label-class">Subject</label>
+          <input type="text" class="form-control" id="name" value="{{ qmsEmailMessagesViewModel.emailSubject }}">
+        </div>
+        <div class="form-group">
+          <label class="Label-class">Message</label>
+          <textarea class="form-control" type="textarea" maxlength="1000"
+            rows="7">{{ qmsEmailMessagesViewModel.emailBody }}</textarea>
+        </div>
+        <div class="form-group" *ngIf="((qmsEmailMessagesViewModel.qmsEmailMessageFilesList !== null) && (qmsEmailMessagesViewModel.qmsEmailMessageFilesList !== undefined) && qmsEmailMessagesViewModel.qmsEmailMessageFilesList.length !== 0)">
+          <div class="row" *ngIf="isFileDownloaded !== 0">
+            <div class="loader animation-start">
+              <span class="circle delay-1 size-2"></span>
+              <span class="circle delay-2 size-4"></span>
+              <span class="circle delay-3 size-6"></span>
+              <span class="circle delay-4 size-7"></span>
+              <span class="circle delay-5 size-7"></span>
+              <span class="circle delay-6 size-6"></span>
+              <span class="circle delay-7 size-4"></span>
+              <span class="circle delay-8 size-2"></span>
+            </div>
+          </div>
+          <div class="row pdf-list" *ngIf='qmsEmailMessagesViewModel.qmsEmailMessageFilesList.length > 1'>
+            <div class="col-md-12" style="text-align:right !important"
+              (click)="downloadAllPDFFile(qmsEmailMessagesViewModel.qmsEmailMessageFilesList, qmsEmailMessagesViewModel.qmsQuoteName)">
+              <b class="pdfFile down_link">Download All</b>
+            </div>
+          </div>
+          <div *ngFor="let file of qmsEmailMessagesViewModel.qmsEmailMessageFilesList" class="pdf-list">
+            <div class="row">
+              <div class="col-md-12" (click)="downloadS3File(file, true)"
+                title="Download - {{file | originalName}}">
+                <p class="pdfFile text-truncate">{{getOriginalFileName(file)}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>

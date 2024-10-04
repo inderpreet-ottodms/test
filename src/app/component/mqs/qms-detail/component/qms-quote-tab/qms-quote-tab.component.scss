@@ -1,0 +1,62 @@
+.qms-part{
+  border: 1px solid #e2e2e5;
+}
+.btn-accept{
+  border: 1px solid #56c23e;
+  color: #56c23e;
+  font-size:14px;
+  background-color: #fff;
+  width: 110px;
+  font-weight: bold;
+}
+.btn-decline{
+  color: #fff;
+  font-size:14px;
+  background-color: #e2e2e5;
+  width: 110px;
+  font-weight: bold;
+}
+.btn-accepted{
+  color: #fff;
+  font-size:14px;
+  background-color: #56c23e;
+  width: 110px;
+  font-weight: bold;
+}
+.fa{
+  color:#4a90e2;
+  font-size:16px;
+  font-weight: bold;
+}
+hr{
+  width: 100%;
+  color:#000;
+  border: 1px solid
+}
+.m-5 {
+  margin: 5px !important;
+}
+.bg-gray{
+  background-color: #f6f7fb;
+}
+[data-toggle="collapse"]:after {
+	display: inline-block;
+	color:#4a90e2;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	content: "\f054";
+	transform: rotate(90deg) ;
+	transition: all linear 0.25s;
+  }
+  [data-toggle="collapse"].collapsed:after {
+	transform: rotate(0deg) ;
+  }
+.status-drop-down{
+  width: 83%;
+    display: inline-flex;
+    padding: 3px;
+    margin-right: 0px;
+}

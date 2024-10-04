@@ -1,0 +1,43 @@
+<div class="background-white">
+  <div class="row">
+    <div class="col-md-12 rightpanel">
+      <i class="fa fa-times-circle pull-right" (click)="closeNoteDrawer()"></i>
+      <h2 class="panelheading">
+        {{(noteId !== -1 && noteId !== null && noteId !== undefined) ? 'Edit Note' : 'New Note'}}
+      </h2>
+    </div>
+    <hr>
+    <div class="col-md-12"><br>
+      <form [formGroup]="noteForm" (ngSubmit)="onNoteSave()">
+        <div class="form-group">
+          <label class="Label-class">Title</label>
+          <input type="text" class="form-control" maxlength="100" placeholder="" formControlName="noteTitle">
+          <div class="error-msg">
+            <app-field-error-display [displayError]="isFieldValid('noteTitle')" errorMsg="Enter Title">
+            </app-field-error-display>
+          </div>
+        </div>
+        <div class="form-group">
+          <label
+            [ngClass]="(isFieldValid('noteBody'))?'Label-focus-red':(labelFocus === 'noteBody')? 'Label-focus':'Label-class'"
+            *ngIf="!checkBodyField('noteBody')">Note</label>
+          <textarea class="form-control" type="textarea" (focus)="setLabel('noteBody')" (blur)="setLabel('no')"
+            placeholder="Type here..." maxlength="2000" rows="7" formControlName="noteBody"></textarea>
+          <div class="error-msg">
+            <app-field-error-display [displayError]="isFieldValid('noteBody')" errorMsg="Enter Note">
+            </app-field-error-display>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 centerAlign">
+            <button type="button" class="rightcancelbutton" (click)="closeNoteDrawer()">Cancel</button>
+          </div>
+          <div class="col-md-6 centerAlign">
+            <button type="submit" [disabled]="validateBtn()"
+              [ngClass]="((validateBtn()) == true )? 'rightaddwithoutsubmit':' rightaddsubmit'">Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

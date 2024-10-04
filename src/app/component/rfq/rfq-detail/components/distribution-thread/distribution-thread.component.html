@@ -1,0 +1,56 @@
+<div class="row manu-list m-t-5 thread" *ngFor="let supplier of supplierDetails">
+
+  <div class="col-md-4  p-t-10">
+    <h2 class="pointerCursor text-truncate manName" (click)="readMore($event,supplier.companyUrl,supplier.contactId)">
+      <span placement="top" data-container="body" [ngbTooltip]="supplier.companyName">{{ supplier.companyName }}</span>
+    </h2>
+    <div class="rfq-star">
+      <span
+        style="color:#4a90e2;">{{ (supplier.noOfStars)? (supplier.noOfStars | number : '1.0-1'): 'n/a'}}</span>
+      <ng-template #t let-fill="fill">
+        <span class="star" [class.full]="fill === 100">
+          <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+        </span>
+      </ng-template>
+      <ngb-rating [(rate)]="supplier.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+    </div>
+  </div>
+  <div class="col-md-3  p-t-10"
+    (click)="openProfilePanel(supplier.contactIdEncrypt, supplier.companyName, supplier.companyName)">
+    <p class="f-w-600"> {{ supplier.manufacturingLocation }}</p>
+  </div>
+  <div class="col-md-2  p-t-10"
+    (click)="openProfilePanel(supplier.contactIdEncrypt, supplier.companyName, supplier.companyName)">
+    <p class="f-w-600">{{ supplier.phoneNo}}</p>
+  </div>
+  <div class="col-md-2  p-t-10"
+    (click)="openProfilePanel(supplier.contactIdEncrypt, supplier.companyName, supplier.companyName)">
+    <p class="f-w-600"> {{supplier.status}}</p>
+  </div>
+  <div class="col-md-1 editdelete action-box">
+    <!-- <a style="float: left">
+      <i class="fa fa-times-circle-o f-16" ngbTooltip="Remove From List"></i>
+    </a> -->
+    <a  (click)="openMessageDrawer($event, supplier.contactId, rfqId, supplier.companyName,supplier.companyId )">
+      <i class="fa fa-envelope-o f-16" ngbTooltip="Message Manufacturer"></i>
+    </a>
+  </div>
+</div>
+
+<div class="row m-t-5" *ngIf="supplierDetails.length === 0 && isLoader === false">
+  <div class="col-md-12" style="text-align: center;margin-bottom: 15px;">
+    <span>No Manufacturer found</span>
+  </div>
+</div>
+<div *ngIf="isLoader">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div>

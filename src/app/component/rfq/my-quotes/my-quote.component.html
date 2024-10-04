@@ -1,0 +1,81 @@
+<div class="" style="padding: 10px;">
+    <div class="row">
+      <div [ngClass]="(isSidePanel())?'col-md-8 col-9':'col-md-12 col-12'">
+        <app-rfq-warning-banner></app-rfq-warning-banner>
+        <div>
+          <div class="row myRFQ-custom-row-left-padding">
+            <div class="col-md-5 myRFQ-Header">My Quotes</div>
+          </div>
+          <div class="row myRFQ-custom-row-left-padding">
+            <div class="col-md-12">
+              <div class="myRFQ-rfq-no-available" *ngIf="isRfqAvailable">
+                <div class="row" style="text-align: center;padding-top:106px">
+                  <div class="col-md-12">
+                    <div>
+                      <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+                    assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+                    </div>
+                  </div>
+                </div>
+                <div class="row" style="padding-top:34px">
+                  <div class="col-md-12">
+                    <div class="myRFQ-noRFQActive-helper-text">You don’t have any RFQs active at this time.</div>
+                  </div>
+                </div>
+                <div class="row" style="padding-top:10px">
+                  <div class="col-md-12">
+                    <div class="myRFQ-noRFQActive-helper-sub-text">Please create an RFQ or check for ones Draft Rfqs.</div>
+                  </div>
+                </div>
+                <div class="row myRFQ-noRFQBodyBtn-spacing">
+                  <div class="col-md-6" style="text-align:right">
+                    <button type="submit" [routerLink]="['/rfq/draftrfqs/']"
+                      [ngClass]="toggleNoRFQBodyBtn?'myRFQ-noRFQBodyBtn-inActive':'myRFQ-noRFQBodyBtn-Active'"
+                      (mouseover)="changeInProg(true)" (mouseout)="changeInProg(false)"
+                      [disabled]="isRFQInProgBodyBtnDisabled" (click)="onRFQInProgBodyClick()">
+                      <span [ngClass]="toggleNoRFQBodyBtn?'myRFQ-noRFQBodyBtn-inActive-text':'myRFQ-noRFQBodyBtn-Active-text'"
+                      >Draft RFQs</span>
+                    </button>
+                  </div>
+                  <div class="col-md-6" style="text-align:left">
+                    <button type="submit" 
+                    (click)="moveToCreatRfq()"
+
+
+                      [ngClass]="toggleNoRFQBodyBtn?'myRFQ-noRFQBodyBtn-Active':'myRFQ-noRFQBodyBtn-inActive'"
+                      (mouseover)="changeCrRFQ(true)" (mouseout)="changeCrRFQ(false)"
+                      [disabled]="isCreateRFQBodyBtnDisabled" (click)="onCreateRFQBodyClick()">
+                      <span [ngClass]="toggleNoRFQBodyBtn?'myRFQ-noRFQBodyBtn-Active-text':'myRFQ-noRFQBodyBtn-inActive-text'"
+                      >Create an RFQ</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="myRFQ-rfq-main-div" *ngIf="!isRfqAvailable">
+                <app-qoutes-rfq-list></app-qoutes-rfq-list>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 pull-left">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isSidePanel()" class="col-md-4 col-4 sideDrawer Drawer-Shadow">
+        <div *ngIf="isSupplierProfileDrawer()">
+            <app-quote-supplier-profile (drawer_OnClose)="drawerClose($event)"></app-quote-supplier-profile>
+          </div>
+          <div *ngIf="isMessageDrawer()">
+            <app-message-send-drawer (drawer_OnClose)="drawerClose($event)"></app-message-send-drawer>
+          </div>
+      </div>
+    </div>
+    <div class="row" style="bottom: 0px;width: 101%">
+        <div class="col-md-12" style="text-align:-webkit-right;padding:0px">
+          <div class="Site-Background-Copy" >
+            <!-- <p class="Copyright-2018-MFG">Copyright © 2018 MFG.com, Inc. All Rights Reserved.</p> -->
+          </div>
+        </div>
+      </div>
+  </div>

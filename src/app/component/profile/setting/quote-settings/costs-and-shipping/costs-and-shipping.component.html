@@ -1,0 +1,159 @@
+<div>
+  <label><b>Payment Terms</b></label>
+</div>
+
+<div class="form-group">
+  <!-- <img src="assets/images/Loader.gif" /> -->
+  <app-ngx-gen-select *ngIf="_paymentTermsLoadingCompleted!=null" [(itemCollection)]="paymentTermsItemCollection"
+    [(selectedValue)]="selectedPaymentTermId" emptyMessage="Select your default payment term"
+    (itemRemove)="requestToPaymentTermRemove($event)" (selectionRemove)="clearPaymentTermSelection($event)"
+    (selectionChange)="setPaymentTermSelection($event)"></app-ngx-gen-select>
+  <a data-bs-toggle="modal" data-bs-target="#myModal" (mouseover)="setAction(1)">Add new payment term</a>
+</div>
+
+<div>
+  <label><b>Custom Costs</b></label>
+</div>
+
+<div class="m-t-5 form-group">
+  <!-- <div class="extra-bottom-margin">
+        <span class="graycolor" *ngFor="let cost of customCosts">
+            {{cost.costname}}
+            <i class="fa fa-times cursor-pointer" *ngIf="!cost.isDefault" (click)="removeCustomCost(cost.id)"></i>
+        </span>
+    </div> -->
+  <app-ngx-gen-select *ngIf="_customCostsLoadingCompleted!=null" [(itemCollection)]="customCosts"
+    emptyMessage="Select your default custom cost" [(selectedValue)]="selectedCustomCostId"
+    (itemRemove)="removeCustomCost($event)" (selectionRemove)="clearCustomCostSelection($event)"
+    (selectionChange)="setCustomCostSelection($event)"></app-ngx-gen-select>
+  <div class="clearFix"></div>
+  <a data-bs-toggle="modal" data-bs-target="#myModal" (mouseover)="setAction(2)">Add new cost</a>
+</div>
+
+<div>
+  <label><b>Shipping Method</b></label>
+</div>
+
+<div class="form-group">
+  <app-ngx-gen-select *ngIf="_shippingMethodLoadingCompleted!=null" [(itemCollection)]="shippingMethodItemCollection"
+    emptyMessage="Select your default shipping method" [(selectedValue)]="selectedShippingMethodId"
+    (itemRemove)="requestToShippingMethodRemove($event)" (selectionRemove)="clearShippingMethodSelection($event)"
+    (selectionChange)="setShippingMethodSelection($event)"></app-ngx-gen-select>
+  <a data-bs-toggle="modal" data-bs-target="#myModal" (mouseover)="setAction(3)">Add new shipping method</a>
+</div>
+<div>
+  <label><b>Lead Times</b></label>
+</div>
+
+<div class="form-group">
+  <app-ngx-gen-select *ngIf="_leadTimeLoadingCompleted!=null" [(itemCollection)]="leadTimeItemCollection"
+    emptyMessage="Select your default lead time" [(selectedValue)]="selectedLeadTimeId"
+    (itemRemove)="requestToLeadTimeRemove($event)" (selectionRemove)="clearLeadTimeSelection($event)"
+    (selectionChange)="setLeadTimeSelection($event)"></app-ngx-gen-select>
+  <a data-bs-toggle="modal" data-bs-target="#myModal" (mouseover)="setAction(4)">Add new lead time</a>
+</div>
+<div>
+  <label><b>Add Decimal Places to Display</b></label>
+</div>
+
+<div class="form-group">
+  <select *ngIf="_getDecialLoadingCompleted !=null" name="example_length" aria-controls="example" class="form-control"
+    [(ngModel)]="selectedDecimalValue" (ngModelChange)="setDefaultDecimalValue()">
+    <option [value]="data.qmsCurrencyDecimalId" *ngFor="let data of  decimalPoint">{{data.qmsCurrencyDecimal}}</option>
+  </select>
+</div>
+<form #startingNumberForm="ngForm">
+  <div class="form-group">
+    <label>Starting Invoice Number</label>
+    <div class="row">
+      <div class="col-md-8">
+        <input type="text" maxlength="10" class="form-control" name="startingNumber" #startingNumber [(ngModel)]="invoiceStartNumber"   required
+          pattern="^[1-9]+[0-9]*$" placeholder="1001" autocomplete="off" >
+        <div
+          *ngIf="startingNumberForm.form.controls.startingNumber?.invalid && (startingNumberForm.form.controls.startingNumber?.dirty || startingNumberForm.form.controls.startingNumber?.touched)"
+          class="">
+          <p style="color:red" *ngIf="startingNumberForm.form.controls.startingNumber.errors.pattern">Please enter
+            numeric value and invoice number should not  start with zero</p>
+        </div>
+
+      </div>
+
+      <div class="col-md-4">
+        <button type="button"  class="btn invoiceNumberBtn" (click)="onSaveInvoiceNumber()"
+          [disabled]="!startingNumberForm.form.valid">Save</button>
+      </div>
+    </div>
+
+
+
+  </div>
+</form>
+
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog custom-model addItem-model-container modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="col-md-12 col-sm-12 col-lg-12">
+          <button type="button" class="close" aria-label="Close" style="margin-top:0px;" data-bs-dismiss="modal"
+            #customCostContainer (click)="close()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="row" style="padding-bottom: 7px;">
+          <div class="col-md-12 col-lg-12 col-sm-12 title">
+            Add New {{modalHeader}}
+          </div>
+        </div>
+        <hr class="line" />
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-lg-12 model-popup-text">
+            <span>
+              Add a {{modalDescription}} name below. Click ‘Save + Add Another’ to keep this window open and add
+              multiple.
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-lg-12 model-popup-text">
+            <label style="margin-top: 10px; font-weight: 600;">Name</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-lg-12 model-popup-text">
+            <input type="text" class="input-value" (keyup)="checkDuplicateEntry()" [(ngModel)]="itemName"
+              placeholder="{{modelInputPlaceholderText}}" #newItemEntry />
+            <label class="col-sm-12 col-lg-12 col-md-12 error-message" *ngIf="isDuplicateValue">Duplicate item
+              found.</label>
+          </div>
+        </div>
+        <div class="action-container">
+          <input type="button" class="filled-button"
+            [disabled]="itemName===null || itemName===undefined || itemName.length==0 || itemName.trim()== '' ||isDuplicateValue"
+            value="Save {{modalSaveButtonText}}" (click)="saveCustomCostPaymentTermAndShippingMethod(false)" />
+          <input type="button" class="no-filled-button"
+            [disabled]="itemName===null || itemName===undefined || itemName.length==0  || itemName.trim()== '' || isDuplicateValue"
+            value="Save + Add Another" (click)="saveCustomCostPaymentTermAndShippingMethod(true)" />
+          <input type="button" class="clear-action" value="Cancel" (click)="closeMe()" [disabled]="itemName==null" />
+          <div class="clearFix"></div>
+        </div>
+      </div>
+      <!-- <div class="modal-footer footer-modal">
+          <button type="button" class="award-enable" data-bs-dismiss="modal" (click)="getFilterData()">Done </button>
+        </div> -->
+    </div>
+  </div>
+</div>
+
+<p-confirmDialog header="Confirmation" icon="" #cd>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-ignore-rfq" (click)="cd.reject()">No</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="cd.accept()">Yes</button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>

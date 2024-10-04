@@ -1,0 +1,80 @@
+<div class="row">
+  <div class="col-md-4">
+    <label class="f-w-600">Special Fees</label>
+  </div>
+  <div class="col-md-8">
+    <form [formGroup]="FeeTypeForm">
+      <div formArrayName="FeeTypeArray"
+        *ngFor="let item of FeeTypeForm.get('FeeTypeArray')['controls']; let i = index;">
+        <div [formGroupName]="i">
+          <div formArrayName="feesItem" *ngFor="let feeitem of item.get('feesItem').controls; let j = index;">
+            <div class="row" [formGroupName]="j" style="padding: 0px 10px;">
+              <div class="col-md-6" style="padding-right: 5px;">
+                <div class="form-group-quantity">
+                  <div class="part-group">
+                    <label class="f-12 f-w-600">Fee Type </label>
+                  </div>
+                  <select class="form-control" formControlName="name"
+                    (change)="validateChangeFeeQuantityFeeType(feeitem,item,j)" (click)="previousSelectId= $event.target.value">
+                    <option class="form-control" value="0" selected>Select</option>
+                    <option class="form-control" [value]='data.qmsFeeTypeId' *ngFor="let data of iFeetypeList" [disabled]="data.isDisabled">{{data.feeType}} </option>
+                  </select>
+                  <div>
+                    <label class="label-add-more" (click)="addFeeQuantityItem(item)" *ngIf="j==item.get('feesItem').controls.length-1 &&
+                                item.get('feesItem').controls.length<=4">
+                      + Fee Type
+                    </label>
+                    <label class="label-add-more" *ngIf="item.get('feesItem').controls.length>1 &&
+                                        j==item.get('feesItem').controls.length-1 &&
+                                        item.get('feesItem').controls.length<=4">|</label>
+
+                    <label class="label-add-more-remove" (click)="removeFeeQuantityItem(item,j,feeitem)" *ngIf="feeitem.controls.name.value!=1 &&
+                                       getFeesDetails(item).controls.length>1 ">
+                      Remove
+                    </label>
+                    <label class="label-add-more-remove" style="color: white; cursor:not-allowed; text-shadow: none;"
+                      *ngIf="feeitem.controls.name.value==1">
+                      Remove
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6" style="padding-right: 35px;">
+                <div class="form-group-quantity">
+                  <div class="part-group">
+                    <div class="text-right">
+                      <label class="f-12 f-w-600">Unit price</label>
+                    </div>
+
+                  </div>
+                  <input type="text" autocomplete="off" id="costdata" onPaste="return false" appDecimal
+                    [value]='decimalValueDefault' class="form-control" (change)="blurSpecial(item)"
+                    (keyup)="blurSpecial(item)" name="name" placeholder="Cost" formControlName="cost"
+                    [readonly]="feeitem.get('name').value ==='0' " style="text-align: right;" />
+                  <div class="error-rfqName error">
+                    <div class="f-12" style="color:red;"
+                      *ngIf="feeitem.get('name').value !=='0' && (feeitem.get('cost').value === null || feeitem.get('cost').value === '')">
+                      Required
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="col-md-12" style=" padding: 0px 28px; ">
+      <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12 subtotal-display-container">
+              <label>Sub total: </label>
+                  <span [ngClass]="partChecked ? 'dummyClass' : ''">${{ getSpecialTotal() }}</span>
+              </div>
+      </div>
+  </div>
+
+  <!-- <button (click)="check()">click</button> -->
+</div>

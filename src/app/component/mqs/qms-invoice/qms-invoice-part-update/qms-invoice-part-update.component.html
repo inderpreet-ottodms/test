@@ -1,0 +1,189 @@
+<div *ngIf="isLoader" class="loading">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-4 col-md-4 col-lg-4" style="border: solid 0px red; padding: 2px;">
+
+    <div class="row">
+      <div style="margin-left: 23px;">
+        <div class="border-checkbox-section ">
+          <div class="border-checkbox-group border-checkbox-group-primary">
+            <input class="border-checkbox" type="checkbox" [id]="partID" [(ngModel)]="isPartChecked"
+              (change)="isCheckedPart()" [disabled]="invoicePartForm1.invalid">
+            <label class="border-checkbox-label" [for]="partID"></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <h6>{{partName}}</h6>
+        <p>{{partNumber}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-8 col-md-8 col-lg-8" style="border: solid 0px red; padding: 2px;">
+
+    <div *ngIf="!loadingCompleted">
+      <img src="assets/images/Loader.gif">
+      <span>&nbsp;&nbsp;&nbsp;Please wait...</span>
+    </div>
+    <div *ngIf="loadingCompleted" class="col-lg-12 col-md-12 col-sm-12" style="border: solid 0px red;
+        position: relative;
+        border-radius: 5px; padding: 0px; float: left;">
+
+
+      <form [formGroup]="invoicePartForm1" class="col-sm-12 col-md-12 col-lg-12" style="padding:0px;">
+        <div formArrayName="partQuantities">
+          <div class="col-sm-12 col-lg-12 col-md-12"
+            *ngFor="let quantityInfo of invoicePartForm1.get('partQuantities')['controls']; let j = index"
+            [formGroupName]="j">
+            <div class="row">
+              <div class="col-sm-4 col-lg-4 col-md-4" style="padding: 0px; height: 100%; float: left;">
+                <label class="label-title">
+                  <span class="mandetory-field">*</span>
+                  <span *ngIf="quantityInfo.value.selectedQuantityId!=-1">Select Quantity</span>
+                  <span *ngIf="quantityInfo.value.selectedQuantityId==-1">Select Unit
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Qty
+                  </span>
+                </label>
+
+                <select class="form-control" formControlName="selectedQuantityId"
+                  *ngIf="quantityInfo.value.selectedQuantityId!=-1"
+                  (change)="onChangeLoadFeeType(quantityInfo,$event.target.value, j)"
+                  (click)="perivousSelectedQuantityId = $event.target.value">
+                  <option value="" selected>Select Quantity</option>
+                  <option class="form-control" [disabled]="data.isDisabled" [value]='data.qmsQuotePartQtyId'
+                    *ngFor="let data of qmsQuotePartQuantity">
+                    {{data.partQty }} {{data.partQtyUnit}}
+                  </option>
+                  <option value="-1" selected>Other</option>
+                </select>
+                <div class="input-group" *ngIf="quantityInfo.value.selectedQuantityId==-1">
+                  <select class="form-control col-sm-9 col-lg-9 col-md-9" formControlName="selectedUnitId"
+                    (change)="onChangeUnitSelection($event,quantityInfo)">
+                    <option value="" selected>Select Unit</option>
+                    <option class="form-control" [value]='data.value' *ngFor="let data of qtyUnitCollction">
+                      {{ data.text }}
+                    </option>
+                  </select>
+                  <input type="text" class="form-control col-sm-3 col-lg-3 col-md-3" formControlName="quantity"
+                    onPaste="return false" appDecimal style="text-align: center;" (keyup)="calculatePartSubTotal()" />
+
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <i class="fa fa-times" aria-hidden="true" (click)="discardQuantityOther(quantityInfo)"></i>
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <!-- {{ quantityInfo.get('quantity').hasError('pattern') | json }} -->
+                  <span style="color:red;" *ngIf="quantityInfo.get('quantity').hasError('pattern')">
+                    Quantity should be greater then zero and do not start with zero.
+                  </span>
+                </div>
+                <label class="label-add-more" (click)="addPartQuantityItem()"
+                  *ngIf="invoicePartForm1.get('partQuantities')['controls'].length < 5 && invoicePartForm1.get('partQuantities')['controls'].length -1 == j">
+                  + Quantity
+                </label>
+                <label class="label-add-more"
+                  *ngIf="invoicePartForm1.get('partQuantities')['controls'].length>1 && invoicePartForm1.get('partQuantities')['controls'].length -1 == j && invoicePartForm1.get('partQuantities')['controls'].length < 5">
+                  |</label>
+                <label class="label-add-more-remove" (click)="removePartQuantityItem(j)"
+                  *ngIf="invoicePartForm1.get('partQuantities')['controls'].length>1">
+                  Remove
+                </label>
+
+
+              </div>
+
+              <div formArrayName="feeTypeList" class="col-sm-8 col-lg-8 col-md-8" style="float: left;">
+                <!-- {{tempFeetypeList[j] | json }} -->
+                <div class="row" *ngFor="let item of quantityInfo.get('feeTypeList')['controls']; let i = index"
+                  [formGroupName]="i">
+                  <!-- {{ j}} -->
+                  <div class="col-sm-6 col-lg-6 col-md-6" style=" float: left;">
+                    <label class="label-title" *ngIf="i==0">
+                      <span class="mandetory-field">*</span>
+                      Fee Type
+                    </label>
+                    <label class="label-add-more" *ngIf="i != 0"></label>
+                    <select class="form-control" (click)="setSelectedFeeType($event.target.value)"
+                      (change)="onChangeSelectFeeType(item,$event.target.value, j,quantityInfo.value.selectedQuantityId)"
+                      formControlName="feeTypeId" [attr.disabled]="(i==0)?true:null">
+                      <option value="" selected>Select Fee Type</option>
+                      <option class="form-control" value="1" disabled> Price per unit</option>
+                      <option class="form-control" [value]="data.qmsFeeTypeId" *ngFor="let data of tempFeetypeList[j]"
+                        [disabled]="data.isDisabled">
+                        {{data.feeType}}
+                      </option>
+                    </select>
+                    <label class="label-add-more" (click)="addQuantityFeeType(quantityInfo)" *ngIf="i==quantityInfo.get('feeTypeList')['controls'].length-1 &&
+                            quantityInfo.get('feeTypeList')['controls'].length<=4">
+                      + Fee Type
+                    </label>
+                    <label class="label-add-more"
+                      *ngIf="quantityInfo.get('feeTypeList')['controls'].length >1 && quantityInfo.get('feeTypeList')['controls'].length -1 == i && quantityInfo.get('feeTypeList')['controls'].length < 5">
+                      |</label>
+                    <label class="label-add-more-remove" (click)="removeQuantityFeeType(quantityInfo,i, j)"
+                      *ngIf="quantityInfo.get('feeTypeList')['controls'].length>1 && i!=0">
+                      Remove
+                    </label>
+
+                  </div>
+
+                  <div class="col-sm-6 col-lg-6 col-md-6">
+                    <label class="label-title" *ngIf="i==0" style="text-align: right; width: 100%;">
+                      <span class="mandetory-field">*</span>
+                      Unit price
+                    </label>
+                    <label class="label-title" *ngIf="i!=0" style="text-align: right; width: 100%;">
+                      <span class="mandetory-field">*</span>
+                      Price
+                    </label>
+
+                    <!-- <div class="input-group mb-3"> -->
+                    <input type="text" class="form-control" onPaste="return false" appDecimal
+                      [value]='decimalValueDefault' (keyup)="calculatePartSubTotal(item)" placeholder=""
+                      formControlName="feeTypeCost" style="text-align: right;" />
+                    <span style="color:red;" *ngIf="item.get('feeTypeCost').hasError('required')">
+                      Required
+                    </span>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-12 subtotal-display-container">
+            Sub Total :
+            <label [ngClass]="isPartChecked ? 'dummyClass' : ''">
+              ${{getPartSubTotal()}}
+            </label>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <hr />
+              <app-qms-invoice-special-fee [qmsQuoteID]="qmsQuoteID" [isSpecailFeeSave]="isSpecailFeeSave"
+                [partChecked]="isPartChecked" [partInvoiceID]="partInvoiceID" [partID]="partID" [invoiceID]="invoiceID"
+                [(specialFee)]="specialFee" [isPartOfInvoice]="_isPartOfInvoice"
+                (specialFeeChange)="changeSpecialFee($event)"></app-qms-invoice-special-fee>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    </div>
+
+  </div>
+</div>

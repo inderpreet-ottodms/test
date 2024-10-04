@@ -1,0 +1,564 @@
+<p-confirmDialog header="Confirmation" icon="" [style]="{width: '660px'}" #cd>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6">
+        <button
+          type="button"
+          class="btn button-green-border"
+          (click)="cd.reject()"
+          style="width: 284px;"
+        >
+          {{ btnCancelText }}
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button
+          type="button"
+          class="btn button-green"
+          style="width: 284px;"
+          label="Yes"
+          (click)="cd.accept()"
+        >
+          {{ btnSaveText }}
+        </button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>
+
+<div class="p-15" [ngClass]="!isLoader ? '' : 'loader-height'">
+  <div class="row">
+    <div class="col-md-12 text-right">
+      <i
+        [ngClass]="
+          isTilesView
+            ? 'ti-layout-grid2 list-view active'
+            : 'ti-layout-grid2 list-view '
+        "
+        (click)="openTilesView()"
+      ></i>
+      <i
+        [ngClass]="
+          isGridView ? 'ti-list list-view active' : 'ti-list list-view'
+        "
+        (click)="openGridView()"
+      ></i>
+    </div>
+  </div>
+  <div class="row p-t-10">
+    <div class="col-md-3 col-sm-3">
+      <select
+        class="filter"
+        [(ngModel)]="stateFilterValue"
+        (change)="filterAll()"
+      >
+        <option value="9">All Status</option>
+        <option value="11">Returned Action Needed</option>
+        <option value="10">Draft Rfqs</option>
+      </select>
+    </div>
+    <div class="col-md-3 col-sm-3">
+      <select
+        class="recent"
+        [(ngModel)]="sortFilterValue"
+        (change)="filterAll()"
+      >
+        <option value="1">Recent</option>
+        <option value="2">Oldest</option>
+        <option value="3">A - Z</option>
+        <option value="4">Z - A</option>
+      </select>
+    </div>
+    <div
+      [ngClass]="
+        isSidePanel()
+          ? 'col-md-3 col-sm-3 col-xs-12 pull-right offset-3'
+          : 'col-md-3 col-sm-3 col-xs-12 pull-right offset-3'
+      "
+    >
+      <div class="input-container">
+        <i
+          class="fa fa-search icon-search"
+          (click)="stateFilter()"
+          placement="top"
+          container="body"
+          ngbTooltip="Search"
+        ></i>
+        <input
+          [(ngModel)]="searchFilterValue"
+          class="search search-text"
+          placeholder="Search"
+          type="text"
+          (keypress)="searchByKey($event)"
+          (input)="checkSearch(searchFilterValue)"
+        />
+        <i
+          class="fa fa-times-circle icon"
+          (click)="removeTextValue()"
+          placement="top"
+          container="body"
+          ngbTooltip="Remove Text"
+        ></i>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="isTilesView == true">
+    <div class="col-md-12">
+      <div class="">
+        <div class="row">
+          <br />
+          <div
+            [ngClass]="isSidePanel() ? 'col-md-6' : 'col-md-3'"
+            *ngFor="let rfq of iFilteredRFQViewModelColl"
+            id="{{ rfq.rfqId }}"
+          >
+            <div
+              class="card"
+              [ngClass]="rfq.rfqId === currentRfq() ? 'activePart' : ''"
+            >
+              <div class="box-1" *ngIf="rfq.isMfgCommunityRfq == true">
+                <div class="ribbon ribbon-top-left-row">
+                  <span>Directory</span>
+                </div>
+              </div>
+              <div
+                class="box cursor-pointer"
+                (click)="openPartDetails(rfq.rfqId)"
+              >
+                <div class="flag" *ngIf="rfq.rfqStatusId == 14">
+                  <a class="pull-right">
+                    <i class="fa fa-flag"></i>
+                  </a>
+                </div>
+                <div class="hourglass" *ngIf="rfq.rfqStatusId == 2">
+                  <a class="pull-right">
+                    <i class="fa fa-hourglass"></i>
+                  </a>
+                </div>
+                  <div class="star" *ngIf="rfq.rfqStatusId == 1">
+                  <span  class="icon-img" *ngIf="rfq.withOrderManagement"><img src="assets/images/Badge.png"  [ngbTooltip]="orderManagement" style="float: left;"></span>
+                  <ng-template #orderManagement>
+                    <div>
+                      <span class="unlock-growth">This RFQ requires Order Management on MFG.</span> 
+                    </div>
+                  </ng-template>
+                  <a
+                    class="pull-right"
+                    *ngIf="rfq.rfqPercent== 25"
+                  >
+                    <img src="assets/rfq/icon_star_25.svg" class="Close-3" />
+                  </a>
+                  <a
+                    class="pull-right"
+                    *ngIf="rfq.rfqPercent == 50"
+                  >
+                    <img src="assets/rfq/icon_inprogress.svg" class="Close-3" />
+                  </a>
+                  <a
+                    class="pull-right"
+                    *ngIf="rfq.rfqPercent == 75"
+                  >
+                    <img src="assets/rfq/icon_star_75.svg" class="Close-3" />
+                  </a>
+                </div>
+                <div class="img" style="clear: both">
+                  <img
+                    class="resimg"
+                    *ngIf="
+                      (!rfq.rfqThumbnail || rfq.rfqThumbnail === '') &&
+                      !rfq.isMfgCommunityRfq
+                    "
+                    src="assets/supplier/comming-soon.png"
+                  />
+                  <img
+                    class="resimg"
+                    *ngIf="
+                      (!rfq.rfqThumbnail || rfq.rfqThumbnail === '') &&
+                      rfq.isMfgCommunityRfq
+                    "
+                    src="assets/directrfq.png"
+                  />
+                  <img
+                    *ngIf="!(!rfq.rfqThumbnail || rfq.rfqThumbnail === '')"
+                    [src]="getLoadableImg(rfq.rfqThumbnail)"
+                    class="img-circle box-fit resimg"
+                  />
+                </div>
+                <h2
+                  class="cursor-pointer text-truncate"
+                  placement="top"
+                  data-container="body"
+                  ngbTooltip="{{ rfq.rfqName }}"
+                >
+                  {{ rfq.rfqName }}
+                  <br />
+                  <span>RFQ #{{ rfq.rfqId }}</span>
+                </h2>
+                <p
+                  *ngIf="rfq.manufacturingLocation"
+                  class="text-truncate rfq-loc"
+                >
+                  <span
+                    placement="top"
+                    data-container="body"
+                    ngbTooltip="{{ rfq.manufacturingLocation }}"
+                    >{{ rfq.manufacturingLocation }}</span
+                  >
+                </p>
+                <p
+                  *ngIf="!rfq.manufacturingLocation"
+                  class="text-truncate rfq-loc"
+                >
+                  &nbsp;
+                </p>
+                <p>{{ rfq.rfqStatus }}</p>
+              </div>
+              <div class="bottomaction">
+                <ul>
+                  <li>
+                    <a
+                      *ngIf="rfq.rfqStatusId === 2"
+                      (click)="cloneRfq(rfq.rfqId, rfq.contactId)"
+                    >
+                      <i
+                        class="fa fa-clone cursor-pointer"
+                        placement="top"
+                        container="body"
+                        ngbTooltip="Clone RFQ"
+                      ></i>
+                    </a>
+                    <a
+                      *ngIf="rfq.rfqStatusId === 1 || rfq.rfqStatusId == 14"
+                      (click)="editRfq(rfq)"
+                    >
+                      <i
+                        class="fa fa-edit cursor-pointer"
+                        placement="top"
+                        container="body"
+                        ngbTooltip="Edit RFQ"
+                      ></i>
+                    </a>
+                  </li>
+                  <li class="pull-right">
+                    <a
+                      *ngIf="rfq.rfqStatusId === 2"
+                      (click)="cancelRfq(rfq.rfqId)"
+                    >
+                      <i
+                        class="fa fa-times-circle cursor-pointer"
+                        placement="top"
+                        container="body"
+                        ngbTooltip="Cancel RFQ"
+                      ></i>
+                    </a>
+                    <a
+                      *ngIf="rfq.rfqStatusId === 1 || rfq.rfqStatusId == 14"
+                      (click)="deleteRfq(rfq.rfqId)"
+                    >
+                      <i
+                        class="fa fa-trash cursor-pointer"
+                        placement="top"
+                        container="body"
+                        ngbTooltip="Delete RFQ"
+                      ></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="isGridView == true">
+    <div class="col-md-12">
+      <div class="background-white">
+        <div class="row">
+          <br />
+          <div class="col-md-12">
+            <div class="table-responsive">
+              <table class="table table-hover rfqtable">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Date Created</th>
+                    <th>Status</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let rfq of iFilteredRFQViewModelColl"
+                    [ngClass]="rfq.rfqId === currentRfq() ? 'activePart' : ''"
+                    id="{{ rfq.rfqId }}"
+                  >
+                    <td
+                      class="rfqtd left-border text-truncate hand"
+                      (click)="openPartDetails(rfq.rfqId)"
+                    >
+                      <div class="box-1" *ngIf="rfq.isMfgCommunityRfq == true">
+                        <div class="ribbon ribbon-top-left">
+                          <span>Directory</span>
+                        </div>
+                      </div>
+                      {{ rfq.rfqName }}
+                      <br />
+                      <span>RFQ #{{ rfq.rfqId }}</span
+                      ><br />
+                      <span>{{ rfq.manufacturingLocation }}</span>
+                    </td>
+                    <td (click)="openPartDetails(rfq.rfqId)">
+                      {{ rfq.rfqCreatedOn | date: "dd/MM/yyyy" }}
+                    </td>
+                    <td
+                      *ngIf="rfq.rfqStatusId == 1 || rfq.rfqStatusId == 14"
+                      (click)="openPartDetails(rfq.rfqId)"
+                    >
+                      <div class="row">
+                        <div
+                          class="col-md-6 col-wrap"
+                          *ngIf="rfq.rfqStatusId == 1"
+                        >
+                          Draft Rfqs
+                        </div>
+                        <div
+                          class="col-md-6 col-wrap"
+                          *ngIf="rfq.rfqStatusId == 14"
+                        >
+                          Returned - Action Needed
+                        </div>
+                        <div class="col-md-6" style="margin-top: 7px">
+                          <div class="progress progress-xs">
+                            <div
+                              class="progress-bar progress-bar-danger"
+                              [style.width.%]="rfq.rfqPercent"
+                              role="progressbar"
+                              style="background-color: #81db6d"
+                              aria-valuenow="25"
+                              aria-valuemin="0"
+                              aria-valuemax="100"
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td *ngIf="rfq.rfqStatusId == 14">
+                      <i class="fa fa-flag flagred pull-right"></i>
+                    </td>
+                    <td *ngIf="rfq.rfqStatusId == 2">
+                      <i class="fa fa-hourglass hourglassyellow"></i>
+                    </td>
+                    <td *ngIf="rfq.rfqStatusId == 1">
+                      <a
+                        class="pull-right"
+                        *ngIf="rfq.rfqPercent == 25"
+                      >
+                        <img
+                          src="assets/rfq/icon_star_25.svg"
+                          class="Close-3"
+                        />
+                      </a>
+                      <a
+                        class="pull-right"
+                        *ngIf="rfq.rfqPercent == 50"
+                      >
+                        <img
+                          src="assets/rfq/icon_inprogress.svg"
+                          class="Close-3"
+                        />
+                      </a>
+                      <a
+                        class="pull-right"
+                        *ngIf="rfq.rfqPercent == 75"
+                      >
+                        <img
+                          src="assets/rfq/icon_star_75.svg"
+                          class="Close-3"
+                        />
+                      </a>
+                    </td>
+
+                    <td
+                      class="editdelete"
+                      *ngIf="rfq.rfqStatusId === 13"
+                      (click)="cloneRfq(rfq.rfqId, rfq.contactId)"
+                    >
+                      <i
+                        class="fa fa-clone"
+                        placement="top"
+                        container="body"
+                        ngbTooltip="Clone RFQ"
+                      ></i>
+                    </td>
+                    <td
+                      class="editdelete"
+                      *ngIf="rfq.rfqStatusId !== 13"
+                      (click)="editRfq(rfq)"
+                    >
+                      <i
+                        class="fa fa-edit"
+                        placement="top"
+                        container="body"
+                        ngbTooltip="Edit RFQ"
+                      ></i>
+                    </td>
+                    <td
+                      *ngIf="rfq.rfqStatusId === 1 || rfq.rfqStatusId == 14"
+                      (click)="deleteRfq(rfq.rfqId)"
+                      class="editdelete"
+                    >
+                      <i
+                        class="fa fa-trash"
+                        placement="top"
+                        container="body"
+                        ngbTooltip="Delete RFQ"
+                      ></i>
+                    </td>
+                    <td
+                      *ngIf="rfq.rfqStatusId == 2"
+                      (click)="cancelRfq(rfq.rfqId)"
+                      class="editdelete"
+                    >
+                      <i
+                        class="fa fa-times-circle"
+                        placement="top"
+                        container="body"
+                        ngbTooltip="Cancel RFQ"
+                      ></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isLoader">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>
+  <div class="rfq-no-available" *ngIf="isRfqAvailable">
+    <div class="row" style="text-align: center; padding-top: 106px">
+      <div class="col-md-12">
+        <div>
+          <img
+            src="assets/rfq/no-rfq.png"
+            srcset="assets/rfq/no-rfq@2x.png 2x, assets/rfq/no-rfq@3x.png 3x"
+            class="Group"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-top: 34px">
+      <div class="col-md-12">
+        <div class="f-22 f-w-600 color-gray text-center">
+          You don’t have any Draft RFQs at this time.
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-top: 10px">
+      <div class="col-md-12">
+        <div class="f-14 text-center color-gray">
+          Please create an RFQ to begin.
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12" style="text-align: center">
+        <button
+          type="submit"
+          (click)="moveToCreatRfq()"
+          class="btn Save-Rfq-button-active"
+        >
+          <span> Create an RFQ </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ------------------------- Pagination start----------------------- -->
+  <div class="row" style="margin-top: 20px">
+    <div class="col-md-2">
+      <div class="dataTables_length" id="example_length">
+        <label
+          >Show
+          <select
+            name="example_length"
+            aria-controls="example"
+            class=""
+            [(ngModel)]="pageSize"
+            (change)="filterAll()"
+          >
+            <option value="24">24</option>
+            <option value="48">48</option>
+            <option value="96">96</option>
+          </select>
+          entries</label
+        >
+      </div>
+    </div>
+    <div class="col-md-10">
+      <div class="paginations">
+        <div>
+          <div id="radioBtn" class="btn-group">
+            <a
+              [ngClass]="{ disabled: currentIndex == 1 || pageNumber == 0 }"
+              class="btn btn-primary btn-sm notActive"
+              (click)="prevPage()"
+              data-bs-toggle="fun"
+              data-title="Y"
+            >
+              Previous
+            </a>
+            <a
+              *ngFor="let page of pagesIndex"
+              (click)="setPage(page)"
+              [ngClass]="
+                currentIndex == page
+                  ? 'btn btn-primary btn-sm active'
+                  : 'btn btn-primary btn-sm notActive'
+              "
+              data-bs-toggle="fun"
+              data-title="X"
+            >
+              {{ page }}
+            </a>
+            <a
+              [ngClass]="{ disabled: currentIndex == pageNumber }"
+              class="btn btn-primary btn-sm notActive"
+              (click)="nextPage()"
+              data-bs-toggle="fun"
+              data-title="N"
+            >
+              Next
+            </a>
+          </div>
+          <input type="hidden" name="fun" id="fun" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="pull-right padd-right" style="padding-right: 62px">
+        <label class="showreccount">
+          {{ currentIndex }} of {{ pageNumber }}
+        </label>
+      </div>
+    </div>
+  </div>
+  <!-- ------------------------- Pagination end----------------------- -->
+</div>

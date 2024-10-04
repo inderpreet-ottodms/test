@@ -1,0 +1,33 @@
+.msg-thread{
+    border: 1px solid #d0d0d0; 
+    margin: 5px; 
+    padding: 5px; 
+    width: 100%; 
+    border-radius: 5px; 
+}
+.user-img{
+    width:100%;
+    border: 1px solid #bec4cb;
+    width: 40px;
+    height:40px;
+}
+.reply-text{
+    color:blue;
+    cursor: pointer;
+}
+.fileArea {
+    background-color: #f6f7fb;
+    padding-left: 2px;
+    cursor: pointer;
+  }
+  .attach-file{
+    color: #4a90e2;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 12px;
+  }
+  div.msg-thread:hover{
+    // -webkit-box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+    // box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+    background-color: #ececec;
+  }

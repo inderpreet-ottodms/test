@@ -1,0 +1,340 @@
+{{checkIfFollowUnFollowChange()}}
+<div style="padding:19px" [ngClass]="(!isLoader)?'':'loader-height'">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="btn-group"> <!-- (click)="setStatusFilter('All')" -->
+        <button type="button" (click)="setStatusFilter('All')"
+          [ngClass]="(activeStatusFilterBtn == 'All')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+          All</button><!--  (click)="setStatusFilter('')" -->
+        <button type="button"  (click)="setStatusFilter('Blacklisted')"
+          [ngClass]="(activeStatusFilterBtn == 'Blacklisted')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+          Blacklisted
+        </button>
+        <button type="button" (click)="setStatusFilter('Archived')"
+          [ngClass]="(activeStatusFilterBtn == 'Archived')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+          Archived
+        </button>
+      </div>
+    </div>
+    <div class="col-md-6 pull-right" style="text-align: end;padding-top:7px;">
+      <i _ngcontent-c4="" [ngClass]="(isTilesView)?'ti-layout-grid2 my-RFQ-list-view active':'ti-layout-grid2 my-RFQ-list-view '"
+        (click)="openTilesView()"></i>
+      <i _ngcontent-c4="" [ngClass]="(isGridView)?'ti-list my-RFQ-list-view active':'ti-list my-RFQ-list-view'" (click)="openGridView()"></i>
+    </div>
+  </div>
+
+  <div class="row contact_filter" style="padding:10px 0px">
+    <div [ngClass]="(isSidePanel())?'col-md-4':'col-md-4'">
+      <angular2-multiselect [data]='iCountryModel'  name="processdrop" [(ngModel)]="selectedcountry"   [settings]='countrySettings'
+        (onDeSelect)="filterAll()" (onSelect)="filterAll()" (onSelectAll)="filterAll()" (onDeSelectAll)="filterAll()">
+      </angular2-multiselect>
+    </div>
+    <div  [ngClass]="(isSidePanel())?'col-md-4':'col-md-4'">
+      <angular2-multiselect [data]='iIndustryModel' [(ngModel)]="selectedIndustry" name="postsProcess"  [settings]='industrySettings'
+        (onDeSelect)="filterAll()" (onSelect)="filterAll()" (onSelectAll)="filterAll()" (onDeSelectAll)="filterAll()">
+      </angular2-multiselect>
+    </div>
+    <div [ngClass]="(isSidePanel())?'col-md-4':'col-md-4'">
+      <div class="input-container">
+        <i class="fa fa-search icon-search" (click)="onSearch()" placement="top" container="body" ngbTooltip="Search"></i>
+        <input class="search search-text" [(ngModel)]="searchFilterValue" placeholder="Search" type="text" (keypress) = "searchByKey($event)" (input)="checkSearch(searchFilterValue)" />
+        <i class="fa fa-times-circle icon" (click)="removeTextValue()" placement="top" container="body" ngbTooltip="Remove Text"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="padding: 0px 10px 10px 0px">
+  </div>
+
+  <div class="row" *ngIf="isTilesView == true  && !isRfqAvailable">
+    <div class="col-md-12">
+      <div class="">
+        <div class="row">
+          <br>
+          <!-- ----------------------loop for card start------------------ -->
+          <div [ngClass]="(isSidePanel())?'col-md-5 box-margin':'col-md-3'" *ngFor='let supplier of items'>
+            <!-- card start -->
+            <div class="card" id="{{ supplier.followContactId }}" [ngClass]="(supplier.followContactId === currentContact())?'actievPart':''">
+              <!-- card body start  -->
+              <div class="pointerCursor">
+
+                <div class="card-img">
+                  <img class="imagwidtheight" *ngIf="(supplier.logoOfCompany === '' || supplier.logoOfCompany === null || supplier.logoOfCompany === 'string')"
+                          src="assets/company/avatar-manu-basic.svg">
+                  <img class="imagwidtheight" *ngIf="!(supplier.logoOfCompany === '' || supplier.logoOfCompany === null || supplier.logoOfCompany === 'string')"
+                    src="{{ supplier.logoOfCompany }}" onError="this.src='assets/company/avatar-manu-basic.svg'">
+                </div>
+                <div class="card-title">
+                    <h2 class="pointerCursor text-truncate" (click)="openBuyerDrawer(supplier.contactIdEncrypt, supplier.followContactId )">{{ supplier.companyName }}
+                    <!-- class="badge badge-pill badge-green" -->
+                    <!-- <span [ngClass]="supplier.npsScore | npsState"> {{ ((supplier?.npsScore !== null) && (supplier?.npsScore !== '')) ? supplier?.npsScore : 'N/A' }}</span>&nbsp;&nbsp;<span>Net Promotor Score</span> -->
+                    <div class="rfq-star">
+                        <!-- <span style="color:#2E58D6;font-size: 14px;">{{ (supplier.noOfStars)? (supplier.noOfStars| number : '1.0-1') : 0 }}</span> -->
+                        <span style="color:#2E58D6;font-size: 14px;">{{ (supplier.noOfStars)? (supplier.noOfStars | number : '1.0-1') : 'n/a' }}</span>
+                        <ng-template #t let-fill="fill">
+                          <span class="star" [class.full]="fill === 100">
+                            <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+                          </span>
+                        </ng-template>
+                        <ngb-rating [(rate)]="supplier.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+                      </div>
+                    </h2>
+                </div>
+                <div class="card-sub-title">
+                    <hr />
+                    <div class="address_div">
+                      <p [innerHTML]="getAddressFormat(supplier.address)"></p>
+                        <!-- <p class="text-truncate" > {{ supplier.address.streetAddress  }}</p>
+                        <p class="text-truncate"> {{ supplier.address.city  }}, <span *ngIf="supplier.address.state === 'Unknown - Do not delete'"> N/A </span>  <span *ngIf="supplier.address.state !== 'Unknown - Do not delete' ">{{ supplier.address.state }}</span> {{ supplier.address.postalCode }}</p>
+                        <p class="text-truncate"> {{ supplier.address.country }}</p> -->
+                      </div>
+                    <hr />
+                    <p class="text-truncate">{{ supplier.telephoneNo}}</p>
+                    <hr/>
+                    <p class="company_url text-truncate">{{ supplier.webUrl}}</p>
+                </div>
+
+              </div>
+              <!-- card body end  -->
+              <!-- card footer start  -->
+              <div class="bottomaction">
+                <ul>
+                  <li *ngIf="isPremium()">
+                    <a (click)="openMessageDrawer($event,supplier.followContactId,0,supplier.companyName)">
+                        <i class="fa fa-envelope-o pointerCursor" aria-hidden="true" placement="top" container="body" ngbTooltip="Message Buyer"></i>
+                    </a>
+                  </li>
+                  <li class="pull-right" *ngIf="activeStatusFilterBtn !== 'Archived'">
+                    <a (click)="removeContact(supplier.companyId)">
+                      <img src="assets/rfq/not-allow.png" srcset="assets/rfq/not-allow@2x.png 2x, assets/rfq/not-allow@3x.png 3x" class="award-rfq-icon-class pointerCursor" placement="top" container="body" ngbTooltip="Remove Blacklist">
+                    </a>
+                  </li>
+                  <li class="pull-right" *ngIf="activeStatusFilterBtn === 'Archived'">
+                      <a (click)="removeArchivedContact(supplier.companyId)">
+                          <i class="fa fa-trash pointerCursor" aria-hidden="true" placement="top" container="body" ngbTooltip="Remove Contact"></i>
+                      </a>
+                    </li>
+                </ul>
+              </div>
+               <!-- card footer start  -->
+            </div>
+            <!-- card start -->
+          </div>
+          <!-- ----------------------loop for card end------------------ -->
+        </div>
+    <!-- ------------------------- Pagination start----------------------- -->
+      <!-- <div class="row" *ngIf="!isRfqAvailable">
+          <div class="col-md-4">
+            <div class="dataTables_length" id="example_length">
+              <label>Show
+                <select name="example_length" aria-controls="example" class="" [(ngModel)]="pageSize" (ngModelChange)="filterAll()">
+                  <option value="24">24</option>
+                  <option value="48">48</option>
+                  <option value="96">96</option>
+                </select>
+                entries</label>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="paginations">
+              <div  >
+                <div id="radioBtn" class="btn-group">
+                  <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" class="btn btn-primary btn-sm notActive"
+                    (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                    Previous
+                  </a>
+                  <a *ngFor="let page of pagesIndex" (click)="setPage(page)" [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                    data-bs-toggle="fun" data-title="X">
+                    {{page}}
+                  </a>
+                  <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+                    (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                    Next
+                  </a>
+                </div>
+                <input type="hidden" name="fun" id="fun">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="!isRfqAvailable ">
+          <div class="col-md-12">
+              <div class="pull-right padd-right">
+                  <label class="showreccount"> {{currentIndex   }} of {{pageNumber}} </label>
+                </div>
+          </div>
+        </div> -->
+      <!-- ------------------------- Pagination end----------------------- -->
+    </div>
+ </div>
+</div>
+<!--   -----------------------grid view starts--------------------------- -->
+<!-- && !isRfqAvailable" -->
+<div class="row" *ngIf="isGridView == true  && !isRfqAvailable">
+  <div class="col-md-12">
+    <div class="">
+      <div class="row">
+        <br>
+        <div class="col-md-12">
+          <div class="table-responsive">
+            <table class="table table-hover rfqtable">
+              <thead>
+                <tr>
+                  <th>
+                  <th (click)="sortOnContactName()">Manufacturer<i [ngClass]="(toggleManufacturer)?'fa fa-sort-asc':'fa fa-sort-desc'"></i></th>
+                  <th *ngIf="!isSidePanel()">Address</th>
+                  <th>Phone</th>
+                  <th *ngIf="!isSidePanel()">Website</th>
+                  <th>Actions</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngFor='let supplier of items' [ngClass]="(supplier.followContactId === currentContact())?'actievPart':''">
+                  <td class="tdborderleft cardtile-img">
+                    <img  *ngIf="(supplier.logoOfCompany === '' || supplier.logoOfCompany === null || supplier.logoOfCompany === 'string')"
+                    src="assets/company/avatar-manu-basic.svg" class="d-Turbine-3D-AutoCAD-Drawing">
+                  <img  *ngIf="!(supplier.logoOfCompany === '' || supplier.logoOfCompany === null || supplier.logoOfCompany === 'string')"
+                    src="{{ supplier.logoOfCompany }}" class="d-Turbine-3D-AutoCAD-Drawing" onError="this.src='assets/company/avatar-manu-basic.svg'" >
+                  </td>
+                  <td class="rfqtd text-truncate hand card-title" >
+                    <h2 *ngIf="isPremium()" class="pointerCursor text-truncate" (click)="openBuyerDrawer(supplier.contactIdEncrypt, supplier.followContactId)">{{ supplier.companyName }}</h2>
+                    <h2 *ngIf="!isPremium()" class="pointerCursor text-truncate">{{ supplier.companyName }}
+                    <br>                          <!-- class="badge badge-pill badge-green" -->
+                    <!-- <span [ngClass]="supplier.npsScore | npsState">{{ ((supplier?.npsScore !== null) && (supplier?.npsScore !== '')) ? supplier?.npsScore : 'N/A' }}</span>&nbsp;&nbsp;<span>Net Promotor Score</span> -->
+                  </h2>
+                    <div class="rfq-star">
+                        <!-- <span style="color:#2E58D6;font-size: 14px;">{{ (supplier.noOfStars)? (supplier.noOfStars| number : '1.0-1') : 0 }}</span> -->
+                        <span style="color:#2E58D6;font-size: 14px; margin-right: 5px;">{{ (supplier.noOfStars)? (supplier.noOfStars | number : '1.0-1') : 'n/a' }}</span>
+                        <ng-template #t let-fill="fill">
+                        <span class="star" [class.full]="fill === 100">
+                          <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+                        </span>
+                      </ng-template>
+                      <ngb-rating [(rate)]="supplier.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+                    </div>
+                  </td>
+                  <td *ngIf="!isSidePanel()">
+                      <p [innerHTML]="getAddressFormat(supplier.address)"></p>
+                      <!-- <p class="text-truncate"> {{ supplier.address.streetAddress }}</p>
+                      <p class="text-truncate"> {{ supplier.address.city }}, <span *ngIf="supplier.address.state === 'Unknown - Do not delete'"> N/A </span>  <span *ngIf="supplier.address.state !== 'Unknown - Do not delete' ">{{ supplier.address.state }}</span>  {{ supplier.address.postalCode }}</p>
+                      <p class="text-truncate"> {{ supplier.address.country }}</p> -->
+                  </td>
+                  <td>{{ supplier.telephoneNo}}</td>
+                  <td *ngIf="!isSidePanel()">{{ supplier.webUrl}}</td>
+                  <td class="editdelete" *ngIf="isPremium()">
+                    <a (click)="openMessageDrawer($event,supplier.followContactId,0,supplier.companyName)">
+                        <i class="fa fa-envelope-o pointerCursor" aria-hidden="true" placement="top" container="body" ngbTooltip="Message Manufacturer"></i>
+                    </a>
+                  </td>
+                  <td  (click)="removeContact(supplier.companyId)" class="editdelete tdborderright" *ngIf="activeStatusFilterBtn !== 'Archived'">
+                    <a>
+                      <img src="assets/rfq/not-allow.png" srcset="assets/rfq/not-allow@2x.png 2x, assets/rfq/not-allow@3x.png 3x" class="award-rfq-icon-class pointerCursor" placement="top" container="body" ngbTooltip="Remove Blacklist">
+                    </a>
+                  </td>
+                  <td (click)="removeArchivedContact(supplier.companyId)" class="editdelete tdborderright" *ngIf="activeStatusFilterBtn === 'Archived'">
+                      <a>
+                          <i class="fa fa-trash pointerCursor" aria-hidden="true" placement="top" container="body" ngbTooltip="Remove Contact"></i>
+                      </a>
+                    </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- *ngIf="!isRfqAvailable" -->
+      <div class="row" *ngIf="!isRfqAvailable">
+        <div class="col-md-4">
+          <div class="dataTables_length" id="example_length">
+            <label>Show
+              <select name="example_length" aria-controls="example" class="" [(ngModel)]="pageSize" (ngModelChange)="filterAll()">
+                  <option value="24">24</option>
+                  <option value="48">48</option>
+                  <option value="96">96</option>
+              </select>
+              entries</label>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="paginations">
+            <div  >
+              <div id="radioBtn" class="btn-group">
+                <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" class="btn btn-primary btn-sm notActive"
+                  (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                  Previous
+                </a>
+                <a *ngFor="let page of pagesIndex" (click)="setPage(page)" [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                  data-bs-toggle="fun" data-title="X">
+                  {{page}}
+                </a>
+                <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+                  (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                  Next
+                </a>
+              </div>
+              <input type="hidden" name="fun" id="fun">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="!isRfqAvailable">
+        <div class="col-md-12">
+            <div class="pull-right padd-right">
+                <label class="showreccount"> {{currentIndex   }} of {{pageNumber}} </label>
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- --------------------grid view ends------------------------- -->
+
+  <!-- ---------------------  loader start   --------------------  -->
+  <div *ngIf="isLoader">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>
+  <!-- ---------------------  loader end   --------------------  -->
+  <!-- ---------------------  Empty Box start   --------------------  -->
+  <div class="myRFQ-rfq-no-available" *ngIf="isRfqAvailable">
+    <div class="row" style="text-align: center;padding-top:60px">
+      <div class="col-md-12">
+        <div>
+          <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+        assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-top:34px;margin-bottom:100px;">
+      <div class="col-md-12">
+        <div class="myRFQ-noRFQActive-helper-text">You don’t have any Contacts at this time.</div>
+      </div>
+    </div>
+
+  </div>
+   <!-- ---------------------  Empty Box end   --------------------  -->
+<!-- </div> -->
+<!-- <div class="custom-confirmation" *ngIf="isCancel1stStep"> -->
+    <p-confirmDialog header="Confirmation" icon="" width="629" height="220" #cd>
+      <p-footer>
+        <div class="row">
+          <div class="col-md-6">
+            <button type="button" class="btn btn-ignore-rfq" (click)="cd.reject()">No</button>
+          </div>
+          <div class="col-md-6">
+            <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="cd.accept()">Yes</button>
+          </div>
+        </div>
+      </p-footer>
+    </p-confirmDialog>
+  <!-- </div> -->

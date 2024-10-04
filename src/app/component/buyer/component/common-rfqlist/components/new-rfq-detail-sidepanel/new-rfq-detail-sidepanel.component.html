@@ -1,0 +1,1338 @@
+<div class="rounded" id="rfqDrawer" >
+  <div class="row" *ngIf="!isLoader" (clickOutside)="clickOutside()">
+    <div class="col-md-12">
+      <svg
+        class="pull-right cursor-pointer"
+        (click)="closePartDrawer()"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <path
+          d="M3.21967 4.28033C2.92678 3.98744 2.92678 3.51256 3.21967 3.21967C3.51256 2.92678 3.98744 2.92678 4.28033 3.21967L12 10.9393L19.7197 3.21967C20.0126 2.92678 20.4874 2.92678 20.7803 3.21967C21.0732 3.51256 21.0732 3.98744 20.7803 4.28033L13.0607 12L20.7803 19.7197C21.0732 20.0126 21.0732 20.4874 20.7803 20.7803C20.4874 21.0732 20.0126 21.0732 19.7197 20.7803L12 13.0607L4.28033 20.7803C3.98744 21.0732 3.51256 21.0732 3.21967 20.7803C2.92678 20.4874 2.92678 20.0126 3.21967 19.7197L10.9393 12L3.21967 4.28033Z"
+          fill="black"
+        />
+      </svg>
+      <!-- <i class="fa fa-times-circle pull-right color-blue f-20 cursor-pointer" (click)="closePartDrawer()"></i> -->
+      <h2
+        class="rfq-heading"
+        placement="top"
+        data-container="body"
+        ngbTooltip="{{ irfqViewModel?.rfqName }}"
+      >
+        {{ irfqViewModel?.rfqName | dotLimit : "30" }}
+      </h2>
+      <h2 class="f-20 rfq-id">{{ irfqViewModel?.rfqId }}</h2>
+      <label class="f-14" *ngIf="irfqViewModel?.rfqStatusId == 1">Draft</label>
+      <label class="f-16 rfq-id" *ngIf="irfqViewModel?.rfqStatusId == 2"
+        >Pending Approval</label
+      >
+      <label class="f-16 rfq-id" *ngIf="irfqViewModel?.rfqStatusId == 3"
+        >Quoting</label
+      >
+      <label class="f-16 rfq-id" *ngIf="irfqViewModel?.rfqStatusId == 5"
+        >Closed</label
+      >
+      <label class="f-16 rfq-id" *ngIf="irfqViewModel?.rfqStatusId == 6"
+        >Awarded</label
+      >
+      <label class="f-16 rfq-id" *ngIf="irfqViewModel?.rfqStatusId == 9"
+        >Award Declined</label
+      >
+      <label class="f-16 rfq-id" *ngIf="irfqViewModel?.rfqStatusId == 14"
+        >In complete</label
+      >
+      <label class="f-16 rfq-id" *ngIf="irfqViewModel?.rfqStatusId == 15"
+        >Award</label
+      >
+      <label class="f-16 rfq-id" *ngIf="irfqViewModel?.rfqStatusId == 16"
+        >Awarded</label
+      >
+      <label class="f-16 rfq-id" *ngIf="irfqViewModel?.rfqStatusId == 17"
+        >Awarded</label
+      >
+      <label class="f-16 rfq-id" *ngIf="irfqViewModel?.rfqStatusId == 20"
+        >Awarded</label
+      >
+      <label class="f-16 rfq-id" *ngIf="irfqViewModel?.rfqStatusId == 18"
+        >Not Awarded</label
+      >
+    </div>
+    <div class="col-md-12 m-t-16" *ngIf="!isSupplierDetailPage">
+      <div style="display: flex">
+        <button
+          class="view_rfq_btn rfq_btn"
+          (click)="goToRfqDdetails(irfqViewModel?.rfqId)"
+        >
+          View Full RFQ
+        </button>
+       </div>
+    </div>
+    <div class="buyerDetails" *ngIf="showDrawer">
+      <div class="col-md-12">
+        <div class="panel panel-default remove-panel-margin">
+          <div class="panel-body">
+            <div class="panel-group" id="accordion">
+              <div class="panel pt-2 remove-panel-margin">
+                <div class="panel-heading section-heading-bottom mb-2">
+                  <div class="panel-title text-left">
+                    <a class="f-16 f-w-600 color-black">Parts</a>
+                  </div>
+                </div>
+                <div class="panel-body">
+                  <div class="panel-group">
+                    <div class="row" *ngIf="isFileDownloaded !== 0">
+                      <div class="loader animation-start">
+                        <span class="circle delay-1 size-2"></span>
+                        <span class="circle delay-2 size-4"></span>
+                        <span class="circle delay-3 size-6"></span>
+                        <span class="circle delay-4 size-7"></span>
+                        <span class="circle delay-5 size-7"></span>
+                        <span class="circle delay-6 size-6"></span>
+                        <span class="circle delay-7 size-4"></span>
+                        <span class="circle delay-8 size-2"></span>
+                      </div>
+                    </div>
+                    <div class="part-class"
+                      *ngFor="
+                        let part of iReviewPartsViewModelColl;
+                        let i = index
+                      "
+                    >
+                      <div class="panel panel-default bg-row-light mb-2 new-panel">
+                        <div
+                          class="section-heading-bottom clearfix"
+                          (click)="
+                            showHideRFQPartDetails($event, part.partId, i)
+                          "
+                        >
+                          <div class="panel-title text-left pull-left">
+                            <p
+                              class="f-16 f-w-600 pl-3 namerfq"
+                              placement="top"
+                              data-container="body"
+                              ngbTooltip="{{ part?.partName }}"
+                            >
+                              {{ part?.partName | titlecase }}
+                            </p>
+                            <p class="f-14 f-w-400 pl-3">
+                              {{ part?.partNumber | titlecase }}
+                            </p>
+                          </div>
+                          <div
+                            class="btn-group pull-right d-flex justify-content-around align-items-center"
+                          >
+                            <a
+                              class="pr-3 color-black"
+                              placement="left"
+                              [ngbPopover]="reviewpopAttachment"
+                              container="body"
+                              #q1="ngbPopover"
+                              (document:click)="q1.close()"
+                              (click)="$event.stopPropagation()"
+                            >
+                              <img
+                                src="assets/paperclip.svg"
+                                class="img-attachment"
+                              />
+                              <span class="f-14"
+                                >({{ part?.partsFiles?.length + 1 }})</span
+                              >
+                            </a>
+                            <div
+                              class="col-md-1 pull-right expand-icon-div img-right"
+                              (click)="
+                                showHideRFQPartDetails($event, part.partId, i)
+                              "
+                            >
+                              <i
+                                *ngIf="part.result"
+                                class="color-blue cursor-pointer"
+                              >
+                              <svg class="color-blue" width="18" height="2" viewBox="0 0 18 2" fill="none" xmlns="
+                              http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1C0 0.585786 0.335786 0.25 0.75 0.25H17.25C17.6642 0.25 18 0.585786 18 1C18 1.41421 17.6642 1.75 17.25 1.75H0.75C0.335786 1.75 0 1.41421 0 1Z" fill="blue"/>
+                              </svg>
+                              
+                              <!-- <img
+                              *ngIf="part.result"
+                              src="assets/dash-lg.svg"
+                              class="f-28 f-w-600 p-l-5 color-blue cursor-pointer img-attachment"
+                          /> -->
+                        </i>
+
+                              <!-- ngbTooltip="Expand Part Details" -->
+                              <i
+                                *ngIf="!part.result"
+                                data-container="body"
+                                class="cursor-pointer plus-class"
+                                ><img
+                                  src="assets/plus-lg.svg"
+                                  class="img-attachment"
+                              /></i>
+                            </div>
+                            <ng-template #reviewpopAttachment>
+                              <div>
+                                <div
+                                  class="text-right"
+                                  *ngIf="
+                                    !!part.partsFiles &&
+                                    isPremium() &&
+                                    ((irfqViewModel?.isStripeSupplier &&
+                                      part?.isAllowPartQuoting) ||
+                                      !irfqViewModel?.isStripeSupplier) &&
+                                    isNDAaccepted &&
+                                    part.partsFiles.length !== 0 &&
+                                    part.partsFiles.length >= 1
+                                  "
+                                >
+                                  <label
+                                    class="cursor-pointer color-blue text-right"
+                                    (click)="
+                                      downloadAllFiles(
+                                        part.partsFiles,
+                                        part.rfqPartFile,
+                                        part.partId,
+                                        part.rfqId,
+                                        'isFileDownloaded'
+                                      )
+                                    "
+                                  >
+                                    Download All
+                                  </label>
+                                </div>
+                                <div class="text-truncate">
+                                  <div class="row">
+                                    <div class="col-md-12 text-truncate">
+                                      <label
+                                        class="cursor-pointer color-blue"
+                                        *ngIf="
+                                          isPremium() &&
+                                          isNDAaccepted &&
+                                          ((irfqViewModel?.isStripeSupplier &&
+                                            part?.isAllowPartQuoting) ||
+                                            !irfqViewModel?.isStripeSupplier)
+                                        "
+                                        (click)="
+                                          downloadS3File(part.rfqPartFile, true)
+                                        "
+                                        title="Download - {{
+                                          part.rfqPartFile | originalName
+                                        }}"
+                                        >{{
+                                          part.rfqPartFile | shortAwsName : "23"
+                                        }}
+                                      </label>
+                                      <label
+                                        class="color-blue"
+                                        *ngIf="
+                                          !isPremium() ||
+                                          !isNDAaccepted ||
+                                          (irfqViewModel?.isStripeSupplier &&
+                                            !part?.isAllowPartQuoting)
+                                        "
+                                        title="{{
+                                          part.rfqPartFile | originalName
+                                        }}"
+                                        >{{
+                                          part.rfqPartFile | shortAwsName : "23"
+                                        }}
+                                      </label>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  *ngFor="let file of part?.partsFiles"
+                                  class="text-truncate"
+                                >
+                                  <label
+                                    class="cursor-pointer color-blue"
+                                    *ngIf="
+                                      isPremium() &&
+                                      isNDAaccepted &&
+                                      ((irfqViewModel?.isStripeSupplier &&
+                                        part?.isAllowPartQuoting) ||
+                                        !irfqViewModel?.isStripeSupplier)
+                                    "
+                                    (click)="downloadS3File(file, true)"
+                                    title="Download - {{ file | originalName }}"
+                                  >
+                                    {{ file | shortAwsName : "23" }}
+                                  </label>
+                                  <label
+                                    class="color-blue"
+                                    *ngIf="
+                                      !isPremium() ||
+                                      !isNDAaccepted ||
+                                      (irfqViewModel?.isStripeSupplier &&
+                                        !part?.isAllowPartQuoting)
+                                    "
+                                    title="{{ file | originalName }}"
+                                    >{{ file | shortAwsName : "23" }}
+                                  </label>
+                                </div>
+                              </div>
+                            </ng-template>
+                          </div>
+                        </div>
+
+                        <div *ngIf="part.result" class="panel-body p-l-5">
+                          <div
+                            class="row m-t-10"
+                            *ngIf="
+                              !isRFQForm2Enabled ||
+                              irfqViewModel.rfqFormVersion <
+                                rfqFormLatestVersion
+                            "
+                          >
+                            <div class="col-md-6">
+                              <div class="f-14 f-w-600">
+                                New or Existing Part?
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div>
+                                {{
+                                  part.isExistingPart == false
+                                    ? "New Part"
+                                    : part.isExistingPart == true
+                                    ? "Existing Part"
+                                    : "N/a"
+                                }}
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-4">
+                              <div class="f-14 f-w-600">1st Qty</div>
+                              <br />
+                              <div>
+                                {{ getQuantityByLeval(part.partId, 0) }}
+                              </div>
+                            </div>
+                            <div
+                              class="col-md-4"
+                              *ngIf="part?.rfqPartQuantityList.length > 1"
+                            >
+                              <div class="f-14 f-w-600">2nd Qty</div>
+                              <br />
+                              <div>
+                                {{ getQuantityByLeval(part.partId, 1) }}
+                              </div>
+                            </div>
+                            <div
+                              class="col-md-4"
+                              *ngIf="part?.rfqPartQuantityList.length > 2"
+                            >
+                              <div class="f-14 f-w-600">3rd Qty</div>
+                              <br />
+                              <div>
+                                {{ getQuantityByLeval(part.partId, 2) }}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row pt-2">
+                            <div class="col-md-12 pb-2">
+                              <div class="f-14 f-w-600 text-left pl-3">
+                                Quantity Unit
+                              </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-12 pb-2">
+                              <div class="f-14 text-left pl-3">
+                                {{
+                                  part?.partQtyUnitName
+                                    ? (part?.partQtyUnitName | titlecase)
+                                    : "N/A"
+                                }}
+                              </div>
+                            </div>
+                          </div>
+                          <!-- <div class="row pt-2">
+                          <div class="col-md-12 pb-2">
+                            <div class="f-14 f-w-600 text-left pl-3">
+                              Delivery Date
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <div class="f-14 text-left pl-3">
+                              {{
+                                part?.deliveryDate
+                                  ? (part?.deliveryDate | date: "MM/dd/yyyy")
+                                  : "N/A"
+                              }}
+                            </div>
+                          </div>
+                        </div> -->
+                          <div class="row pt-2">
+                            <div class="col-md-12 pb-2">
+                              <div class="f-14 f-w-600 text-left pl-3">
+                                Manufacturing Process
+                              </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-12 pb-2">
+                              <div class="f-14 text-left pl-3">
+                                {{
+                                  part?.parentCategoryName &&
+                                  part?.parentCategoryName !== "do not delete"
+                                    ? (part?.parentCategoryName | titlecase)
+                                    : "N/A"
+                                }}
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row pt-2">
+                            <div class="col-md-12 pb-2">
+                              <div class="f-14 f-w-600 text-left pl-3">
+                                Manufacturing Technique
+                              </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-12 pb-2">
+                              <div class="f-14 text-left pl-3">
+                                {{
+                                  part?.childCategoryName &&
+                                  part?.childCategoryName !== "do not delete"
+                                    ? (part?.childCategoryName | titlecase)
+                                    : "N/A"
+                                }}
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row pt-2">
+                            <div class="col-md-12 pb-2">
+                              <div class="f-14 f-w-600 text-left pl-3">
+                                Material
+                              </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-12 pb-2">
+                              <div class="f-14 text-left pl-3">
+                                {{
+                                  part?.materialName == "defaultroot" ||
+                                  part?.materialName == ""
+                                    ? "N/A"
+                                    : (part?.materialName | titlecase)
+                                }}
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row pt-2">
+                            <div class="col-md-12 pb-2">
+                              <div class="f-14 f-w-600 text-left pl-3">
+                                Post-Prod. Process
+                              </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-12 pb-2">
+                              <div class="f-14 text-left pl-3">
+                                {{
+                                  part?.postProductionProcessName
+                                    ? (part?.postProductionProcessName
+                                      | titlecase)
+                                    : "N/A"
+                                }}
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row pt-2">
+                            <div class="col-md-12 pb-2">
+                              <div class="f-14 f-w-600 text-left pl-3">
+                                Part Information for Manufacturing
+                              </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-12 pb-2">
+                              <div
+                                class="f-14 text-left pl-3"
+                                [innerHTML]="
+                                  part.partDescription | sanitizeHtmlLimt
+                                "
+                              ></div>
+                            </div>
+                          </div>
+                          <div
+                            class="row pt-2"
+                            *ngFor="
+                              let questions of part.rfqPartDrawerQuestionAnswerResponseList
+                            "
+                          >
+                            <div class="col-md-12 pb-2">
+                              <div class="f-14 f-w-600 text-left pl-3">
+                                {{ questions.question }}
+                              </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-12 pb-2">
+                              <div class="f-14 text-left pl-3">
+                                {{
+                                  questions.answer ? questions.answer : "N/A"
+                                }}
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row pt-2">
+                            <div class="col-md-12 pb-2">
+                              <div class="f-14 f-w-600 text-left pl-3">
+                                Quote Reference Number
+                              </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-12 pb-2">
+                              <div class="f-14 text-left pl-3">
+                                {{
+                                  part?.quoteReferenceNumber
+                                    ? part?.quoteReferenceNumber
+                                    : "N/A"
+                                }}
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row pt-2">
+                            <div class="col-md-12 pb-2">
+                              <div class="f-14 f-w-600 text-left pl-3">
+                                Comment
+                              </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-12 pb-2">
+                              <div
+                                class="f-14 text-left pl-3"
+                                style="word-break: break-word"
+                              >
+                                {{
+                                  part?.messageDesc ? part?.messageDesc : "N/A"
+                                }}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row" *ngIf="isFileDownloaded1 !== 0">
+                            <div class="loader animation-start">
+                              <span class="circle delay-1 size-2"></span>
+                              <span class="circle delay-2 size-4"></span>
+                              <span class="circle delay-3 size-6"></span>
+                              <span class="circle delay-4 size-7"></span>
+                              <span class="circle delay-5 size-7"></span>
+                              <span class="circle delay-6 size-6"></span>
+                              <span class="circle delay-7 size-4"></span>
+                              <span class="circle delay-8 size-2"></span>
+                            </div>
+                          </div>
+                          <div class="border-top">
+                            <div
+                              class="row pt-2"
+                              *ngIf="
+                                !!part.partsFiles &&
+                                isNDAaccepted &&
+                                isPremium() &&
+                                part.partsFiles.length !== 0 &&
+                                part.partsFiles.length >= 1 &&
+                                ((irfqViewModel?.isStripeSupplier &&
+                                  part?.isAllowPartQuoting) ||
+                                  !irfqViewModel?.isStripeSupplier)
+                              "
+                            >
+                              <div class="col-md-12 pb-2 text-right">
+                                <label
+                                  class="text-center pl-3 cursor-pointer color-blue"
+                                  (click)="
+                                    downloadAllFiles(
+                                      part.partsFiles,
+                                      part.rfqPartFile,
+                                      part.partId,
+                                      part.rfqId,
+                                      'isFileDownloaded1'
+                                    )
+                                  "
+                                >
+                                  Download All
+                                </label>
+                              </div>
+                            </div>
+                            <div>
+                              <div class="row pt-2">
+                                <div
+                                  class="col-md-8 pb-2 text-truncate"
+                                  *ngIf="
+                                    !isPremium() ||
+                                    !isNDAaccepted ||
+                                    (irfqViewModel?.isStripeSupplier &&
+                                      !part?.isAllowPartQuoting)
+                                  "
+                                >
+                                  <div
+                                    class="text-left pl-3 text-truncate color-blue"
+                                    title="{{
+                                      part.rfqPartFile | originalName
+                                    }}"
+                                  >
+                                    {{ part.rfqPartFile | originalName }}
+                                  </div>
+                                </div>
+                                <div
+                                  class="col-md-8 pb-2 text-truncate"
+                                  *ngIf="
+                                    isPremium() &&
+                                    isNDAaccepted &&
+                                    ((irfqViewModel?.isStripeSupplier &&
+                                      part?.isAllowPartQuoting) ||
+                                      !irfqViewModel?.isStripeSupplier)
+                                  "
+                                >
+                                  <div
+                                    class="text-left pl-3 text-truncate cursor-pointer color-blue"
+                                    title="{{
+                                      part.rfqPartFile | originalName
+                                    }}"
+                                    (click)="
+                                      downloadS3File(part.rfqPartFile, false)
+                                    "
+                                  >
+                                    {{ part.rfqPartFile | originalName }}
+                                  </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div
+                                  class="col-md-3 pb-2 text-right"
+                                  *ngIf="
+                                    isPremium() &&
+                                    isNDAaccepted &&
+                                    ((irfqViewModel?.isStripeSupplier &&
+                                      part?.isAllowPartQuoting) ||
+                                      !irfqViewModel?.isStripeSupplier)
+                                  "
+                                >
+                                  <a
+                                    (click)="
+                                      downloadS3File(part.rfqPartFile, true)
+                                    "
+                                  >
+                                    <div
+                                      class="f-12 f-w-500 color-blue cursor-pointer text-right"
+                                    >
+                                      Download
+                                    </div>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                            <div *ngFor="let file of part?.partsFiles">
+                              <div class="row pt-2">
+                                <div
+                                  class="col-md-8 pb-2 text-truncate"
+                                  *ngIf="
+                                    !isPremium() ||
+                                    !isNDAaccepted ||
+                                    (irfqViewModel?.isStripeSupplier &&
+                                      !part?.isAllowPartQuoting)
+                                  "
+                                >
+                                  <div
+                                    class="text-left pl-3 text-truncate color-blue"
+                                    placement="top"
+                                    data-container="body"
+                                    ngbTooltip="{{ file | originalName }}"
+                                  >
+                                    {{ file | originalName | dotLimit : "20" }}
+                                  </div>
+                                </div>
+                                <div
+                                  class="col-md-8 pb-2 text-truncate"
+                                  *ngIf="
+                                    isPremium() &&
+                                    isNDAaccepted &&
+                                    ((irfqViewModel?.isStripeSupplier &&
+                                      part.isAllowPartQuoting) ||
+                                      !irfqViewModel?.isStripeSupplier)
+                                  "
+                                >
+                                  <div
+                                    class="text-left pl-3 text-truncate cursor-pointer color-blue"
+                                    (click)="downloadS3File(file, false)"
+                                    placement="top"
+                                    data-container="body"
+                                    ngbTooltip="{{ file | originalName }}"
+                                  >
+                                    {{ file | originalName | dotLimit : "20" }}
+                                  </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div
+                                  class="col-md-3 pb-2 text-right"
+                                  *ngIf="
+                                    isPremium() &&
+                                    isNDAaccepted &&
+                                    ((irfqViewModel?.isStripeSupplier &&
+                                      part?.isAllowPartQuoting) ||
+                                      !irfqViewModel?.isStripeSupplier)
+                                  "
+                                >
+                                  <a (click)="downloadS3File(file, true)">
+                                    <div
+                                      class="f-12 f-w-500 color-blue cursor-pointer text-right"
+                                    >
+                                      Download
+                                    </div>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel pt-2 remove-panel-margin">
+                <!-- <div class="panel-heading section-heading-bottom">
+                <div class="panel-title text-left">
+                  <a class="f-16 f-w-600">RFQ Details</a>
+                </div>
+              </div> -->
+                <!-- <div class="buyerDetails"> -->
+                <div class="panel-body">
+                  <div class="panel-group">
+                    <div class="panel pt-1 remove-panel-margin">
+                      <div
+                        class="panel-heading section-subheading-bottom pl-0 pb-1 seperator"
+                      >
+                        <div class="panel-title text-left pb-1">
+                          <a class="f-16 f-w-600 color-black">Overview</a>
+                        </div>
+                      </div>
+                      <div class="panel-body">
+                        <div class="row p-t20">
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              What is your purpose for this RFQ?
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-400 text-left pl-3">
+                              {{
+                                irfqViewModel?.rfqPurposeAnswer
+                                  ? irfqViewModel.rfqPurposeAnswer
+                                  : "N/A"
+                              }}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div
+                          class="row p-t20"
+                          *ngIf="irfqViewModel?.isForBenchmarking"
+                        >
+                          <div class="col-md-12 pb-2">
+                            <div class="f-14 f-w-600 text-left pl-3">
+                              Benchmarking reason
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <div class="f-14 text-left pl-3">
+                              {{
+                                irfqViewModel?.rfqPurposeOtherComment
+                                  ? irfqViewModel?.rfqPurposeOtherComment
+                                  : irfqViewModel?.benchmarkingReason
+                              }}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row p-t20">
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              Are any special certifications needed to make
+                              these parts?
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-400 text-left pl-3">
+                              {{
+                                irfqViewModel?.isSpecialCertificationsByManufacturer
+                                  ? "Yes"
+                                  : "No"
+                              }}
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="row p-t20"
+                          *ngIf="
+                            irfqViewModel?.isSpecialCertificationsByManufacturer
+                          "
+                        >
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              Certifications
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <div
+                              class="f-16 f-w-400 text-left"
+                              *ngIf="
+                                irfqViewModel?.isSpecialCertificationsByManufacturer
+                              "
+                            >
+                              <div class="row">
+                                <div
+                                  class="col-md-6"
+                                  *ngFor="
+                                    let cer of irfqViewModel.certificateList;
+                                    let i = index
+                                  "
+                                >
+                                  ({{ i + 1 }}) {{ cer.certificateCode }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row p-t20">
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              Do you have any special instructions for the
+                              manufacturer?
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <p class="f-16 f-w-400 text-left pl-3">
+                              {{
+                                irfqViewModel?.isSpecialInstructionToManufacturer
+                                  ? "Yes"
+                                  : "No"
+                              }}
+                            </p>
+                            <p class="f-16 f-w-400 text-left pl-3 mt-1">
+                              {{
+                                irfqViewModel?.specialInstructionToManufacturer
+                              }}
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                          class="row p-t20 bg-row-light"
+                          *ngIf="!isRFQForm2Enabled"
+                        >
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              Order of Importance
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-400 text-left pl-3">
+                              {{ importanceOrder }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row p-t20">
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              Quotes Needed By
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-400 text-left pl-3">
+                              {{
+                                irfqViewModel?.quotesNeededBy
+                                  | date : "MM/dd/yyyy"
+                              }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row p-t20">
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              Award Date
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-400 text-left pl-3">
+                              {{
+                                irfqViewModel?.awardDate | date : "MM/dd/yyyy"
+                              }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row p-t20">
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              Delivery Date
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-400 text-left pl-3">
+                              {{
+                                irfqViewModel?.deliveryDate
+                                  | date : "MM/dd/yyyy"
+                              }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row p-t20">
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              Preferred Manufacturing Location(s)
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-400 text-left pl-3">
+                              {{ preferredMfgLocText }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row p-t20">
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              Do you want to allow partial quoting?
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-400 text-left pl-3">
+                              {{
+                                irfqViewModel?.isPartialQuotingAllowed
+                                  ? "Yes"
+                                  : "No"
+                              }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="panel pt-1 remove-panel-margin">
+                      <div
+                        class="panel-heading section-subheading-bottom pl-0 pb-1 seperator"
+                      >
+                        <div class="panel-title text-left pb-1">
+                          <a class="f-16 f-w-600 color-black">SHIPPING</a>
+                        </div>
+                      </div>
+                      <div class="panel-body">
+                        <div class="row p-t20">
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              Who pays for shipping?
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-400 text-left pl-3">
+                              {{
+                                whoPaysForShippingText
+                                  ? (whoPaysForShippingText | titlecase)
+                                  : "N/A"
+                              }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row p-t20" *ngIf="isPremium()">
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              Ship To
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <div
+                              class="f-16 f-w-400 text-left pl-3"
+                              *ngIf="hasRfqAccess()"
+                            >
+                              {{ shippingAddress?.siteLabel
+                              }}<span *ngIf="shippingAddress?.siteLabel"
+                                >,
+                              </span>
+                              <br />
+                              {{ shippingAddress?.streetAddress
+                              }}<span
+                                *ngIf="
+                                  shippingAddress?.deptAddress &&
+                                  shippingAddress?.deptAddress !== ''
+                                "
+                                >,
+                              </span>
+                              {{ shippingAddress?.deptAddress
+                              }}<span
+                                *ngIf="
+                                  shippingAddress?.city &&
+                                  shippingAddress?.city !== ''
+                                "
+                                >,
+                              </span>
+                              <br />
+                              {{ shippingAddress?.city
+                              }}<span *ngIf="shippingAddress?.state">, </span>
+                              {{ shippingAddress?.state }}
+                              <span
+                                *ngIf="
+                                  shippingAddress?.postalCode &&
+                                  shippingAddress?.postalCode !== ''
+                                "
+                                >,
+                              </span>
+                              {{ shippingAddress?.postalCode }} <br />
+                              {{ shippingAddress?.country }}
+                            </div>
+                            <div
+                              class="f-16 text-left pl-3"
+                              *ngIf="!hasRfqAccess()"
+                            >
+                              <span *ngIf="shippingAddress?.state"> </span>
+                              {{ shippingAddress?.state }},
+                              <br />
+                              {{ shippingAddress?.country }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row p-t20">
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              Payment Terms
+                            </div>
+                          </div>
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              What’s your preferred payment terms?
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <div
+                              class="f-16 f-w-400 text-left pl-3"
+                              *ngIf="irfqViewModel?.payment_term_id == 1"
+                            >
+                              Net 15
+                            </div>
+                            <div
+                              class="f-16 f-w-400 text-left pl-3"
+                              *ngIf="irfqViewModel?.payment_term_id == 2"
+                            >
+                              Net 30
+                            </div>
+                            <div
+                              class="f-16 f-w-400 text-left pl-3"
+                              *ngIf="irfqViewModel?.payment_term_id == 3"
+                            >
+                              Net 45
+                            </div>
+                            <div
+                              class="f-16 f-w-400 text-left pl-3"
+                              *ngIf="irfqViewModel?.payment_term_id == 4"
+                            >
+                              Net 60
+                            </div>
+                            <div
+                              class="f-16 f-w-400 text-left pl-3"
+                              *ngIf="irfqViewModel?.payment_term_id == null"
+                            >
+                              NA
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="panel pt-1 remove-panel-margin">
+                      <div
+                        class="panel-heading section-subheading-bottom pl-0 pb-1 seperator"
+                      >
+                        <div class="panel-title text-left pb-1">
+                          <a class="f-16 f-w-600 color-black">NDA</a>
+                        </div>
+                      </div>
+                      <div class="panel-body">
+                        <div class="row p-t20">
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              Preferred NDA Type
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-400 text-left pl-3">
+                              {{ prefNDATypeText }}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div
+                          class="row p-t20"
+                          *ngIf="prefNDATypeText !== 'No NDA Needed'"
+                        >
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              NDA Verbiage
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="pb-2">
+                            <div class="f-16 f-w-400 text-left pl-3">
+                              {{
+                                isStandardNda
+                                  ? "MFG.com’s Standard NDA"
+                                  : "Custom NDA"
+                              }}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div
+                          class="pt-0"
+                          *ngIf="
+                            !isStandardNda &&
+                            prefNDATypeText !== 'No NDA Needed'
+                          "
+                        >
+                          <div class="pb-2 bg-row-light">
+                            <div
+                              *ngIf="
+                                isPremium() &&
+                                ((irfqViewModel?.isStripeSupplier &&
+                                  irfqViewModel?.isAllowQuoting) ||
+                                  !irfqViewModel?.isStripeSupplier)
+                              "
+                              class="text-left pt-2 pl-3"
+                              placement="top"
+                              data-container="body"
+                              ngbTooltip="{{ customNDAFile | originalName }}"
+                            >
+                              {{
+                                customNDAFile | originalName | dotLimit : "20"
+                              }}
+                              <a (click)="downloadS3File(customNDAFile, false)"
+                                ><span
+                                  class="f-12 f-w-500 color-blue cursor-pointer text-right pull-right pr-3"
+                                  >View</span
+                                ></a
+                              >
+                            </div>
+                            <div
+                              *ngIf="
+                                !isPremium() ||
+                                (irfqViewModel?.isStripeSupplier &&
+                                  !irfqViewModel?.isAllowQuoting)
+                              "
+                              style="cursor: default !important"
+                              class="text-left pt-2 pl-3"
+                              placement="top"
+                              data-container="body"
+                              ngbTooltip="{{ customNDAFile | originalName }}"
+                            >
+                              {{
+                                customNDAFile | originalName | dotLimit : "20"
+                              }}
+                              <a style="cursor: default !important"
+                                ><span
+                                  style="
+                                    cursor: default !important;
+                                    color: gray;
+                                  "
+                                  class="f-12 f-w-500 color-blue cursor-pointer text-right pull-right pr-3"
+                                  >View</span
+                                ></a
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="panel pt-1 remove-panel-margin">
+                      <div
+                        class="panel-heading section-subheading-bottom pl-0 pb-1 seperator"
+                      >
+                        <div class="panel-title text-left pb-1">
+                          <a class="f-16 f-w-600 color-black">Communication</a>
+                        </div>
+                      </div>
+                      <div class="panel-body">
+                        <div class="row p-t20">
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-600 text-left pl-3">
+                              Preferred Method of Communication
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="col-md-12 pb-2">
+                            <div class="f-16 f-w-400 text-left pl-3">
+                              {{
+                                irfqViewModel.prefRfqCommunicationMethod
+                                  ? preferredCommunicationArray[
+                                      irfqViewModel.prefRfqCommunicationMethod
+                                    ]
+                                  : "Call or Email"
+                              }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="panel pt-1 remove-panel-margin">
+                      <div class="row" *ngIf="isFileDownloaded2 !== 0">
+                        <div class="loader animation-start">
+                          <span class="circle delay-1 size-2"></span>
+                          <span class="circle delay-2 size-4"></span>
+                          <span class="circle delay-3 size-6"></span>
+                          <span class="circle delay-4 size-7"></span>
+                          <span class="circle delay-5 size-7"></span>
+                          <span class="circle delay-6 size-6"></span>
+                          <span class="circle delay-7 size-4"></span>
+                          <span class="circle delay-8 size-2"></span>
+                        </div>
+                      </div>
+                      <div
+                        class="panel-heading section-subheading-bottom pl-0 pb-1 seperator"
+                      >
+                        <div class="panel-title text-left pb-1">
+                          <a class="f-16 f-w-600 color-black"
+                            >NON-PART ATTACHMENTS</a
+                          >
+                        </div>
+                      </div>
+                      <div class="panel-body">
+                        <div
+                          class="col-md-12 text-left"
+                          *ngIf="
+                            irfqViewModel?.rfqGeneralAttachmentsList?.length > 0
+                          "
+                        >
+                          <div class="attachemet-indi manufac_scroll">
+                            <div
+                              class="row p-t20 mb-2"
+                              *ngIf="
+                                irfqViewModel?.rfqGeneralAttachmentsList
+                                  .length > 1
+                              "
+                            >
+                              <div
+                                class="col-md-12 pb-2 bg-row-light text-right"
+                                *ngIf="
+                                  isPremium() &&
+                                  isNDAaccepted &&
+                                  ((irfqViewModel?.isStripeSupplier &&
+                                    irfqViewModel?.isAllowQuoting) ||
+                                    !irfqViewModel?.isStripeSupplier)
+                                "
+                              >
+                                <label
+                                  class="text-left pl-3 cursor-pointer color-blue"
+                                  (click)="
+                                    downloadAllFiles(
+                                      irfqViewModel.rfqGeneralAttachmentsList,
+                                      '',
+                                      0,
+                                      irfqViewModel?.rfqId,
+                                      'isFileDownloaded2'
+                                    )
+                                  "
+                                >
+                                  Download All
+                                </label>
+                              </div>
+                            </div>
+                            <div
+                              *ngFor="
+                                let file of irfqViewModel?.rfqGeneralAttachmentsList
+                              "
+                            >
+                              <div class="row p-t20 bg-row-light mb-2">
+                                <div
+                                  class="col-md-12 pb-2 text-truncate download-right"
+                                  *ngIf="
+                                    isPremium() &&
+                                    isNDAaccepted &&
+                                    ((irfqViewModel?.isStripeSupplier &&
+                                      irfqViewModel?.isAllowQuoting) ||
+                                      !irfqViewModel?.isStripeSupplier)
+                                  "
+                                >
+                                  <a
+                                    class="cursor-pointer"
+                                    placement="top"
+                                    data-container="body"
+                                    ngbTooltip="{{
+                                      file | shortAwsName : '200'
+                                    }}"
+                                   
+                                  >
+                                    <div class="text-left pl-3">
+                                      {{ file | shortAwsName : "23" }}
+                                    </div>
+                                  </a>
+                                  <img
+                                  src="assets/download.svg"
+                                  class="cursor-pointer"
+                                  (click)="downloadS3File(file, true)"
+                              />
+                                </div>
+                                <div
+                                  class="col-md-12 pb-2 text-truncate download-right "
+                                  *ngIf="
+                                    !isPremium() ||
+                                    !isNDAaccepted ||
+                                    (irfqViewModel?.isStripeSupplier &&
+                                      !part?.isAllowPartQuoting)
+                                  "
+                                >
+                                  <a
+                                    placement="top"
+                                    data-container="body"
+                                    ngbTooltip="{{
+                                      file | shortAwsName : '200'
+                                    }}"
+                                  >
+                                    <div class="text-left pl-3">
+                                      {{ file | shortAwsName : "23" }}
+                                    </div>
+                                  </a>
+                                  
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="row p-t20 pt-2 bg-row-light mb-2"
+                          *ngIf="
+                            irfqViewModel?.rfqGeneralAttachmentsList?.length ==
+                            0
+                          "
+                        >
+                          <span class="no-groups-added-text">
+                            No attachments</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="full-page-overlay myrfq" *ngIf="isLoader">
+    <div class="rfqLoader"></div>
+  </div>
+  
+</div>

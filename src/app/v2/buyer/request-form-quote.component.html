@@ -1,0 +1,168 @@
+<div class="accordionMainCont">
+    <div class="row sectionTitle">
+        <div class="col-md-12"> Create an RFQ</div>
+    </div>
+    <div class="row mainPageGrid">
+        <div class="col-md-{{partLibraryOpened||getRFQPartsCount()>0?'7':'12'}} sec1">
+            <!--part section started-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="rfqAccordion">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="d-flex accordionTitle justify-content-between">
+                                    <div>
+                                        {{RFQ_PART_SECTION_ACCORDION_DATA.sectionNameText}}
+                                    </div>
+                                    <div (click)="switchAccordionSection(RFQ_PART_SECTION_ACCORDION_DATA)"
+                                        class="cursor-pointer"><i class="fa fa-chevron-down  cursor-pointer"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div [hidden]="currentSectionName!=RFQ_PS">
+                            <rfq-part-section #rfqPartSectionComponentRef></rfq-part-section>
+                            <div class="row">
+                                <div class="col-md-6 mb-2 mb-md-0">
+                                    <button type="button" (click)="partSectionNextPreviousHandler()"
+                                        class="btn btn-outline-primary w-100">{{RFQ_PART_SECTION_ACCORDION_DATA.backButtonText}}</button>
+                                </div>
+                                <div class="col-md-6" *ngIf="currentSectionName!=RFQ_AIS">
+                                    <button type="button" (click)="partSectionNextPreviousHandler(RFQ_DS)"
+                                        class="btn btn-primary w-100">{{RFQ_PART_SECTION_ACCORDION_DATA.nextButtonText}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--partsection end-->
+                <!--detail section started-->
+
+                <div class="col-md-12">
+                    <div class="rfqAccordion">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="d-flex accordionTitle justify-content-between">
+                                    <div>{{RFQ_DETAIL_SECTION_ACCORDION_DATA.sectionNameText}}</div>
+                                    <div (click)="switchAccordionSection(RFQ_DETAIL_SECTION_ACCORDION_DATA)"
+                                        class="cursor-pointer"><i class="fa fa-chevron-down  cursor-pointer"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div [hidden]="currentSectionName!=RFQ_DS">
+                            <rfq-detail-section #rfqDetailRef></rfq-detail-section>
+                            <div class="row">
+                                <div class="col-md-6 mb-2 mb-md-0">
+                                    <button type="button" (click)="detailSectionNextPreviousHandler(null, RFQ_PS)"
+                                        class="btn btn-outline-primary w-100">{{RFQ_DETAIL_SECTION_ACCORDION_DATA.backButtonText}}</button>
+                                </div>
+                                <div class="col-md-6" *ngIf="currentSectionName!=RFQ_AIS">
+                                    <button type="button" (click)="detailSectionNextPreviousHandler(RFQ_SS, null)"
+                                        class="btn btn-primary w-100">{{RFQ_DETAIL_SECTION_ACCORDION_DATA.nextButtonText}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--detail section end-->
+                <!--shipping section started-->
+
+                <div class="col-md-12">
+                    <div class="rfqAccordion">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="d-flex accordionTitle justify-content-between">
+                                    <div>{{RFQ_SHIPPING_SECTION_ACCORDION_DATA.sectionNameText}}</div>
+                                    <div (click)="switchAccordionSection(RFQ_SHIPPING_SECTION_ACCORDION_DATA)"
+                                        class="cursor-pointer"><i class="fa fa-chevron-down  cursor-pointer"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div [hidden]="currentSectionName!=RFQ_SS">
+                            <rfq-shipping-section #rfqShippingSectionfoRef></rfq-shipping-section>
+                            <div class="row">
+                                <div class="col-md-6 mb-2 mb-md-0">
+                                    <button type="button" (click)="updateRFQShippingAddress(null, RFQ_DS)"
+                                        class="btn btn-outline-primary w-100">{{RFQ_SHIPPING_SECTION_ACCORDION_DATA.backButtonText}}</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" (click)="updateRFQShippingAddress(RFQ_AIS, null)"
+                                        class="btn btn-primary w-100">{{RFQ_SHIPPING_SECTION_ACCORDION_DATA.nextButtonText}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--detail section end-->
+                <!--additional information section started-->
+
+                <div class="col-md-12">
+                    <div class="rfqAccordion">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="d-flex accordionTitle justify-content-between">
+                                    <div>{{RFQ_ADDITIONAL_INFO_SECTION_ACCORDION_DATA.sectionNameText}}</div>
+                                    <div (click)="switchAccordionSection(RFQ_ADDITIONAL_INFO_SECTION_ACCORDION_DATA)"
+                                        class="cursor-pointer"><i class="fa fa-chevron-down  cursor-pointer"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div [hidden]="currentSectionName!=RFQ_AIS">
+                            <rfq-additional-info-section #rfqAdditionalInfoRef></rfq-additional-info-section>
+                            <div class="row">
+                                <div class="col-md-12 pb-2">
+                                    <button type="button" (click)="additionalInfoPreviousMover()"
+                                        class="btn btn-secondary w-100">{{RFQ_ADDITIONAL_INFO_SECTION_ACCORDION_DATA.backButtonText}}</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-2 mb-md-0">
+                                    <button type="button" class="btn btn-outline-primary w-100"
+                                        (click)="saveRFQAsDraft()">
+                                        Save to Draft</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" (click)="submitRFQ()"
+                                        class="btn btn-primary w-100">Submit</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--additional information section end-->
+            </div>
+        </div>
+        <div class="col-md-5 rfq-base-sticky-added-part sec2" [hidden]="getRFQPartsCount()==0 && !partLibraryOpened">
+            <rfq-added-part-section></rfq-added-part-section>
+        </div>
+    </div>
+ 
+
+    <ng-template #destroyedModel let-d="dismiss" data-backdrop="static" data-keyboard="false">
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Save your RFQ to drafts?</h4>
+        </div>
+        <div class="modal-body">
+            <div class="m-b-20">
+                <span>If you would like to save your progress and comple this RFQ at another time, you can access it
+                    from "Draft RFQs".</span>
+            </div>
+        </div>
+        <div class="modal-footer" style="justify-content: center">
+            <button type="button" class="btn btn-outline-primary w-100" (click)="autoSaveAsDraft()" style="width: 45%">
+                Move to Draft 
+            </button>
+            <button type="button" class="btn btn-primary w-100" (click)="stayToCurrentPage()"
+                style="width: 45%">
+                Continue RFQ
+            </button>
+        </div>
+    </ng-template>
+
+    <div class="full-page-overlay" *ngIf="showPageDataLoding === 'show' ">
+        <div class="rfqLoader"></div>
+    </div>
+</div>

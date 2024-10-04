@@ -1,0 +1,222 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 m-t-50" style="text-align: center">
+      <img style="width: 50%;" src="assets/login/Logo_MFG_White.png" alt="MFG Logo" />
+    </div>
+    <div class="col-md-12 m-t-50" *ngIf="showRegistration">
+      <form
+        class="form"
+        #registerForm="ngForm"
+        (ngSubmit)="registerUser(registerForm.value)"
+      >
+        <div class="row">
+          <div class="col-md-12 form-group">
+            <label for="">Email</label>
+            <input
+              type="text"
+              class="form-control"
+              name="email"
+              required
+              #email="ngModel"
+              [(ngModel)]="registerModel.emailId"
+              readonly
+            />
+            <div
+              class="form-control-feedback"
+              *ngIf="email.errors && (email.dirty || email.touched)"
+            >
+              <p *ngIf="email.errors.required">Email is required</p>
+            </div>
+          </div>
+        </div>
+        <div class="form-radio row">
+          <div class="col-md-12">
+            <div class="radio radio-inline">
+              <label>
+                <input
+                  type="radio"
+                  class="form-control"
+                  name="userType"
+                  value="buyer"
+                  required
+                  #userType
+                  [(ngModel)]="registerModel.userType"
+                />
+                <i class="helper"></i>Buyer
+              </label>
+            </div>
+            <div class="radio radio-inline">
+              <label>
+                <input
+                  type="radio"
+                  name="userType"
+                  class="form-control"
+                  value="manufacturing"
+                  required
+                  [(ngModel)]="registerModel.userType"
+                />
+                <i class="helper"></i>Manufacturer
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 form-group">
+            <label for="">Company Name</label>
+            <input
+              type="text"
+              class="form-control"
+              name="companyName"
+              required
+              #companyName="ngModel"
+              [(ngModel)]="registerModel.company.name"
+              pattern=".*[^ ].*"
+            />
+            <div
+              class="form-control-feedback"
+              *ngIf="
+                companyName.errors && (companyName.dirty || companyName.touched)
+              "
+            >
+              <p
+                *ngIf="
+                  companyName.errors.required || companyName.errors.pattern
+                "
+              >
+                Company Name is required
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 form-group">
+            <label for="">Country</label>
+            <select
+              name="country"
+              class="form-control"
+              required
+              #country="ngModel"
+              [(ngModel)]="registerModel.address.countryId"
+            >
+              <option
+                *ngFor="let country of countryList"
+                [value]="country.countryId"
+              >
+                {{ country.countryName }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 form-group">
+            <label for="">Postal Code</label>
+            <input
+              type="text"
+              name="postalCode"
+              class="form-control"
+              maxlength="15"
+              required
+              #postalCode="ngModel"
+              [(ngModel)]="registerModel.address.postalCode"
+              pattern=".*[^ ].*"
+            />
+            <div
+              class="form-control-feedback"
+              *ngIf="
+                postalCode.errors && (postalCode.dirty || postalCode.touched)
+              "
+            >
+              <p
+                *ngIf="postalCode.errors.required || postalCode.errors.pattern"
+              >
+                Postal Code is required
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 form-group">
+            <label for="">Password</label>
+            <input
+              type="password"
+              name="password"
+              class="form-control"
+              maxlength="20"
+              minlength="6"
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*#?&^()])[A-Za-z\d$@$!%*#?&^()]{6,20}$"
+              required
+              #password="ngModel"
+              [(ngModel)]="registerModel.password"
+            />
+            <div
+              class="form-control-feedback"
+              *ngIf="password.errors && (password.dirty || password.touched)"
+            >
+              <p *ngIf="password.errors.required">Password is required</p>
+              <p *ngIf="password.errors.pattern">
+                Must be 6-20 characters long and contain both uppercase and
+                lower case letters and at least one number and symbol.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 form-group">
+            <label for="">Confirm Password</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              class="form-control"
+              maxlength="20"
+              maxlength="20"
+              minlength="6"
+              required
+              #confirmPassword="ngModel"
+              [(ngModel)]="registerModel.confirmPass"
+            />
+            <div
+              class="form-control-feedback"
+              *ngIf="
+                comparePassword() &&
+                (confirmPassword.dirty || confirmPassword.touched)
+              "
+            >
+              <p>Password mismatch</p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 form-group">
+            <span class="terms"
+              ><b>Note</b> : Enter combination of at least one number and 6-20
+              characters with one capital,one lower and any one special
+              character ($,@,!,%,*,#,?,&,^,())</span
+            >
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 form-group text-center">
+            <button
+              type="submit"
+              class="btn btn-submit"
+              [disabled]="registerForm.invalid || comparePassword()"
+            >
+              Submit
+              <i class="fa fa-spinner fa-spin" *ngIf="isLoginResponse"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="loader animation-start" *ngIf="!showRegistration">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>
+</div>

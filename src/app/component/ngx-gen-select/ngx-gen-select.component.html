@@ -1,0 +1,47 @@
+<div class="ngx-gen-select-container">
+    <div class="input-group mb-3" (click)="showItems()">
+        <label class="form-control"
+               style="cursor: pointer;"
+               [ngStyle]="{'color' : selectedValue==null ? 'silver' : 'inherit'}"
+               *ngIf="selectedValue==null || (selectedItem!=null && !selectedItem.isEditable)">
+            {{selectedValue!=null ? selectedItem.text : emptyMessage}}
+        </label>
+        <input type="text" class="form-control" 
+                *ngIf="selectedValue!=null && selectedItem.isEditable"
+                (click)="showItems()"
+                [(ngModel)]="selectedItem.object"
+                #ngxEditableSelection />
+        <div class="input-group-append" *ngIf="selectedValue!=null">
+            <span class="input-group-text">
+                <i class="fa fa-times" aria-hidden="true" 
+                    style="margin-top: 3px;" (click)="clearSelection()"></i>
+            </span>
+        </div>
+        <div class="input-group-append">
+            <span class="input-group-text">
+                <i class="fa fa-sort-desc" aria-hidden="true"></i>
+            </span>
+        </div>
+    </div>
+    <div class="items-container-base" *ngIf="_showItems">
+        <div class="col-sm-12 col-lg-12 col-md-12 search-text-container">
+            <input type="text" class="col-sm-12 col-md-12 col-lg-12" 
+                    name="search" [(ngModel)]="searchText"
+                    placeholder="Search..."
+                    #ngxSearchText />
+        </div>
+        <div class="items-container">
+            <div [ngClass]="selectedItem!=null && selectedItem!=undefined 
+                            && selectedItem.text==itemInfo.text
+                            ? 'col-md-12 col-lg-12 col-sm-12 ngxSelectedItem' 
+                            : 'col-md-12 col-lg-12 col-sm-12 ngxItem'" 
+                *ngFor="let itemInfo of itemCollection | selectFilter:searchText"
+                (click)="itemClick(itemInfo)">
+                <span class="item-Text">{{itemInfo.text}}</span>
+                <i class="fa fa-times removeIcon" 
+                    *ngIf="itemInfo.isRemovable" 
+                    (click)="removeSelectedItem(itemInfo, $event)"></i>
+            </div>
+        </div>
+    </div>
+</div>

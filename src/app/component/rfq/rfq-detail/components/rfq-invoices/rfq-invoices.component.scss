@@ -1,0 +1,134 @@
+// Invoice Tab styles
+.header-selection {
+    display: flex;
+    justify-content: space-between;
+    .all-invoices {
+        font-size: 14px;
+    }
+    .outstanding-selection {
+        width:140px;
+        font-size: 14px;
+    }
+    .postDue {
+        font-size: 14px;
+    }
+    .post {
+        font-size: 14px;
+    }
+    .my-RFQ-state-filter-button-active {
+        border-radius: 2px;
+        background-color: #f6f7fb;
+        border: solid 1px #bec4cb;
+        font-family: Poppins;
+        font-size: 14px;
+        font-weight: 500;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: center;
+        color: #919aa3;
+        height: 38px !important;
+      }
+      .my-RFQ-state-filter-button-pre-active {
+        border-radius: 2px;
+        background-color: #f6f7fb;
+        border: solid 1px #bec4cb;
+        font-family: Poppins;
+        font-size: 14px;
+        width: 124px;
+        font-weight: 500;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: center;
+        color: #919aa3;
+        height: 38px !important;
+      }
+      .my-RFQ-state-filter-button-inactive {
+        background-color: #ffffff;
+        border: solid 1px #bec4cb;
+        font-family: Poppins;
+        font-size: 14px;
+        font-weight: 500;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: center;
+        color: #4a90e2;
+        height: 38px !important;
+      }
+      .my-RFQ-state-filter-button-pre-inactive {
+        background-color: #ffffff;
+        border: solid 1px #bec4cb;
+        font-family: Poppins;
+        font-size: 14px;
+        width: 124px;
+        font-weight: 500;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: center;
+        color: #4a90e2;
+        height: 38px !important;
+      }
+      .sortBy {
+        margin-right: 40px;
+        min-width: 30%;
+        .select-sortby {
+            width: 100%;
+            height: 38px;
+            border: solid 1px #bec4cb;
+            font-size: 14px;
+        }
+      }
+      .input-container {
+        border: 1px #bec4cb;
+        .search-text {
+            width: 100% !important;
+            height: 38px !important;
+            font-size: 14px;
+          }
+      }    
+}
+.details-section {
+    background-color: #f5f6fa !important;
+    padding: 18px !important;
+    margin-top: 10px;
+    .status-content {
+        box-sizing: border-box;
+        margin-top: -3px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 4px 8px;
+        gap: 8px;
+        height: 25px;
+        background: #ffffff;
+        border: 1px solid #1f1f1f;
+        border-radius: 36px;
+        order: 0;
+        flex-grow: 0;
+        width: 105px;
+       
+      }
+      .view-invoice {
+        text-align: right;
+        font-weight: 600;
+        color: #4a90e2;
+        padding-left: 0;
+        .box-arror-icon {
+            margin-right: 7px;
+            position: relative;
+            top: -1px;
+        }
+      }
+      .outstanding {
+        padding-top: 17px;
+        font-size: 12px;
+    }
+}
+ 

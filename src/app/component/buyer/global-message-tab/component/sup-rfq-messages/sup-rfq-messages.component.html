@@ -1,0 +1,814 @@
+<!-- <div class="tab-pane" id="messages"> -->
+<!-- <section> -->
+{{ reloadMessages() }}
+{{ isGlobalMsgRaiting() }}
+<div *ngIf="isLoader">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div>
+<div *ngIf="!isLoader">
+  <div>
+    <div class="row">
+      <div class="col-md-8">
+        <div class="input-group">
+          <div id="radioBtn" class="btn-group" style="color: #212A37;">
+            <a
+              class="btn btn-primary btn-sm"
+              data-bs-toggle="fun"
+              data-title="Y"
+              (click)="setStatusFilter('All')"
+              [ngClass]="
+                activeStatusFilterBtn == 'All' ? 'active' : 'notActive'
+              "
+              >All
+              <span *ngIf="unreadMessageCount" class="badge unread-badge">{{
+                unreadMessageCount
+              }}</span></a
+            >
+            <a
+              class="btn btn-primary btn-sm"
+              data-bs-toggle="fun"
+              data-title="X"
+              (click)="setStatusFilter('Read')"
+              [ngClass]="
+                activeStatusFilterBtn == 'Read' ? 'active' : 'notActive'
+              "
+              >Read</a
+            >
+            <a
+              class="btn btn-primary btn-sm"
+              data-bs-toggle="fun"
+              data-title="N"
+              (click)="setStatusFilter('Unread')"
+              [ngClass]="
+                activeStatusFilterBtn == 'Unread' ? 'active' : 'notActive'
+              "
+              >Unread</a
+            >
+            <a
+              class="btn btn-primary btn-sm"
+              data-bs-toggle="fun"
+              data-title="Y"
+              (click)="setStatusFilter('sent')"
+              [ngClass]="
+                activeStatusFilterBtn == 'sent' ? 'active' : 'notActive'
+              "
+              >Sent</a
+            >
+          </div>
+          <input type="hidden" name="fun" id="fun" />
+        </div>
+      </div>
+      <div
+        class="text-right col-md-4"
+        *ngIf="userType === 'Supplier' && isPremium()"
+      >
+        <button
+          class="btn btn-manu-active"
+          (click)="openAssociateMessageDrawer()"
+        >
+          Create New Message
+        </button>
+      </div>
+    </div>
+    <br />
+    <div *ngIf="!isMesssageAvailable">
+      <div class="table-responsive">
+        <div class="tbl-header fixed-header">
+          <table class="nda-table">
+            <thead>
+              <tr>
+                <td class="message-results">{{ totalCount }} results</td>
+                <td class="message-results2">
+                  <div *ngIf="selectedRowCount > 1">
+                    {{ selectedRowCount }} selected
+                  </div>
+                </td>
+                <td *ngIf="isPremium()">
+                  <i
+                    [ngClass]="
+                      selectedRowCount > 1 && !isMagicleadMsgSelected
+                        ? 'iconEnabled'
+                        : 'iconDisabled'
+                    "
+                    class="fa fa-envelope"
+                    (click)="openSidePanel('')"
+                  ></i>
+                </td>
+                <td>
+                  <i
+                    class="fa fa-trash"
+                    [ngClass]="
+                      selectedRowCount > 1 ? 'iconEnabled' : 'iconDisabled'
+                    "
+                    (click)="deleteMultipleMessage()"
+                  ></i>
+                </td>
+              </tr>
+            </thead>
+          </table>
+          <table class="table table-hover rfqtable">
+            <thead>
+              <tr>
+                <th class="nda-checkboxth">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="selectedAll"
+                    (change)="selectAll()"
+                  />
+                </th>
+                <th class="message-contact">Company Name</th>
+                <th class="message-contact">{{ sendOrRecived }}</th>
+                <th class="message-subject">Subject</th>
+                <th class="message-date">Date</th>
+                <th class="messageth3">Actions</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="tbl-content">
+          {{ getReadMessages() }}
+          <table class="table rfqtable">
+            <tbody>
+              <tr *ngFor="let message of items; let i = index">
+                <table
+                  [ngClass]="{ 'active-msg': selectedDivIndex === i }"
+                  style="width: 100%"
+                >
+                  <tr class="rfq-hover">
+                    <td
+                      class="nda-checkboxth"
+                      [ngClass]="
+                        message.messageRead == true
+                          ? 'nda-checkbox grayTr firstTd'
+                          : 'nda-checkbox firstTd'
+                      "
+                    >
+                    <div>
+                      <input
+                        type="checkbox"
+                        [(ngModel)]="message.isSelected"
+                        (change)="checkIfAllSelected()"
+                        [disabled]="
+                          (message.messageTypeId == 221 ||
+                            message.messageTypeId == 225 ||
+                            message.messageTypeId == 230 ||
+                            message.messageTypeId == 232) == true
+                        "
+                      />
+                    </div>
+                    </td>
+                    <td
+                      style="cursor: pointer"
+                      [ngClass]="
+                        message.messageRead == true
+                          ? 'rfqtd message-contact grayTr topTd bottomTd'
+                          : 'rfqtd message-contact topTd '
+                      "
+                    >
+                      <!--company name for not sent button  -->
+                      <div
+                        (click)="openMessageThreadDrawer(message)"
+                        class="f-12"
+                        style="color: gray !important"
+                        *ngIf="userAccount === 'Basic'; else showCompany"
+                      >
+                        Upgrade to see any info.
+                      </div>
+                      <ng-template #showCompany>
+                        <div *ngIf="userAccount !== 'Basic'">
+                          <div
+                            *ngIf="
+                              activeStatusFilterBtn !== 'sent' &&
+                              message.messageTypeId !== 42
+                            "
+                            (click)="openMessageThreadDrawer(message)"
+                          >
+                            <label
+                              style="cursor: pointer"
+                              placement="top"
+                              container="body"
+                              ngbTooltip="{{ message.companyName }}"
+                              >{{ message.companyName | dotLimit: "17" }}</label
+                            >
+                          </div>
+                          <div
+                            (click)="goToRfqDetails(message)"
+                            *ngIf="
+                              activeStatusFilterBtn !== 'sent' &&
+                              message.messageTypeId == 42 && userType == 'Buyer'
+                            "
+                          >
+                            <label
+                              style="cursor: pointer"
+                              placement="top"
+                              container="body"
+                              ngbTooltip="{{ message.companyName }}"
+                            >
+                              {{ message.companyName | dotLimit: "17" }}</label
+                            >
+                          </div>
+                          <div
+                            (click)="openMessageThreadDrawer(message)"
+                            *ngIf="
+                              activeStatusFilterBtn !== 'sent' &&
+                              message.messageTypeId == 42 &&
+                                userType == 'Supplier'
+                            "
+                          >
+                            <label
+                              style="cursor: pointer"
+                              placement="top"
+                              container="body"
+                              ngbTooltip="{{ message.companyName }}"
+                            >
+                              {{ message.companyName | dotLimit: "17" }}</label
+                            >
+                          </div>
+                          <!--company name for  sent button  -->
+                          <div
+                            *ngIf="
+                              activeStatusFilterBtn === 'sent' &&
+                              message.messageTypeId !== 42
+                            "
+                            (click)="openMessageThreadDrawer(message)"
+                          >
+                            <label
+                              style="cursor: pointer"
+                              placement="top"
+                              container="body"
+                              ngbTooltip="{{ message.toCompanyName }}"
+                              >{{
+                                message.toCompanyName | dotLimit: "17"
+                              }}</label
+                            >
+                          </div>
+                          <div
+                            (click)="goToRfqDetails(message)"
+                            *ngIf="
+                              activeStatusFilterBtn === 'sent' &&
+                              message.messageTypeId == 42 && userType == 'Buyer'
+                            "
+                          >
+                            <label
+                              style="cursor: pointer"
+                              placement="top"
+                              container="body"
+                              ngbTooltip="{{ message.toCompanyName }}"
+                            >
+                              {{
+                                message.toCompanyName | dotLimit: "17"
+                              }}</label
+                            >
+                          </div>
+                          <div
+                            (click)="openMessageThreadDrawer(message)"
+                            *ngIf="
+                              activeStatusFilterBtn === 'sent' &&
+                              message.messageTypeId == 42 &&
+                                userType == 'Supplier'
+                            "
+                          >
+                            <label
+                              style="cursor: pointer"
+                              placement="top"
+                              container="body"
+                              ngbTooltip="{{ message.toCompanyName }}"
+                            >
+                              {{
+                                message.toCompanyName | dotLimit: "17"
+                              }}</label
+                            >
+                          </div>
+                        </div>
+                      </ng-template>
+                    </td>
+
+                    <td
+                      style="cursor: pointer"
+                      (click)="openMessageThreadDrawer(message)"
+                      [ngClass]="
+                        message.messageRead == true
+                          ? 'rfqtd message-contact grayTr topTd bottomTd'
+                          : 'rfqtd message-contact topTd '
+                      "
+                    >
+                      <div
+                        class="f-12"
+                        style="color: gray !important"
+                        *ngIf="userAccount === 'Basic'; else showName"
+                      >
+                        Upgrade to see any info.
+                      </div>
+                      <ng-template #showName>
+                        <div *ngIf="userAccount !== 'Basic'">
+                          <div
+                            *ngIf="
+                              activeStatusFilterBtn !== 'sent' &&
+                              message.messageTypeId !== 42
+                            "
+                            (click)="openMessageThreadDrawer(message)"
+                          >
+                            <label
+                              style="cursor: pointer"
+                              placement="top"
+                              container="body"
+                              ngbTooltip="{{
+                                message.fromContName !== undefined &&
+                                message.fromContName !== null &&
+                                message.fromContName !== ''
+                                  ? message.fromContName
+                                  : ''
+                              }}"
+                              >{{
+                                message.fromContName | dotLimit: "17"
+                              }}</label
+                            >
+                          </div>
+                          <div
+                            (click)="goToRfqDetails(message)"
+                            *ngIf="
+                              activeStatusFilterBtn !== 'sent' &&
+                              message.messageTypeId == 42 && userType == 'Buyer'
+                            "
+                          >
+                            <label
+                              style="cursor: pointer"
+                              placement="top"
+                              container="body"
+                              ngbTooltip="{{
+                                message.fromContName !== undefined &&
+                                message.fromContName !== null &&
+                                message.fromContName !== ''
+                                  ? message.fromContName
+                                  : ''
+                              }}"
+                            >
+                              {{ message.fromContName | dotLimit: "17" }}</label
+                            >
+                          </div>
+                          <div
+                            (click)="openMessageThreadDrawer(message)"
+                            *ngIf="
+                              activeStatusFilterBtn !== 'sent' &&
+                              message.messageTypeId == 42 &&
+                                userType == 'Supplier'
+                            "
+                          >
+                            <label
+                              style="cursor: pointer"
+                              placement="top"
+                              container="body"
+                              ngbTooltip="{(message.fromContName !== undefined && message.fromContName !== null && message.fromContName !== '') ? (message.fromContName) : ''}}"
+                              >{{
+                                message.fromContName | dotLimit: "17"
+                              }}</label
+                            >
+                          </div>
+
+                          <div
+                            *ngIf="
+                              activeStatusFilterBtn === 'sent' &&
+                              message.messageTypeId !== 42
+                            "
+                            (click)="openMessageThreadDrawer(message)"
+                          >
+                            <label
+                              style="cursor: pointer"
+                              placement="top"
+                              container="body"
+                              ngbTooltip="{{ message.toContName }}"
+                              >{{ message.toContName | dotLimit: "17" }}</label
+                            >
+                          </div>
+                          <div
+                            *ngIf="
+                              activeStatusFilterBtn === 'sent' &&
+                              message.messageTypeId == 42 && userType == 'Buyer'
+                            "
+                            (click)="goToRfqDetails(message)"
+                          >
+                            <label
+                              style="cursor: pointer"
+                              placement="top"
+                              container="body"
+                              ngbTooltip="{ {message.toContName}}"
+                              >{{ message.toContName | dotLimit: "17" }}</label
+                            >
+                          </div>
+                          <div
+                            (click)="openMessageThreadDrawer(message)"
+                            *ngIf="
+                              activeStatusFilterBtn === 'sent' &&
+                              message.messageTypeId == 42 &&
+                                userType == 'Supplier'
+                            "
+                          >
+                            <label
+                              style="cursor: pointer"
+                              placement="top"
+                              container="body"
+                              ngbTooltip="{{ message.toContName }}"
+                              >{{ message.toContName | dotLimit: "17" }}</label
+                            >
+                          </div>
+                        </div>
+                      </ng-template>
+                    </td>
+
+                    <td
+                      [ngClass]="
+                        message.messageRead == true
+                          ? 'message-subject grayTr topTd'
+                          : 'message-subject topTd'
+                      "
+                      (click)="openMessageThreadDrawer(message)"
+                    >
+                      <div
+                        style="color: gray !important; cursor: pointer"
+                        *ngIf="userAccount === 'Basic'; else showMsgDesc"
+                      >
+                        Upgrade to view this message.
+                      </div>
+                      <ng-template #showMsgDesc>
+                        <!-- <div [innerHTML]="replaceMessage(message.messageSubject,message.messageDescr)| dotLimit:'600' | sanitizeNolimit">
+                          </div> -->
+                        <div>
+                          <span
+                            class="message-des"
+                            placement="top"
+                            data-container="body"
+                            [ngbTooltip]="tooltipMsg"
+                          >
+                            <span [innerHTML]="message.messageSubject"></span
+                            >-<span
+                              *ngIf="
+                                message.messageTypeId === 220 &&
+                                message.quoteReferenceNumber !== '' &&
+                                message.quoteReferenceNumber !== null &&
+                                message.quoteReferenceNumber !== undefined
+                              "
+                              >Quote Reference Number:
+                              {{ message.quoteReferenceNumber }}
+                            </span>
+                            <span>{{
+                              removeHtmlTag(message.messageDescr)
+                                | dotLimit: "20"
+                            }}</span>
+                          </span>
+                          <ng-template #tooltipMsg style="font-family: Poppins">
+                            {{
+                              removeHtmlTag(message.messageSubject)
+                                | dotLimit: "110"
+                            }}-<span
+                              *ngIf="
+                                message.messageTypeId === 220 &&
+                                message.quoteReferenceNumber !== '' &&
+                                message.quoteReferenceNumber !== null &&
+                                message.quoteReferenceNumber !== undefined
+                              "
+                              ><b>Quote Reference Number</b>:
+                              {{
+                                removeHtmlTag(message.quoteReferenceNumber)
+                              }}</span
+                            >&nbsp;<span>{{
+                              removeHtmlTag(message.messageDescr)
+                            }}</span>
+                          </ng-template>
+                        </div>
+                      </ng-template>
+                    </td>
+                    <td
+                      style="cursor: pointer"
+                      [ngClass]="
+                        message.messageRead == true
+                          ? 'message-date grayTr topTd'
+                          : 'message-date topTd'
+                      "
+                      (click)="openMessageThreadDrawer(message)"
+                    >
+                      {{ message.messageDate | date: "MMM-dd-yyyy" }}
+                    </td>
+                    <td
+                      *ngIf="
+                        isPremium() &&
+                        activeStatusFilterBtn !== 'sent' &&
+                        message.messageTypeId !== 221 &&
+                          message.messageTypeId !== 225 &&
+                          message.messageTypeId !== 230 &&
+                          message.messageTypeId !== 232 &&
+                          message.messageTypeId !== 234 &&
+                          message.messageTypeId !== 235 &&
+                          message.messageTypeId !== 236 &&
+                          message.messageTypeId !== 237
+                      "
+                      [ngClass]="
+                        message.messageRead == true
+                          ? 'editdelete grayTr topTd'
+                          : 'editdelete topTd'
+                      "
+                      (click)="
+                        openSidePanel1(
+                          $event,
+                          message.fromCont,
+                          message.rfqId,
+                          message.fromContName
+                        )
+                      "
+                    >
+                      <i class="fa fa-envelope"></i>
+                    </td>
+                    <td
+                      *ngIf="
+                        isPremium() &&
+                        activeStatusFilterBtn === 'sent' &&
+                        message.messageTypeId !== 221 &&
+                          message.messageTypeId !== 225 &&
+                          message.messageTypeId !== 230 &&
+                          message.messageTypeId !== 234 &&
+                          message.messageTypeId !== 235 &&
+                          message.messageTypeId !== 236 &&
+                          message.messageTypeId !== 237
+                      "
+                      [ngClass]="
+                        message.messageRead == true
+                          ? 'editdelete grayTr topTd'
+                          : 'editdelete topTd'
+                      "
+                      (click)="
+                        openSidePanel1(
+                          $event,
+                          message.toCont,
+                          message.rfqId,
+                          message.toContName
+                        )
+                      "
+                    >
+                      <i class="fa fa-envelope"></i>
+                    </td>
+                    <td
+                      *ngIf="
+                        !isPremium() ||
+                        message.messageTypeId == 221 ||
+                        message.messageTypeId == 225 ||
+                        message.messageTypeId == 230 ||
+                        (message.messageTypeId == 232 &&
+                          message.messageTypeId == 234) ||
+                        message.messageTypeId == 235 ||
+                        message.messageTypeId == 236 ||
+                        message.messageTypeId == 237
+                      "
+                      class="iconDisabled"
+                      [ngClass]="
+                        message.messageRead == true
+                          ? 'editdelete grayTr topTd'
+                          : 'editdelete topTd'
+                      "
+                    >
+                      <i class="fa fa-envelope"></i>
+                    </td>
+                    <td
+                      class="topTd"
+                      [ngClass]="
+                        message.messageRead == true
+                          ? 'editdelete grayTr '
+                          : 'editdelete'
+                      "
+                    >
+                      <a
+                        *ngIf="
+                          message.rfqId == null &&
+                          activeStatusFilterBtn !== 'sent' &&
+                          message.messageTypeId != 221 &&
+                          message.messageTypeId != 225 &&
+                          message.messageTypeId != 230 &&
+                          message.messageTypeId !== 232 &&
+                           message.messageTypeId !== 234 &&
+                          message.messageTypeId !== 235 &&
+                          message.messageTypeId !== 236 &&
+                          message.messageTypeId !== 237
+                        "
+                        (click)="
+                          getmessageId(message.messageId, message.fromCont)
+                        "
+                        placement="top"
+                        container="body"
+                        ngbTooltip="Move To"
+                        container="body"
+                        data-bs-toggle="modal"
+                        data-bs-target="#myModal"
+                      >
+                        <i class="fa fa-share-square"></i>
+                      </a>
+                      <a
+                        *ngIf="
+                          message.rfqId == null &&
+                          activeStatusFilterBtn === 'sent'
+                        "
+                        (click)="
+                          getmessageId(message.messageId, message.toCont)
+                        "
+                        placement="top"
+                        container="body"
+                        ngbTooltip="Move To"
+                        container="body"
+                        data-bs-toggle="modal"
+                        data-bs-target="#myModal"
+                      >
+                        <i class="fa fa-share-square"></i>
+                      </a>
+                    </td>
+                    <td
+                      [ngClass]="
+                        message.messageRead == true
+                          ? 'editdelete grayTr topTd '
+                          : 'editdelete topTd '
+                      "
+                      (click)="deleteMessage(message)"
+                    >
+                      <i class="fa fa-trash"></i>
+                    </td>
+                    <!-- <td [ngClass]="(message.messageRead == true)?'editdelete grayTr lastTd':'editdelete lastTd'"  (click)="toggleMessageThreadDiv(i)">
+                      <i class="fa fa-chevron-down" aria-hidden="true" *ngIf="selectedDivIndex !== i"></i><i class="fa fa-chevron-up" aria-hidden="true" *ngIf="selectedDivIndex === i"></i>
+                    </td> -->
+                    <td
+                      *ngIf="
+                        userAccount !== 'Basic' &&
+                          message.messageTypeId !== 210 &&
+                          message.messageTypeId !== 225 &&
+                          message.messageTypeId !== 230
+                      "
+                      [ngClass]="
+                        message.messageRead == true
+                          ? 'editdelete grayTr lastTd'
+                          : 'editdelete lastTd'
+                      "
+                      (click)="toggleMessageThreadDiv(i)"
+                    >
+                      <i
+                        class="fa fa-chevron-down"
+                        aria-hidden="true"
+                        *ngIf="selectedDivIndex !== i"
+                      ></i>
+                      <i
+                        class="fa fa-chevron-up"
+                        aria-hidden="true"
+                        *ngIf="selectedDivIndex === i"
+                      ></i>
+                    </td>
+                    <td
+                      *ngIf="
+                        message.messageTypeId === 210 ||
+                        message.messageTypeId === 225 ||
+                        message.messageTypeId == 230 ||
+                        userAccount === 'Basic'
+                      "
+                      [ngClass]="
+                        message.messageRead == true
+                          ? 'editdelete grayTr lastTd'
+                          : 'editdelete lastTd'
+                      "
+                    >
+                      <i
+                        class="fa fa-chevron-down iconDisabled"
+                        aria-hidden="true"
+                      ></i>
+                    </td>
+                  </tr>
+                </table>
+                <div
+                  style="width: 98%; padding-left: 25px"
+                  *ngIf="selectedDivIndex === i"
+                >
+                  <app-message-threads
+                    [message]="message"
+                    (changeToReply)="openMessageThreadDrawer($event)"
+                  >
+                  </app-message-threads>
+                </div>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <br />
+      <div class="row">
+        <div class="col-md-12">
+          <div class="paginations m-b-15">
+            <div>
+              <div id="radioBtn" class="btn-group">
+                <a
+                  [ngClass]="{ disabled: currentIndex == 1 || pageNumber == 0 }"
+                  class="btn btn-primary btn-sm notActive"
+                  (click)="prevPage()"
+                  data-bs-toggle="fun"
+                  data-title="Y"
+                >
+                  Previous
+                </a>
+                <a
+                  *ngFor="let page of pagesIndex"
+                  (click)="setPage(page)"
+                  [ngClass]="
+                    currentIndex == page
+                      ? 'btn btn-primary btn-sm active'
+                      : 'btn btn-primary btn-sm notActive'
+                  "
+                  data-bs-toggle="fun"
+                  data-title="X"
+                >
+                  {{ page }}
+                </a>
+                <a
+                  [ngClass]="{ disabled: currentIndex == pageNumber }"
+                  class="btn btn-primary btn-sm notActive"
+                  (click)="nextPage()"
+                  data-bs-toggle="fun"
+                  data-title="N"
+                >
+                  Next
+                </a>
+              </div>
+              <input type="hidden" name="fun" id="fun" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="pull-right padd-right m-b-25">
+            <label class="showreccount">
+              {{ currentIndex }} of {{ pageNumber }}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="myRFQ-rfq-no-available" *ngIf="isMesssageAvailable">
+    <div class="row" style="text-align: center; padding-top: 106px">
+      <div class="col-md-12">
+        <div>
+          <img
+            src="assets/rfq/no-rfq.png"
+            srcset="assets/rfq/no-rfq@2x.png 2x, assets/rfq/no-rfq@3x.png 3x"
+            class="myRFQ-Group"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-top: 34px">
+      <div class="col-md-12">
+        <div class="myRFQ-noRFQActive-helper-text">
+          No Messages found at this time.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-confirmDialog header="Confirmation" icon="" width="629" height="220" #msgDlt>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6">
+        <button
+          type="button"
+          class="btn btn-ignore-rfq"
+          (click)="msgDlt.reject()"
+        >
+          Cancel
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button
+          type="button"
+          class="btn btn-cancel-rfq"
+          label="Yes"
+          (click)="msgDlt.accept()"
+        >
+        Archive Message
+        </button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog custom-model addItem-model-container modal-md">
+    <div class="modal-content">
+      <div class="modal-body" style="height: 380px" *ngIf="messageId != 0">
+        <app-multiselect-rfqs
+          (moveRfqEventHandler)="moveRfq($event)"
+          [(messageId)]="messageId"
+          [(formToContactId)]="formToContactId"
+        ></app-multiselect-rfqs>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+.color-blue {
+  color: #4a90e2;
+  cursor: pointer;
+}
+
+.background-white {
+  background: #FFF;
+  padding: 20px;
+  border-radius: 5px;
+  margin: -60px 5px 19px 10px;
+  border-radius: 5px;
+  background-color: #ffffff;
+  -webkit-box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+  box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+}
+
+.back-section {
+  color: #4a90e2;
+  cursor: pointer;
+  border-bottom: 2px solid #e2e2e5;
+  padding-bottom: 8px;
+}
+
+.breadcumb-box {
+  background-color: #ebecf0;
+  padding: 7px 25px;
+}
+
+.breadcumb-quote {
+  color: #4a90e2;
+}
+
+.breadcumb-invoice {
+  color: #919aa3;
+}
+
+
+.part-container
+{
+    border: 0px solid #e2e2e5;margin-top:15px; padding:5px;
+}
+
+.part-container .quantity-container
+{
+    border-bottom: solid 0px silver; padding:15px 0px;
+    margin-top: -15px;
+}
+.part-container .quantity-container:last-child
+{
+    border-bottom: solid 0px silver; padding:15px 0px;
+}
+.part-container .subtotal-contaier
+{
+    text-align: right;
+    font-weight: bold;
+    font-size: 10pt;
+} 
+.grand-total-viewer
+{
+    border:1px solid #e2e2e5;
+    padding: 2px 0px 2px 10px;
+    border-top:2px solid #222;
+    margin-top:25px;
+    font-size: 15pt;;
+}
+.form-button
+{
+    border-radius: 4px;
+    color: #4a90e2;
+    border: 1px solid #4a90e2;
+    padding: 3px 16px;
+    text-align: center;
+    margin-top: -8px;
+    float: right;
+}

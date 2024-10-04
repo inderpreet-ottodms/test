@@ -1,0 +1,158 @@
+//classes for #contentNewforSilver silver upgrade model
+.graphic-header2 {
+    background-image:url('../../../../../../assets/supplier/upgrade_model_background_img_for_silver.jpg');
+    height: 220px;
+    width: auto;
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center;
+    font-weight: bold;
+    padding: 70px 30px;
+    color: #fff;
+  }
+  .payText2 {
+    color: #2E58D6;
+    /* background-image: url(data:image/png;base64,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); */
+    border-radius: 42px;
+    padding: 6px;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0 auto 20px !important;
+    margin-bottom: 0 !important;
+    background-color: hsl(0, 0%, 90%);
+    width: 65%;
+  }
+  .head-text-center-1 {
+    font-size: 30px;
+  }
+  .head-text-center-2 {
+    font-size: 22px;
+    margin-top: -10px;
+  }
+  .padding-space {
+    padding: 0px 50px 30px;
+  }
+  .padding-space2 {
+    font-size: 16px;
+    padding: 20px 25px;
+  }
+  .btn-cancel {
+    color: #2E58D6;
+    border: 2px solid #2E58D6;
+    width: 90%;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    background: none;
+    padding: 9px 10px !important;
+  }
+  .btn-upgrade {
+    color: #fff;
+    background-color: #2E58D6;
+    width: 90%;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .btn-upgrade-section {
+    padding-left: 0px !important;
+  }
+  
+  .btn-cancel-section {
+    padding-right: 0px !important;
+  }
+  .btn-cancel {
+    color: #2E58D6;
+    border: 2px solid #2E58D6;
+    width: 90%;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    background: none;
+    padding: 9px 10px !important;
+  }
+  
+  .btn-upgrade-section {
+    padding-left: 0px !important;
+  }
+  
+  .btn-cancel-section {
+    padding-right: 0px !important;
+  }
+  .subject-text {
+    font-size: 16px;
+    padding: 20px 30px;
+  }
+  
+  .subject-value {
+    padding: 0px 60px 30px;
+  }
+  
+  .subject-value ul li {
+    list-style-type: circle;
+  }
+  
+  .okay-button {
+    width: 285px;
+    border-radius: 2px;
+    background-color: #2E58D6;
+    font-size: 16px;
+    border: solid 2px #2E58D6;
+    text-align: center;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    font-weight: bold;
+    color: #ffffff;
+    cursor: pointer;
+  }
+  
+  .button-margin {
+    padding: 20px;
+    text-align: center;
+    margin-top: 15px;
+  }
+  
+  /* Absolute Center Spinner */
+  .loading {
+    position: fixed;
+    z-index: 999;
+    height: 2em;
+    width: 2em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 600px;
+  }
+  
+  /* Transparent Overlay */
+  .loading:before {
+    content: '';
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 600px;
+    height: 100%;
+    opacity: 0.2;
+    background-color: #666666;
+  }
+  .custom-modal {
+    width: 600px;
+    background-color: #fff;
+  }
+  .custom-modal .modal-footer-section {
+    position: relative;
+    left: 15px;
+    bottom: 20px;
+  }
+  @media screen and (max-width:768px) {
+    .custom-modal {
+      width: auto; 
+      background-color: #fff;
+  }
+  }
+  

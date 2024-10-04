@@ -1,0 +1,103 @@
+<div class="background-white">
+  <div class="row row-border-bottom">
+    <div class="col-md-12 rightpanel">
+      <i class="fa fa-times-circle pull-right" (click)="closeHeaderDrawer()"></i>
+      <h2 class="panelheading heading-text pb-3">Edit Header</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" *ngIf="iContactViewModel.company">
+      <form #loginForm="ngForm">
+      <div class="row input-top-padding">
+        <div class="col-md-12">
+          <label [ngClass]="(companyName.errors && (companyName.dirty || companyName.touched ))?'Label-focus-red':(labelFocus === 'companyName')? 'Label-focus':'Label-class'"
+            *ngIf="checkIfCompanyNameLabelNeeded()">Company Name</label>
+          <label class="Label-class" *ngIf="!checkIfCompanyNameLabelNeeded()"></label>
+          <input type="text" class="form-control" maxlength="50" placeholder="Company Name Here" autocomplete="off" (focus)="setFocus('companyName')"
+            (blur)="setFocus('no')" [(ngModel)]="iContactViewModel.company.name" name="companyName"  #companyName="ngModel" required>
+          <div *ngIf="companyName.errors && (companyName.dirty || companyName.touched )" style="color: red; text-align: right">
+            Please Enter Company Name
+          </div>
+        </div>
+      </div>
+      <div class="row input-top-padding">
+        <div class="col-md-12">
+          <!-- <label [ngClass]="(companyType.errors && (companyType.dirty || companyType.touched ))?'Label-focus-red':(labelFocus === 'companyType')? 'Label-focus':'Label-class'"
+          *ngIf="checkIfCompanyTypeLabelNeeded()">Company Type</label> -->
+          <select id="supplierType" class="form-control" (change)="companyType(supplierTypeId)" [(ngModel)]="supplierTypeId" placeholder="Company Name Here" 
+          name="supplierType">
+          <option value="0" disabled selected>Company Type</option>
+          <option  *ngFor="let companyType of buyerTypeViewModelColl" [value]="companyType.industryBranchesId">
+            {{ companyType.industryBranchesNameEn }} 
+          </option>
+        </select>
+        </div>
+      </div>
+      <div class="row input-top-padding">
+        <div class="col-md-12">
+          <label [ngClass]="(companyPhone.errors && (companyPhone.dirty || companyPhone.touched ))?'Label-focus-red':(labelFocus === 'companyPhone')? 'Label-focus':'Label-class'"
+            *ngIf="checkIfPhoneLabelNeeded()">Company Phone</label>
+          <label class="Label-class" *ngIf="!checkIfPhoneLabelNeeded()"></label>
+          <input type="text" class="form-control" maxlength="17"  pattern="^[+]?[0-9]*"  placeholder="Company Phone number" autocomplete="off" (focus)="setFocus('companyPhone')"
+            (blur)="setFocus('no')" [(ngModel)]="iContactViewModel.phoneNo"
+            (keyup)="onPaste($event)"
+             onKeyPress="if(this.value.length==17) return false;" onkeydown="javascript: return (event.keyCode == 69  || event.keyCode == 189 || event.keyCode == 190)? false : true" name="companyPhone"  #companyPhone="ngModel" required>
+          <!-- <div *ngIf="companyPhone.errors && (companyPhone.dirty || companyPhone.touched )" style="color: red; text-align: right">
+            Please Enter company Phone number
+          </div> -->
+          <div [hidden]="!companyPhone.hasError('maxlength')" style="color: red; text-align: right">Company phone should be 17 digit</div>
+      <div [hidden]="!companyPhone.hasError('required')" style="color: red; text-align: right">Please enter company phone number</div>
+          <div [hidden]="!companyPhone.hasError('pattern')" style="color: red; text-align: right">Company phone should be only numbers</div>
+        </div>
+      </div>
+      <div class="row input-top-padding">
+        <div class="col-md-12"><label class="Label-class">Profile Logo</label></div>
+        <div class="col-md-12" *ngIf="isFileUpladed == true">
+          <div class="loader animation-start">
+            <span class="circle delay-1 size-2"></span>
+            <span class="circle delay-2 size-4"></span>
+            <span class="circle delay-3 size-6"></span>
+            <span class="circle delay-4 size-7"></span>
+            <span class="circle delay-5 size-7"></span>
+            <span class="circle delay-6 size-6"></span>
+            <span class="circle delay-7 size-4"></span>
+            <span class="circle delay-8 size-2"></span>
+          </div>
+        </div>
+        <div class="col-md-6">
+            <div *ngIf="supplierLogoPath === ''" class="upload-company-logo-box" ng2FileDrop [uploader]="profileLogoUploader" [ngClass]="{'nv-file-over': hasBaseDropZoneOver}">
+              <div class="row"><div class="col-md-12">
+                <img src="assets/supplier/logoUploadGuide.png" srcset="assets/supplier/logoUploadGuide@2x.png 2x, assets/supplier/logoUploadGuide@3x.png 3x"
+                  class="upload-logo-guide-margin">
+              </div></div>
+              <div class="row"><div class="col-md-12">
+                <span class="upload-logo-guide-text">Drag & drop a logo for your profile picture.(150x150)</span>
+              </div></div>
+            </div>
+            <div ng2FileDrop [uploader]="profileLogoUploader" [ngClass]="{'nv-file-over': hasBaseDropZoneOver}">
+              <img *ngIf="supplierLogoPath !== ''" class="uploaded-company-logo-box" [src]="supplierLogoPath" onerror="this.src='assets/company/avatar-manu-basic.svg'">
+            </div>
+          </div>
+          <div class="col-md-6 guide-for-upload-logo1">
+            <span class="guide-for-upload-logo">Drag & Drop or </span>
+            <div class="gallary-browse-file-text">
+              <!-- <span class="or"> or</span> -->
+              <span class="cursor-pointer">"browse your files"</span>
+              <input type="file" ng2FileSelect  [uploader]="profileLogoUploader" class="custom-file-input cursor-pointer"
+              style="top:-40px;color:#337ab7" accept="image/jpeg, image/png" />
+            </div>
+            <span>to add or edit. <br>PNG or JPG files only</span>
+          </div>
+        <div class="col-md-12" *ngIf="profileUploadLogoError !== ''" style="color: red; text-align: right">
+          {{profileUploadLogoError}}
+        </div>
+      </div>
+      <div class="dropimagebuttons">
+        <button type="button" class="cancelbutton1" (click)="closeEditHeader()">Cancel</button>
+        <button type="button"  class="save-btn" [disabled]="loginForm.form.invalid"
+          (click)="saveHeader()">Save</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>

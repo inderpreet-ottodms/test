@@ -1,0 +1,56 @@
+<div *ngFor="let data of buyerRfqSourcedInfoFilterResponse">
+  <div class="box">
+    <div class="row cursor" (click)="opensideDrawerData(data.rfqId)">
+      <div class="col-md-6">
+         RFQ# :
+      </div>
+      <div class="col-md-6 rfqNumber">
+        {{data.rfqId}}
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+         RFQ Name :
+      </div>
+      <div class="col-md-6">
+        {{data.rfqName}}
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+       Process :
+      </div>
+      <div class="col-md-6">
+        {{data.process }}
+      </div>
+
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-6">
+      Technique :
+      </div>
+      <div class="col-md-6">
+        {{data.technique}}
+      </div>
+
+    </div>
+
+
+
+    <div class="row">
+      <div class="col-md-6">
+        Max Quantity :
+      </div>
+      <div class="col-md-6">
+        {{data.maxQuantity}}
+      </div>
+
+    </div>
+
+  </div>
+</div>

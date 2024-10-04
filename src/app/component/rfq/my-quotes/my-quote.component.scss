@@ -1,0 +1,167 @@
+// .background-white {
+//   width: 1053px;
+//   height: 423px;
+//   border-radius: 5px;
+//   background-color: #ffffff;
+//   box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+// }
+.myRFQ-custom-row-left-padding {
+  margin-top:10px;
+}
+.pointerCursor {
+  cursor: pointer;
+}
+.Drawer-Shadow {
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65)
+}
+.sideDrawer {
+  padding-right:0px !important;
+  position:fixed !important;
+  width:28% !important;
+  right: 0 !important;
+  overflow-y: auto !important;
+  height:100% !important;
+  padding-bottom:150px !important;
+}
+.myRFQ-Header {
+  height: 33px;
+  font-family: Poppins;
+  font-size: 24px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+}
+.myRFQ-create-Rfq-btn {
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  border: solid 2px #81db6d;
+  color: #81db6d;
+  background-color: white;
+}
+.myRFQ-create-Rfq-btn-text {
+  height: 23px;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #81db6d;
+}
+
+.myRFQ-rfq-inProgress-btn {
+  width: 176px;
+  height: 35px;
+  border-radius: 2px;
+  border: solid 2px #81db6d;
+  color: #81db6d;
+  margin-right: 30px;
+  background-color: white;
+}
+.myRFQ-rfq-inProgress-btn-disabled {
+  width: 176px;
+  height: 35px;
+  border-radius: 2px;
+  color: gray;
+  margin-right: 30px;
+}
+.myRFQ-rfq-inProgress-btn-text {
+  height: 23px;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+}
+.myRFQ-rfq-main-div {
+  width: 100%;
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+}
+.myRFQ-rfq-no-available {
+  height: 423px;
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+}
+.myRFQ-Group {
+  width: 213px;
+  height: 106px;
+  object-fit: contain;
+}
+.myRFQ-noRFQActive-helper-text {
+  height: 29px;
+  font-family: Poppins;
+  font-size: 21px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #222222;
+}
+.myRFQ-noRFQActive-helper-sub-text {
+  height: 45px;
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #222222;
+}
+.myRFQ-noRFQBodyBtn-spacing {
+  margin-bottom: 40px;
+  margin-top:10px
+}
+.myRFQ-noRFQBodyBtn-inActive {
+  width: 331px;
+  height: 45px;
+  border-radius: 2px;
+  background-color: #ffffff;
+}
+.myRFQ-noRFQBodyBtn-inActive-text {
+  height: 23px;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #81db6d;
+}
+.myRFQ-noRFQBodyBtn-Active-text {
+  height: 23px;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+}
+.myRFQ-noRFQBodyBtn-Active {
+  width: 331px;
+  height: 45px;
+  border-radius: 2px;
+  background-color: #81db6d;
+}

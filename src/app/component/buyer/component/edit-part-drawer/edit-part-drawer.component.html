@@ -1,0 +1,334 @@
+<div style="padding-right:5px;padding-left:5px;right: 0;height:100%;padding-bottom:150px">
+    <!-- PART DETAILS SECTION -->
+    {{checkConfirmResponse()}}
+    <div class="Drawer-Shadow">
+      <div >
+        <div class="panel panel-default panel-body-bottom">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-md-6" style="text-align: left">
+                <p class="part-details">Part Details </p>
+              </div>
+              <div class="col-md-6" style="text-align: right">
+                <img src="assets/rfq/close-3.svg" class="Close-3" (click)="cancelPartDetails1()">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-8" style="text-align: left; margin-bottom: 12px;">
+                <!-- primaryPartFile target="_self" -->
+                <a  *ngIf="(iPartsViewModel.partName === '')" class="part-filename pointerCursor"  (click) = "downloadS3File(iPartsViewModel.rfqPartFile, true)"> {{currentImageName}} </a>
+                <a  *ngIf="(iPartsViewModel.partName !== '')" class="part-filename pointerCursor"  (click) = "downloadS3File(iPartsViewModel.rfqPartFile, true)"> {{ iPartsViewModel.partName}}</a>
+              </div>
+            </div>
+            <div *ngIf="iPartsViewModel?.isPartWithOldCapability">
+              <span style="color:red">
+                Part is no longer supported
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-body panel-body-padding">
+            <form class="form-horizontal m-t">
+              <div class="row margin-top">
+                  <div class="col-md-12 m-t-5" style="text-align: left">
+                      <label for="partName" class="label-part-detail">New or Existing Part?</label>
+
+                      <!-- <input [(ngModel)]="iPartsViewModel.partName" type="text" id="partName" name="partName"
+                        placeholder="Part Name" class="form-control" #PartName="ngModel" required autofocus> -->
+                        <div class=" m-b-10">
+                            {{ (iPartsViewModel.isExistingPart == false)?'New Part' : (iPartsViewModel.isExistingPart == true)? 'Existing Part': 'N/a' }}
+                        </div>
+                      <!-- <div *ngIf="IsExistingPart.errors && (IsExistingPart.dirty || IsExistingPart.touched )"
+                        style="color: red; text-align: right">Please select</div> -->
+                    </div>
+
+              </div>
+              <div class="form-group">
+                <div class="col-md-12 inner-div">
+                  <label for="process" class="label-part-detail">Manufacturing Process </label>
+                  <label class="All- pull-right"></label>
+                  <input  [(ngModel)]="iPartsViewModel.parentCategoryName"   readonly="readonly"    type="text" name="categoryName"  class="form-control">
+                  <!-- <angular2-multiselect [data]='iCustomProcessViewModelColl' readonly="readonly" [(ngModel)]='selectedItems' name="Processdrop" (onSelect)="onProcessSelect($event)" [settings]='processSettings'></angular2-multiselect> -->
+                  <!-- <angular2-multiselect [data]='iCustomProcessViewModelColl' [(ngModel)]='selectedItems' [(ngModel)]="iPartsViewModel.partCategoryId"   [settings]='processSettings'></angular2-multiselect> -->
+                  <!-- <ng-select class="custom" [(ngModel)]="iPartsViewModel.partCategoryId"  [options]="iCategoryCollShow" filterPlaceholder="Search"> </ng-select> -->
+                </div>
+              </div>
+              <div class="form-group" *ngIf="iPartsViewModel.parentCategoryName !== iPartsViewModel.childCategoryName && iPartsViewModel.childCategoryName !== null && iPartsViewModel.childCategoryName !== undefined && iPartsViewModel.childCategoryName !== ''">
+                  <div class="col-md-12 inner-div">
+                    <label for="process" class="label-part-detail">Manufacturing Technique </label>
+                    <label class="All- pull-right"></label>
+                    <input  [(ngModel)]="iPartsViewModel.childCategoryName"   readonly="readonly"    type="text" name="categoryName2"  class="form-control">
+                    <!-- <angular2-multiselect [data]='iCustomProcessViewModelColl' readonly="readonly" [(ngModel)]='selectedItems' name="Processdrop" (onSelect)="onProcessSelect($event)" [settings]='processSettings'></angular2-multiselect> -->
+                    <!-- <angular2-multiselect [data]='iCustomProcessViewModelColl' [(ngModel)]='selectedItems' [(ngModel)]="iPartsViewModel.partCategoryId"   [settings]='processSettings'></angular2-multiselect> -->
+                    <!-- <ng-select class="custom" [(ngModel)]="iPartsViewModel.partCategoryId"  [options]="iCategoryCollShow" filterPlaceholder="Search"> </ng-select> -->
+                  </div>
+                </div>
+              <div class="form-group">
+                <div class="col-md-12 inner-div" (click)="materialTouch()">
+                  <label for="material" class="label-part-detail">Material </label>
+                  <label class="All- pull-right"></label>
+                  <input  [(ngModel)]="iPartsViewModel.materialName"   readonly="readonly"    type="text" name="materialName" placeholder="Material" class="form-control">
+                  <!-- <angular2-multiselect [data]='iMaterialViewModelColl' readonly="readonly" [(ngModel)]="materialselectedItems" name="materials" (onSelect)="onMaterialSelect($event)" [settings]='materialsettings' #skills="ngModel" ></angular2-multiselect> -->
+                  <!-- <ng-select class="custom" [(ngModel)]="iPartsViewModel.materialId"  [options]="iMaterialCollShow" filterPlaceholder="Search"> </ng-select> -->
+                  <!-- <div *ngIf="isMaterialValid" style="color: red; text-align: right">Select Material </div> -->
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-12 inner-div">
+                  <label for="postProduction" class="label-part-detail">Post-Production Process</label>
+                  <!-- <label class="All- pull-right">Optional</label> -->
+                  <input  [(ngModel)]="iPartsViewModel.postProductionProcessName"   readonly="readonly"    type="text" name="postProductionProcessName" placeholder="Post Production" class="form-control">
+                  <!-- <angular2-multiselect [data]='iPostProductionViewModelColl' readonly="readonly" [(ngModel)]="postProcessselectedItems" name="postProcess" (onSelect)="onPostProcessSelect($event)" [settings]='postProductionProcesssettings'></angular2-multiselect> -->
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-12 inner-div remove-padding-right" style="text-align: left">
+                  <label for="partName" class="label-part-detail">Part Name </label>
+                  <label class="All- pull-right"></label>
+                  <input [(ngModel)]="iPartsViewModel.partName" type="text" id="partName" name="partName" placeholder="Part Name" class="form-control" #PartName="ngModel"  autofocus readonly="readonly">
+                  <!-- <div *ngIf="PartName.errors && (PartName.dirty || PartName.touched )" style="color: red; text-align: right">Please Enter Name</div> -->
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-12 inner-div remove-padding-right">
+                  <label for="partNumber" class="label-part-detail">Part Number </label>
+                  <label class="All- pull-right"></label>
+                  <input [(ngModel)]="iPartsViewModel.partNumber" type="text" name="partNumber" id="partNumber" placeholder="Part Number" class="form-control" readonly="readonly"
+                    #PartNumber="ngModel"  (blur)="checkPartNumber()">
+                  <!-- <div *ngIf="(PartNumber.errors || (PartError1 !== '')) && (PartNumber.dirty || PartNumber.touched )" style="color: red; text-align: right">{{PartError1}}</div> -->
+                </div>
+              </div>
+              <div class="form-group noPaddingMargin" >
+                  <div class="col-md-12 inner-div remove-padding-right">
+                    <label for="partNumber" class="label-part-detail">1st Quantity  </label>
+                    <label class="All- pull-right"></label>
+                    <input  [(ngModel)]="firstQuantity" type="text" name="firstQuantity" id="partNumber" placeholder="First Quantity" readonly="readonly"
+                      class="form-control" maxlength="9" (focus)="firstFocus()" (blur)="checkfirstQuantity()" [pattern]="numberOnlyPattern" #Part1stQuantity="ngModel"  >
+
+                    <!-- <div *ngIf="Part1stQuantity.errors && (Part1stQuantity.dirty || Part1stQuantity.touched )" style="color: red; text-align: right">{{quantityError1}}</div> -->
+                    <!-- <div *ngIf="firstQuantitySameError" style="color: red; text-align: right">Quantity cant be same</div> -->
+                    <!-- <div *ngIf="firstQuantityRequiredError" style="color: red; text-align: right">Quantity cant be zero</div> -->
+
+                  </div>
+              </div>
+              <div class="form-group noPaddingMargin">
+                  <div class="col-md-12 quantity-div" *ngIf="addsecondQuantityDiv">
+                      <!-- <a class="Add-Another-Quanti" (click)="addSecondQuantity()">+ Add Another Quantity  </a> -->
+                    </div>
+              </div>
+
+              <div class="form-group noPaddingMargin" *ngIf="secondQuantityDiv">
+                  <div class="col-md-12 inner-div remove-padding-right">
+                    <label for="partNumber" class="label-part-detail">2nd  Quantity  </label>
+                    <label class="All- pull-right"></label>
+                    <input  [(ngModel)]="secondQuantity" #secondQty (focus)="secondFocus()" (blur)="checksecondQuantity()" readonly="readonly"  [pattern]="numberOnlyPattern"   type="text" name="secondQuantity" id="partNumber" placeholder="Second Quantity" class="form-control" maxlength="9"  #Part2ndQuantity="ngModel" >
+                    <!-- <div *ngIf="Part2ndQuantity.errors && (Part2ndQuantity.dirty || Part2ndQuantity.touched )" style="color: red; text-align: right">{{quantityError2}}</div> -->
+                    <!-- <div *ngIf="secondQuantitySameError" style="color: red; text-align: right">Quantity cant be same</div> -->
+                    <!-- <div *ngIf="secondQuantityRequiredError" style="color: red; text-align: right">Quantity cant be zero</div> -->
+
+                  </div>
+                  <div class="col-md-4 remove-padding-right">
+                      <!-- <a (click)="deleteSecondQuantity()">
+                        <span class="upload-part-detail-remove pointerCursor">Remove</span>
+                      </a> -->
+                    </div>
+              </div>
+              <div class="form-group noPaddingMargin" *ngIf="addthirdQuantityDiv">
+                  <div class="col-md-12 quantity-div">
+                      <!-- <a class="Add-Another-Quanti" (click)="addThirdQuantity()">+ Add Another Quantity  </a> -->
+                    </div>
+              </div>
+
+              <div class="form-group noPaddingMargin"  *ngIf="thirdQuantityDiv">
+                  <div class="col-md-12 inner-div remove-padding-right">
+                    <label for="partNumber" class="label-part-detail">3rd Quantity  </label>
+                    <label class="All- pull-right"></label>
+                    <input  [(ngModel)]="thirdQuantity" (focus)="thirdFocus()"  readonly="readonly" (blur)="checkthirdQuantity()"  [pattern]="numberOnlyPattern"  type="text" name="thirdQuantity" id="partNumber" placeholder="Third Quantity" class="form-control" maxlength="9" #Part3rdQuantity="ngModel" >
+                    <div *ngIf="Part3rdQuantity.errors && (Part3rdQuantity.dirty || Part3rdQuantity.touched )" style="color: red; text-align: right">{{quantityError3}}</div>
+                    <!-- <div *ngIf="thirdQuantitySameError" style="color: red; text-align: right">Quantity cant be same</div> -->
+                    <!-- <div *ngIf="thirdQuantityRequiredError" style="color: red; text-align: right">Quantity cant be zero</div> -->
+
+                  </div>
+                  <div class="col-md-4 remove-padding-right">
+                      <!-- <a (click)="deleteThirdQuantity()">
+                        <span class="upload-part-detail-remove pointerCursor">Remove</span>
+                      </a> -->
+                    </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-md-12 inner-div">
+                  <label for="unit" class="label-part-detail">Quantity Unit</label>
+                  <label class="All- pull-right"></label>
+                  <input  [(ngModel)]="iPartsViewModel.partQtyUnitName"   readonly="readonly"    type="text" name="partQtyUnitName" placeholder="Unit" class="form-control">
+                  <!-- <select id="jobPostingId" class="form-control" readonly="readonly" [(ngModel)]="iPartsViewModel.partQtyUnitId" name="partQtyUnitId">
+                    <option *ngFor="let unit  of iQuantityUnitColl" [value]="unit.id">
+                      {{ unit.value }}
+                    </option>
+                  </select> -->
+                </div>
+              </div>
+              <!-- <div class="form-group">
+                <div class="col-md-12 inner-div">
+                  <label for="delivery" class="label-part-detail">Delivery Date </label>
+                  <label class="All- pull-right"></label>
+                  <div class="input-group">
+                    <p-calendar [(ngModel)]="iPartsViewModel.deliveryDate" (click)="checkDeleveryDate()" [inputStyle]="{'width':'100%'}" name="deliveryDate" placeholder="MM/DD/YYYY" [minDate]="minDate" [showIcon]="true" #deleveryDate="ngModel" ></p-calendar>
+                    <div *ngIf="deleveryDate.errors && (deleveryDate.dirty || deleveryDate.touched )" style="color: red; text-align: right">Please Select Date </div>
+                     <div *ngIf="isDeliveryDateError" style="color: red; text-align: right">Please Select Date </div>
+                  </div>
+                </div>
+              </div> -->
+
+
+                <div class="form-group" *ngIf="iPartsViewModel.showPartSizingComponent">
+                  <div class="col-md-12 inner-div">
+                    <div>
+                      <label for="unit" class="label-part-detail">Select your part type </label>
+                    </div>
+                    <div class="m-t-10">
+                      <button [ngClass]="(iPartsViewModel.geometryId === 58)?'button-Selected':'button-Unselected'" style="margin-right: 3px" >Prismatic</button>
+                      <button [ngClass]="(iPartsViewModel.geometryId === 59)?'button-Selected':'button-Unselected'" >Cylindrical</button>
+                    </div>
+                    <div class="m-t-10">
+                      <label for="unit" class="label-part-detail">Select your part size?</label>
+                    </div>
+                    <div class="form-radio">
+                      <div class="radio radio-inline">
+                        <label>
+                          <input type="radio"  disabled="true"  class="form-control" name="isSmall" [value]="false" [(ngModel)]="iPartsViewModel.isLargePart"  style="cursor: not-allowed!important;">
+                          <i class="helper"></i>Small (< 10 inches or < 254 mm)
+                        </label>
+                      </div>
+
+
+                        <div class="radio radio-inline">
+                          <label>
+                            <input type="radio" disabled="true"  name="isSmall" class="form-control" [value]="true"
+                            [(ngModel)]="iPartsViewModel.isLargePart" >
+                            <i class="helper"></i>Large (> 10 inches or > 254 mm)
+                          </label>
+                        </div>
+                  </div>
+                </div>
+
+                </div>
+
+
+                <div class="form-group" *ngIf="iPartsViewModel.showPartSizingComponent">
+                  <div class="col-md-12 inner-div">
+                    <div>
+                      <label for="proximity" class="label-part-detail"> Select your Unit of measure</label>
+                    </div>
+                    <div>
+                      <button [ngClass]="(iPartsViewModel.partSizeUnitId === 9)?' button-Selected':'button-Unselected'" >Inches</button>
+                      <button [ngClass]="(iPartsViewModel.partSizeUnitId === 5)?'button-Selected':' button-Unselected'" >Millimeters</button>
+                    </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12 inner-div">
+                    <label for="postProduction" class="label-part-detail">Part Specification</label>
+                  </div>
+                  <div class="col-md-12 inner-div" *ngIf="iPartsViewModel.customPartDescription">
+                    <label for="postProduction" class="f-12 f-w-600">{{iPartsViewModel.customPartDescription}}</label>
+                  </div>
+
+                  <div class="col-md-12 inner-div" *ngIf="!iPartsViewModel.customPartDescription">
+                    <label for="postProduction" class="label-part-detail">N/A</label>
+                  </div>
+                </div>
+
+                <div class="form-group" *ngIf="iPartsViewModel.showQuestionsOnPartDrawer == true">
+                  <app-rfq-part-questions [partCategoryId]="iPartsViewModel.parentPartCategoryId" [selectedQuestion]="iPartsViewModel.rfqPartDrawerAnswerList" [setDisabled]="'1'"></app-rfq-part-questions>
+                </div>
+
+              <div class="form-group">
+                <div class="col-md-12 inner-div">
+                  <label for="description" class="label-part-detail">Description</label>
+                  <!-- <label  class="All- pull-right">Optional</label> -->
+                  <textarea [(ngModel)]="iPartsViewModel.partDescription" readonly="readonly" name="description" id="description" placeholder="Description" cols="10" rows="5"
+                    class="form-control custom-font-size description-textArea" maxlength="1000"></textarea>
+                  <!-- <div style="text-align: right">
+                    <span class="character-warning">1000 Characters</span>
+                  </div> -->
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-12 inner-div" *ngIf="isAttachmentsLoading !== 0">
+                  <div class="loader animation-start">
+                    <span class="circle delay-1 size-2"></span>
+                    <span class="circle delay-2 size-4"></span>
+                    <span class="circle delay-3 size-6"></span>
+                    <span class="circle delay-4 size-7"></span>
+                    <span class="circle delay-5 size-7"></span>
+                    <span class="circle delay-6 size-6"></span>
+                    <span class="circle delay-7 size-4"></span>
+                    <span class="circle delay-8 size-2"></span>
+                  </div>
+                </div>
+                <div class="col-md-12 inner-div">
+                  <label for="attachments" class="label-part-detail">Part Attachments</label>
+                  <br>
+                  <table class="part-table">
+                    <tbody>
+                      <tr *ngIf="iPartUploadedFileNameList?.FileNameList.length >= 1" class="part-tr text-right">
+                        <td></td>
+                        <td class="text-right">
+                          <span style="color: #2E58D6;" class="upload-part-detail-list pointerCursor text-right downloadAll" (click)="downloadAllFiles(iPartUploadedFileNameList?.FileNameList, true ,iPartsViewModel.rfqPartFile)">
+                            Download All
+                          </span>
+                        </td>
+                      </tr>
+                      <tr class="part-tr">
+                        <td class="text-truncate">
+                          <span class="upload-part-detail-list pointerCursor text-truncate" (click)="downloadS3File(iPartsViewModel.rfqPartFile, true)"
+                            title="Download - {{ iPartsViewModel.rfqPartFile | originalName }}">{{getShortOriginalPartName(iPartsViewModel.rfqPartFile)}}
+                          </span>
+                        </td>
+                        <td></td>
+                        <!-- <td *ngIf="iPartUploadedFileNameList?.FileNameList.length >= 1" class="text-right">
+                          <span class="upload-part-detail-remove" (click)="downloadAllFiles(iPartUploadedFileNameList?.FileNameList, true ,iPartsViewModel.rfqPartFile)">
+                            Download All
+                          </span>
+                        </td> -->
+                      </tr>
+                      <tr *ngFor="let item of iPartUploadedFileNameList?.FileNameList; let i =index " class="part-tr">
+                        <td class="text-truncate">
+                          <span class="upload-part-detail-list pointerCursor text-truncate" (click)="downloadS3File(item.CompleteFileName, true)"
+                            title="Download - {{ item.CompleteFileName | originalName }}">{{getShortOriginalPartName(item.CompleteFileName)}}
+                          </span>
+                        </td>
+                        <!-- <td class="text-right">
+                          <a (click)="removeSavedPartDetailFile(item,i,iPartsViewModel.rfqPartId)">
+                            <span class="upload-part-detail-remove text-right">Remove</span>
+                          </a>
+                        </td> -->
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!-- <label for="file-upload" class="custom-file-upload"> Browse Your Files </label>
+                  <input id="file-upload" type="file" ng2FileSelect [uploader]="partDetailUploader" multiple (change)="onFileSelected($event)" /> -->
+                </div>
+              </div>
+              <div class="row padding-tp">
+                <div class="col-md-12" style="text-align: center">
+                  <button type="button" class="btn-cancel-part-details" (click)="cancelPartDetails()">
+                    <span class="btn-cancel-text">Cancel</span>
+                  </button>
+                </div>
+                <!-- <div class="col-md-12" style="text-align: center">
+
+                  <button *ngIf="(isPartSaveSubmit() || (isAttachmentsLoading !== 0))" type="button" class="btn btn-save-part-details-disabled"
+                    placement="top" container="body" ngbTooltip="Please fill above  fields">
+                    <span class="btn-save-text-part">Save</span>
+                  </button>
+                </div> -->
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

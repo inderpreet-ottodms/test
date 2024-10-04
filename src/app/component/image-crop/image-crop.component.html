@@ -1,0 +1,66 @@
+<ng-template #content let-d="dismiss" data-backdrop="static" data-keyboard="false">
+  <div class="modal-header">
+    <h4 class="modal-title">Crop Image</h4>
+    <button type="button" class="close" data-bs-dismiss="modal" (click)="d('notNow');closeCropModel()">
+      <i class="fa fa-times-circle" aria-hidden="true" style="color: #4a90e2;"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div *ngIf="croppedImage === null || croppedImage === undefined || croppedImage === ''">
+
+      <div class="banner" ng2FileDrop (click)="imageUpload.click();" [uploader]="uploaderBanner">
+        <div><img src="assets/supplier/logoUploadGuide.png"
+            srcset="assets/supplier/logoUploadGuide@2x.png 2x, assets/supplier/logoUploadGuide@3x.png 3x"
+            class="upload-bg-guide-margin"></div>
+        <div>&nbsp;<span>Select an image for your background. (1053x200)</span></div>
+      </div>
+      <div class="m-t-10 f-16">
+        <span> Drag & Drop or <label class="m-b-0 f-16">
+          <a class="browse-text f-16" (click)="imageUpload.click();" style="color:#337ab7 !important">browse your files</a>
+        </label> to add or edit. PNG or JPG files only.</span>
+      </div>
+
+      <input type="file" #imageUpload (change)="fileChangeEvent($event)" style="display: none" accept="image/*" />
+    </div>
+    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="5 / 1"
+      [resizeToWidth]="1319" [resizeToHeight]="200" [imageBase64]="imageBase64" [transform]="transform"  [canvasRotation]="canvasRotation" format="png" (imageCropped)="imageCropped($event)"
+      (imageLoaded)="imageLoaded()" (loadImageFailed)="loadImageFailed()">
+    </image-cropper>
+    <div *ngIf="croppedImage !== null && croppedImage !== undefined && croppedImage !== ''">
+      <button class="btn btn-action" (click)="resetCrop()">Reset</button>
+      <button class="btn btn-action" (click)="rotateLeft()">Rotate left</button>
+      <button class="btn btn-action" (click)="rotateRight()">Rotate right</button>
+      <button class="btn btn-action" (click)="flipHorizontal()">Flip horizontal</button>
+      <button class="btn btn-action" (click)="flipVertical()">Flip vertical</button>
+      <button class="btn btn-action" (click)="clear()">Clear</button>
+      <!-- <button (click)="zoomOut()">Zoom -</button> 
+      <button (click)="zoomIn()">Zoom +</button> -->
+    </div>
+    <div class="m-t-10" *ngIf="croppedImage !== null && croppedImage !== undefined && croppedImage !== ''">
+      <span class="f-16 f-w-600"> Preview </span>
+    </div>
+    <img [src]="croppedImage" style="width: 500px;" />
+  </div>
+
+  <div class="modal-footer-section">
+    <div class="row">
+      <div class="col-md-12 btn-cancel-section text-center p-10" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-save" data-bs-dismiss="modal" (click)="closeCropModel(1);" [attr.disabled]="(croppedImage !== null && croppedImage !== undefined && croppedImage !== '')? null : '' ">Crop and save</button>
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal"
+          (click)="closeCropModel();">Close</button>
+      </div>
+    </div>
+  </div>
+  <div class="loading" *ngIf="isLoader">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>
+</ng-template>

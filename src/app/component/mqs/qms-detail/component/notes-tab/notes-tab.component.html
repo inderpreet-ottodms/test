@@ -1,0 +1,118 @@
+<div class="qms-section">
+  <div class="row">
+    {{reloadNotes()}}
+    <div class="col-md-12 add-notebtn">
+      <button (click)="openNoteDrawer(-1)">Add New Note</button>
+    </div>
+  </div>
+  <div class="row" *ngIf="isNotesAvailable">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-md-3 lead-subhead lead-padding"><span>Title</span></div>
+        <div class="col-md-5 lead-subhead"><span>Body</span></div>
+        <div class="col-md-2 lead-subhead"><span>Date</span></div>
+        <div class="col-md-2 lead-subhead actionTitle"><span>Actions</span></div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isLoader">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>
+  <div class="row noteData" *ngIf="isNotesAvailable">
+    <div class="col-md-12">
+      <div class="row lead-info" *ngFor="let notes of items">
+        <div class="col-md-3 note-value lead-name p-l-10 p-t-20 p-b-20 text-wrap">
+          <span placement="top" data-container="body" (click)="openNoteDrawer(notes.qmsNoteId)"
+            ngbTooltip="{{notes.qmsNotesTitle}}">{{notes.qmsNotesTitle ? (notes.qmsNotesTitle | dotLimit:'30') : 'N/A'}}</span>
+        </div>
+        <div class="col-md-5 note-value p-t-20 p-b-20 text-truncate">
+          <span placement="top" data-container="body"
+            ngbTooltip="{{notes.qmsNotes}}">{{notes.qmsNotes ? (notes.qmsNotes | dotLimit:'45') : 'N/A'}}</span>
+        </div>
+        <div class="col-md-2 note-value  p-t-20 p-b-20 text-wrap">
+          <span placement="top" data-container="body"
+            ngbTooltip="{{notes?.qmsNotesDate | date :  'MMM-dd-yyyy'}}">{{ (notes?.qmsNotesDate) ? (notes?.qmsNotesDate | date :  "MMM-dd-yyyy") : 'N/A' }}</span>
+        </div>
+        <div class="col-md-2 note-value actiondiv">
+          <span class="iconQms">
+            <i class="fa fa-edit pointer-cursor" placement="top" container="body"
+              (click)="openNoteDrawer(notes.qmsNoteId)" ngbTooltip="Edit Note"></i>
+          </span>
+          <span class="iconQms">
+            <i class="fa fa-trash pointer-cursor" (click)="DeleteNote(notes.qmsNoteId)" placement="top" container="body"
+              ngbTooltip="Delete Note"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="myRFQ-rfq-no-available" *ngIf="!isNotesAvailable">
+    <div class="row noImage-padding">
+      <div class="col-md-12">
+        <div>
+          <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+                  assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+        </div>
+      </div>
+    </div>
+    <div class="row noMsg-text">
+      <div class="col-md-12">
+        <div class="myRFQ-noRFQActive-helper-text">No Notes found at this time.</div>
+      </div>
+    </div>
+  </div>
+  <!-- ------------------------- Pagination start----------------------- -->
+  <div class="row msgPagination" *ngIf="isNotesAvailable">
+    <div class="col-md-12" *ngIf="!isLoader">
+      <div class="paginations">
+        <div>
+          <div id="radioBtn" class="btn-group">
+            <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" class="btn btn-primary btn-sm notActive"
+              (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+              Previous
+            </a>
+            <a *ngFor="let page of pagesIndex" (click)="setPage(page)"
+              [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+              data-bs-toggle="fun" data-title="X">
+              {{page}}
+            </a>
+            <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+              (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+              Next
+            </a>
+          </div>
+          <input type="hidden" name="fun" id="fun">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="isNotesAvailable">
+    <div class="col-md-12">
+      <div class="pull-right padd-right">
+        <label class="showreccount"> {{currentIndex }} of {{pageNumber}} </label>
+      </div>
+    </div>
+  </div>
+  <!-- ------------------------- Pagination end----------------------- -->
+</div>
+<p-confirmDialog header="Confirmation" icon="" width="629" height="220" #msgDlt>
+  <p-footer>
+    <div class="row qms-section">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-ignore-rfq" (click)="msgDlt.reject()">Cancel</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="msgDlt.accept()"> Yes</button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>

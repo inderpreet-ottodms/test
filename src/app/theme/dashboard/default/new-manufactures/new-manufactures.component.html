@@ -1,0 +1,41 @@
+<div class="card" style="min-height: 205px; " *ngFor="let manufactureDetails of manufactureList;">
+    <div style="min-height: 65px;">
+      <img  [src]="manufactureDetails.supplierCompanyLogo" onError="this.src='assets/company/avatar-manu-basic.svg'">
+      <div class="p-r-25">
+        <p class="name f-16 f-w-600 word-break"> 
+          <span placement="top" data-container="body" ngbTooltip="{{manufactureDetails.supplierCompany}}">
+              {{manufactureDetails.supplierCompany | dotLimit:'23' }}
+          </span>
+         </p>
+        <p class="name f-12 word-break">{{manufactureDetails.supplierLocation }}</p>
+      </div>
+      <div class="card-tag">
+          <span>New</span>
+        </div>
+    </div>
+    <div class="m-t-10" *ngIf="manufactureDetails.capabiitiesListData === null || manufactureDetails.capabiitiesListData === undefined" style="min-height: 65px;">
+
+    </div>
+    <div class="m-t-10" style="min-height: 65px;" *ngIf="manufactureDetails.capabiitiesListData !== null && manufactureDetails.capabiitiesListData !== undefined" style="min-height: 65px;">
+      <span class="badge" *ngFor="let cat of manufactureDetails.capabiitiesListData | slice:0:3">{{cat}}</span>
+    </div>
+    <div class="m-t-15" style="display:flex;justify-content:space-between;">
+      <button class="btn-msg" (click)="openMessageDrawer($event,manufactureDetails.supplierId, 0 , manufactureDetails.supplier)">Send Message</button>
+      <button class="btn-profile" (click)="openProfileDrawer(manufactureDetails.encryptedSupplierId,manufactureDetails.supplier, manufactureDetails.supplierCompany, manufactureDetails.supplierId)">View Profile</button>
+    </div>
+  </div>
+  <div class="card" *ngIf="manufactureList.length === 0">
+    <p class="p-t-20 p-l-10 p-b-20 p-r-10 gray-color f-16 f-w-50">No new manufacturers.</p>
+  </div>
+  <div *ngIf="loader" class="loading">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>

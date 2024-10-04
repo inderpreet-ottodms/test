@@ -1,0 +1,112 @@
+@import '../../../styles.scss';
+
+.pagination-container
+{
+    margin: 0px auto;
+    //text-align: center;
+    clear: both;
+    font-size: 0.875em;
+    padding: 0px;
+    padding-left: 15px;
+    //display:-webkit-inline-flex;
+}
+
+.pagination-container ul
+{
+    list-style-type: none;
+    display: flex;
+}
+.pagination-container ul li
+{
+    display: inline-block;
+    padding:5px 12px;
+    border-left: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    margin: 0px;
+    cursor: pointer;
+    color: #4a90e2;
+}
+.pagination-container ul li:last-child
+{
+    border-right: solid 1px silver;
+}
+
+
+.pagination-container .static-text
+{
+    margin: 2px 2px;
+    font-size:14px !important;
+    color:#222 !important;
+}
+.pagination-container .page-navigation-container
+{
+    //border: solid 1px red;
+    display: -webkit-inline-flex;
+}
+
+.pagination-container .page-viewer
+{
+    margin: 0px 10px;
+}
+.pagination-container .page-navigation, .separator
+{
+    //text-decoration: underline;
+    margin: 2px 2px;
+    cursor: pointer!important;
+}
+.pagination-container .page-navigation :hover
+{
+    text-decoration: underline;
+    margin: 2px 2px;
+    cursor: pointer!important;
+}
+
+.pagination-container select
+{
+    min-width: 40px;
+    padding: 2px;
+    border: 0px;
+    //margin: 0px 5px;
+    //border-bottom: solid 1px silver;
+    text-align-last: center;
+    text-align: center;
+   -ms-text-align-last: center;
+   -moz-text-align-last: center;
+//    -webkit-appearance: none;
+//     -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+    cursor: pointer;
+}
+.pagination-container option
+{
+    text-align-last: center;
+   text-align: center;
+   -ms-text-align-last: center;
+   -moz-text-align-last: center;
+}
+
+.page-navigation select
+{
+    text-align: center;
+}
+.border {
+   border: 1px solid  rgb(169, 169, 169);
+
+}
+.notActive{
+  color: #4a90e2;
+padding: 5px 15px 5px 15px;
+  background-color: #fff;
+}
+ .active{
+background-color: #bec4cb;
+  color: #FFF!important;
+box-shadow: none;
+padding: 5px 15px 5px 15px;
+}
+.badge-secondary{
+  background-color: #bec4cb!important;
+  border-radius: 5px!important;
+}

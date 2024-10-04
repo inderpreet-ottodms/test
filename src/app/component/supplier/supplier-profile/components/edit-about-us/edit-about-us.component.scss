@@ -1,0 +1,548 @@
+* {
+  font-family: Poppins;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+}
+.fa{
+  font-family: FontAwesome;
+}
+.background-white{
+	background:#FFF;
+	padding: 15px;
+	border-radius:5px;
+	margin-bottom:19px;
+	border-radius: 5px;
+  box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+  margin-top:10px;
+}
+.row-border-bottom {
+  border-bottom: 2px solid #e0dfdf;
+}
+.Edit-Equipment {
+  height: 23px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #222222;
+}
+.equipment-label{
+  font-size: 12px;
+  font-weight: bold;
+  color: #222222;
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
+.Save-Equipment-active {
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  padding: 0px !important;
+  background-color: #2E58D6;
+  color:white;
+  cursor: pointer;
+}
+
+.Save-Equipment-Deactive {
+  width: 150px;
+  height: 35px;
+  padding: 0px !important;
+ font-size: 16px;
+ font-weight: 600;
+ text-align: center;
+ color: #ffffff;
+ border-radius: 2px;
+ background-color: #bec4cb;
+ cursor: default !important;
+}
+.Rectangle-2{
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  background-color: #bec4cb;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+   }
+
+   .Rectangle-2-active {
+    width: 150px;
+    height: 35px;
+    border-radius: 2px;
+    background-color: #bec4cb;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: #2E58D6;
+  }
+   .Add-Another-Quanti {
+    width: 141px;
+    height: 17px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #2E58D6 !important;
+  }
+   .inner-div{
+    text-align: left;
+    padding-left: 0px;
+  }
+
+  .Rectangle-description {
+    width: 330px;
+    height: 310px;
+    border-radius: 2px;
+    border: solid 1px #2E58D6;
+    background-color: #ffffff;
+  }
+  .Rectangle-description-1 {
+    width: 330px;
+    height: 120px;
+    border-radius: 2px;
+    border: solid 1px #2E58D6;
+    background-color: #ffffff;
+  }
+//   .cke_top {
+//     display: none !important;
+// }
+// ol {
+// 	counter-reset: item;
+// }
+// li {
+// 	display: block;
+// }
+// li:before {
+// 	content: counters(item, ".") " ";
+// 	counter-increment: item
+// }
+  .Company-Description1 {
+    height: 17px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #222222;
+  }
+  .dHelper-align {
+    text-align: right;
+  }
+  .description-helper {
+    height: 16px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #919aa3;
+  }
+  .Drag-drop-your-cer {
+    // width: 279px;
+    width: 100%;
+    // height: 23px;
+    font-size: 16px;
+    text-align: center;
+    color: #222222;
+    // padding-left: 39px;
+    padding-top: 4px;
+  }
+.Rectangle-3{
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  border: solid 2px #212A37;
+  background-color: white;
+  color: #212A37;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.row-padding-top {
+  padding-top: 10px;
+}
+.upload-part-detail-remove {
+  width: 50px;
+  height: 17px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #2E58D6;
+  cursor: pointer;
+}
+.custom-cursor {
+  cursor: pointer !important;
+}
+.Add-another-piece {
+  width: 241px;
+  height: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2E58D6;
+}
+.rightpanel i {
+  color: #2E58D6;
+  font-size: 19px;
+}
+
+.panelheading {
+  font-size: 16px;
+  font-weight: bold;
+  color: #222;
+  margin-top: 2px !important;
+  line-height: 22px;
+}
+.panelheading span {
+  font-size: 12px;
+  font-weight: bold;
+  color: #919aa3;
+}
+.rightpanel {
+  border-bottom: solid 2px #e2e2e5;
+}
+.gallary-item-upload-box {
+  height: 228px;
+  border-radius: 2px;
+  border: dashed 2px #e2e2e5;
+  margin-top: 10px;
+  width: 100%;
+  text-align: center;
+}
+.inActive-link {
+  width: 100%;
+  height: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #bec4cb;
+}
+.-Add-Another-Catego {
+  margin-top: 10px;
+  height: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2E58D6 !important;
+  cursor: pointer;
+}
+.label-part-detail {
+  margin-top: 10px;
+}
+.add-certi-space {
+  margin-top: 10px;
+}
+.gallary-Drag-drop-text {
+  margin-top: 20px;
+  height: 25px;
+  font-size: 18px;
+  text-align: center;
+  color: #222222;
+}
+.gallary-browse-file-text {
+  height: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  color: #2E58D6;
+}
+.gallary-browse-file-text .or {
+  font-weight: normal;
+  color: #222222;
+}
+.display-none{
+  display: none
+}
+.cursor-pointer{
+  cursor: pointer !important;
+}
+.gallary-browse-file-type {
+  margin-top: 9px;
+  margin-bottom: 9px;
+  height: 16px;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  color: #919aa3;
+}
+.gallary-browse-Icon-default {
+  width: 45px;
+  height: 57px;
+  object-fit: contain;
+  margin-top: 33px;
+}
+.dropimagebuttons {
+	width:100% !important;
+  margin-top: 29px;
+}
+.disabled-btn {
+  margin-left: 10px;
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  background-color: #bec4cb;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: #ffffff;
+}
+.enabled-btn {
+  margin-left: 10px;
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  background-color: #2E58D6;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: #ffffff;
+}
+.cancelbutton {
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  border: solid 2px #2E58D6;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: #2E58D6;
+}
+.cancelbutton-disabled {
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  border: solid 2px #bec4cb;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: #bec4cb;
+}
+.thumbnail{
+	border: none !important;
+}
+.img-thumbnail{
+	border: none !important;
+}
+.show-image {
+  width: 150px;
+  height: 94.3px;
+}
+.show-image1 {
+  height: 207.6px;
+  margin: 20px;
+}
+.add-margin {
+  margin-top: 8px;
+}
+.add-margin img{
+ cursor: grab;
+}
+.add-margin img:hover {
+  transform: scale(1.0); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+.img-meta {
+  width: 100%;
+  height: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2E58D6;
+  cursor: pointer;
+}
+.delete-img {
+  width: 13px;
+  height: 14px;
+  float: right;
+  margin-top: 5px;
+}
+.active-link {
+  width: 100%;
+  height: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2E58D6;
+  cursor: pointer;
+}
+.active-link i {
+  height: 16px;
+  font-size: 16px;
+}
+.edit-photo-padding {
+  padding-top: 29px;
+}
+.space-add-another {
+  padding-top: 10px;
+}
+.error-msg2 {
+  position:absolute;
+  width:100%;
+}
+
+.cancelbutton1 {
+  width: 100%;
+  height: 35px;
+  border-radius: 2px;
+  border: solid 2px #2E58D6;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: #2E58D6;
+  background-color: #fff;
+  cursor: pointer;
+}
+.cancelbutton-disabled1 {
+  width: 100%;
+  height: 35px;
+  border-radius: 2px;
+  border: solid 2px #bec4cb;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: #bec4cb;
+}
+
+.disabled-btn1 {
+  width: 100%;
+  height: 35px;
+  border-radius: 2px;
+  background-color: #bec4cb;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: #ffffff;
+  border: none;
+}
+.enabled-btn1 {
+  width: 100%;
+  height: 35px;
+  border-radius: 2px;
+  background-color: #2E58D6;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: #ffffff;
+  border:0px;
+  cursor: pointer;
+}
+
+.Label-focus-red {
+  font-size: 12px !important;
+  font-weight: bold !important;
+  color: #da2020 !important;
+}
+.Label-class {
+  font-size: 12px !important;
+  font-weight: bold !important;
+  color: #222222 !important;
+}
+.Label-focus {
+  font-size: 12px !important;
+  font-weight: bold !important;
+  color: #2E58D6 !important;
+}
+
+.btn-cancel-part-details {
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  border: solid 2px #2E58D6;
+  background: white;
+  cursor: pointer;
+
+}
+.btn-save-text-part{
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: #ffffff;
+}
+.language-div a:hover {
+  background-color: #ffffff;
+  cursor: pointer;
+  color: #607d8b;
+  font-weight: bold;
+}
+
+.language-div {
+  text-align: left
+}
+.Add-Another-Lang {
+  width: 141px;
+  height: 17px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #2E58D6 !important;
+}
+.label-language-detail {
+  width: 200px;
+  height: 17px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #222222;
+}
+
+.pointerCursor {
+  cursor: pointer;
+}
+
+.language-detail-remove {
+  width: 50px;
+  height: 17px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #2E58D6;
+  cursor: pointer;
+}
+
+.error-msg2 {
+  position:absolute;
+  bottom:-19px;
+  left:0;
+  width:100%;
+  left:15px
+}
+.pad-since {
+  height: 33px;
+  background-color: #f6f7fb;
+  text-align: center;
+  padding-top: 5px
+}
+
+.MFGcom-Member-Since {
+  width: 228px;
+  height: 17px;
+  font-size: 12px;
+  font-weight: 500;
+  padding-top: 10px;
+  color: #919aa4;
+}
+.error-msg{
+  font-size: 13px;
+  color:#a94442;
+}
+.itar_logo {
+  width: 150px;
+  margin:0 auto;
+}
+
+.help-text{
+  font-size: 13px;
+  color:grey;
+  text-align: right;
+}
+
+/* in-flight clone */
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+  pointer-events: none;
+}
+/* high-performance display:none; helper */
+.gu-hide {
+  left: -9999px !important;
+}
+/* added to mirrorContainer (default = body) while dragging */
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+/* added to the source element while its mirror is dragged */
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
+}

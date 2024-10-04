@@ -1,0 +1,100 @@
+.upgrade-btn {
+    width: 200px;
+    // height: 35px;
+    border-radius: 2px;
+    border: solid 2px #2E58D6;
+    color: #2E58D6;
+    background-color: white;
+    cursor: pointer;
+    margin-bottom:10px;
+    line-height:30px;
+  }
+  .upgrade-btn-text {
+    // height: 23px;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    // line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #2E58D6;
+  }
+  /*----------------------------------------Modal Popup-------------------------------------*/
+.fa-times-circle {
+    color: #4a90e2;
+    font-size:18px;
+  }
+  .model-dialog {
+    font-family: "Poppins", sans-serif;
+  }
+  .modal-header {
+      padding-bottom: 5px;
+  }
+  .modal-title{
+      font-size: 24px !important;
+      font-weight:bold !important;
+  }
+  .modal-footer .btn-group button {
+      height:40px;
+      border-top-left-radius : 0;
+      border-top-right-radius : 0;
+      border: none;
+      border-right: 1px solid #ddd; 
+  }
+  .okay-button {
+    width: 285px;
+      border-radius: 2px;
+      background-color: #2E58D6;
+      font-size: 16px;
+      border:  solid 2px #2E58D6;
+      text-align:center;
+      transition:0.3s;
+      font-weight: bold;
+    color: #ffffff;
+    cursor: pointer;
+  }
+  .show-success {
+    font-family: Poppins;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #222222;
+  }
+  .button-margin1 {
+    padding:20px;
+    text-align: center;
+    margin-top: 15px;
+  }
+  .View-All {
+    float: right;
+    color: #4a90e2 !important;
+    cursor: pointer;
+  }
+.upgrade-modal .ui-dialog-content {
+    padding: 20px !important;
+}
+.upgrade-modal .ui-dialog-titlebar {
+    padding: 20px !important;
+}
+  /*----------------------------------------Modal Popup-------------------------------------*/
+
+
+
+
+  .upgradeQuoteBtn{
+    padding: 2px 5px !important;
+    border-radius: 2px;
+    border: solid 2px #212A37;
+    color: #212A37;
+    background-color: #fff;
+    cursor: pointer;
+    margin-bottom: 10px;
+    line-height: 30px;
+    font-weight: bold;
+    font-size: 16px;
+  }

@@ -1,0 +1,207 @@
+<div *ngIf="!isLoader">
+  <div class="row" *ngIf="(iRFQViewModelColl.length != 0)">
+    <div class="col-md-12">
+      <div>
+        <div class="row top-row">
+          <div class="col-md-3">
+            Showing 10 latest
+          </div>
+        </div>
+        <div class="row">
+          <br>
+          <div class="col-md-12">
+            <div class="table-responsive min-height">
+              <table class="table table-hover rfqtable">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th class="" (click)="sortMessage('Quantity')">Quantity
+                      <i [ngClass]="(toggle5)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </th>
+
+                    <th class="" (click)="sortMessage('Material')">Material
+                      <i [ngClass]="(toggle)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </th>
+
+                    <th class="" (click)="sortMessage('Status')">Status
+                      <i [ngClass]="(toggle6)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </th>
+                    <th class="" (click)="sortMessage('Process')">Process
+                      <i [ngClass]="(toggle3)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </th>
+                    <th class="" (click)="sortMessage('Post Process')">Post Process
+                      <i [ngClass]="(toggle2)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </th>
+                    <th class="" (click)="sortMessage('Closes')">Closes
+                      <i [ngClass]="(toggle4)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </th>
+
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor='let rfq of iRFQViewModelColl'>
+                    <td class="tdborderleft">
+                      <img src="assets/supplier/3-d-turbine-3-d-auto-cad-drawing.png" srcset="assets/supplier/3-d-turbine-3-d-auto-cad-drawing@2x.png 2x, assets/supplier/3-d-turbine-3-d-auto-cad-drawing@3x.png 3x"
+                        *ngIf="(!rfq.rfqThumbnail || rfq.rfqThumbnail === '') && !rfq.isMfgCommunityRfq" class="d-Turbine-3D-AutoCAD-Drawing">
+                        <img src="assets/directrfq.png" srcset="assets/directrfq@2x.png 2x, assets/directrfq@3x.png 3x"
+                        *ngIf="(!rfq.rfqThumbnail || rfq.rfqThumbnail === '') && rfq.isMfgCommunityRfq" class="d-Turbine-3D-AutoCAD-Drawing">
+                        <img src="assets/supplier/3-d-turbine-3-d-auto-cad-drawing.png" srcset="assets/supplier/3-d-turbine-3-d-auto-cad-drawing@2x.png 2x, assets/supplier/3-d-turbine-3-d-auto-cad-drawing@3x.png 3x"
+                        *ngIf="(!rfq.rfqThumbnail || rfq.rfqThumbnail === '')" class="d-Turbine-3D-AutoCAD-Drawing">
+                      <div *ngIf="!(!rfq.rfqThumbnail || rfq.rfqThumbnail === '')" class="d-Turbine-3D-AutoCAD-Drawing">
+                        <img [src]="getLoadableImg(rfq.rfqThumbnail)" class="img-circle box-fit">
+                      </div>
+                    </td>
+                    <td class="rfqtd" (click)="detailRfq(rfq.rfqId)" placement="top" data-container="body" >  <div ngbTooltip="{{ rfq.rfqName}}"> {{rfq.rfqName | dotLimit:'10'}}</div>  
+                      <span>RFQ #{{rfq.rfqId}}</span><br>
+                      <span>{{rfq.manufacturingLocation | dotLimit:'25'}}</span>
+                    </td>
+                    <td>{{rfq.partQty}} {{rfq.partQtyUnit}}</td>
+                    <td class="custtd Custome-WhiteSpace">{{rfq.partsMaterialName}} </td>
+                    <!-- rfqStatusId -->
+                    <td class="custtd Custome-WhiteSpace" >{{rfq.rfqStatus}} </td>
+                    <td class="custtd Custome-WhiteSpace" placement="top" data-container="body" > <div ngbTooltip="{{ rfq.partCategoryName}}"> {{rfq.partCategoryName | Na | dotLimit:'15'}} </div>   </td>
+                    <td class="custtd Custome-WhiteSpace"  placement="top" data-container="body">  <div  ngbTooltip="{{ rfq.postProductionProcessName}}"> {{rfq.postProductionProcessName | Na | dotLimit:'15'}} </div> </td>
+                    <td class="custtd Custome-WhiteSpace">{{rfq.quotesNeededBy | date: 'MM/dd/yyyy'}} </td>
+                    <td class="btn-high tdbackgorungcolor">
+                      <a (click)="redirectToEditRfq(rfq)" *ngIf="rfq.rfqStatusId !== 3 && rfq.isEditEnable">
+                        <i class="fa fa-edit pointerCursor editICon"   ngbTooltip="Edit RFQ"></i>
+                      </a>
+                      <a data-bs-target="#editConfirmModel" data-bs-toggle="modal"  (click)="setRfqDetail(rfq.rfqId, rfq.rfqName ,rfq.rfqStatusId)" *ngIf="rfq.rfqStatusId === 3 && rfq.isEditEnable">
+                        <i class="fa fa-edit pointerCursor editICon" ngbTooltip="Edit RFQ"></i>
+                      </a>
+                      <a   *ngIf="(!rfq.isEditEnable)">
+                        <i  class="fa fa-edit editICon" style="cursor: not-allowed;" placement="top" container="body" ngbTooltip="Edit RFQ"></i>
+                      </a>
+                    </td>
+                    <td class="btn-high tdborderright tdbackgorungcolor">
+                      <a (click)="cloneModel(rfq.rfqId,rfq.manufacturingLocationId,rfq.deliveryDate)">
+                        <i class="fa fa-clone pointerCursor editICon" ngbTooltip="Clone RFQ"></i>
+                      </a>
+                    </td>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="myRFQ-rfq-no-available" *ngIf="(iRFQViewModelColl.length === 0)">
+    <div class="row" style="text-align: center;padding-top:60px">
+      <div class="col-md-12">
+        <div>
+          <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+      assets/rfq/no-rfq@3x.png 3x"
+            class="Group">
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-top:34px">
+      <div class="col-md-12">
+        <div class="You-dont-have-any-R"> You don't have any active RFQs</div>
+      </div>
+    </div>
+    <div class="row" style="padding-top:10px">
+      <div class="col-md-12">
+        <div class="Please-create-an-RFQ">Press Create an RFQ to get quotes from manufacturers on any of your parts.</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12" style="text-align:center">
+        <button type="submit" 
+        (click)="moveToCreatRfq()"
+        class="btn Save-Rfq-button-active">
+          <span class="button-lbl pointerCursor"> Create an RFQ </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="isLoader">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div>
+<!-- <p-dialog header="Clone RFQ" [(visible)]="display" [modal]="true" [responsive]="true" [contentStyle]="{'overflow':'visible'}" [autoZIndex]="false" [style]="{'z-index': 10001}"> -->
+  <!-- <div class="row" style="padding-bottom: 28px">
+    <div class="col-md-12">
+      <p class="What-would-you-like">
+        <span>What would you like to name your new RFQ?</span>
+      </p>
+    </div>
+  </div> -->
+  <!-- <div class="row" style="padding-bottom: 25px">
+    <div class="col-md-12">
+        <label  class="label-part-detail">What would you like to name your new RFQ?</label>
+      <input type="text" placeholder="RFQ Name*" [(ngModel)]="cloneRfqName" class="form-control" />
+    </div>
+  </div>
+  <div class="row" style="padding-bottom: 25px">
+    <div class="col-md-6">
+        <label  class="label-part-detail">Select your part(s) delivery date </label>
+      <p-calendar  [readonlyInput]="true" [(ngModel)]="cloneDeliveryDate" [style]="{'width':'100%','border-bottom-color':'none'}"
+                        [inputStyle]="{'width':'82%' ,'padding':'7px','border-bottom-color':'none'}" name="deliveryDate" placeholder="Delivery date *" [minDate]="minDate"
+                        [showIcon]="true" #deleveryDate="ngModel"></p-calendar>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <p class="clone-below-text">
+        <span>NOTE: You will find your new RFQ in the Draft RFQs section of the left navigation.</span>
+      </p>
+    </div>
+  </div>
+  <p-footer>
+    <div class="row" style="padding-top: 25px">
+      <div class="col-md-6" >
+        <button type="button" class="btn btn-cancel" (click)="display=false">Cancel</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" [ngClass]="(!isvalid())? 'btn btn-clone':'btn btn-disable'" label="Yes" [disabled]="isvalid()"
+          (click)="submitClone()"> Submit RFQ</button>
+      </div>
+    </div>
+  </p-footer>
+</p-dialog> -->
+
+
+<div class="modal fade" id="editConfirmModel" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Confirmation</h4>
+        <button type="button" style="color: #4a90e2;"class="close" data-bs-dismiss="modal"><i class="fa fa-times-circle" aria-hidden="true"></i></button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <p style="font-size: 14px; margin-top: 20px; font-weight: normal;">This RFQ is currently open for quoting. Editing the RFQ will cause any current quotes to be retracted. Do you wish to continue?' </p>
+      </div>
+      <div class="row modal-footer1" style="padding: 10px">
+        <div class="col-md-6">
+            <button type="button" class="btn nobtn" data-bs-dismiss="modal">No</button>
+        </div>
+        <div class="col-md-6">
+            <button type="button" class="btn btn-edit-confirm" data-bs-dismiss="modal" (click)="editRfq()">Yes</button>
+          </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf=isCloneModel>
+    <app-clone-rfq [id]="cloneRfqId"></app-clone-rfq>
+    </div>

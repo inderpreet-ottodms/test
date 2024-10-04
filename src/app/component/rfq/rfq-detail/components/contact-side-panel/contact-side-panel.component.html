@@ -1,0 +1,369 @@
+<div *ngIf="addressList">
+  <div class="panel panel-default panel-body-bottom">
+    <div class="panel-heading">
+      <div class="row">
+        <div class="col-md-6" style="text-align: left">
+          <p class="Change-Shipping-Addr">Change Shipping Address</p>
+        </div>
+        <div class="col-md-6" style="text-align: right">
+          <i
+            class="fa fa-times close-card"
+            style="color: #4099ff"
+            (click)="closeContactDrawer()"
+          ></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-body panel-body-padding">
+      <div class="row">
+        <div
+          class="col-md-12"
+          *ngFor="let address of shippingAddressData; let i = index"
+        >
+          <div class="row">
+            <div class="col-md-1">
+              <div class="border-checkbox-section" style="padding-top: 10px">
+                <div
+                  class="border-checkbox-group border-checkbox-group-primary"
+                >
+                  <input
+                    class="border-checkbox"
+                    type="checkbox"
+                    id="{{ address.siteId }}"
+                    [checked]="address.defaultSite"
+                    (change)="
+                      makeShippingDefault(address,address.siteId, $event.target.checked)
+                    "
+                  />
+                  <label
+                    class="border-checkbox-label"
+                    for="{{ address.siteId }}"
+                  ></label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-7" style="text-align: left; font-size: 10px">
+              <div class="addressNickname" style="width: 100%">
+                {{ address.siteLabel }}
+              </div>
+              <div
+                class="companyName"
+                [innerHTML]="getAddressFormat(address.addresses)"
+              ></div>
+            </div>
+            <div class="col-md-3">
+              <a
+                style="font-size: 12px; color: #4a90e2"
+                class="cusror-pointer"
+                (click)="editShippingAddress(address.siteId)"
+              >
+                <b>Edit</b>
+              </a>
+            </div>
+          </div>
+          <hr class="HrLine" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 padding-tp">
+          <a
+            class="Add-new-address"
+            href="javascript:void(0);"
+            (click)="openShippingAddressForm()"
+          >
+            <b>+ Add new address</b>
+          </a>
+        </div>
+      </div>
+      <div class="row padding-tp">
+        <div class="col-md-6">
+          <button
+            type="button"
+            class="btn addClosebtn"
+            (click)="closeContactDrawer()"
+          >
+            Cancel
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button
+            type="button"
+            class="btn"
+            (click)="addDefaultShipping()"
+            [disabled]="!checkAddress"
+            [ngClass]="
+              checkAddress ? 'btn-SaveAddress-enabled ' : 'btn-SaveAddress'
+            "
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- after edit -->
+<div *ngIf="addShippingform">
+  <div class="panel panel-default">
+    <div class="panel-body panel-body-padding">
+      <form
+        class="md-float-material"
+        [formGroup]="shippingForm"
+        (ngSubmit)="onSaveShippingInfo()"
+      >
+        <div class="row">
+          <div
+            class="col-md-8"
+            style="
+              font-family: Poppins;
+              font-size: 16px;
+              font-weight: bold;
+              color: #222222;
+            "
+          >
+            <label> Add New Address</label>
+          </div>
+          <div class="col-md-4" style="text-align: right">
+            <i
+              class="fa fa-times close-card"
+              style="color: #4099ff"
+              (click)="closeAddShippingForm()"
+            ></i>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <hr style="border: solid 1px #e2e2e5" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="Address-Nickname">Nick Name</div>
+          </div>
+          <div class="col-md-6">
+            <div class="All-Required" style="float: right">All Required</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <input
+              type="text"
+              maxlength="50"
+              formControlName="siteLabel"
+              class="form-control"
+              placeholder="Nick Name"
+              name="nickname"
+              id="nickname"
+            />
+          </div>
+        </div>
+        <div class="row padding-tp">
+          <div class="col-md-12">
+            <input
+              type="text"
+              maxlength="50"
+              class="form-control"
+              formControlName="companyName"
+              name="cname"
+              id="cname"
+              [readonly]="isCompanyPresent"
+              placeholder="Company Name"
+            />
+            <input
+              type="hidden"
+              maxlength="50"
+              id="shippingstredetaddress"
+              class="form-control"
+              formControlName="addressId"
+            />
+            <div class="error-msg2">
+              <app-field-error-display
+                [displayError]="isShippingFieldValid('companyName')"
+                errorMsg="Company Name Is required"
+              ></app-field-error-display>
+            </div>
+          </div>
+        </div>
+        <div class="row padding-tp">
+          <div class="col-md-12">
+            <div class="Address-Nickname">Address</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <input
+              type="text"
+              class="form-control"
+              maxlength="100"
+              name="streetAdd"
+              id="streetAdd"
+              formControlName="streetAddress"
+              placeholder="Address1"
+            />
+            <div class="error-msg2">
+              <app-field-error-display
+                [displayError]="isShippingFieldValid('streetAddress')"
+                errorMsg="Street Address Is required"
+              ></app-field-error-display>
+            </div>
+          </div>
+        </div>
+        <div class="row padding-tp">
+          <div class="col-md-12">
+            <input
+              type="text"
+              class="form-control"
+              maxlength="100"
+              formControlName="deptAddress"
+              name="deptAdd"
+              id="deptAdd"
+              placeholder="Address 2"
+            />
+            <div>
+              <label class="All-Required pull-right">Optional</label>
+            </div>
+            <div class="error-msg2">
+              <app-field-error-display
+                [displayError]="isShippingFieldValid('deptAddress')"
+                errorMsg="Dept / Address 2 Is required"
+              ></app-field-error-display>
+            </div>
+          </div>
+        </div>
+        <div class="row padding-tp">
+          <div class="col-md-12">
+            <input
+              type="text"
+              style="width: 221px"
+              maxlength="20"
+              class="form-control"
+              formControlName="city"
+              placeholder="City"
+              name="acity"
+              id="acity"
+            />
+            <div class="error-msg2">
+              <app-field-error-display
+                [displayError]="isShippingFieldValid('city')"
+                errorMsg="City Is required"
+              ></app-field-error-display>
+            </div>
+          </div>
+        </div>
+        <div class="row padding-tp" style="width: 85%">
+          <div class="col-md-12">
+            <select
+              class="form-control"
+              formControlName="countryId"
+              (change)="onCountryChange(0)"
+            >
+              <option [value]="0" disabled selected>Select Country</option>
+
+              <option
+                *ngFor="let country of iCountryColl"
+                [value]="country.countryId"
+              >
+                {{ country.countryName }}
+              </option>
+            </select>
+            <div class="error-msg2">
+              <!-- <app-field-error-display
+                  [displayError]="isShippingStateValid('countryId')"
+                  errorMsg="Country Is required"
+                ></app-field-error-display> -->
+            </div>
+          </div>
+        </div>
+        <div class="row padding-tp" style="width: 85%">
+          <div class="col-md-12">
+            <select class="form-control" formControlName="stateId">
+              <option [value]="0" selected>Select State</option>
+              <option
+                *ngFor="let region of iRegionModel"
+                [value]="region.regionId"
+              >
+                {{ region.regionName }}
+              </option>
+            </select>
+            <div class="error-msg2">
+              <!-- <app-field-error-display
+                  [displayError]="isShippingStateValid('stateId')"
+                  errorMsg="State Is required"
+                ></app-field-error-display> -->
+            </div>
+          </div>
+        </div>
+        <div class="row padding-tp">
+          <div class="col-md-12">
+            <input
+              type="text"
+              class="form-control"
+              style="width: 40%"
+              maxlength="8"
+              formControlName="postalCode"
+              placeholder="Postal Code"
+              name="PostalCode"
+              id="PostalCode"
+            />
+            <div class="error-msg2">
+              <app-field-error-display
+                [displayError]="isShippingFieldValid('postalCode')"
+                errorMsg="Zip / Postal Code Is required"
+              ></app-field-error-display>
+              <!-- <app-field-error-display [displayError]="isShipPincodeValid('postalCode')" errorMsg="Enter Proper Zip Code"></app-field-error-display> -->
+            </div>
+          </div>
+        </div>
+        <div class="row padding-tp">
+          <div class="col-md-12">
+            <div class="border-checkbox-section" style="padding-top: 10px">
+              <div class="border-checkbox-group border-checkbox-group-primary">
+                <input
+                  class="border-checkbox"
+                  type="checkbox"
+                  id="defaultAddress"
+                  formControlName="defaultSite"
+                />
+                <label
+                  class="border-checkbox-label Make-default-address"
+                  for="defaultAddress"
+                  >Make default address</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <button
+              type="button"
+              class="btn addClosebtn"
+              (click)="closeAddShippingForm()"
+            >
+              Cancel
+            </button>
+          </div>
+          <div class="col-md-6">
+            <button
+              type="submit"
+              [ngClass]="
+                shippingForm.valid
+                  ? 'btn btn-SaveAddress-enabled'
+                  : 'btn btn-SaveAddress'
+              "
+            >
+              <!-- [disabled]="
+              isShippingLimit() ||
+              !shippingForm.valid ||
+              isCityStateValid()
+            " -->
+              <i></i>Save
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

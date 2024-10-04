@@ -1,0 +1,40 @@
+<div class="row" *ngIf="( awardWarning )">
+  <div class="col-md-12 m-b-20">
+    <div class="cus-alert-danger">
+      <div
+        style="display: flex;justify-content: start;padding: 0px;margin: 0px;align-items: center;align-self: center;align-content: center;">
+        <div>
+          <p style="margin-left: 0px;">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <span class="m-l-5"
+              style="font-size: 16px!important;">Attention Needed</span>
+          </p>
+        </div>
+      </div>
+      <p style="font-size: 18px;">Hi, {{firstName}}. Congrats! You had {{warningObj.totalSuppliersQuoted}} suppliers
+        quote on your last {{warningObj.totalRFQs}} projects with MFG. Please update the award status <a
+          style="color:blue; cursor: pointer;font-size: 18px;" (click)="redirectToRfq()">here</a> before posting your
+        next project. Questions? <span style="color:blue; cursor: pointer;" (click)="showContactModel()">Contact
+          support.</span></p>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="(!isProfileDetailsFilledOut )">
+  <div class="col-md-12 m-b-20 cursor-pointer" (click)="redirectToBuyerProfile()">
+    <div class="cus-alert-danger">
+      <div
+        style="display: flex;justify-content: start;padding: 0px;margin: 0px;align-items: center;align-self: center;align-content: center;">
+        <div>
+          <p style="margin-left: 0px;">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <span class="m-l-5"
+              style="font-size: 16px!important;">Attention Needed</span>
+          </p>
+        </div>
+      </div>
+      <p style="font-size: 16px !important">{{isProfileDetailsBannerText}}</p>
+    </div>
+  </div>
+</div>
+
+<app-contact-sales-model *ngIf="toShowContactModel" (modelUpdateInfoChange)="toShowContactModel= $event">
+</app-contact-sales-model>

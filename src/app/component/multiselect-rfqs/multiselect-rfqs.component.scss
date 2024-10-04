@@ -1,0 +1,59 @@
+.small-button{
+	border-radius: 2px;
+	background-color: #FFF;
+  font-size: 14px;
+	border:  solid 1px #81db6d;
+	// margin:10px;
+	transition:0.3s;
+  font-weight: normal;
+  padding: 5px 10px;
+  color:#81db6d;
+  cursor: pointer;
+  width:50%;
+}
+.small-button:disabled {
+cursor:not-allowed !important;
+}
+
+.line
+  {
+    border: 0px;
+    border-top: 2px solid #222222;
+    margin-left: -16px;
+    width: 106%;
+  }
+  .action-container
+  {
+    margin-top: 10px;
+    position: relative;
+    margin-top: 50px;
+    text-align: center;
+
+  }
+
+  .model-popup-text
+  {
+    width: 562px;
+    height: 38px;
+    font-family: Poppins;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.36;
+    letter-spacing: normal;
+    color: #222222;
+  }
+  .title
+  {
+    width: 274px;
+    height: 33px;
+    font-family: Poppins;
+    font-size: 24px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #222222;
+  }

@@ -1,0 +1,285 @@
+.background-white{
+	background:#FFF;
+	padding: 15px;
+	border-radius:5px;
+	margin-bottom:19px;
+	border-radius: 5px;
+	box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+}
+.row-border-bottom {
+  border-bottom: 2px solid #e0dfdf;
+}
+.rightpanel i {
+  color: #4a90e2;
+  font-size: 19px;
+}
+.panelheading {
+  font-size: 16px;
+  font-weight: bold;
+  color: #222;
+  margin-top: 2px !important;
+  line-height: 22px;
+}
+.panelheading span {
+  font-size: 12px;
+  font-weight: bold;
+  color: #919aa3;
+}
+
+.input-top-padding {
+  margin-top: 16px;
+}
+.Label-focus-red {
+  font-family: Poppins !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+  font-style: normal !important;
+  font-stretch: normal !important;
+  line-height: normal !important;
+  letter-spacing: normal !important;
+  color: #da2020 !important;
+}
+.Label-class {
+  font-family: Poppins !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+  font-style: normal !important;
+  font-stretch: normal !important;
+  line-height: normal !important;
+  letter-spacing: normal !important;
+  color: #222222 !important;
+}
+.Label-focus {
+  font-family: Poppins !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+  font-style: normal !important;
+  font-stretch: normal !important;
+  line-height: normal !important;
+  letter-spacing: normal !important;
+  color: #4a90e2 !important;
+}
+.upload-company-logo-box {
+  margin-top: 12px;
+  text-align: center;
+  width: 150px;
+  height: 150px;
+  border: dashed 2px #e2e2e5;
+  background-color: #f6f7fb;
+
+  @media screen and (max-width: 570px) {
+    width: auto; 
+  }
+}
+.uploaded-company-logo-box {
+  margin-top: 12px;
+  text-align: center;
+  width: 150px;
+  height: 150px;
+  background-color: rgba(34, 34, 34, 0.24);
+}
+.guide-for-upload-logo1 {
+  padding-top: 8px;
+
+  @media screen and (max-width: 570px) {
+    text-align: center; 
+  }
+}
+.guide-for-upload-logo {
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+}
+.upload-logo-guide-margin {
+  margin-top: 29px;
+  margin-bottom: 5px;
+  width: 24px;
+  height: 21px;
+  object-fit: contain;
+}
+.upload-logo-guide-text {
+  margin-top: 12px;
+  width: 103px;
+  height: 68px;
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #919aa4;
+}
+.upload-company-bg-box {
+  margin-top: 12px;
+  text-align: center;
+  width: 100%;
+  height: 82px;
+  border: dashed 2px #e2e2e5;
+  background-color: #f6f7fb;
+}
+.uploaded-company-bg-box {
+  margin-top: 12px;
+  text-align: center;
+  width: 100%;
+  height: 62px;
+  background-color: rgba(34, 34, 34, 0.24);
+}
+.guide-for-upload-bg1 {
+  margin-top: 29px;
+}
+.guide-for-upload-bg {
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+}
+.upload-bg-guide-margin {
+  margin-top: 29px;
+  margin-bottom: 5px;
+  width: 24px;
+  height: 21px;
+  object-fit: contain;
+}
+.upload-bg-guide-text1 {
+  padding-top: 20px;
+}
+.upload-bg-guide-text {
+  margin-top: 29px;
+  width: 103px;
+  height: 68px;
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #919aa4;
+}
+
+.dropimagebuttons {
+	width:100% !important;
+  margin-top: 29px;
+}
+.cancelbutton1 {
+  width: -webkit-fill-available;
+  height: 35px;
+  border-radius: 2px;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  border: solid 2px #212A37;
+  color: #212A37;
+  background-color: #ffffff;
+  margin-bottom: 1rem;
+}
+.disabled-btn1 {
+  margin-left: 10px;
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  background-color: #bec4cb;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+  border:none;
+}
+.enabled-btn1 {
+  margin-left: 10px;
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  background-color: #2E58D6;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+  border:none;
+  cursor:pointer;
+}
+.btn-ignore-rfq {
+  width: 284px;
+  height: 45px;
+  border-radius: 2px;
+  border: solid 2px #212A37;
+  background-color:#fff;
+  color:#212A37
+}
+.btn-cancel-rfq {
+  width: 285px;
+  height: 45px;
+  border-radius: 2px;
+  background-color: #2E58D6;
+  color:#ffffff;
+}
+.ui-widget-header {
+  background: #ffffff !important;
+}
+.ui-widget-header {
+  background-color: #ffffff!important;
+}
+.gallary-browse-file-text {
+  color:#337ab7 !important;
+  height:40px;
+  // text-align: center;
+}
+.gallary-browse-file-text .or {
+  color: #222222;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.custom-file-input {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: calc(2.25rem + 2px);
+  margin: 0;
+  opacity: 0;
+}
+.save-btn{
+  // margin-left: 10px;
+  width: -webkit-fill-available;
+  height: 35px;
+  border-radius: 2px;
+  background-color: #2E58D6;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
+.save-btn:disabled{
+    background-color: #bec4cb;
+    color: #ffffff;
+    cursor: not-allowed;
+}

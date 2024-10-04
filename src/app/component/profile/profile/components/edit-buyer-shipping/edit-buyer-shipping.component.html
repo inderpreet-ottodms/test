@@ -1,0 +1,162 @@
+<div class="background-white">
+    <div class="row row-border-bottom">
+      <div class="col-md-12 rightpanel"><br>
+        <i class="fa fa-times-circle pull-right custom-cursor icon" (click)="closePartDrawer()"></i>
+        <h2 class="panelheading heading-text pb-3">{{ shippingid == 0 ? 'Add Buyer Shipping' : 'Edit Buyer Shipping'}}</h2>
+      </div>
+    </div><br>
+
+    <form *ngIf="!isLoader" class="md-float-material" [formGroup]="shippingForm" (ngSubmit)="onSaveShippingInfo()">
+        <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="Email">Company Name</label>
+                <input type="text" maxlength="40" id="shippingstredetaddress" class="form-control"
+                formControlName="companyName" placeholder="Company Name" autocomplete="off">
+              <input type="hidden" maxlength="40" id="shippingstredetaddress" class="form-control"
+                formControlName="addressId" placeholder="Company Name" autocomplete="off">
+              <div class="error-msg2">
+                <app-field-error-display [displayError]="isShippingFieldValid('companyName')" errorMsg="Company Name Is required"></app-field-error-display>
+              </div>
+              </div>
+            </div>
+          </div>
+
+
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="Email">Street Address</label>
+            <input type="text" maxlength="40" id="shippingstreetaddress" class="form-control"
+            formControlName="streetAddress" placeholder="Street Address" autocomplete="off">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isShippingFieldValid('streetAddress')"
+              errorMsg="Street Address Is required"></app-field-error-display>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="Email">Dept / Address 2</label>
+            <input type="text" maxlength="40" id="shippingaddress2" class="form-control"
+            formControlName="deptAddress" placeholder="Dept / Address 2" autocomplete="off">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isShippingFieldValid('deptAddress')" errorMsg="Dept / Address 2 Is required"></app-field-error-display>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="Email">City</label>
+            <input type="text" maxlength="30" id="shippingcity" class="form-control" formControlName="city"
+            placeholder="City" autocomplete="off">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isShippingFieldValid('city')" errorMsg="City Is required"></app-field-error-display>
+          </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="Email">Country</label>
+            <select id="jobPostingId" class="form-control" formControlName="countryId" (change)="onShipCountryChange(0)">
+              <option selected disabled [value]="0"> Country</option>
+              <option *ngFor="let country of iCountryViewModelColl" [value]="country.countryId">
+                {{ country.countryName }}
+              </option>
+            </select>
+            <div class="error-msg3">
+              <app-field-error-display [displayError]="ismailingFieldValid('countryId')" errorMsg="Country Is required"></app-field-error-display>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="Email">State or Province</label>
+            <select id="jobPostingId" class="form-control" formControlName="stateId">
+                <option selected  [value]="">Select State</option>
+                <option *ngFor="let region of iRegionModelShipping" [value]="region.regionId">
+                  {{ region.regionName }}
+                </option>
+              </select>
+              <div class="error-msg3">
+                <app-field-error-display [displayError]="isShippingFieldValid('stateId')" errorMsg="State Is required"></app-field-error-display>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="Email">Zip code </label>
+            <input type="text" maxlength="8" class="form-control" formControlName="postalCode"
+            placeholder="Zip / Postal Code" autocomplete="off">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isShippingFieldValid('postalCode')" errorMsg="Zip / Postal Code Is required"></app-field-error-display>
+            <!-- <app-field-error-display [displayError]="isShipPincodeValid('postalCode')" errorMsg="Enter Proper Zip Code"></app-field-error-display> -->
+          </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+              <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="shippingmakedefault"
+              formControlName="defaultSite">
+            <label class="form-check-label" for="shippingmakedefault">Make this my default Shipping
+              Address</label>
+              </div>
+          </div>
+            </div>
+          </div>
+
+
+
+
+
+      <div class="row row-padding-top">
+        <div class="mb-2" style="width: -webkit-fill-available;">
+          <button type="button" class="Rectangle-3" (click)="closePartDrawer()">
+            <span class="button-lbl">Cancel</span>
+          </button>
+        </div>
+        <div style="width: -webkit-fill-available;">
+          <button type="submit" [ngClass]="(shippingForm.valid)?'btn Save-Equipment-active':'btn Save-Equipment-Deactive'" [disabled] ="!shippingForm.valid">Save</button>
+        </div>
+      </div>
+    </form>
+
+
+    <div *ngIf="isLoader">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+  </div>
+
+
+

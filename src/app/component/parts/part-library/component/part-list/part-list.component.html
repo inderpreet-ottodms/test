@@ -1,0 +1,303 @@
+<p-confirmDialog width="629" height="220" #cd>
+    <p-footer >
+        <div class="row">
+          <div class="col-md-6">
+            <button type="button" class="btn btn-ignore-rfq" (click)="cd.reject()">No</button>
+          </div>
+          <div class="col-md-6">
+            <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="cd.accept()"> Yes</button>
+          </div>
+        </div>
+      </p-footer>
+  </p-confirmDialog>
+  <div class="row" style="padding-bottom: 15px;padding-top: 15px">
+      <div class="col-md-5 myRFQ-Header">My RFQ Parts Library</div>
+      <div class="col-md-7" style="text-align:end">
+        <button type="button" [ngClass]="'myRFQ-rfq-inProgress-btn pointerCursor'"
+        [routerLink]="['/rfq/draftrfqs']">
+        <span class="myRFQ-rfq-inProgress-btn-text">Draft RFQs </span>
+      </button>
+          <button type="button" [ngClass]="activeTopBtns?'small-button':'small-button-deactive '" [disabled]="!activeTopBtns" (click)="createRfq()">
+
+          <!-- <button type="button" [ngClass]="activeTopBtns? 'compare-enabled' : 'compare-disabled'"
+          (click)="createRfq()"> -->
+          <!-- <span *ngIf="!activeTopBtns" class="compare-disabled-text">Create an RFQ</span> -->
+          <span   class="">Create an RFQ </span>
+        </button>
+      </div>
+    </div>
+  <div style="padding:19px;min-height:650px" [ngClass]="(!isLoader)?'background-white':'loader-height background-white'">
+    {{ checkSaveRFQ() }}
+      <div class="row" >
+        <div class="col-md-6">
+          <div class="btn-group">
+            <button type="button" (click)="setStatusFilter('All')" [ngClass]="(activeStatusFilterBtn == 'All')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+              All</button>
+            <button type="button" (click)="setStatusFilter('Active')" [ngClass]="(activeStatusFilterBtn == 'Active')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+              Active</button>
+            <button type="button" (click)="setStatusFilter('Archived')" [ngClass]="(activeStatusFilterBtn == 'Archived')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+              Archived</button>
+          </div>
+        </div>
+        <div class="col-md-6 pull-right" style="text-align: end;">
+          <i _ngcontent-c4="" [ngClass]="(isTilesView)?'ti-layout-grid2 my-RFQ-list-view active':'ti-layout-grid2 my-RFQ-list-view '"
+            (click)="openTilesView()"></i>
+          <i _ngcontent-c4="" [ngClass]="(isGridView)?'ti-list my-RFQ-list-view active':'ti-list my-RFQ-list-view'"
+            (click)="openGridView()"></i>
+        </div>
+      </div>
+
+      <div class="row" style="padding-top:10px">
+        <div class="col-md-3 col-sm-3">
+          <select class="filter myBoldClass" [(ngModel)]="stateFilterValue" (change)="filterAll2()">
+            <option value="All">All</option>
+            <option value="Active">Active</option>
+            <option value="Archived">Archived</option>
+            <option value="Awarded">Awarded</option>
+            <option value="Quoted">Quoted</option>
+            <option value="QuoteInProgress">Draft Rfqs</option>
+          </select>
+        </div>
+        <div class="col-md-3 col-sm-3">
+          <select class="recent myBoldClass" [(ngModel)]="sortFilterValue" (change)="filterAll()">
+            <option value="Recent">Recent</option>
+            <option value="Oldest">Oldest</option>
+            <!-- <option value="A - Z">A - Z</option>
+            <option value="Z - A">Z - A</option> -->
+          </select>
+        </div>
+        <div class="col-md-3 col-sm-3 col-xs-12 pull-right offset-3">
+          <!-- <input class="search" [(ngModel)]="searchFilterValue" (input)="searchFilter($event.target.value)" placeholder="Search by Name" type="text" /> -->
+          <div class="input-container">
+            <i class="fa fa-search icon-search" (click)="filterAll()" placement="top" container="body" ngbTooltip="Search"></i>
+            <input class="input-field search search-text"  [(ngModel)]="searchFilterValue" type="text" placeholder="Search" (keypress) = "searchByKey($event)" (input)="checkSearch(searchFilterValue)">
+            <i class="fa fa-times-circle icon" (click)="removeTextValue()" placement="top" container="body" ngbTooltip="Remove Text"></i>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoader">
+      <div class="row" *ngIf="isTilesView == true">
+        <div class="col-md-12" *ngIf="!isRfqAvailable">
+          <div class="">
+            <div class="row">
+              <br>
+              <div [ngClass]="(isSidePanel())?'col-md-6':'col-md-3'" *ngFor='let rfq of iFilteredPartLibraryModelColl' id="R{{ rfq.partId }}">
+                <div [ngClass]="(rfq.isPartWithOldCapability)?'oldProcess-color':''"  class="card" style="height: 340 px !important">
+
+                  <ng-template #reviewpopAttachment>
+                    <div class="review-pop-partfiles pop-over-height">
+                      <div class="text-right"
+                        *ngIf='!!rfq.partsFiles && (rfq.partsFiles.length !== 0 && rfq.partsFiles.length >= 1)'>
+                        <label style="color: #2E58D6;"
+                          class="part-attachment-name active pointerCursor text-left"
+                          (click)="downloadAllFiles(rfq.partsFiles, true, rfq.primaryPartFile)">
+                          Download All
+                        </label>
+                      </div>
+                      <div class="text-truncate">
+                        <div class="row">
+                          <div class="col-md-12 text-truncate">
+                            <label class="part-attachment-name downloadLink pointerCursor"
+                              title="Download - {{rfq.primaryPartFile | originalName }}"
+                              (click)="downloadS3File(rfq.primaryPartFile, true)">
+                              {{rfq.primaryPartFile | originalShortName : 20 }}</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngFor='let file of rfq?.partsFiles' class="text-truncate">
+                        <label class="part-attachment-name downloadLink pointerCursor" (click)="downloadS3File(file, true)"
+                          title="Download - {{file | originalName }}">
+                          {{file   | originalShortName : 20 }}
+                        </label>
+                      </div>
+                    </div>
+                  </ng-template>
+
+
+                  <div class="box pointerCursor" >
+                     <div class="row">
+                      <div class="btn-group col-md-6" style="text-align: left;
+                      padding: 0px;">
+                        <a class="pr-3" placement="left" [ngbPopover]="reviewpopAttachment" container="body"
+                          #q1="ngbPopover" (document:click)="q1.close()" (click)="$event.stopPropagation()"><img
+                            src='assets/attachment.svg' class="img-attachment"><span
+                            class="attachement-count-text">({{rfq?.partsFiles?.length + 1}})</span>
+                        </a>
+                    </div>
+                    <div class="quote col-md-6 text-right" *ngIf="(rfq.statusId !== 12 && !rfq.isPartWithOldCapability)">
+                      <div class="border-checkbox-section">
+                        <div class="border-checkbox-group border-checkbox-group-primary">
+                          <input class="border-checkbox" type="checkbox" id="{{rfq.partId}}" [checked]="rfq.result" (change)="checkIfAllSelected()"
+                            [(ngModel)]="rfq.result">
+                          <label class="border-checkbox-label" for="{{rfq.partId}}"></label>
+                        </div>
+                      </div>
+                    </div>
+                     </div>
+                    <div (click)="openPartDetails(rfq.partId , rfq.rfqPartId)">
+                        <h2 style="margin-top: 0px;" class="pointerCursor text-truncate">{{rfq.partName}}  </h2>
+                        <span class="pointerCursor text-truncate partNumber">{{rfq.partNumber}}  </span>
+                        <h2 class="pointerCursor text-truncate DATE-CREATED">DATE CREATED  </h2>
+                        <h2 class="pointerCursor text-truncate YYYY">{{rfq.creationDate | date: 'MM/dd/yyyy'}} </h2>
+                        <h2 class="pointerCursor text-truncate PROCESS">PROCESS   </h2>
+                        <h2 class="pointerCursor text-truncate Let-MFGcom-pick-the">{{rfq.parentCategoryName}} <span style=" color: #000; font-weight: normal;" *ngIf="rfq.parentCategoryName !== rfq.childCategoryName && rfq.childCategoryName !== null && rfq.childCategoryName !== undefined && rfq.childCategoryName !==  ''">/ {{rfq.childCategoryName}}</span> </h2>
+                        <h2 class="pointerCursor text-truncate MATERIAL">MATERIAL   </h2>
+                        <h2 class="pointerCursor text-truncate material-1">{{rfq.materialName}}  </h2>
+                    </div>
+                  </div>
+                  <div class="bottomaction">
+                    <ul >
+                      <li *ngIf="(rfq.statusId !== 12)" placement="top" container="body" ngbTooltip="Delete Part" container="body">
+                        <a (click)="deletePart(rfq.partId)">
+                          <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        </a>
+                      </li>
+                      <li  *ngIf="!rfq.isPartWithOldCapability && (rfq.statusId !== 12)" class="pull-right"  placement="top" container="body" ngbTooltip="Create RFQ" container="body">
+                        <a (click)="createRfq(rfq)">
+                          <i class="fa fa-share-square-o" aria-hidden="true"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="isGridView == true">
+        <div class="col-md-12" *ngIf="!isRfqAvailable">
+          <div>
+            <div class="row">
+              <br>
+              <div class="col-md-12">
+                <div class="table-responsive">
+                  <table class="table table-hover rfqtable">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Date Created</th>
+                        <th>Process</th>
+                        <th>Material</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor='let rfq of iFilteredPartLibraryModelColl'  id="R{{ rfq.partId }}">
+
+                          <td class="rfqtd text-truncate hand border-left" [ngClass]="(rfq.isPartWithOldCapability)?'oldProcess-color':''">
+                            <div class="border-checkbox-section" *ngIf="!rfq.isPartWithOldCapability && (rfq.statusId !== 12)">
+                                <div class="border-checkbox-group border-checkbox-group-primary">
+                                  <input class="border-checkbox" type="checkbox" id="{{rfq.partId}}" [checked]="rfq.result" (change)="checkIfAllSelected()"
+                                    [(ngModel)]="rfq.result">
+                                  <label class="border-checkbox-label" for="{{rfq.partId}}"></label>
+                                </div>
+                              </div>
+                        </td>
+                        <td [ngClass]="(rfq.isPartWithOldCapability)?'oldProcess-color':''" (click)="openPartDetails(rfq.partId, rfq.rfqPartId)">{{rfq.partName}}</td>
+                        <td [ngClass]="(rfq.isPartWithOldCapability)?'oldProcess-color':''" (click)="openPartDetails(rfq.partId, rfq.rfqPartId)">{{rfq.creationDate | date: 'MM/dd/yyyy'}}</td>
+                        <td [ngClass]="(rfq.isPartWithOldCapability)?'oldProcess-color':''" (click)="openPartDetails(rfq.partId, rfq.rfqPartId)">{{rfq.parentCategoryName }} <span style=" color: #000;" *ngIf="rfq.parentCategoryName !== rfq.childCategoryName && rfq.childCategoryName !== null && rfq.childCategoryName !== undefined && rfq.childCategoryName !==  ''">/ {{rfq.childCategoryName}}</span></td>
+                        <td  [ngClass]="(rfq.isPartWithOldCapability)?'oldProcess-color':''" (click)="openPartDetails(rfq.partId, rfq.rfqPartId)">{{rfq.materialName }}</td>
+                        <td class="border-right" [ngClass]="(rfq.isPartWithOldCapability)?'oldProcess-color':''">
+                          <a (click)="deletePart(rfq.partId)"  *ngIf="(rfq.statusId !== 12)" placement="top" container="body" ngbTooltip="Delete Part" container="body">
+                          <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        </a>
+                        <a  *ngIf="!rfq.isPartWithOldCapability && (rfq.statusId !== 12)" (click)="createRfq(rfq)" class="pad-left"  placement="top" container="body" ngbTooltip="Create RFQ" container="body">
+                            <i class="fa fa-share-square-o" aria-hidden="true"></i>
+                          </a>
+                      </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      <div *ngIf="isLoader">
+        <div class="loader animation-start">
+          <span class="circle delay-1 size-2"></span>
+          <span class="circle delay-2 size-4"></span>
+          <span class="circle delay-3 size-6"></span>
+          <span class="circle delay-4 size-7"></span>
+          <span class="circle delay-5 size-7"></span>
+          <span class="circle delay-6 size-6"></span>
+          <span class="circle delay-7 size-4"></span>
+          <span class="circle delay-8 size-2"></span>
+        </div>
+      </div>
+
+
+       <!-- ------------------------- Pagination start----------------------- -->
+    <div class="row" *ngIf="!isRfqAvailable">
+      <div class="col-md-2" *ngIf="!isLoader">
+        <div class="dataTables_length" id="example_length">
+          <label>Show
+            <select name="example_length" aria-controls="example" class="" [(ngModel)]="pageSize" (change)="filterAll()">
+                <option value="24">24</option>
+                <option value="48">48</option>
+                <option value="96">96</option>
+            </select>
+            entries</label>
+        </div>
+      </div>
+      <div class="col-md-10" *ngIf="!isLoader">
+        <div class="paginations">
+          <div>
+            <div id="radioBtn" class="btn-group">
+              <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" class="btn btn-primary btn-sm notActive"
+                (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                Previous
+              </a>
+              <a *ngFor="let page of pagesIndex" (click)="setPage(page)" [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                data-bs-toggle="fun" data-title="X">
+                {{page}}
+              </a>
+              <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+                (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                Next
+              </a>
+            </div>
+            <input type="hidden" name="fun" id="fun">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="!isRfqAvailable">
+      <div class="col-md-12" *ngIf="!isLoader">
+        <div class="pull-right padd-right">
+          <label class="showreccount"> {{currentIndex }} of {{pageNumber}} </label>
+        </div>
+      </div>
+    </div>
+    <!-- ------------------------- Pagination end----------------------- -->
+
+      <div class="myRFQ-rfq-no-available" *ngIf="isRfqAvailable">
+        <div class="row" style="text-align: center;padding-top:106px">
+          <div class="col-md-12">
+            <div>
+              <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+        assets/rfq/no-rfq@3x.png 3x"
+                class="myRFQ-Group">
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding-top:34px">
+          <div class="col-md-12">
+            <div class="myRFQ-noRFQActive-helper-text">You don’t have any Parts at this time.</div>
+          </div>
+        </div>
+        <div class="row" style="padding-top:10px">
+          <div class="col-md-12">
+            <div class="myRFQ-noRFQActive-helper-sub-text">Please create an RFQ .</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="full-page-overlay" *ngIf="showPageDataLoding === 'show' ">
+      <div class="rfqLoader"></div>
+    </div>

@@ -1,0 +1,252 @@
+<!-- <div>
+  <div class="row row-border-bottom">
+    <div class="col-md-12 rightpanel">
+      <i class="fa fa-times-circle pull-right" (click)="closePartDrawer()"></i>
+      <h2 class="panelheading heading-text pb-3">Edit Get In Touch</h2>
+    </div>
+  </div>
+  <div>
+    <form   (ngSubmit)="editCompanyDescription()">
+      <div class="row">
+        <div class="col-md-12">
+            <p-editor name ="sdsd" [(ngModel)]="iCompanyViewModel.description" [style]="{'height':'320px'}">
+                <p-header>
+                  <span class="ql-formats">
+                      <button class="ql-list" value="bullet"></button>
+                  </span>
+                </p-header>
+              </p-editor>
+       <div></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 dHelper-align">
+          <span class="description-helper">4000 characters</span>
+        </div>
+      </div>
+      <div class="row" *ngIf="isCompanyDesError">
+        <div class="col-md-12" style="color: red">
+          Company description Is required
+        </div>
+      </div>
+      <div class="row row-padding-top">
+        <div class="col-md-6">
+          <button type="button" class="Rectangle-3" (click)="closePartDrawer(1)">
+            <span class="button-lbl" style="color: #81db6d">Cancel</span>
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button type="submit" [ngClass]="(iCompanyViewModel.description!=='' && this.iCompanyViewModel.description!== null)? 'btn Save-Equipment-active' : 'btn Save-Equipment-Deactive'">Save</button>
+        </div>
+      </div>
+    </form>
+    <form *ngIf="!isLoader" class="md-float-material" [formGroup]="companyProfileForm" (ngSubmit)="onSaveContactInfo();">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="Email">Address</label>
+              <ng-template style="max-height: 100px; overflow: scroll;" #rt let-r="result" let-t="term">
+                <ngb-highlight  [result]="formattedAddress(r)" [term]="t"></ngb-highlight>
+              </ng-template>
+              <input formControlName="streetAddress" type="text" maxlength="500" class="form-control"
+                placeholder="Address" name="dunsNumber" [(ngModel)]="iCompanyEditViewModel.streetAddress"
+                [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultTemplate]="rt"
+                (selectItem)="addressSelected($event)">
+              <small *ngIf="searching" class="form-text text-muted">searching...</small>
+            <div class="Loginerror-msg">
+              <app-field-error-display [displayError]="isFieldValid('streetAddress')" errorMsg="Address Is required">
+              </app-field-error-display>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="Email"></label>
+            <input formControlName="deptAddress" type="text" maxlength="500" class="form-control"
+              placeholder="Address 2" name="dunsNumber">
+            <div class="Loginerror-msg">
+              <app-field-error-display [displayError]="isFieldValid('deptAddress')" errorMsg="Address Is required">
+              </app-field-error-display>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="Email">Country</label>
+            <select id="jobPostingId" class="form-control" formControlName="countryId" name="languageId"
+              (change)="onCountrySelection()">
+              <option selected disabled [value]="0"> Select Country</option>
+              <option *ngFor="let country of iCountryColl" [value]="country.countryId">
+                {{ country.countryName }}
+              </option>
+            </select>
+            <div class="Loginerror-msg">
+              <app-field-error-display [displayError]="isFieldValid('countryId')" errorMsg="Country Is required">
+              </app-field-error-display>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="Email">City</label>
+            <input formControlName="city" type="text" maxlength="100" class="form-control" placeholder="City"
+              name="dunsNumber">
+            <div class="Loginerror-msg">
+              <app-field-error-display [displayError]="isFieldValid('city')" errorMsg="City Is required">
+              </app-field-error-display>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="Email">State</label>
+            <select id="jobPostingId" class="form-control" formControlName="stateId" name="languageId">
+              <option selected value=''>Select State</option>
+              <option *ngFor="let state of iRegionModel" [value]="state.regionId">
+                {{ state.regionName }}
+              </option>
+            </select>
+            <div class="Loginerror-msg">
+              <app-field-error-display [displayError]="isFieldValid('stateId')" errorMsg="State Is required">
+              </app-field-error-display>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="Email">Postal Code</label>
+            <input formControlName="postalCode" type="text" maxlength="500" class="form-control"
+              placeholder="Postal Code" name="dunsNumber">
+            <div class="Loginerror-msg">
+              <app-field-error-display [displayError]="isFieldValid('postalCode')" errorMsg="Postal Code Is required">
+              </app-field-error-display>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <div class="form-check">
+              <input type="checkbox" #defaultshipping class="form-check-input" id="mailingaddressinprofile"
+                formControlName="showInProfile">
+              <label class="form-check-label" for="mailingaddressinprofile">Make this my default
+                Shipping Address</label>
+            </div><br>
+  
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="onlystate" formControlName="showOnlyStateCity">
+              <label class="form-check-label" for="onlystate">Only display city and state in my
+                profile</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="Email">Company Phone</label>
+            <input formControlName="phoneNo" type="text" pattern="^[+]?[0-9]*" maxlength="17" class="form-control"
+              placeholder="Company Phone" name="dunsNumber" (keyup)="onPaste($event)"
+              onKeyPress="if(this.value.length==17) return false;"
+              onkeydown="javascript: return (event.keyCode == 69  || event.keyCode == 189  || event.keyCode == 190)? false : true">
+            <div [hidden]="!companyProfileForm.get('phoneNo').hasError('maxlength')"
+              style="color: red; text-align: right">Mobile should be 17 digit</div>
+            <div [hidden]="!companyProfileForm.get('phoneNo').hasError('required')"
+              style="color: red; text-align: right">Please Enter company Phone number</div>
+            <div [hidden]="!companyProfileForm.get('phoneNo').hasError('pattern')"
+              style="color: red; text-align: right">Mobile number should be only numbers</div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="Email">Website</label>
+            <input formControlName="website" type="text" maxlength="500" class="form-control" placeholder="Website"
+              name="dunsNumber">
+            <div class="Loginerror-msg">
+              <app-field-error-display [displayError]="isFieldValid('website')" errorMsg="Website Is required">
+              </app-field-error-display>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="Email">Twitter URL</label>
+            <input formControlName="tweeter" type="text" maxlength="500" class="form-control" placeholder="Twitter URL"
+              name="dunsNumber">
+            <div class="Loginerror-msg">
+              <app-field-error-display [displayError]="isFieldValid('tweeter')" errorMsg="Twitter URL Is required">
+              </app-field-error-display>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="Email">Facebook URL</label>
+            <input formControlName="facebook" type="text" maxlength="500" class="form-control"
+              placeholder="Facebook URL" name="dunsNumber">
+            <div class="Loginerror-msg">
+              <app-field-error-display [displayError]="isFieldValid('facebook')" errorMsg="Facebook URL Is required">
+              </app-field-error-display>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="Email">LinkedIn URL</label>
+            <input formControlName="linkedIn" type="text" maxlength="500" class="form-control"
+              placeholder="LinkedIn URL" name="dunsNumber">
+            <div class="Loginerror-msg">
+              <app-field-error-display [displayError]="isFieldValid('linkedIn')" errorMsg="LinkedIn URL Is required">
+              </app-field-error-display>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row row-padding-top">
+        <div class="col-md-6">
+          <button type="button" class="Rectangle-3" (click)="closePartDrawer(1)">
+            <span class="button-lbl" style="color: #81db6d">Cancel</span>
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button type="submit"
+            [ngClass]="(companyProfileForm.valid)?'btn Save-Equipment-active':'btn Save-Equipment-Deactive '"
+            [disabled]="!companyProfileForm.valid">Save</button>
+        </div>
+      </div>
+
+    </form>
+    <div *ngIf="isLoader">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+  </div>
+</div> -->

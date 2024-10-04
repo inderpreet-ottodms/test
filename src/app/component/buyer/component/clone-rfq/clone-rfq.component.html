@@ -1,0 +1,195 @@
+<ng-template
+  #cloneModel
+  let-d="dismiss"
+  data-backdrop="static"
+  data-keyboard="false"
+>
+  <form [formGroup]="cloneForm">
+    <div class="modal-header">
+      <h4 class="modal-title">Clone RFQ</h4>
+      <button
+        type="button"
+        class="close"
+        data-bs-dismiss="modal"
+        (click)="d('notNow'); onClose()"
+        style="z-index: 100"
+      >
+        <i
+          class="fa fa-times-circle color-blue"
+          aria-hidden="true"
+          style=" z-index: 1000"
+        ></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <b>What would you like to name your new RFQ?</b>
+        <input
+          type="text"
+          placeholder="RFQ-Name"
+          #rfqName
+          formControlName="rfqName"
+          class="form-control"
+        />
+        <div
+          *ngIf="f.rfqName.invalid && (f.rfqName.dirty || f.rfqName.touched)"
+        >
+          <span class="color-red">Rfq Name is required</span>
+        </div>
+      </div>
+      
+
+      <div class="form-group">
+        <b>Select your part(s) Quotes needed by date</b>
+        <p-calendar
+          [readonlyInput]="true"
+          formControlName="quotesNeededByDate"
+          [style]="{ width: '100%', 'border-bottom-color': 'none' }"
+          [inputStyle]="{
+            width: '92%',
+            padding: '7px',
+            'border-bottom-color': 'none'
+          }"
+          name="deliveryDate"
+          (onSelect)="onDateChange('quotes')"
+          placeholder="Quotes needed  date"
+          [maxDate]="DeliveryDate"
+          [minDate]="minDate"
+          [showIcon]="true"
+          [disabledDays]="[0,6]"
+        ></p-calendar>
+        <div
+          *ngIf="
+            f.quotesNeededByDate.invalid &&
+            (f.quotesNeededByDate.dirty || f.quotesNeededByDate.touched)
+          "
+        >
+          <span class="color-red">Quotes needed date is required</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <b>Select your part(s) Estimated award date </b>
+        <p-calendar
+          [readonlyInput]="true"
+          formControlName="estimatedAwardDate"
+          [style]="{ width: '100%', 'border-bottom-color': 'none' }"
+          [inputStyle]="{
+            width: '92%',
+            padding: '7px',
+            'border-bottom-color': 'none'
+          }"
+          name="deliveryDate"
+          (onSelect)="onDateChange('Award')"
+          placeholder="Estimated award date"
+          [maxDate]="DeliveryDate"
+          [minDate]="awardMinDate"
+          [showIcon]="true"
+          [disabledDays]="[0,6]"
+        ></p-calendar>
+        <div
+          *ngIf="
+            f.estimatedAwardDate.invalid &&
+            (f.estimatedAwardDate.dirty || f.estimatedAwardDate.touched)
+          "
+        >
+          <span class="color-red">Estimated award date is required</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <b>Select your part(s) delivery date</b>
+        <p-calendar
+          [readonlyInput]="true"
+          formControlName="partDeliveryDate"
+          [style]="{ width: '100%', 'border-bottom-color': 'none' }"
+          [inputStyle]="{
+            width: '92%',
+            padding: '7px',
+            'border-bottom-color': 'none'
+          }"
+          name="deliveryDate"
+          (onSelect)="onDeliveryDateChange();onDateChange('Delivery')"
+          placeholder="Delivery date"
+          [minDate]="minDeliveryDate"
+          [showIcon]="true"
+          [disabledDays]="[0,6]"
+        >
+        </p-calendar>
+        <div
+          *ngIf="
+            f.partDeliveryDate.invalid &&
+            (f.partDeliveryDate.dirty || f.partDeliveryDate.touched)
+          "
+        >
+          <span class="color-red">Delivery date is required</span>
+        </div>
+      </div>
+      <div class="row">
+        <div [class.col-md-6]="toShowUnit" [class.col-md-12]="!toShowUnit">
+          <div class="form-group">
+            <b>Region</b>
+            <select formControlName="region" class="form-control">
+              <option selected value="">Select Region</option>
+              <option
+                *ngFor="let territory of ITerritoryClassificationModelArray"
+                [value]="territory.territoryClassificationId"
+              >
+                {{ territory.territoryClassificationName }}
+              </option>
+            </select>
+            <div
+              *ngIf="f.region.invalid && (f.region.dirty || f.region.touched)"
+            >
+              <span class="color-red">Region is required</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6" *ngIf="toShowUnit">
+          <div class="form-group">
+            <b>Quantity Unit</b>
+            <select formControlName="unit" class="form-control">
+              <option selected value="">Select Unit</option>
+              <option *ngFor="let unit of iQuantityUnitColl" [value]="unit.id">
+                {{ unit.value }}
+              </option>
+            </select>
+            <div *ngIf="f.unit.invalid && (f.unit.dirty || f.unit.touched)">
+              <span class="color-red">Unit is required</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <b>Do you need to change any RFQ details?</b>
+      </div>
+    </div>
+    <div class="modal-footer-section py-0 p-l-10 p-r-10">
+      <div class="form-group d-flex justify-content-around">
+        <button
+          class="btn button-green m-r-5"
+          (click)="onSubmit('yes')"
+          [disabled]="cloneForm.invalid || rfqName.value.trim() == ''"
+        >
+          Yes
+        </button>
+        <button
+          *ngIf="!isSubmit"
+          class="btn button-green m-r-5"
+          (click)="onSubmit('no')"
+          [disabled]="
+            cloneForm.invalid || rfqName.value.trim() == '' || checkRfqWarning()
+          "
+        >
+          No & Submit
+        </button>
+        <button *ngIf="isSubmit" class="btn button-green m-r-5">
+          No & Submit
+        </button>
+        <button class="btn button-green-border m-r-5" (click)="onClose()">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </form>
+</ng-template>

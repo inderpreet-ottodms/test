@@ -1,0 +1,159 @@
+<div class="background-white">
+  <div class="row">
+    <div class="col-md-12 rightpanel">
+      <i class="fa fa-times-circle pull-right" (click)="closeMessageThreadDrawer()"></i>
+      <h2 class="panelheading">{{removeHtmlTag(inputMsgObj.messageSubject)}}</h2>
+    </div>
+    <hr>
+    <div class="col-md-12"><br>
+      <div class="chat-bg0">
+        <div class="chat-bg1">
+          <div class="row">
+            <div class="col-md-5 f-w-600">Company Name</div>
+            <div class="col-md-7 f-w-600" style="color: #919aa3;">{{ compName|Na}}</div>
+            <div class="col-md-5 f-w-600">Contact Name</div>
+            <div class="col-md-7 f-w-600" style="color: #919aa3;">{{OpenContactName |Na}}</div>
+            <div class="col-md-5 f-w-600"
+                *ngIf="compName !== null && compName !== undefined && compName !== '' && messageThreadList[0].messageTypeId === 225">
+                Company Name</div>
+              <div class="col-md-7" style="color: #919aa3;"
+                *ngIf="compName !== null && compName !== undefined && compName !== '' && messageThreadList[0].messageTypeId === 225">
+                {{compName}}</div>
+            </div>
+          <!-- <h2 class="panelheading">Company Name<br><span>{{companyName}}</span></h2>
+          <h2 class="panelheading">Contact Name1<br><span>{{ OpenContactName }}</span> -->
+          <!-- </h2> -->
+        </div>
+      </div>
+
+      <!-- <div style="text-align: center">
+        <button *ngIf="userAccount === 'Basic'" type="button" class="upgrade-btn pointer" (click)="upgradeClick()">
+          Upgrade Your Account
+        </button>
+      </div>
+      <div class="row" *ngIf="userAccount === 'Basic'" style="text-align: center">
+        <div class="col-md-12">
+          <button type="button" class="btn btn-upgrade" data-bs-dismiss="modal" (click)="openContactModal()">Contact
+            Sales </button>
+        </div>
+      </div> -->
+      <div class="form-group" *ngIf="userAccount !== 'Basic' && userAccount !== 'Silver'">
+        <div class="error-msg">
+          <app-field-error-display [displayError]="sendMessageError" errorMsg="Enter the Message">
+          </app-field-error-display>
+          <span class="f-12" style="color: #a94442;">{{errorDisMsg}}</span>
+        </div>
+        <!-- <textarea class="form-control message-dialog" type="textarea" placeholder="Message" maxlength="1000" rows="7" [(ngModel)]="messageToSend"></textarea> -->
+        <p-editor name="sdsd" [(ngModel)]="messageToSend" [style]="{'height':'160px'}"
+          (onTextChange)="changeText($event)">
+          <p-header>
+            <span class="ql-formats">
+              <select class="ql-size">
+                <option value="2em">Heading</option>
+                <option value="1.5em">Subheading</option>
+                <option value="0.5em" selected>Normal</option>
+              </select>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-bold" aria-label="Bold"></button>
+              <button class="ql-italic" aria-label="Italic"></button>
+              <button class="ql-underline" aria-label="Underline"></button>
+              <button class="ql-strike" aria-label="Strike"></button>
+            </span>
+            <span class="ql-formats">
+              <select class="ql-color" tabindex="-1"></select>
+              <select class="ql-background" tabindex="-1"></select>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-list" value="ordered" aria-label="Ordered List" tabindex="-1"></button>
+              <button class="ql-list" value="bullet" aria-label="Unordered List" tabindex="-1"></button>
+              <select class="ql-align" tabindex="-1">
+                <option selected tabindex="-1"></option>
+                <option value="center" tabindex="-1"></option>
+                <option value="right" tabindex="-1"></option>
+                <option value="justify" tabindex="-1"></option>
+              </select>
+            </span>
+          </p-header>
+        </p-editor>
+        <div class="message-action">
+          <i class="fa fa-paper-plane pull-right" (click)="sendReplyMessage()" placement="top" container="body"
+            ngbTooltip="Send"></i>
+          <input type="file" #messageAttachment id="file-upload" class="display-none" ng2FileSelect
+            [uploader]="attachFilesUploader" multiple (change)="onFileSelect($event)">
+          <i class="fa fa-paperclip pull-left" (click)="messageAttachment.click()" placement="top" container="body"
+            ngbTooltip="Attach file(s)"></i>
+        </div>
+        <div class="text-right">
+          <span class="description-helper">1000 characters</span>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="sendMessageObj.messageFileNames.length !== 0">
+        <div class="row" *ngFor=" let file of sendMessageObj.messageFileNames;let i=index;">
+          <div class="col-md-8 text-wrap">
+            <span class="fileName ">{{ getOriginalPartName(file) }}</span>
+          </div>
+          <div class="col-md-4">
+            <span class="activeLink" (click)="removeSavedAttachFile(file,i)">Remove</span>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="chatbox">
+        <ul class="chat" *ngIf="messageThreadList && messageThreadList.length > 0">
+          <ng-container *ngFor="let messageObj of messageThreadList; let i = index">
+            <li class="clearfix" [ngClass]="isBuyerMessage(messageObj)? 'right' : 'left'">
+              <span class="chat-img" [ngClass]="isBuyerMessage(messageObj)? 'pull-right' : 'pull-left'">
+                <img [src]="getProfilePic(messageObj)" alt="" class="img-circle" style="width:100%"
+                  onError="this.src='assets/company/avatar-manu-basic-circle.svg'" style="border: 1px solid #bec4cb;" />
+                <!-- <div *ngIf="! getProfilePic(messageObj)" style="height: 37px;width: 37px;margin: auto;border: 1px solid #bec4cb;border-radius: 50%;">
+                      <img style="height: 25px;width: 25px!important;background-color: #fff;margin-top: 3px;" src="assets/company/avatar-manu-basic.svg" onError="this.src='assets/company/avatar-manu-basic.svg'">
+                    </div> -->
+                <br>
+                <span class="time">{{messageObj.companyName |Na}}<br>{{getDate(messageObj.messageDate)}}</span>
+              </span>
+              <div class="chat-body1 clearfix">
+                <p><span
+                    *ngIf="messageObj.messageTypeId === 220 && messageObj.quoteReferenceNumber !== '' && messageObj.quoteReferenceNumber !== null && messageObj.quoteReferenceNumber !== undefined"><b>Quote
+                      Reference Number</b>: {{messageObj.quoteReferenceNumber}} </span>&nbsp;<span
+                    [innerHTML]="messageObj.messageDescr | sanitizeNolimit"></span></p>
+              </div>
+              <div style="text-align: right">
+                <span class="color" *ngIf="messageObj.messageFileNames.length > 1"
+                  (click)="downloadAllFiles(messageObj.messageFileNames)"><b>Download All</b></span>
+              </div>
+              <div *ngIf="messageObj.messageFileNames.length !== 0" class="fileArea">
+                <div *ngFor=" let file of messageObj.messageFileNames" class="fileArea">
+                  <span class="color" (click)="downloadS3File(file, true)">{{file| originalShortName: 28}}</span>
+                </div>
+              </div><br>
+
+              <div *ngIf="!messageObj.messageRead">
+                <div [ngClass]="isNextBuyerMessage(i)? 'border-left' : 'border-right'">
+                  <img src="assets/rfq/message-thread/unReadMessage.png"
+                    srcset="assets/rfq/message-thread/unReadMessage@2x.png 2x, assets/rfq/message-thread/unReadMessage@3x.png 3x"
+                    [ngClass]="isNextBuyerMessage(i)? 'border' : 'border mirror-img'">
+                </div>
+              </div>
+              <div *ngIf="messageObj.messageRead">
+                <div *ngIf="isReadFlagAllowed(i)">
+                  <div [ngClass]="isNextBuyerMessage(i)? 'border-left' : 'border-right'">
+                    <img src="assets/rfq/message-thread/readMessage.png"
+                      srcset="assets/rfq/message-thread/readMessage@2x.png 2x, assets/rfq/message-thread/readMessage@3x.png 3x"
+                      [ngClass]="isNextBuyerMessage(i)? 'border mirror-img' : 'border'">
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ng-container>
+        </ul>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+<app-contact-sales-model *ngIf="toShowContactModel" (modelUpdateInfoChange)="toShowContactModel= $event">
+</app-contact-sales-model>

@@ -1,0 +1,221 @@
+<html>
+
+<head>
+  <title></title>
+  <style>
+    body {
+      background: -webkit-gradient(linear, left top, right top, from(#00447c), to(#4a90e2));
+      background: linear-gradient(to right, #00447c, #4a90e2);
+    }
+
+    img {
+      width: 165px;
+      height: 35px;
+    }
+
+    .container {
+      margin-top: 60px;
+      text-align: center;
+    }
+
+    .body {
+      margin-top: 30px;
+    }
+
+    .body span {
+      font-size: 22px;
+      color: #fff;
+    }
+
+    .lds-roller {
+      display: inline-block;
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+
+    .lds-roller div {
+      animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      transform-origin: 40px 40px;
+    }
+
+    .lds-roller div:after {
+      content: " ";
+      display: block;
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #1abc9c;
+      margin: -4px 0 0 -4px;
+    }
+
+    .lds-roller div:nth-child(1) {
+      animation-delay: -0.036s;
+    }
+
+    .lds-roller div:nth-child(1):after {
+      top: 63px;
+      left: 63px;
+    }
+
+    .lds-roller div:nth-child(2) {
+      animation-delay: -0.072s;
+    }
+
+    .lds-roller div:nth-child(2):after {
+      top: 68px;
+      left: 56px;
+    }
+
+    .lds-roller div:nth-child(3) {
+      animation-delay: -0.108s;
+    }
+
+    .lds-roller div:nth-child(3):after {
+      top: 71px;
+      left: 48px;
+    }
+
+    .lds-roller div:nth-child(4) {
+      animation-delay: -0.144s;
+    }
+
+    .lds-roller div:nth-child(4):after {
+      top: 72px;
+      left: 40px;
+    }
+
+    .lds-roller div:nth-child(5) {
+      animation-delay: -0.18s;
+    }
+
+    .lds-roller div:nth-child(5):after {
+      top: 71px;
+      left: 32px;
+    }
+
+    .lds-roller div:nth-child(6) {
+      animation-delay: -0.216s;
+    }
+
+    .lds-roller div:nth-child(6):after {
+      top: 68px;
+      left: 24px;
+    }
+
+    .lds-roller div:nth-child(7) {
+      animation-delay: -0.252s;
+    }
+
+    .lds-roller div:nth-child(7):after {
+      top: 63px;
+      left: 17px;
+    }
+
+    .lds-roller div:nth-child(8) {
+      animation-delay: -0.288s;
+    }
+
+    .lds-roller div:nth-child(8):after {
+      top: 56px;
+      left: 12px;
+    }
+
+    @keyframes lds-roller {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .m-t-30 {
+      margin-top: 30px;
+    }
+
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+  
+	var ua = "Opera/9.80 (X11; Linux i686; Ubuntu/14.10) Presto/2.12.388 Version/12.16";
+  
+    $.urlParam = function (name) {
+      var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+      if(results != null && results != undefined){
+        return results[1] || 0;
+      } else{
+        return null;
+      }
+    }
+    $(document).ready(function () {
+
+      var sAMLRequest = ($.urlParam('SAMLRequest')!= undefined && $.urlParam('SAMLRequest') != null && $.urlParam('SAMLRequest') != '')? decodeURI($.urlParam('SAMLRequest')): '';
+      var relayState =  ($.urlParam('RelayState')!= undefined && $.urlParam('RelayState') != null && $.urlParam('RelayState') != '')? decodeURI($.urlParam('RelayState')): '';
+      var id =  ($.urlParam('d')!= undefined && $.urlParam('d') != null && $.urlParam('d') != '')? decodeURI($.urlParam('d')): '';
+      var s =  ($.urlParam('s')!= undefined && $.urlParam('s') != null && $.urlParam('s') != '')? decodeURI($.urlParam('s')): '';
+
+		  var temp = {
+          'samlRequestBase64' : sAMLRequest,
+          'relayStateBase64': relayState,
+          'loggedInUserContactId' : id,
+          'dynamicSecurityKey': s
+        };
+      $.ajax({
+        url: "https://api.mfg.com/api/CustomerAutoLogIn",
+        type: 'post',
+        dataType: "json",
+        contentType: "application/json",
+        processData: false,
+        data: JSON.stringify(temp),
+        success: function(response){
+            var SamlResponse = response.data.samlResponseBase64;
+            var RelayState = response.data.relayStateBase64;
+            var data = new FormData();
+            data.append("SAMLResponse",SamlResponse);
+            data.append("RelayState", RelayState);
+			
+              var xhr = new XMLHttpRequest();
+              xhr.withCredentials = true;
+		          //debugger;
+
+              xhr.addEventListener("readystatechange", function() {
+                if(this.readyState === 4) {
+                 // console.log(this.responseText);
+                  //debugger;
+                  window.open('https://subscriptions.zoho.com/portal/mfgcom','_self');
+                 // debugger;
+                }
+              });
+			
+              xhr.open("POST", "https://accounts.zohoportal.com/accounts/csamlresponse/10011588666");
+		
+		          xhr.send(data);
+        }
+      });
+
+    });
+	
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <img alt="MFG Logo" src="https://s3.us-east-2.amazonaws.com/mfg.mp2020/636810714479365316_S3_logo.png">
+    </div>
+    <div class="body">
+      <span>Please wait ......... </span>
+      <div class="m-t-30">
+        <div class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+</body>
+
+</html>

@@ -1,0 +1,102 @@
+<div class="row" *ngIf="!isBuyerCommpleteProfile()">
+  <div [ngClass]="(isSidePanel())?'col-md-8 col-9':'col-md-12 col-12'">
+    <app-rfq-warning-banner></app-rfq-warning-banner>
+    <div class="myRFQ-custom-row-left-padding1">
+      <div class="col-md-5 myRFQ-Header">Messages </div>  
+      <div class="messages-nav-buttons">
+        <div class="input-container">
+          <i class="fa fa-search icon-search" placement="top" container="body"
+            ngbTooltip="Search"></i>
+          <!-- <input class="search search-text" id="messageSearchText" name="messageSearchText" #messageSearchText placeholder="Search Messages" type="text" /> -->
+          <input class="search search-text" [(ngModel)]="messageSearchText" placeholder="Search Messages" type="text" />
+          <i *ngIf="messageSearchText" class="fa fa-times-circle icon cursor-pointer remove-icon" (click)="removeTextValue(messageSearchText)" placement="top" container="body"
+            ngbTooltip="Remove Text"></i>
+        </div>
+        <div class="compose-msg-btn">
+              <!-- The compose button -->
+              <button class="compose-msg" *ngIf="userType ==='Supplier' &&  (accountType === 'Gold' || accountType === 'Platinum')" (click)="openAssociateMessageDrawer()">
+                Compose New Message
+              </button>
+              <button class="compose-msg-disable" *ngIf="userType ==='Supplier' && (accountType === 'Basic' || accountType === 'Silver')">
+                Compose New Message
+              </button>
+              <button class="compose-msg" *ngIf="userType ==='Buyer'" (click)="openAssociateMessageDrawer()">
+                Compose New Message
+              </button>
+              <button class="compose-msg" *ngIf="userType ==='Supplier' &&  (accountType === 'Growth Package')" (click)="openAssociateMessageDrawer()">
+                Compose New Message
+              </button>
+        </div>
+      </div>   
+    </div>
+    <div class="background-white">
+      <div class="row myRFQ-custom-row-left-padding">
+        <div class="col-md-12">
+          <app-common-message [messageSearchText]="messageSearchText"></app-common-message>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- <div>
+      <div class="row">
+        <div class="col-md-12">
+          <app-common-message></app-common-message>
+        </div>
+      </div>
+    </div> -->
+    
+    <!-- <div class="background-white">
+      <div class="row myRFQ-custom-row-left-padding">
+        <div class="col-md-5 myRFQ-Header">My Messages </div>
+      </div>
+      <div class="row myRFQ-custom-row-left-padding">
+        <div class="col-md-12">
+          <app-sup-rfq-messages></app-sup-rfq-messages>
+        </div>
+      </div>
+    </div> -->
+    
+  </div>
+  <div *ngIf="isSidePanel()" class="message-side-drawer">
+    <div *ngIf="isAssociateMessageDrawer()">
+      <app-associate-message-drawer [associateRfqId]=0></app-associate-message-drawer>
+    </div>
+    <div *ngIf="isMessageThreadPanel()">
+      <app-message-thread-drawer [messageThreadId]="getMessageIdForThread()"></app-message-thread-drawer>
+    </div>
+  
+    <div *ngIf="isBuyerMiniProfile()">
+      <app-mini-buyer-profile></app-mini-buyer-profile>
+    </div>
+    <div *ngIf="isSupplierProfileDrawer()">
+      <app-quote-supplier-profile></app-quote-supplier-profile>
+    </div>
+    <div *ngIf="isBuyerMessage()">
+      <app-message-send-drawer></app-message-send-drawer>
+    </div>
+    <div *ngIf="isMessageView()">
+      <app-lead-message-view></app-lead-message-view>
+    </div>
+  </div>
+</div>
+<div *ngIf="isBuyerCommpleteProfile()">
+  <div class="row">
+    <div class="col-md-9">
+
+    </div>
+    <div class="col-md-3" style="text-align:right;">
+      <button type="button" class="btn btn-submit-rfq-close-1 RectangleYes-2-1" (click)="goBack()">Go Back to Message</button>
+    </div>
+  </div>
+  <div>
+    <app-buyer-view-profile></app-buyer-view-profile>
+  </div>
+
+</div>
+{{checkAccountUpgradeReqSent()}}
+<app-upgrade-account *ngIf="showUpgradeAccountModal" [quoteRFQ]=false [RfqId]=0 (modalCloseEvent)="closeModal($event)">
+</app-upgrade-account>
+
+<div *ngIf="isModelShow()">
+  <app-rating-model></app-rating-model>
+</div>

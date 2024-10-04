@@ -1,0 +1,356 @@
+.Drawer-Shadow {
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65)
+}
+.part-filename{
+  width: 140px;
+  height: 20px;
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #222222;
+}
+.pointerCursor {
+  cursor: pointer;
+}
+.inner-div{
+  text-align: left;
+  padding-left: 0px;
+}
+.remove-padding-right{
+  padding-right: 0px;
+}
+.noPaddingMargin {
+  padding: 0px !important;
+  margin: 0px !important;
+}
+.character-warning {
+  width: 88px;
+  height: 16px;
+  font-family: Poppins;
+  font-size: 11px;
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #919aa3;
+}
+.downloadAll {
+  color: #2E58D6 !important;
+  cursor: pointer !important;
+  text-align: right !important;
+}
+
+.upload-part-detail-list {
+  width: 138px;
+  height: 20px;
+  font-family: Poppins;
+  font-size: 13px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #2E58D6;
+  padding-left: 12px;
+}
+
+.upload-part-detail-remove {
+  width: 50px;
+  height: 17px;
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #2E58D6;
+  cursor: pointer;
+}
+
+.part-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.custom-file-upload {
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  width: 100%;
+  height: 20px;
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #2E58D6;
+}
+
+.btn-cancel-part-details {
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  border: solid 2px #212A37 !important;
+  background: white;
+  cursor: pointer;
+
+}
+.btn-save-text{
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+}
+
+.btn-save-text-part{
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+}
+
+.btn-cancel-text{
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #212A37 !important;
+}
+
+
+.btn-save-part-details:hover, .btn-save-part-details:active, .btn-save-part-details.hover {
+  background-color: #afaaa8;
+}
+.part-tr {
+  height: 30px;
+  background-color: #f6f7fb;
+  border-bottom: solid 4px white
+}
+input[type="file"] {
+  display: none;
+}
+.panel-body-bottom {
+  border-bottom: 1px solid #80808047  !important;
+  border-radius:0px !important;
+  padding-bottom: 2
+}
+.panel-heading .accordion-toggle:after {
+	font-family: 'Glyphicons Halflings';
+    content: "\e080";
+	float: right;
+	color: #2E58D6;
+	font-size:12px;
+	line-height:7px;
+}
+.panel-heading .accordion-toggle.collapsed:after {
+	content: "\e114";
+	top:15px;
+}
+.panel-heading .accordion-toggle1:after {
+	font-family: 'Glyphicons Halflings';
+    content: "\e080";
+	float: right;
+	color: #2E58D6;
+	font-size:12px;
+	line-height:inherit;
+}
+.panel-heading .accordion-toggle1.collapsed:after {
+	content: "\e114";
+	top:15px;
+}
+.panel{
+	box-shadow: none !important;
+	margin-bottom:11px !important;
+}
+.panel-default > .panel-heading{
+	background:#fff;
+}
+.panel-title a{
+	font-weight:bold;
+	font-size: 11px;
+	line-height:22px;
+	color:#222;
+}
+.panel-body-padding {
+  padding:7px;
+  padding-bottom: 90px !important;
+}
+.btn-save-part-details {
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  cursor: pointer;
+  background-color: #81db6d!important;;
+  // background-color: #bec4cb
+  padding: 0px !important;
+}
+  //swapnali M2-53 ( 20/08/2018)
+  .Add-Another-Quanti {
+    width: 141px;
+    height: 17px;
+    font-family: Poppins;
+    font-size: 12px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #2E58D6 !important;
+  }
+
+  .quantity-div a:hover {
+    background-color: #ffffff;
+    cursor: pointer;
+    color: #607d8b;
+    font-weight: bold;
+  }
+
+  .quantity-div {
+    text-align: left
+  }
+
+  .form-group {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+.label-part-detail {
+  width: 200px;
+  height: 17px;
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+}
+
+.bottom-highlinghted{
+  border-bottom: solid 1px #e2e2e5;
+  border-bottom-width: 0.1px;
+}
+.active {
+  color:#448ada;
+}
+.All-Required {
+  font-family: Poppins !important;
+  float: right;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  font-style: italic !important;
+  font-stretch: normal !important;
+  line-height: normal !important;
+  letter-spacing: normal !important;
+  text-align: right !important;
+  color: #919aa3 !important;
+}
+.panel-heading.collapsed .fa-chevron-down,
+.panel-heading .fa-chevron-right {
+  display: none;
+}
+
+.panel-heading.collapsed .fa-chevron-right,
+.panel-heading .fa-chevron-down {
+  display: inline-block;
+}
+.part-details{
+  width: 95px;
+  height: 23px;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+}
+.Close-3 {
+  width: 17px;
+  height: 17px;
+  object-fit: contain;
+  cursor: pointer;
+}
+.margin-top{
+  margin-top: 12px
+}
+.form-control{
+	border-radius: 2px;
+	border: solid 1px #bec4cb;
+}
+.custom-font-size {
+  font-size: 11px;
+}
+.description-textArea {
+  border-radius: 2px;
+  background-color: #ffffff;
+  border: solid 1px #bec4cb;
+}
+.btn-save-part-details-disabled {
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  // background-color: #bec4cb
+  padding: 0px !important;
+  // opacity: 0.65;
+  background-color: #bec4cb !important;
+}
+
+.btn-save-part-details-disabled:hover {
+  display: block;
+  // margin-bottom: 20px;
+  text-decoration: none;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  font-family:Poppins;
+  text-align: center;
+  color: #FFFFFF;
+}
+.button-Unselected{
+  border-radius: 2px;
+  color: #212A37;
+  font-size: 16px;
+  border: 1px solid #212A37;
+  background-color: #fff;
+  cursor: not-allowed;
+}
+.button-Selected{
+  border-radius: 2px;
+  background-color: #2E58D6!important;
+  color: #fff!important;
+  font-size: 16px;
+  border: 1px solid #2E58D6;
+  cursor: not-allowed;
+}
+.form-control:disabled {
+  cursor: not-allowed!important;
+  opacity: 0!important;
+}
+.radio .helper::after, .radio .helper::before{
+  cursor: not-allowed!important;
+}

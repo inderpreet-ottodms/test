@@ -1,0 +1,107 @@
+<div class="background-white">
+  <div class="row">
+    <div class="col-md-12 rightpanel">
+      <i class="fa fa-times-circle pull-right" (click)="closePartDrawer()"></i>
+      <h2 class="panelheading">Message To:</h2>
+    </div>
+    <hr>
+    <div class="col-md-12"><br>
+
+      <div class="Rectangle-5"> {{ contactIdCount }} </div>
+      <form [formGroup]="messageForm" (ngSubmit)="onMessageSend()">
+        <div class="form-group">
+            <label class="Label-class" *ngIf="checkMessageField('subject')"></label>
+            <label [ngClass]="(isFieldValid('subject'))?'Label-focus-red':(labelFocus === 'subject')? 'Label-focus':'Label-class'"  *ngIf="!checkMessageField('subject')" style="font-weight: bold;" >Subject</label>
+          <input type="text" class="form-control" id="name" (focus)="setFocus('subject')" (blur)="setFocus('no')" placeholder="Subject" formControlName="subject">
+          <div class="error-msg">
+            <app-field-error-display [displayError]="isFieldValid('subject')" errorMsg="Enter Subject"></app-field-error-display>
+           <!-- <app-field-error-display [displayError]="isSubjectValid('subject')" errorMsg="Enter proper subject"></app-field-error-display>-->
+          </div>
+        </div>
+        <div class="form-group">
+            <label class="Label-class" *ngIf="checkMessageField('message')"></label>
+            <label [ngClass]="(isFieldValid('message'))?'Label-focus-red':(labelFocus === 'message')? 'Label-focus':'Label-class'"  *ngIf="!checkMessageField('message')" style="font-weight: bold;" >Message</label>
+          <!-- <textarea class="form-control" type="textarea" (focus)="setFocus('message')" (blur)="setFocus('no')"  placeholder="Message" maxlength="1000" rows="7" formControlName="message"></textarea> -->
+          <p-editor name="sdsd" formControlName="message" [style]="{'height':'160px'}"
+            (onTextChange)="changeText($event)">
+            <p-header>
+              <span class="ql-formats">
+                <select class="ql-size">
+                  <option value="2em">Heading</option>
+                  <option value="1.5em">Subheading</option>
+                  <option value="0.5em" selected>Normal</option>
+                </select>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-bold" aria-label="Bold"></button>
+                <button class="ql-italic" aria-label="Italic"></button>
+                <button class="ql-underline" aria-label="Underline"></button>
+                <button class="ql-strike" aria-label="Strike"></button>
+              </span>
+              <span class="ql-formats">
+                <select class="ql-color" tabindex="-1"></select>
+                <select class="ql-background" tabindex="-1"></select>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-list" value="ordered" aria-label="Ordered List" tabindex="-1"></button>
+                <button class="ql-list" value="bullet" aria-label="Unordered List" tabindex="-1"></button>
+                <select class="ql-align" tabindex="-1">
+                  <option selected tabindex="-1"></option>
+                  <option value="center" tabindex="-1"></option>
+                  <option value="right" tabindex="-1"></option>
+                  <option value="justify" tabindex="-1"></option>
+                </select>
+              </span>
+            </p-header>
+          </p-editor>
+          <div class="text-right">
+            <span class="description-helper">1000 characters</span>
+          </div>
+          <div class="error-msg">
+            <app-field-error-display [displayError]="isFieldValid('message')" errorMsg="Enter Message"></app-field-error-display>
+            <span class="f-12" style="color: #a94442;">{{errorDisMsg}}</span>
+          <!-- <app-field-error-display [displayError]="isMessageValid('message')" errorMsg="Message Invalid"></app-field-error-display>-->
+          </div>
+        </div>
+        <div class="form-group">
+          <div *ngIf="messageFailureStatus" style="margin-bottom:2.1em;text-align: left;color:red;vertical-align: middle">
+            {{ successOrFailureMsg }}
+          </div>
+          <div *ngIf="messageSuccessStatus" style="margin-bottom:2.1em;text-align: left;color:green;vertical-align: middle">
+            {{ successOrFailureMsg }}
+          </div>
+        </div>
+        <div class="form-group" *ngIf="iRfqMessageViewModelColl.messageFileNames.length !== 0">
+            <div class="row" *ngFor=" let file of iRfqMessageViewModelColl.messageFileNames ;let i=index;">
+                <div class="col-md-8 text-wrap">
+                    <span class="fileName ">{{ getOriginalPartName(file) }}</span>
+                </div>
+                  <div class="col-md-4">
+                      <span class="activeLink" (click)="removeSavedAttachFile(file,i)">Remove</span>
+                  </div>
+                <!-- <span class="fileName">{{file| originalShortName: 30}}</span>
+                <span class="activeLink" (click)="removeSavedAttachFile(file,i)">Remove</span> -->
+            </div>
+          <!-- <span class="fileName">{{ getOriginalPartName(iRfqMessageViewModelColl.messageFileNames[0]) }}</span>
+          <span class="activeLink" (click)="downloadS3File(iRfqMessageViewModelColl.messageFileNames[0], true)">download</span> -->
+        </div>
+        <div class="form-group">
+            <input type="file" #messageAttachment class="display-none" ng2FileSelect [uploader]="attachFilesUploader" multiple (change)="onFileSelect($event)">
+            <span (click)="messageAttachment.click()" class="cusror-pointer">Attach file(s)</span>
+        </div>
+       <div class="">
+         <div class="row">
+           <div class="col-md-6 centerAlign">
+              <button type="button" class="rightcancelbutton" (click)="closePartDrawer()">Cancel</button>
+           </div>
+           <div class="col-md-6 centerAlign">
+              <!-- <button type="submit" [disabled]="resetBtn() || uploadingInProg" [ngClass]="((resetBtn() || uploadingInProg) == true )? 'rightaddwithoutsubmit':' rightaddsubmit'">Send</button> -->
+              <button type="submit" [disabled]="messageForm.invalid || this.errorDisMsg != ''"
+                class="rightaddsubmit">Send</button>
+            </div>
+         </div>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>

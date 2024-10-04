@@ -1,0 +1,581 @@
+<simple-notifications [options]="options"></simple-notifications>
+<div id="pcoded" class="pcoded" [attr.nav-type]="navType" [attr.theme-layout]="themeLayout"
+  [attr.vertical-placement]="verticalPlacement" [attr.vertical-layout]="verticalLayout"
+  [attr.pcoded-device-type]="pcodedDeviceType" [attr.vertical-nav-type]="verticalNavType"
+  [attr.vertical-effect]="verticalEffect" [attr.vnavigation-view]="vnavigationView" [attr.fream-type]="freamType"
+  [attr.sidebar-img]="sidebarImg" [attr.sidebar-img-type]="sidebarImgType" [attr.layout-type]="layoutType"
+  (window:resize)="onResize($event)">
+  <div class="pcoded-overlay-box"></div>
+  <div class="pcoded-container navbar-wrapper">
+    <nav class="navbar header-navbar pcoded-header" [attr.header-theme]="headerTheme"
+      [attr.pcoded-header-position]="pcodedHeaderPosition">
+      {{isNPSPopupReqFromMessageTab()}}
+      <div class="navbar-wrapper">
+        <div class="navbar-logo" style=" margin-bottom: 9px; ">
+          <a class="mobile-menu" id="mobile-collapse" href="javascript:void(0);" (click)="toggleOpened()"
+            [exclude]="'#main_navbar'" (clickOutside)="onClickedOutsideSidebar($event)">
+            <i class="ti-menu"></i>
+          </a>
+          <a *ngIf="userType === 'Buyer'" [routerLink]="['/dashboard/buyer/default/']">
+            <img class="img-fluidlogo" src="assets/Logo_new.png" alt="MFG-Logo" />
+          </a>
+          <a *ngIf="userType === 'Supplier'" [routerLink]="['/dashboard/supplier/ecommerce/']">
+            <img class="img-fluidlogo" src="assets/Logo_new.png" alt="MFG-Logo" />
+          </a>
+          <a href="javascript:void(0);" class="mobile-options" (click)="toggleHeaderNavRight()">
+            <i class="ti-more"></i>
+          </a>
+        </div>
+        <div class="navbar-container mainPage-header">
+          <ul *ngIf="showCommunityMenu" class="nav-left mnu-border" style="margin-left:10px;cursor: pointer;">
+            <li class="menu" *ngFor="let menu of communityMenu">
+              <div (click)="community_redirect(menu.isLoginTocommunity, menu.page,menu.title)">
+                <a [class.active]="menu.isActive" [attr.name]="menu.title"> {{menu.name}}
+                  <i class="fa fa-chevron-down" style="font-size: 0.6rem;color: black;" *ngIf="menu.child"></i>
+                </a>
+              </div>
+              <div class="submenu-container" *ngIf="menu.child">
+                <ul class="submenu">
+                  <li *ngFor="let submenu of menu.child">
+                    <a (click)="community_submenu_redirect(submenu.isPostJob, submenu.page)">
+                      {{submenu.name}}
+                      <i class="fa fa-chevron-right menu-icon" *ngIf="submenu.child"></i>
+                    </a>
+                    <ul class="child-submenu" *ngIf="submenu.child">
+                      <li *ngFor="let childSubMenu of submenu.child">
+                        <a (click)="childSubMenuClickHandler(childSubMenu);">{{childSubMenu.name}}</a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+          <ul [@mobileHeaderNavRight]="navRight" [ngClass]="navRight" class="nav-right right-menu-style">
+            <li (clickOutside)="notificationOutsideClick('profile')" class="user-profile header-notification"
+              [ngClass]="profileNotificationClass" (click)="toggleProfileNotification()">
+
+              <a href="javascript:void(0);" class="d-flex flex-nowrap justify-content-end">
+                {{logoPathReload()}}
+                {{checkAccountUpgradeReqSent()}}
+                <div style="color:#222222" class="text-truncate">
+                  {{loggedUsername}}
+                </div>
+                <div class="d-flex align-items-center">
+                  <i style="color:#222222" class="ti-angle-down"></i>
+                  <img [src]="logoPathToShow" onError="this.src='assets/company/avatar-manu-basic-circle.svg'"
+                    class="img-circle logo-size1" alt="User-Profile-Image" style=" background-color: #fff; ">
+                  <span class="bb-separator"></span>
+                </div>
+              </a>
+              <ul *ngIf="userType==='Supplier'" [@notificationBottom]="profileNotification" class="profile-notification"
+                style="height:auto !important">
+
+                <li (click)="reloadAdminCompforSupplier($event)" class="li-bottom-border">
+                  <a name="company_profile">
+                    <img src="assets/profile/compProfile.svg" class="myprofile" alt="User-Profile-Image">
+                    Company Profile
+                  </a>
+                </li>
+                <li class="li-bottom-border">
+                  <ul>
+                    <img src="assets/profile/my-account.svg" class="myprofile" alt="User-Profile-Image">My Account
+                    <li [routerLink]="['/profile/setting/']">
+                      <a name="settings">
+                        <i class="ti-settings"></i> Settings
+                      </a>
+                    </li>
+                    <li *ngIf="accountType == 'Starter' || toShowBillingMenu == true"
+                      [routerLink]="['/supplier/myAccount/']">
+                      <a name="billing">
+                        <i class="fa fa-usd myacc"></i> Billing
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+
+                <li class="li-bottom-border">
+                  <ul>
+                    <img src="assets/profile/account.svg" class="myprofile" alt="User-Profile-Image">Account Type
+                    <li [ngClass]="(userType=='Supplier') ?'rolecolor':''">
+                      <a [ngClass]="(userType =='Buyer') ?'padleft':'qq'" name="manufacturer">
+                        <i class="fa fa-circle Oval" aria-hidden="true"
+                          *ngIf="(userType=='Supplier')"></i>Manufacturer</a>
+                    </li>
+                    <li (click)="showSupplierBuyer()" *ngIf='!SupplierBuyer' style="cursor: pointer;">Create Buyer
+                      Account</li>
+                    <li *ngIf="SupplierBuyer" [ngClass]="(userType =='Buyer') ?'rolecolor':''"
+                      (click)="switchAccount('BuyerAdmin')">
+                      <a [ngClass]="(userType =='Supplier') ?'padleft':'qq'" name="buyer">
+                        <i class="fa fa-circle Oval" aria-hidden="true" *ngIf="(userType=='Buyer')"></i>Buyer</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="li-bottom-border" *ngIf="isAdminUser">
+                  <a name="user_management" (click)="checkCompany()">
+                    <img src="assets/profile/users.svg" class="myprofile" alt="User-Profile-Image">User Management
+                  </a>
+                </li>
+                <li class="li-bottom-border" (click)="toShowContactModel = true">
+                  <a style="padding-left: 25px;" name="contact_mfg">Contact MFG</a>
+                </li>
+                <li class="li-bottom-border">
+                  <a style="padding-left: 25px;" name="help_center" href="https://knowledge.mfg.com/"
+                    target="_blank">Help Center</a>
+                </li>
+                <li (click)="logout()">
+                  <a name="logout">
+                    <img src="assets/profile/logout.svg" class="myprofile" alt="User-Profile-Image">
+                    Logout
+                  </a>
+                </li>
+              </ul>
+              <ul *ngIf="userType==='Buyer'" [@notificationBottom]="profileNotification"
+                class="show-notification profile-notification" style="height:auto !important">
+
+                <li (click)="reloadAdminCompforBuyer($event)">
+                  <a name="profile">
+                    <img src="assets/profile/myProfile.svg" class="myprofile" alt="User-Profile-Image">
+                    Profile
+                  </a>
+                </li>
+                <li [routerLink]="['/profile/setting/']" class="li-bottom-border">
+                  <a name="settings">
+                    <i class="ti-settings"></i> Settings
+                  </a>
+                </li>
+                <li>
+                  <ul>{{getprofile()}}
+                    <i class="fa fa-usd myacc"></i>Account Type
+                    <li (click)="showSupplierBuyer()" *ngIf='!buyerSupplier' style="cursor: pointer;"><a
+                        name="create_manufacturer_account">Create Manufacturer Account</a></li>
+                    <li [ngClass]="(userType=='Buyer') ?'rolecolor':''">
+                      <a [ngClass]="(userType =='Supplier') ?'padleft':'qq'" name="buyer">
+                        <i class="fa fa-circle Oval" aria-hidden="true" *ngIf="(userType=='Buyer')"></i>Buyer
+                      </a>
+                    </li>
+                    <li *ngIf="buyerSupplier" [ngClass]="(userType =='Supplier') ?'rolecolor':''"
+                      (click)="switchAccount('SellerAdmin')">
+                      <a [ngClass]="(userType =='Buyer') ?'padleft':'qq'" name="manufacturer">
+                        <i class="fa fa-circle Oval" aria-hidden="true"
+                          *ngIf="(userType=='Supplier')"></i>Manufacturer</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="li-bottom-border" *ngIf="isAdminUser">
+                  <a class="" (click)="checkCompany()" name="user_management">
+                    <img src="assets/profile/users.svg" class="myprofile" alt="User-Profile-Image">User Management
+                  </a>
+                </li>
+                <li class="li-bottom-border" (click)="toShowContactModel = true">
+                  <a style="padding-left: 25px;" name="contact_mfg">Contact MFG</a>
+                </li>
+                <li class="li-bottom-border">
+                  <a style="padding-left: 25px;" name="help_center" href="https://knowledge.mfg.com/"
+                    target="_blank">Help Center</a>
+                </li>
+                <li (click)="logout()">
+                  <a name="logout">
+                    <img src="assets/profile/logout.svg" class="myprofile" alt="User-Profile-Image">
+                    Logout
+                  </a>
+                </li>
+              </ul>
+
+            </li>
+
+            <li (clickOutside)="notificationOutsideClick('live')" class="header-notification"
+              [ngClass]="liveNotificationClass" (click)="toggleLiveNotification()"
+              style="padding: 0px;padding-top: 5px;">
+              <a href="javascript:void(0);">
+                <i class="ti-bell ti-bell1"></i>
+                <span [ngClass]="(showBell)?'badge bg-c-pink':'badge bg-c-pink badge-noanim'"></span>
+
+              </a>
+              <ul [@notificationBottom]="liveNotification" class="show-notification">
+                <li>
+                  <h6>Notifications</h6>
+                  <a class="View-All" (click)="viewAll()">View All</a>
+
+                </li>
+                <div *ngIf="isNotificationLoader" class="loading">
+                  <div class="loader animation-start">
+                    <span class="circle delay-1 size-2"></span>
+                    <span class="circle delay-2 size-4"></span>
+                    <span class="circle delay-3 size-6"></span>
+                    <span class="circle delay-4 size-7"></span>
+                    <span class="circle delay-5 size-7"></span>
+                    <span class="circle delay-6 size-6"></span>
+                    <span class="circle delay-7 size-4"></span>
+                    <span class="circle delay-8 size-2"></span>
+                  </div>
+                </div>
+                <li class="borderbotm" *ngFor="let messageHubmodel of iMessageHubModelList">
+                  <div class="media row">
+                    <div class="col-md-12 cursorPointer" style="display: inline-flex">
+                      <img (click)="markRead(messageHubmodel)" class="d-flex align-self-center img-radius cusHeight"
+                        *ngIf="(messageHubmodel.imageString != '' && messageHubmodel.imageString != null)"
+                        src="{{messageHubmodel.imageString}}" alt="Profile image"
+                        onerror='this.src="assets/company/avatar-manu-basic.svg"'>
+                      <img (click)="markRead(messageHubmodel)" class="d-flex align-self-center img-radius cusHeight"
+                        *ngIf="(messageHubmodel.imageString == '' || messageHubmodel.imageString == null)"
+                        src="{{supplierLogoPath}}" alt="Profile image">
+                      <div class="media-body" (click)="markRead(messageHubmodel)">
+                        <h5 class="notification-user cususer marginbottom"
+                          [innerHTML]="messageHubmodel.userName | sanitizeNolimit"></h5>
+                        <p class="notification-msg cusmsg marginbottom" title="{{messageHubmodel.messageDescr}}"
+                          [innerHTML]="messageHubmodel.messageDescr | sanitizeNolimit"></p>
+                        <span class="notification-time"> {{utcDate(messageHubmodel.messageDate)| date:'medium' }}</span>
+
+
+                      </div>
+                      <div (click)="closeNotification($event,messageHubmodel.messageId)">
+                        <i class="fa fa-times" style="margin-top: 3px; font-size:14px;color:#4a90e2"></i>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+
+              </ul>
+            </li>
+
+          </ul>
+
+          <p-dialog [header]="npsRatingPopupTitle" [(visible)]="isNPSPupupShow" [modal]="true" [responsive]="true"
+            [width]="500" [autoZIndex]="false" [style]="{'z-index': 10001}" styleClass="Rectangle-3">
+            <div class="row">
+              <div class="col-md-12 manufacturer-name">
+                <span>{{iContactViewModelNPSModel?.company?.name}}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 popup-helper-menu">
+                <span *ngIf="!iContactViewModelNPSModel.isBuyer">How would you rate your experience <br /> working with
+                  {{iContactViewModelNPSModel.firstName}} {{iContactViewModelNPSModel.lastName}}?</span>
+                <span *ngIf="iContactViewModelNPSModel.isBuyer">How likely would you recommend this buyer <br /> to
+                  another business needing parts made?</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2 p-0 d-flex align-items-center justify-content-end">
+                <span class="color-light-gray">Not Likely</span>
+              </div>
+              <div class="col-md-8" style="text-align:center;">
+                <div class="form-radio">
+                  <div class="radio radio-inline">
+                    <label>
+                      <input type="radio" name="radio" [value]=1 [(ngModel)]="radio1">
+                      <i class="helper"></i><br />
+                      <div class="radio-label">1</div>
+                    </label>
+                  </div>
+                  <div class="radio radio-inline">
+                    <label>
+                      <input type="radio" name="radio" [value]=2 [(ngModel)]="radio1">
+                      <i class="helper"></i>
+                      <br />
+                      <div class="radio-label">2</div>
+                    </label>
+                  </div>
+                  <div class="radio radio-inline">
+                    <label>
+                      <input type="radio" name="radio" [value]=3 [(ngModel)]="radio1">
+                      <i class="helper"></i>
+                      <br />
+                      <div class="radio-label">3</div>
+                    </label>
+                  </div>
+                  <div class="radio radio-inline">
+                    <label>
+                      <input type="radio" name="radio" [value]=4 [(ngModel)]="radio1">
+                      <i class="helper"></i><br />
+                      <div class="radio-label">4</div>
+                    </label>
+                  </div>
+                  <div class="radio radio-inline" style="margin-right: 0px;">
+                    <label>
+                      <input type="radio" name="radio" [value]=5 [(ngModel)]="radio1">
+                      <i class="helper"></i><br />
+                      <div class="radio-label">5</div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2 p-0 d-flex align-items-center">
+                <span class="color-light-gray">Very Likely</span>
+              </div>
+            </div>
+            <div class="row" style="padding-top:20px">
+              <div class="col-md-12">
+                <label style="color:#222222;font-size:12px;font-weight: bold">Comment</label>
+                <textarea class="form-control" [(ngModel)]="iRatingResponseViewModel.comment"
+                  placeholder="Please provide comments here" maxlength="5000"></textarea>
+                <span style="float:right;color:#919aa3;font-size:11px">5000 characters</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 button-margin">
+                <button type="button" class="btn cancelbutton" (click)="closeNPSPopup()">Not Now</button>
+              </div>
+              <div class="col-md-6 button-margin">
+                <button type="button" [disabled]="isAllowd()" (click)="submitRating()"
+                  class="btn savebutton">Submit</button>
+              </div>
+            </div>
+
+          </p-dialog>
+
+          <p-dialog header="Upgrade Account" [(visible)]="isAccountUpgradereqSent" [modal]="true" [responsive]="true"
+            [autoZIndex]="false" [style]="{'z-index': 10001}" [width]="600" styleClass="Rectangle-3 upgrade_close">
+            <div class="row">
+              <div class="col-md-12">
+                <span class="show-success">{{accountUpgradereqMessage}}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 button-margin1">
+                <button type="button" class="okay-button" (click)="closeAccountUpgradePopUp()">OK</button>
+              </div>
+            </div>
+          </p-dialog>
+          <p-dialog [header]="header" [(visible)]="isSupplier" [modal]="true" [responsive]="true"
+            styleClass="Rectangle-3" [autoZIndex]="false" [style]="{'z-index': 10001}">
+            <div class="row" style="padding-bottom: 28px">
+              <div class="col-md-12">
+                <p class="What-would-you-like">
+                  <span>Please complete the registration to continue.</span>
+                </p>
+              </div>
+            </div>
+
+            <form class="md-float-material" *ngIf="isSupplier" [formGroup]="registerSupplierForm"
+              (ngSubmit)="onRegister()">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 Rectangle-5">
+                    <div class="form-group">
+                      <input type="text" maxlength="50" class="form-control" placeholder="First Name"
+                        formControlName="sFirstName">
+                    </div>
+                  </div>
+                  <div class="col-md-6 Rectangle-5">
+                    <div class="form-group">
+                      <input type="text" maxlength="50" class="form-control" placeholder="Last Name"
+                        formControlName="sLastName">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row" style="padding-bottom: 36px;
+                  padding-top: 36px;">
+                  <div class="col-md-6 Rectangle-5">
+                    <select id="jobPostingId" class="form-control" formControlName="scontryId" name="scontryId">
+                      <option selected value=''>All Country</option>
+                      <option *ngFor="let contry of iCountryColl" [value]="contry.countryId">
+                        {{ contry.countryName }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 Rectangle-5">
+                    <div class="form-group">
+                      <input readonly type="text" placeholder="Company Name" class="form-control" autocomplete="off"
+                        formControlName="sCompany" name="sCompany" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row" style="padding-bottom: 25px;">
+                  <div class="col-md-6 Text-Field">
+                    <div class="form-group">
+                      <input type="text" maxlength="10" placeholder="Postal Code" class="form-control"
+                        formControlName="sPostalCode" />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <input type="text" (keyup)="onPaste($event)" pattern="^[+]?[0-9]*" maxlength="17"
+                        onKeyPress="if(this.value.length==17) return false;"
+                        onkeydown="javascript: return (event.keyCode == 69  || event.keyCode == 189 || event.keyCode == 190)? false : true"
+                        placeholder="Phone" class="form-control" formControlName="sPhoneNo" />
+                    </div>
+                    <div [hidden]="!registerSupplierForm.get('sPhoneNo').hasError('pattern')"
+                      style="color: red; text-align: right"> Phone number should be only numbers</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+
+                  <p *ngIf="(userType === 'Buyer')">Don’t forget to complete your profile with capabilities so that
+                    others can see what<br> services you provide and learn more about your company.</p>
+                </div>
+              </div>
+              <p-footer>
+                <div class="col-md-12">
+                  <div class="row" style="padding-right: 50px">
+
+                    <div class="col-md-6">
+                      <button type="button"
+                        class="btn btn-md btn-block waves-effect text-center m-b-20 Rectanglebtn-active"
+                        (click)="hideSupplier()">Cancel</button>
+                    </div>
+                    <div class="col-md-6">
+                      <button type="submit" class="btn btn-md btn-block waves-effect text-center m-b-20"
+                        [ngClass]="(!registerSupplierForm.valid || checkSupplierRegistrationForms() ||  disabled) ?'Rectanglebtn-inactive':'Rectanglebtn-active'"
+                        label="Yes"
+                        [disabled]="!registerSupplierForm.valid || checkSupplierRegistrationForms() ||  disabled">
+                        Create account</button>
+                    </div>
+                  </div>
+
+                </div>
+              </p-footer>
+            </form>
+          </p-dialog>
+        </div>
+      </div>
+    </nav>
+    <div class="pcoded-main-container" [style.margin-top]="headerFixedMargin">
+      <div class="pcoded-wrapper">
+        <nav id="main_navbar" class="pcoded-navbar" (clickOutside)="onClickedOutsideSidebar($event)"
+          [exclude]="'#mobile-collapse'" [attr.pcoded-header-position]="pcodedHeaderPosition"
+          [attr.navbar-theme]="navBarTheme" [attr.active-item-theme]="activeItemTheme" sub-item-theme="theme2"
+          active-item-style="style0" [attr.pcoded-navbar-position]="pcodedSidebarPosition">
+          <div class="pcoded-inner-navbar main-menu">
+            <perfect-scrollbar class="perfect-scrollbar" [style.max-width]="'238px'" [style.height]="sidebarFixedNewHeight" [config]="config">
+              <ng-template [ngIf]="!showCommunityMenu">
+                <span *ngFor="let menu of communityMenu;">
+                  <ul class="pcoded-item pcoded-left-item" [attr.item-border]="itemBorder"
+                    [attr.item-border-style]="itemBorderStyle" [attr.subitem-border]="subItemBorder" group="dashboard"
+                    (click)="community_redirect(menu.redirectable,menu.page,menu)">
+                    <li group="dashboard">
+                      <a [attr.name]="menu.title">
+                        <span class="pcoded-micon"><b></b></span>
+                        <span class="pcoded-mtext" [class.active]="menu.isActive">{{menu.name}}</span>
+                        <span class="pcoded-mcaret"></span>
+                      </a>
+                    </li>
+                  </ul>
+                </span>
+                <hr>
+              </ng-template>
+              <span class="d-color {{submitRfqCount === 0  && userType === 'Buyer'?'disable-left_menu':null}}">
+                <ul class="pcoded-item pcoded-left-item" [attr.item-border]="itemBorder"
+                  [attr.item-border-style]="itemBorderStyle" [attr.subitem-border]="subItemBorder" group="dashboard">
+                  <li [routerLinkActive]="['active']" group="dashboard">
+                    <a (click)="reloadDashBoardComp()">
+                      <span class="pcoded-micon"><i class="ti-home"></i><b></b></span>
+                      <span class="pcoded-mtext">Dashboard</span>
+                      <span class="pcoded-mcaret"></span>
+                    </a>
+                  </li>
+                </ul>
+              </span>
+              <!--  done -->
+              <span *ngFor="let asideItems of menuItems.getAll(); index as outerIndex"
+                class="d-color {{submitRfqCount === 0 && userType === 'Buyer'?'disable-left_menu':null}}">
+                <ul *ngFor="let asideItem of asideItems.main;index as mainIndex" class="pcoded-item pcoded-left-item">
+                  <li
+                    class="{{asideItem.children?.length>0? openedMenu==outerIndex+'_'+mainIndex?'pcoded-trigger pcoded-hasmenu':'pcoded-hasmenu' :null}} "
+                    [attr.dropdown-icon]="dropDownIcon" [attr.subitem-icon]="subItemIcon">
+                    <a href="javascript:void(0);" (click)="leftMenuParentClickHandler(asideItem,outerIndex,mainIndex);">
+                      <span class="pcoded-micon"><i *ngIf="asideItem.icon!=='icon_getmaterial'"
+                          class="{{ asideItem.icon }}"></i>
+                        <svg *ngIf="asideItem.icon==='icon_getmaterial'" width="14" height="14" viewBox="0 0 14 14"
+                          fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <g clip-path="url(#clip0_125_159)">
+                            <path
+                              d="M13.199 5.0871C12.6306 4.51877 11.8688 4.25543 11.1094 4.29156C11.3856 3.84694 11.5393 3.33924 11.5497 2.81072C11.565 2.04581 11.2809 1.33172 10.7493 0.800136C9.65672 -0.292427 7.84762 -0.261806 6.71709 0.86934L6.70055 0.885876L3.48104 4.90215C2.917 5.47721 2.63345 6.22315 2.63406 6.9605L0.847622 9.18911C-0.262089 10.3209 -0.286586 12.114 0.799241 13.1999C1.33327 13.7339 2.03879 13.9997 2.75165 13.9997C3.46451 13.9997 4.25331 13.7088 4.83144 13.1313C4.98332 12.9794 5.1156 12.814 5.22951 12.6383L5.36302 12.4717C5.49163 12.7357 5.66433 12.9819 5.88174 13.1999C6.41578 13.7339 7.12129 13.9997 7.83415 13.9997C8.54701 13.9997 9.33581 13.7088 9.91394 13.1313C10.0658 12.9794 10.1981 12.814 10.312 12.6383L13.1463 9.10215C13.681 8.55893 13.9835 7.84791 13.9988 7.09769C14.0141 6.33277 13.7299 5.61868 13.1984 5.0871H13.199ZM12.5076 8.52953L10.764 10.7049C10.6899 10.0949 10.4204 9.53513 9.98376 9.09847C9.59303 8.70775 9.11044 8.46155 8.60029 8.35683C8.44902 8.32559 8.29592 8.30722 8.14159 8.3011C8.06197 8.29804 7.98174 8.29865 7.90152 8.30232L8.4037 7.67643L8.91569 7.03767L10.2061 5.42822C10.9771 4.97809 11.9607 5.06199 12.5927 5.6934C12.9577 6.0584 13.153 6.55079 13.142 7.08054C13.131 7.61641 12.9118 8.12533 12.5235 8.51361L12.5069 8.53014L12.5076 8.52953ZM9.29478 12.5378C8.4974 13.3205 7.24316 13.3475 6.48927 12.5936C6.23327 12.3376 6.06731 12.024 5.99075 11.6896C5.94299 11.4826 5.92951 11.2683 5.94972 11.0552C5.99382 10.5922 6.19714 10.1347 6.55847 9.77336C6.80099 9.53084 7.08699 9.35998 7.3883 9.26015C7.59469 9.19156 7.80904 9.15665 8.02155 9.15543C8.02461 9.15543 8.02829 9.15543 8.03135 9.15543C8.52496 9.15543 9.01061 9.33793 9.37807 9.70477C9.74307 10.0698 9.93844 10.5622 9.92741 11.0919C9.92006 11.463 9.81228 11.8213 9.61753 12.1355C9.53117 12.2745 9.42829 12.4056 9.30886 12.5244C9.30396 12.5293 9.29968 12.5329 9.29478 12.5378ZM4.22391 12.5225L4.21166 12.5378C3.41429 13.3205 2.16005 13.3475 1.40615 12.5936C0.647972 11.8354 0.678593 10.5701 1.47536 9.77398C1.88629 9.36304 2.42216 9.15604 2.94885 9.15604C3.44246 9.15604 3.92811 9.33854 4.29557 9.70539C4.66057 10.0704 4.85593 10.5628 4.84491 11.0925C4.83756 11.4637 4.72977 11.8219 4.53502 12.1361C4.44867 12.2751 4.34579 12.4062 4.22636 12.525L4.22453 12.5231L4.22391 12.5225ZM10.143 1.40644C10.508 1.77144 10.7034 2.26383 10.6923 2.79357C10.6813 3.32945 10.4621 3.83837 10.0738 4.22665L10.0572 4.24318L9.62855 4.77844L8.6946 5.94327L8.38104 6.33399L8.31368 6.4179C8.30694 6.36094 8.29837 6.30399 8.28795 6.24764C8.26713 6.13496 8.23896 6.02411 8.20467 5.91632C8.07422 5.50294 7.84701 5.12507 7.53345 4.81151C7.38647 4.66453 7.22601 4.53837 7.05637 4.43181C6.52356 4.09742 5.89644 3.9633 5.27973 4.02761L7.33809 1.4591C8.13546 0.678264 9.38848 0.652542 10.1418 1.40582L10.143 1.40644ZM5.3618 9.71212C5.36976 9.71212 5.37772 9.71212 5.38568 9.71212C5.43161 9.71212 5.47693 9.7109 5.52286 9.70906C5.49285 9.75805 5.46346 9.80705 5.43651 9.85727C5.41324 9.80827 5.38813 9.75928 5.3618 9.71151V9.71212ZM4.10816 5.4864C4.42601 5.16855 4.81858 4.97319 5.224 4.90092C5.34281 4.87949 5.46223 4.86846 5.58166 4.86846C5.97361 4.86846 6.36005 4.9836 6.68647 5.21448C6.77159 5.2745 6.85243 5.34187 6.92837 5.41781C7.29338 5.78281 7.48874 6.2752 7.47772 6.80495C7.47404 7.00092 7.44159 7.19261 7.38402 7.37634C7.33257 7.54108 7.2597 7.6997 7.16783 7.84852C7.08148 7.98754 6.97859 8.1186 6.85917 8.23741L6.85733 8.23557L6.84508 8.25088C6.71586 8.37765 6.57501 8.48421 6.42619 8.57118C5.65515 9.02131 4.67159 8.93802 4.03957 8.306C3.74194 8.00836 3.56617 7.63233 3.51044 7.23793C3.47676 6.9997 3.48655 6.75473 3.53984 6.51588C3.62313 6.14108 3.81298 5.78159 4.10878 5.4864H4.10816ZM2.97334 8.29987C2.86433 8.29865 2.75593 8.30355 2.64692 8.31518L2.85453 8.05613C2.89005 8.13881 2.92925 8.22026 2.97273 8.29987H2.97334Z"
+                              fill="#4A4B4C" />
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_125_159">
+                              <rect width="14" height="13.9994" fill="white" transform="translate(0 0.000305176)" />
+                            </clipPath>
+                          </defs>
+                        </svg><b>{{ asideItem.short_label }}</b></span>
+                      <span class="pcoded-mtext" [attr.data-value]="asideItem.name">{{ asideItem.name }}</span>
+
+                      <span class="badge bg-primary"
+                       *ngIf="asideItem.icon==='ti-email'"
+                        style="position: absolute;left: 167px;margin-top:7px;margin-left:-25px;font-size: 9px;"
+                        [ngClass]="(showMessage) || newMessageCount > 0 ?'badge bg-c-pink':'badge bg-c-pink badge-noanim'">New</span>
+                      <span class="badge bg-primary"
+                       *ngIf="asideItem.icon==='ti-bell'"
+                        style="position: absolute;left: 167px;margin-top:7px;margin-left:-25px;font-size: 9px;"
+                        [ngClass]="(showBell)|| newNotifications > 0?'badge bg-c-pink':'badge bg-c-pink badge-noanim'">New</span>
+                      <span class="pcoded-mcaret" *ngIf="asideItem.children?.length>0">
+                      </span>
+                    </a>
+                    <ng-container *ngIf="asideItem.children?.length>0" class="d-color">
+                      <ul class="pcoded-submenu">
+                        <li *ngFor="let asideSubItems of asideItem.children; index as subindex"
+                          (click)="leftMenuChildClickHandler(asideItem,asideSubItems,outerIndex,mainIndex);">
+                          <a href="javascript:void(0);">
+                            <span class="pcoded-mtext" [attr.data-value]="asideSubItems.name">{{ asideSubItems.name
+                              }}</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </ng-container>
+                  </li>
+                </ul>
+              </span>
+            </perfect-scrollbar>
+            <!-- new update as per figma-->
+            <div class="cs-nav-area">
+              <div class="advisor-padding">
+                <div class="Line-Copy">
+                  <div class="mb-3 mt-2">
+                    <div class="advisor-title" *ngIf="!showScheduleDemo">
+                        <div class="help-text" placement="right" >Looking for help?</div>
+                      <a class="email-text" href="mailto:support@mfg.com">support@mfg.com</a>
+                      <!-- <div class="schedule-btn" *ngIf="showScheduleDemo">
+                        <div class="schedule-demo" (click)="scheduleDemo()">Schedule a Demo</div>
+                      </div> -->
+                    </div>
+                    <div class="advisor-title-new" *ngIf="showScheduleDemo">
+                      <div class="help-text" placement="right" >Looking for help?</div>
+                    <a class="email-text" href="mailto:support@mfg.com">support@mfg.com</a>
+                    <div class="schedule-btn" *ngIf="showScheduleDemo">
+                      <div class="schedule-demo" (click)="scheduleDemo()">Schedule a Demo</div>
+                    </div>
+                  </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <!-- new update -->
+          </div>
+        </nav>
+        <div class="pcoded-content">
+          <div class="pcoded-inner-content">
+            <!-- Main-body start -->
+            <div class="main-body">
+              <div class="page-wrapper px-3 px-xxl-3">
+                <router-outlet>
+                  <app-spinner></app-spinner>
+                </router-outlet>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-rfq-capability></app-rfq-capability>
+  <footer style="text-align:center;background-color: #ebecf0;color:#919aa3">
+    <p style="margin:0px;padding:5px 0px;">Copyright &copy; {{year}}. All Rights Reserved.<span class="pull-right">V 1.1
+        &nbsp;</span>
+    </p>
+  </footer>
+</div>
+<app-contact-sales-model *ngIf="toShowContactModel" (modelUpdateInfoChange)="toShowContactModel= $event"
+  [hideCall]="'1'">
+</app-contact-sales-model>
+
+<app-terms-and-conditions-model *ngIf="isTermsModelShow()"></app-terms-and-conditions-model>
+<app-session-expire-model *ngIf="showSessionModel" (closeModel)=closeModel($event)></app-session-expire-model>

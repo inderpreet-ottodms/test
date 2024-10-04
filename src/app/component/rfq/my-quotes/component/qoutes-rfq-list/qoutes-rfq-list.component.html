@@ -1,0 +1,942 @@
+<div style="padding:20px">
+  <div class="row">
+    <div class="col-md-12">
+      <div>
+
+        <div class="row">
+          <div class="col-md-7">
+            <div class="btn-group">
+              <button type="button" (click)="setStatusFilter('All')"
+                [ngClass]="(activeStatusFilterBtn == 'All')? 'btn RFQ-state-filter-button-active': 'btn RFQ-state-filter-button-inactive'">
+                All</button>
+              <button type="button" (click)="setStatusFilter('NotReviewed')"
+                [ngClass]="(activeStatusFilterBtn == 'NotReviewed')? 'btn RFQ-state-filter-button-active': 'btn RFQ-state-filter-button-inactive'">
+                Not Reviewed</button>
+              <button type="button" (click)="setStatusFilter('Reviewed')"
+                [ngClass]="(activeStatusFilterBtn == 'Reviewed')? 'btn RFQ-state-filter-button-active': 'btn RFQ-state-filter-button-inactive'">
+                Reviewed</button>
+              <button type="button" (click)="setStatusFilter('Declined')"
+                [ngClass]="(activeStatusFilterBtn == 'Declined')? 'btn RFQ-state-filter-button-active': 'btn RFQ-state-filter-button-inactive'">
+                Declined</button>
+              <button type="button" (click)="setStatusFilter('Archive')" [ngClass]="(activeStatusFilterBtn == 'Archive')? 'btn RFQ-state-filter-button-active': 'btn
+                RFQ-state-filter-button-inactive'">
+                Archive</button>
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <button type="button" data-bs-target="#archiveConfirmModel" data-bs-toggle="modal"
+              [ngClass]="(isChecked())?'button-disabled': 'button-green-border'" style="padding: 2px !important"
+              [disabled]="isChecked()">
+              Archive
+            </button>
+          </div>
+        </div>
+        <div class="row" style="padding-top:15px">
+
+          <div class="col-md-3 col-sm-3">
+            <select class="filter" [(ngModel)]="allStatusFilterValue" (change)="filterAll()">
+              <option value="0">All Status</option>
+              <option value="3">Quoting</option>
+              <option value="6">Awarded Manufacturer</option>
+              <option value="5">Closed</option>
+              <option value="16">Awarded</option>
+              <option value="17">Awarded</option>
+              <option value="18"> Not Awarded </option>
+              <option value="20"> Awarded </option>
+
+
+            </select>
+
+          </div>
+
+          <div class="col-md-3 col-sm-3">
+            <select class="recent" [(ngModel)]="sortFilterValue" (change)="filterAll()">
+              <option value="Recent">Recent</option>
+              <option value="Oldest">Oldest</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-sm-3">
+            <select class="filter" [(ngModel)]="allLocationFilterValue" (change)="filterAll()">
+              <option value="0"> All locations</option>
+              <option [value]="data.territoryClassificationId" *ngFor="let data of iLocationColl">
+                {{data.territoryClassificationName}}</option>
+
+
+            </select>
+
+          </div>
+          <div class="col-md-3 col-sm-3 col-xs-12 pull-right">
+            <div class="input-container">
+              <i class="fa fa-search icon-search" (click)="filterAll()" placement="top" container="body"
+                ngbTooltip="Search by RFQ#, RFQ name, or Company name"></i>
+              <input class="search search-text" [(ngModel)]="searchFilterValue"
+                placeholder="Search by RFQ#, RFQ name, or Company name" type="text" (keypress)="searchByKey($event)"
+                (input)="checkSearch(searchFilterValue)" />
+              <i class="fa fa-times-circle icon" (click)="removeTextValue()" placement="top" container="body"
+                ngbTooltip="Remove Text"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <br>
+          <div class="col-md-12">
+            <!-- Header -->
+            <div class="display-flex">
+              <div>
+                <div class="border-checkbox-section p-l-10">
+                  <div class="border-checkbox-group border-checkbox-group-primary">
+                    <input class="border-checkbox" type="checkbox" id="checkAll" [(ngModel)]="checkedAll"
+                      name="checkRfqRow" (change)="checkUncheckAll()"
+                      [disabled]="( this.iBuyerQuotesViewModel.tabId == 5) == true">
+                    <label class="border-checkbox-label" for="checkAll">Select All</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- WILL NEED TO BUILD FILTERS HERE -->
+
+              <!-- <div><span class="f-w-600 f-12">RFQ Name</span></div>
+              <div (click)="sortMessage('Location')"><span class="f-w-600 f-12">Location</span> <i
+                  [ngClass]="(toggle6)?'fa fa-sort-asc':'fa fa-sort-desc'"></i></div>
+              <div (click)="sortMessage('Manufacturer')"><span class="f-w-600 f-12">Manufacturer</span> <i
+                  [ngClass]="(toggle7)?'fa fa-sort-asc':'fa fa-sort-desc'"></i></div>
+              <div><span class="f-w-600 f-12">Contact Name</span></div>
+              <div (click)="sortMessage('Date')"><span class="f-w-600 f-12">Date</span> <i
+                  [ngClass]="(toggle1)?'fa fa-sort-asc':'fa fa-sort-desc'"></i></div>
+              <div (click)="sortMessage('Qty1')"><span class="f-w-600 f-12">Qty 1</span> <i
+                  [ngClass]="(toggle2)?'fa fa-sort-asc':'fa fa-sort-desc'"></i></div>
+              <div (click)="sortMessage('Qty2')"><span class="f-w-600 f-12">Qty 2</span> <i
+                  [ngClass]="(toggle3)?'fa fa-sort-asc':'fa fa-sort-desc'"></i></div>
+              <div (click)="sortMessage('Qty3')"><span class="f-w-600 f-12">Qty 3</span> <i
+                  [ngClass]="(toggle4)?'fa fa-sort-asc':'fa fa-sort-desc'"></i></div>
+              <div (click)="sortMessage('Status')"><span class="f-w-600 f-12">Status</span> <i
+                  [ngClass]="(toggle5)?'fa fa-sort-asc':'fa fa-sort-desc'"></i></div>
+              <div>
+                <span class="f-w-600 f-12"> Quote Feedback</span>
+                <i class="icofont icofont-info-circle graycolor" placement="top" data-container="body"
+                  ngbTooltip="Use this selector to give the manufacturer feedback on their quote."></i>
+              </div>
+
+              <div><span class="f-w-600 f-12">Actions</span></div> -->
+
+            </div>
+            <div class="loading" *ngIf="isLoader2" style="padding:20px">
+              <div class="loader animation-start">
+                <span class="circle delay-1 size-2"></span>
+                <span class="circle delay-2 size-4"></span>
+                <span class="circle delay-3 size-6"></span>
+                <span class="circle delay-4 size-7"></span>
+                <span class="circle delay-5 size-7"></span>
+                <span class="circle delay-6 size-6"></span>
+                <span class="circle delay-7 size-4"></span>
+                <span class="circle delay-8 size-2"></span>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="buyer-quotes-container" *ngIf="(iBuyerQuotesListColl.length != 0)">
+              <div *ngFor='let rfq of iBuyerQuotesListColl;let i = index' [id]="rfq.rfqId +'_' + i"
+                [ngClass]="(rfq.rfqId +'_' + i === currentRfq())?'actievPart':''">
+               
+                
+                <div class="display-grid quote-div">
+                  <div class="p-3">
+                    <div class="qtheader">
+                      <!-- Check Box-->
+                      <div class="border-checkbox-section">
+                        <div class="border-checkbox-group border-checkbox-group-primary">
+                          <input class="border-checkbox" type="checkbox"
+                            [disabled]="( this.iBuyerQuotesViewModel.tabId == 5) == true" [id]="rfq.rfqId +'*' + i"
+                            [(ngModel)]="rfq.isSelected" name="checkRfqRow">
+                          <label class="border-checkbox-label m-10" [for]="rfq.rfqId  +'*' + i"></label>
+                        </div>
+                      </div>
+                      <div
+                        (click)="expandQuotes(rfq.rfqId, rfq.supplierId, i, rfq.rfqResubmittedByBuyer, rfq.supplierCompanyId, 'ViewedQuote', (rfq.supplierId === currentOpenContactId && rfq.rfqId === currentOpenQuoteId ))"
+                        style="font-weight: 600">
+                        <lobel class="pr-2">
+                          <b>Status:</b>
+                        </lobel>
+                        {{ ( rfq.isViewedByBuyer && !rfq.isReviewedByBuyer) ? 'Viewed'  : ( rfq.isViewedByBuyer && rfq.isReviewedByBuyer) ? 'Reviewed' : '' }}
+                        <br/>
+                        <lobel class="pr-2">
+                          <b>Date:</b>
+                        </lobel>
+                        {{rfq.quoteDate | date: 'MM/dd/yyyy'}}
+                      </div>
+                    </div>
+                    <div class="custtd ml-3 mb-2">
+                      <div (click)="detailRfq(rfq.rfqId)">
+                        <span style="color:#2E58D6;font-size:16px;font-weight:600;word-break: break-word;" placement="top"
+                          data-container="body" ngbTooltip="View RFQ Details">
+                        <lobel class="pr-2" style="color: #000;">
+                          <b>RFQ Name:</b>
+                        </lobel>
+                          {{rfq.rfqName}}
+                      </span>
+                    </div>
+                      <!-- <div><span style="color:#919aa3;font-weight:600">RFQ #{{rfq.rfqId}}</span></div> -->
+                  </div>
+                  <div class="custtd ml-3"
+                    (click)="openSidePanel(rfq.supplierIdEncrypt,rfq.supplier, rfq.supplierCompany, rfq.rfqId, i)">
+                    <lobel class="pr-2">
+                      <b>Company Name:</b>
+                    </lobel>
+                    <span style="color:#2E58D6;font-weight:600;word-break: break-word;" placement="top"
+                      data-container="body"
+                      ngbTooltip="{{rfq.supplierCompany}}">{{rfq.supplierCompany}}</span>
+                  </div>
+                  <div class="custtd ml-3"
+                    (click)="openSidePanel(rfq.supplierIdEncrypt,rfq.supplier, rfq.supplierCompany, rfq.rfqId, i)">
+                    <lobel class="pr-2">
+                      <b>Manufacturer:</b>
+                    </lobel>
+                    <span style="color:#2E58D6;font-weight: 600;word-break: break-word;" data-container="body"
+                      ngbTooltip="{{rfq.supplier}}">{{rfq.supplier}}</span>
+                  </div>
+                  <div class="custtd ml-3 mb-2" placement="top"
+                    (click)="openSidePanel(rfq.supplierIdEncrypt,rfq.supplier, rfq.supplierCompany, rfq.rfqId, i)">
+                    <lobel class="pr-2">
+                      <b>Location:</b>
+                    </lobel>
+                    <span style="font-weight: 600;width:4% !important" data-container="body"
+                      ngbTooltip="{{rfq.supplierTerritory}}">{{rfq.supplierTerritory}}
+                    </span>
+                  </div>
+                  <div class="custtd ml-3"
+                    (click)="expandQuotes(rfq.rfqId, rfq.supplierId, i, rfq.rfqResubmittedByBuyer, rfq.supplierCompanyId, 'ViewedQuote', (rfq.supplierId === currentOpenContactId && rfq.rfqId === currentOpenQuoteId ))">
+                    <lobel class="pr-2">
+                      <b>Qty 1:</b>
+                    </lobel>
+                    {{ (rfq.qty1) ? '$'  : '' }}{{rfq.qty1}}
+                  </div>
+                  <div class="custtd ml-3"
+                    (click)="expandQuotes(rfq.rfqId, rfq.supplierId, i, rfq.rfqResubmittedByBuyer, rfq.supplierCompanyId, 'ViewedQuote', (rfq.supplierId === currentOpenContactId && rfq.rfqId === currentOpenQuoteId ))">
+                    <lobel class="pr-2">
+                      <b>Qty 2:</b>
+                    </lobel>
+                    {{ (rfq.qty2) ? '$'  : '' }}{{rfq.qty2}}
+                  </div>
+                  <div class="custtd ml-3"
+                    (click)="expandQuotes(rfq.rfqId, rfq.supplierId, i, rfq.rfqResubmittedByBuyer, rfq.supplierCompanyId, 'ViewedQuote', (rfq.supplierId === currentOpenContactId && rfq.rfqId === currentOpenQuoteId ))">
+                    <lobel class="pr-2">
+                      <b>Qty 3:</b>
+                    </lobel>
+                    {{ (rfq.qty3) ? '$'  : '' }}{{rfq.qty3}}
+                  </div>
+                    
+
+                    <!-- <div
+                      (click)="expandQuotes(rfq.rfqId, rfq.supplierId, i, rfq.rfqResubmittedByBuyer, rfq.supplierCompanyId, 'ViewedQuote', (rfq.supplierId === currentOpenContactId && rfq.rfqId === currentOpenQuoteId ))"
+                      style="font-weight: 600">{{ (rfq.isReviewedByBuyer) ? 'Reviewed' : 'Not Reviewed' }}</div> -->
+
+
+
+                  <div class="custtd ml-3 mt-3">
+                    <lobel>
+                      Quote Feedback
+                      <i class="icofont icofont-info-circle graycolor" placement="top" data-container="body"
+                        ngbTooltip="Use this selector to give the manufacturer feedback on their quote.">
+                      </i>
+                    </lobel>
+                    <select class="filter" [(ngModel)]="rfq.buyerFeedbackId"
+                      (change)="OnsaveFeedback($event.target.value, rfq.supplierId,rfq.supplierQuoteId, rfq.rfqId)">
+                      <option value='0'>Select</option>
+                      <option *ngFor="let Feedbackvalue of feedbackQuantity" [value]="Feedbackvalue.id">
+                        {{ Feedbackvalue.value }}</option>
+                    </select>
+                  </div>
+                </div>  
+
+                <!-- Display Information -->
+                <div class="show" *ngIf="rfq.isShow">
+                  <div *ngIf="isLoader1">
+                    <div class="loader animation-start">
+                      <span class="circle delay-1 size-2"></span>
+                      <span class="circle delay-2 size-4"></span>
+                      <span class="circle delay-3 size-6"></span>
+                      <span class="circle delay-4 size-7"></span>
+                      <span class="circle delay-5 size-7"></span>
+                      <span class="circle delay-6 size-6"></span>
+                      <span class="circle delay-7 size-4"></span>
+                      <span class="circle delay-8 size-2"></span>
+                    </div>
+                  </div>
+                  <ng-container *ngIf="!isRecAvailable">
+
+                    <div style="padding: 10px;"
+                      *ngIf="!isLoader1">
+                      <div *ngIf="isRecAvailable" style="text-align: center">
+                        No Quotes record found for this manufacturer quote
+                      </div>
+                      <div class="b-qt-info-container" *ngIf="!isRecAvailable">
+                        <div class="common_heading">
+                          <div>All prices are quoted in USD</div>
+                          <div>
+                            <button class="btn btn-award" [disabled]="isAwardAllStatus(rfq.supplierId,rfq.rfqId)"
+                              (click)="awardAll(rfq.supplierId, rfq.supplier, rfq.rfqId, rfq.noOfStars)">Award All
+                              Parts</button>
+                          </div>
+                        </div>
+                        <ng-container
+                          *ngFor="let singlePart of iRFQPartQuantityQuoteColl | groupBy:'rfqPartIdString';let iPart = index;">
+                          <div>
+                            <div>
+                              <div class="quote-main-col" *ngIf="(getpartName(singlePart.key)) !== ''">
+                                <span class="Part-Name text-truncate" placement="top" data-container="body"
+                                  ngbTooltip="{{getpartName(singlePart.key)}}">
+                                  {{getpartName(singlePart.key) |dotLimit:100}} 
+                                </span>
+                                # {{getpartNumber(singlePart.key)}}
+                              </div>
+                              <div *ngIf="!isSidePanel()">
+                                <div *ngIf="(getpartName(singlePart.key)) !== ''">
+                                  <div>
+                                    <div class="quote-main-col px-3">
+                                      <div class="row" (click)="setPartCollapseStatus(singlePart.key)">
+                                        <div class="col-md-3 quantity_unit pointerCursor"> Quantity </div>
+                                        <div class="col-md-3 text-right quantity_unit pointerCursor">
+                                          {{getQuantityUnit(singlePart.key,1)}} </div>
+                                        <div class="col-md-3 text-right quantity_unit pointerCursor">
+                                          {{getQuantityUnit(singlePart.key,2)}} </div>
+                                        <div class="col-md-3 text-right quantity_unit pointerCursor">
+                                          {{getQuantityUnit(singlePart.key,3)}} </div>
+                                      </div>
+                                      <div class="row" *ngIf="getPartCollapseStatus(singlePart.key)"
+                                        (click)="setPartCollapseStatus(singlePart.key)">
+                                        <div class="col-md-3 pointerCursor"> Price Per Unit </div>
+                                        <div class="col-md-3 text-right"> $
+                                          {{getQuantityPerPrice(singlePart.key,1)| number: '1.1-4'}}
+                                        </div>
+                                        <div class="col-md-3 text-right">$
+                                          {{getQuantityPerPrice(singlePart.key,2)| number: '1.1-4'}}
+                                        </div>
+                                        <div class="col-md-3 text-right">$
+                                          {{getQuantityPerPrice(singlePart.key,3)| number: '1.1-4'}}
+                                        </div>
+                                      </div>
+                                      <div class="row" *ngIf="getPartCollapseStatus(singlePart.key)"
+                                        (click)="setPartCollapseStatus(singlePart.key)">
+                                        <div class="col-md-3 pointerCursor"> Tooling</div>
+                                        <div class="col-md-3 text-right"> $
+                                          {{getToolingAmount(singlePart.key,1)| number: '1.1-4'}}
+                                        </div>
+                                        <div class="col-md-3 text-right"> $
+                                          {{getToolingAmount(singlePart.key,2)| number: '1.1-4'}}
+                                        </div>
+                                        <div class="col-md-3 text-right"> $
+                                          {{getToolingAmount(singlePart.key,3)| number: '1.1-4'}}
+                                        </div>
+                                      </div>
+                                      <div class="row" *ngIf="getPartCollapseStatus(singlePart.key)"
+                                        (click)="setPartCollapseStatus(singlePart.key)">
+                                        <div class="col-md-3 pointerCursor"> Miscellaneous </div>
+                                        <div class="col-md-3 text-right"> $
+                                          {{getMisleniousAmount(singlePart.key,1)| number: '1.1-4'}}
+                                        </div>
+                                        <div class="col-md-3 text-right"> $
+                                          {{getMisleniousAmount(singlePart.key,2)| number: '1.1-4'}}
+                                        </div>
+                                        <div class="col-md-3 text-right"> $
+                                          {{getMisleniousAmount(singlePart.key,3)| number: '1.1-4'}}
+                                        </div>
+                                      </div>
+                                      <div class="row" *ngIf="getPartCollapseStatus(singlePart.key)"
+                                        (click)="setPartCollapseStatus(singlePart.key)">
+                                        <div class="col-md-3 pointerCursor"> Shipping </div>
+                                        <div class="col-md-3 text-right"> $
+                                          {{getShippingAmount(singlePart.key,1)| number: '1.1-4'}}
+                                        </div>
+                                        <div class="col-md-3 text-right"> $
+                                          {{getShippingAmount(singlePart.key,2)| number: '1.1-4'}}
+                                        </div>
+                                        <div class="col-md-3 text-right"> $
+                                          {{getShippingAmount(singlePart.key,3)| number: '1.1-4'}}
+                                        </div>
+                                      </div>
+                                      <div class="row" (click)="setPartCollapseStatus(singlePart.key)">
+                                        <div class="col-md-3 Subtotals pointerCursor"> Sub Total </div>
+                                        <div class="col-md-3 text-right Subtotals"> $
+                                          {{getQuantity1Total(singlePart.key,1)| number: '1.1-4'}} </div>
+                                        <div class="col-md-3 text-right Subtotals"> $
+                                          {{getQuantity2Total(singlePart.key,2)| number: '1.1-4'}} </div>
+                                        <div class="col-md-3 text-right Subtotals"> $
+                                          {{getQuantity3Total(singlePart.key,3)| number: '1.1-4'}} </div>
+                                      </div>
+                                      <div class="row m-t-10" (click)="setPartCollapseStatus(singlePart.key)">
+                                        <div class="col-md-3 m-b-10 Subtotals pointerCursor"> Est. Lead Time
+                                          (ARO)</div>
+                                        <div class="col-md-3 text-right Subtotals">
+                                          {{getLeadTime(singlePart.key,1)}} </div>
+                                        <div class="col-md-3 text-right Subtotals">
+                                          {{getLeadTime(singlePart.key,2)}} </div>
+                                        <div class="col-md-3 text-right Subtotals">
+                                          {{getLeadTime(singlePart.key,3)}} </div>
+                                      </div>
+                                    </div>
+
+
+                                    <div>
+                                      <div class="expand-icon-div text-center" style="padding-top: 15px">
+                                        <i class="icon-third" data-container="body" ngbTooltip="Click To Expand"
+                                          [ngClass]="getPartCollapseStatus(singlePart.key)?'fa fa-angle-up':'fa fa-angle-down'"
+                                          (click)="setPartCollapseStatus(singlePart.key)"></i>
+                                      </div>
+                                    </div>
+
+                                    <div
+                                      style="display: flex;justify-content: end;align-items: flex-end;">
+                                      <button [disabled]="getRfqPartAwardedStatusByOther(singlePart.key,rfq.rfqId,rfq.supplierId)"
+                                        *ngIf="!getRfqPartAwardedStatus(singlePart.key,6) && singlePart.value[0].rfqPartStatusId !== 17 && singlePart.value[0].rfqPartStatusId !== 16 && singlePart.value[0].rfqPartStatusId !== 18 && singlePart.value[0].rfqPartStatusId !== 20"
+                                        class="btn-award-part"
+                                        (click)="openAwardModel(1, rfq.supplierId, rfq.rfqId, singlePart.key, rfq.supplier)">Award
+                                        Part</button>
+
+                                      <div class="f-12"
+                                        style="background-color: #ccc;width: 35px;height: 35px;padding: 6px 5px 5px 7px;border-radius: 50%;"
+                                        *ngIf="singlePart.value[0].rfqPartStatusId == 17 && getRfqPartAwardedStatus(singlePart.key,17)">
+                                        <img src="assets/non-mfg-award.svg" data-container="body"
+                                          ngbTooltip="Awarded">
+                                      </div>
+
+                                      <div class="f-12" data-container="body" ngbTooltip="Not Awarded"
+                                        *ngIf="singlePart.value[0].rfqPartStatusId == 18 && getRfqPartNotAwardedStatus(singlePart.key,18)">
+                                        <span class="fa-stack fa-lg" style="color:#ccc;">
+                                          <i class="fa fa-trophy fa-stack-1x"></i>
+                                          <i class="fa fa-ban fa-stack-2x"></i>
+                                        </span>
+                                      </div>
+
+
+                                      <div class="f-12"
+                                        *ngIf="singlePart.value[0].rfqPartStatusId == 16 && getRfqPartAwardedStatus(singlePart.key,16)">
+                                        <img src="assets/rfq/award2-12.png"
+                                          srcset="assets/rfq/award2-12@2x.png 2x, assets/rfq/award2-12@3x.png 3x"
+                                          data-container="body" ngbTooltip="Awarded">
+                                      </div>
+
+                                      <div class="f-12"
+                                        *ngIf="singlePart.value[0].rfqPartStatusId == 20 && getRfqPartAwardedStatus(singlePart.key,20)">
+                                        <img src="assets/rfq/award2-12.png"
+                                          srcset="assets/rfq/award2-12@2x.png 2x, assets/rfq/award2-12@3x.png 3x"
+                                          data-container="body" ngbTooltip="Awarded">
+                                      </div>
+
+                                      <img src="assets/rfq/award2-12.png"
+                                        *ngIf="getRfqPartAwardedStatus(singlePart.key,6)"
+                                        srcset="assets/rfq/award2-12@2x.png 2x, assets/rfq/award2-12@3x.png 3x"
+                                        class="Group-3" data-container="body" ngbTooltip="Awarded MFG Manufacturer">
+                                    </div>
+
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row quote-main-row" *ngIf="isSidePanel()">
+                                <div class="col-md-3 quote-main-col" *ngIf="(getpartName(singlePart.key)) !== ''">
+                                  <div class="row">
+                                    <div class="col-md-9">
+                                      <span class="Part-Name text-truncate"> {{getpartName(singlePart.key)}}
+                                      </span><br>
+                                      # {{getpartNumber(singlePart.key)}} <br>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-9" *ngIf="(getpartName(singlePart.key)) !== ''">
+                                  <div class="row">
+                                    <div class="col-md-6 quote-main-col">
+                                      <div class="row">
+                                        <div class="col-md-6  quantity_unit"> Quantity </div>
+                                        <div class="col-md-6 text-right  quantity_unit" *ngIf="highestQtyPresent === 1">
+                                          {{getQuantityUnit(singlePart.key,1)}} </div>
+                                        <div class="col-md-6 text-right  quantity_unit" *ngIf="highestQtyPresent === 2">
+                                          {{getQuantityUnit(singlePart.key,2)}} </div>
+                                        <div class="col-md-6 text-right  quantity_unit" *ngIf="highestQtyPresent === 3">
+                                          {{getQuantityUnit(singlePart.key,3)}} </div>
+                                      </div>
+                                      <div class="row" *ngIf="getPartCollapseStatus(singlePart.key)">
+                                        <div class="col-md-6"> Price Per Unit </div>
+                                        <div class="col-md-6 text-right" *ngIf="highestQtyPresent === 1"> $
+                                          {{getQuantityPerPrice(singlePart.key,1)| number: '1.1-4'}} </div>
+                                        <div class="col-md-6 text-right" *ngIf="highestQtyPresent === 2">$
+                                          {{getQuantityPerPrice(singlePart.key,2)| number: '1.1-4'}} </div>
+                                        <div class="col-md-6 text-right" *ngIf="highestQtyPresent === 3">$
+                                          {{getQuantityPerPrice(singlePart.key,3)| number: '1.1-4'}} </div>
+                                      </div>
+                                      <div class="row" *ngIf="getPartCollapseStatus(singlePart.key)">
+                                        <div class="col-md-6"> Tooling</div>
+                                        <div class="col-md-6 text-right" *ngIf="highestQtyPresent === 1"> $
+                                          {{getToolingAmount(singlePart.key,1)| number: '1.1-4'}} </div>
+                                        <div class="col-md-6 text-right" *ngIf="highestQtyPresent === 2"> $
+                                          {{getToolingAmount(singlePart.key,2)| number: '1.1-4'}} </div>
+                                        <div class="col-md-6 text-right" *ngIf="highestQtyPresent === 3"> $
+                                          {{getToolingAmount(singlePart.key,3)| number: '1.1-4'}} </div>
+                                      </div>
+                                      <div class="row" *ngIf="getPartCollapseStatus(singlePart.key)">
+                                        <div class="col-md-6"> Miscellaneous </div>
+                                        <div class="col-md-6 text-right" *ngIf="highestQtyPresent === 1"> $
+                                          {{getMisleniousAmount(singlePart.key,1)| number: '1.1-4'}} </div>
+                                        <div class="col-md-6 text-right" *ngIf="highestQtyPresent === 2"> $
+                                          {{getMisleniousAmount(singlePart.key,2)| number: '1.1-4'}} </div>
+                                        <div class="col-md-6 text-right" *ngIf="highestQtyPresent === 3"> $
+                                          {{getMisleniousAmount(singlePart.key,3)| number: '1.1-4'}} </div>
+                                      </div>
+                                      <div class="row" *ngIf="getPartCollapseStatus(singlePart.key)">
+                                        <div class="col-md-6"> Shipping </div>
+                                        <div class="col-md-6 text-right" *ngIf="highestQtyPresent === 1"> $
+                                          {{getShippingAmount(singlePart.key,1)| number: '1.1-4'}} </div>
+                                        <div class="col-md-6 text-right" *ngIf="highestQtyPresent === 2"> $
+                                          {{getShippingAmount(singlePart.key,2)| number: '1.1-4'}} </div>
+                                        <div class="col-md-6 text-right" *ngIf="highestQtyPresent === 3"> $
+                                          {{getShippingAmount(singlePart.key,3)| number: '1.1-4'}} </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-6 Subtotals"> Sub Total </div>
+                                        <div class="col-md-6 text-right Subtotals" *ngIf="highestQtyPresent === 1">
+                                          $
+                                          {{getQuantity1Total(singlePart.key,1)| number: '1.1-4'}} </div>
+                                        <div class="col-md-6 text-right Subtotals" *ngIf="highestQtyPresent === 2">
+                                          $
+                                          {{getQuantity2Total(singlePart.key,2)| number: '1.1-4'}} </div>
+                                        <div class="col-md-6 text-right Subtotals" *ngIf="highestQtyPresent === 3">
+                                          $
+                                          {{getQuantity3Total(singlePart.key,3)| number: '1.1-4'}} </div>
+                                      </div>
+                                      <div class="row m-t-10" (click)="setPartCollapseStatus(singlePart.key)">
+                                        <div class="col-md-6 m-b-10 Subtotals"> Est. Lead Time (ARO)</div>
+                                        <div *ngIf="highestQtyPresent === 1" class="col-md-6 text-right Subtotals">
+                                          {{getLeadTime(singlePart.key,1)}} </div>
+                                        <div *ngIf="highestQtyPresent === 2" class="col-md-6 text-right Subtotals">
+                                          {{getLeadTime(singlePart.key,2)}} </div>
+                                        <div *ngIf="highestQtyPresent === 3" class="col-md-6 text-right Subtotals">
+                                          {{getLeadTime(singlePart.key,3)}} </div>
+                                      </div>
+                                    </div>
+
+
+                                    <div class="col-md-1">
+                                      <div class="expand-icon-div text-center" style="padding-top: 15px">
+                                        <i class="icon-third" data-container="body" ngbTooltip="Click To Expand"
+                                          [ngClass]="getPartCollapseStatus(singlePart.key)?'fa fa-angle-down':'fa fa-angle-right'"
+                                          (click)="setPartCollapseStatus(singlePart.key)"></i>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-3"
+                                      style="display: flex;justify-content: end;align-items: flex-end;">
+                                      <button [disabled]="getRfqPartAwardedStatusByOther(singlePart.key,6)"
+                                        *ngIf="!getRfqPartAwardedStatus(singlePart.key,6) && singlePart.value[0].rfqPartStatusId !== 17 && singlePart.value[0].rfqPartStatusId !== 16 && singlePart.value[0].rfqPartStatusId !== 18 && singlePart.value[0].rfqPartStatusId !== 20"
+                                        class="btn-award-part"
+                                        (click)="openAwardModel(1, rfq.supplierId, rfq.rfqId, singlePart.key, rfq.supplier)">Award
+                                        Part</button>
+
+                                      <div class="f-12"
+                                        style="background-color: #ccc;width: 35px;height: 35px;padding: 6px 5px 5px 7px;border-radius: 50%;"
+                                        *ngIf="singlePart.value[0].rfqPartStatusId == 17 && getRfqPartAwardedStatus(singlePart.key,17)">
+                                        <img src="assets/non-mfg-award.svg" data-container="body"
+                                          ngbTooltip="Awarded">
+                                      </div>
+
+                                      <div class="f-12" data-container="body" ngbTooltip="Not Awarded"
+                                        *ngIf="singlePart.value[0].rfqPartStatusId == 18 && getRfqPartNotAwardedStatus(singlePart.key,18)">
+                                        <span class="fa-stack fa-lg" style="color:#ccc;">
+                                          <i class="fa fa-trophy fa-stack-1x"></i>
+                                          <i class="fa fa-ban fa-stack-2x"></i>
+                                        </span>
+                                      </div>
+
+
+                                      <div class="f-12"
+                                        *ngIf="singlePart.value[0].rfqPartStatusId == 16 && getRfqPartAwardedStatus(singlePart.key,16)">
+                                        <img src="assets/rfq/award2-12.png"
+                                          srcset="assets/rfq/award2-12@2x.png 2x, assets/rfq/award2-12@3x.png 3x"
+                                          data-container="body" ngbTooltip="Awarded">
+                                      </div>
+
+                                      <div class="f-12"
+                                        *ngIf="singlePart.value[0].rfqPartStatusId == 20 && getRfqPartAwardedStatus(singlePart.key,20)">
+                                        <img src="assets/rfq/award2-12.png"
+                                          srcset="assets/rfq/award2-12@2x.png 2x, assets/rfq/award2-12@3x.png 3x"
+                                          data-container="body" ngbTooltip="Awarded">
+                                      </div>
+
+                                      <img src="assets/rfq/award2-12.png" data-container="body"
+                                        ngbTooltip="Awarded MFG Manufacturer"
+                                        *ngIf="getRfqPartAwardedStatus(singlePart.key,6)"
+                                        srcset="assets/rfq/award2-12@2x.png 2x, assets/rfq/award2-12@3x.png 3x"
+                                        class="Group-3" data-container="body" ngbTooltip="Awarded MFG Manufacturer">
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div style="padding-top: 10px"></div>
+                            </div>
+                          </div>
+
+
+                        </ng-container>
+                        <div class="row">
+                          <div class="col-md-3 Subtotals"></div>
+                          <div class="col-md-2 Subtotals"></div>
+                          <div class="col-md-2 Subtotals"></div>
+                          <div class="col-md-5 Subtotals" style="text-align: right">
+                          </div>
+                        </div>
+                        <div>
+                          <span class="Contact-Name">Quote Reference Number</span>
+                        </div>
+                        <div class="row oldQuote" style="margin-top: 3px">
+                          <div class="col-md-12" style="padding: 10px;">
+                            {{ (quoteReferenceNumber) ? (quoteReferenceNumber) : 'N/A' }}
+                          </div>
+
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <span class="Contact-Name">Payment Terms</span>
+                          </div>
+                        </div>
+                        <div class="row m-b-10 oldQuote" style="background-color:#dee2e6;margin-top: 3px">
+                          <div class="col-md-12" style="padding: 10px;">
+                            {{ (supplierPaymentTerm) ? (supplierPaymentTerm) : 'N/A' }}
+                          </div>
+
+                        </div>
+                        <div>
+                          <span class="Contact-Name">Manufacturer Comments</span>
+                        </div>
+                        <div class="row oldQuote" style="margin-top: 3px">
+                          <div class="col-md-4" style="padding: 10px;">
+                            <div class="row oldQuote">
+                              <div class="col-md-10" style="padding: 0px;">
+                                <span class="Contact-Name" placement="top" ngbTooltip="{{rfq.supplierCompany}}">
+                                  {{rfq.supplierCompany | dotLimit:'20'}}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-8 oldQuote" style="padding: 10px;" *ngIf="message != ''">
+                            {{message}} </div>
+                          <div class="col-md-8 oldQuote" style="padding: 10px;"
+                            *ngIf="message == '' || message == null">
+                            No Message Found </div>
+                        </div>
+                        <div style="padding-top: 9px;">
+                          <span class="Contact-Name">Attachments</span>
+                        </div>
+                        <div class="row oldQuote">
+                          <div class="col-md-12" style="padding-top: 7px">
+                            <span class="File_Name_Herepdf"
+                              *ngIf="messageAttachment === null || messageAttachment.length === 0">No
+                              Attachment Found
+                            </span>
+                            <span class="File_Name_Herepdf"
+                              *ngIf="messageAttachment !== null && messageAttachment.length > 1" class="download"
+                              (click)="downloadAllFiles(messageAttachment,rfq.rfqId)"><b>Download All</b>
+                            </span><br>
+                            <div *ngFor="let file of messageAttachment">
+                              <span class="File_Name_Herepdf" *ngIf="file != '' && file != null" class="download"
+                                (click)="downloadS3File(file, true)">{{file | originalShortName: 30}}</span>
+
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-5"> </div>
+                          <div class="col-md-7" style="text-align: right">
+                          </div>
+                        </div>
+                        <div style="padding-top: 10px"></div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+
+                <!-- Footer -->
+                <div style="background-color: #edeff7;padding: 15px;display:flex;justify-content: space-between">
+                    <i class="fa fa-eye icon-first" style="color:#2E58D6;" (click)="detailRfqquote(rfq.rfqId)"
+                      aria-hidden="true" ngbTooltip="View RFQ Details"></i>
+                    <i style="color:#2E58D6;"
+                      (click)="openMessageDrawer($event, rfq.supplierId, rfq.rfqId, rfq.supplier, i)"
+                      class="fa fa-envelope-o icon-second p-l-10" aria-hidden="true"
+                      ngbTooltip="Message Manufacturer"></i>
+                    <a data-bs-target="#archiveConfirmModel" data-bs-toggle="modal" (click)="setRfqDetail(rfq.rfqId)">
+
+                      <i *ngIf=" this.iBuyerQuotesViewModel.tabId != 5" placement="top" data-container="body"
+                        ngbTooltip="Archive Quote" class="fa fa-archive color-blue icon-second colorBlue" aria-hidden="true"></i>
+                    </a>
+
+                    <i *ngIf=" this.iBuyerQuotesViewModel.tabId == 5" placement="top" data-container="body"
+                      ngbTooltip="Archive Quote" class="fa fa-archive color-light-gray icon-second" aria-hidden="true"
+                      style="cursor: not-allowed;"></i>
+                    <i class="icon-third" data-container="body" ngbTooltip="Click To Expand"
+                      style="font-size: 20px;font-weight:600;color:#2E58D6;margin-right: 10px;"
+                      [ngClass]="(rfq.isShow)?'fa fa-angle-up pointerCursor':'fa fa-angle-down pointerCursor'"
+                      (click)="expandQuotes(rfq.rfqId, rfq.supplierId, i, rfq.rfqResubmittedByBuyer, rfq.supplierCompanyId, 'ViewedQuote', (rfq.supplierId === currentOpenContactId && rfq.rfqId === currentOpenQuoteId ))"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ------------------------- Pagination start----------------------- -->
+  <div class="row" *ngIf="!isRfqAvailable">
+    <div class="col-md-4">
+      <div class="dataTables_length" id="example_length">
+        <label>Show
+          <select name="example_length" aria-controls="example" class="" [(ngModel)]="pageSize" (change)="filterAll()">
+            <option value="24">24</option>
+            <option value="48">48</option>
+            <option value="96">96</option>
+          </select>
+          entries</label>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="paginations">
+        <div>
+          <div id="radioBtn" class="btn-group">
+            <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" class="btn btn-primary btn-sm notActive"
+              (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+              Previous
+            </a>
+            <a *ngFor="let page of pagesIndex" (click)="setPage(page)"
+              [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+              data-bs-toggle="fun" data-title="X">
+              {{page}}
+            </a>
+            <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+              (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+              Next
+            </a>
+          </div>
+          <input type="hidden" name="fun" id="fun">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="!isRfqAvailable">
+    <div class="col-md-12">
+      <div class="pull-right padd-right">
+        <label class="showreccount"> {{currentIndex }} of {{pageNumber}} </label>
+      </div>
+    </div>
+  </div>
+  <!-- ------------------------- Pagination end----------------------- -->
+  <div class="myRFQ-rfq-no-available" *ngIf="isRfqAvailable">
+    <div class="row" style="text-align: center;padding-top:60px">
+      <div class="col-md-12">
+        <div>
+          <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+          assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group resimg">
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-top:34px">
+      <div class="col-md-12">
+        <div class="myRFQ-noRFQActive-helper-text">You don't have any My Quotes.</div>
+      </div>
+    </div>
+    <div class="row" style="padding-top:10px">
+      <div class="col-md-12">
+        <div class="myRFQ-noRFQActive-helper-sub-text">Press Create an RFQ to get quotes from manufacturers on any of
+          your parts.</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12" style="text-align:center">
+        <button type="submit" 
+        (click)="moveToCreatRfq()" class="btn Save-Rfq-button-active">
+          <span class="button-lbl pointerCursor"> Create an RFQ </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div *ngIf="isLoader" style="padding:20px">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div> -->
+<div *ngIf="isModelShow()">
+  <app-rating-model></app-rating-model>
+</div>
+
+<p-dialog header="Award Your Parts" [(visible)]="isAward" [modal]="true" [responsive]="true"  [minY]="70" [maximizable]="true" [baseZIndex]="10000" style="width: 758;height: 500;min-width: 758;">
+  <div class="row" style="padding-bottom: 25px">
+    <div class="col-md-12" *ngIf="isAward" style="min-height: 300px;max-height: 300px">
+      <div class="row">
+        <div class="col-md-12 Comparison">
+          <p>
+            Please select a manufacturer or update the status of your part(s). Thank you for doing your part to support
+            the MFG.com marketplace.
+            The manufacturer's who quoted your part(s) greatly appreciate it.
+          </p>
+        </div>
+      </div>
+      <div *ngFor="let Part of NPartArrayColl; let i =index">
+        <div class="nawardBlock">
+          <div class="row">
+            <div class="col-md-12 f-w-600 NPartName">
+              {{Part.partName}}    
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              {{Part.partNumber}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-5">
+              <!-- <input type="text" [value]="Part.manName" class="form-control" readonly /> -->
+
+              <select class="form-control" style="padding: 2px;" [value]="Part.manId"
+                (change)="makeManufactureSelection( i ,$event.target.value, Part.rfqId, Part.rfqPartId)">
+                <option value="null">Select Manufacturer</option>
+                <option *ngFor="let supplier of Part.supplierList" [value]="supplier.id">{{supplier.name}}</option>
+              </select>
+            </div>
+            <div class="col-md-6" style="padding-right: 2px;"
+              *ngIf="Part.manId != 16 && Part.manId != 17 && Part.manId != 18 && Part.manId !=20">
+              <select class="form-control" *ngIf="(Part.quantityList.length === 0)">
+                <option value="0">Select Quantity &amp; Price</option>
+
+              </select>
+              <select class="form-control" *ngIf="(Part.quantityList.length === 1)"
+                (change)="makeQuantitySelection( Part.manId, $event.target.value,Part.rfqPartId)">
+                <option *ngFor="let quantity of Part.quantityList" [value]="quantity.rfqQuoteItemsId">
+                  {{quantity.quantityDetails}}</option>
+              </select>
+              <select class="form-control" *ngIf="(Part.quantityList.length > 1)"
+                (change)="makeQuantitySelection( Part.manId, $event.target.value,Part.rfqPartId)"
+                [ngModel]="Part.rfqQuoteItemsId">
+                <option value="0">Select Quantity &amp; Price</option>
+                <option *ngFor="let quantity of Part.quantityList" [value]="quantity.rfqQuoteItemsId">
+                  {{quantity.quantityDetails}}</option>
+              </select>
+            </div>
+            <div class="col-md-2" style="padding-right: 2px;"
+              *ngIf="Part.manId == 16 || Part.manId == 17 || Part.manId == 18 || Part.manId == 20">
+              <input type="text" class="form-control" name="quantity" [(ngModel)]="Part.unit" #qty="ngModel"
+                placeholder="Quantity" [disabled]="Part.manId == 18" onPaste="return false" style=" height: 38px;">
+              <label *ngIf="Part.manId != 18" class="pull-right optionText">Optional</label>
+              <div *ngIf="(checkZero(qty.value)) && (qty.dirty || qty.touched) && (Part.manId != 18)"
+                style="color: red;">Quantity should be greater then zero. </div>
+            </div>
+            <div class="col-md-2" style="padding-right: 2px;padding-left: 2px;"
+              *ngIf="Part.manId == 16 || Part.manId == 17 || Part.manId == 18 || Part.manId == 20">
+              <select class="form-control" [(ngModel)]="Part.awardedUnitTypeId" [disabled]="Part.manId == 18">
+                <option *ngFor="let unit  of iQuantityUnitColl" [value]="unit.id">
+                  {{ unit.value }}
+                </option>
+              </select>
+              <label *ngIf="Part.manId != 18" class="pull-right optionText">Optional</label>
+            </div>
+            <div class="col-md-3" style="padding-left: 2px;"
+              *ngIf="Part.manId == 16 || Part.manId == 17 || Part.manId == 18 || Part.manId == 20">
+              <input type="text" class="form-control" placeholder=" $ Price Per Unit" [disabled]="Part.manId == 18"
+                onPaste="return false" [(ngModel)]="Part.price" appDecimal style=" height: 38px; ">
+              <label *ngIf="Part.manId != 18" class="pull-right optionText">Optional</label>
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col-md-12 -Net-Promotor-Scor">
+              <div class="rfq-star">
+                <span style="color:#2E58D6;">{{ (Part.noOfStars)? (Part.noOfStars | number : '1.0-1') : 'n/a'}}</span>
+                <ng-template #t let-fill="fill">
+                  <span class="star" [class.full]="fill === 100">
+                    <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+                  </span>
+                </ng-template>
+                <ngb-rating [(rate)]="Part.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="text-align: right;color:#4099ff;cursor: pointer;"><span
+            (click)="removeSelectedAward(i)">Remove</span></div>
+        <div style="padding-top: 5px"></div>
+      </div>
+    </div>
+    <div class="loading" *ngIf="isCsvLoader">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-cancel" (click)="hidePopup()">Cancel</button>
+      </div>
+      <div class="col-md-6">
+        <button [disabled]="checkToDisableAwardButton()" type="button" class="btn btn-clone" label="Award"
+          (click)="awardActual()"><i class="fa fa-spinner fa-spin" *ngIf="isAwardDone"></i> Award</button>
+      </div>
+    </div>
+  </p-footer>
+</p-dialog>
+
+
+<div class="modal fade" id="archiveConfirmModel" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Archive</h4>
+        <button type="button" class="color-blue close" data-bs-dismiss="modal">
+          <i class="fa fa-times-circle" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="modal-body" class="text-left">
+        <p class="f-14; m-t-20; f-w-100 p-10">
+          Are you sure you want to archive this Quote?
+        </p>
+      </div>
+      <div class="row modal-footer1" style="padding: 10px">
+        <div class="col-md-6">
+          <button type="button" class="btn button-green-border" data-bs-dismiss="modal">
+            No
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn button-green" data-bs-dismiss="modal" (click)="setArchive()">
+            Yes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div *ngFor='let rfq of NPartArrayColl'>
+  <pre>{{rfq | json}}</pre> ************
+</div> -->
+
+<!-- new award model order-->
+  <div *ngIf="showAwardAllPopup">
+
+    <app-award-order-managment-myquotes (closeModelEventHandler)="closeAwardAllModelAward($event)" [supplierId]="manId" [rfqId]="rfqId"></app-award-order-managment-myquotes>
+  </div>
+
+  <div *ngIf="singleAwardModal">
+    <app-award-order-managment-myquotes (closeModelEventHandler)="closeAwardSingleModelAward($event)" [supplierId]="manId"  [rfqPartId]="partId" [rfqId]="rfqId"></app-award-order-managment-myquotes>
+  </div>

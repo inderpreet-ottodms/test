@@ -1,0 +1,125 @@
+<p-dialog header="Update Part Award Status" [(visible)]="isAward" [modal]="true" [responsive]="true" style="width:'758';height:500;min-width:758;"  [minY]="70" [maximizable]="true" [baseZIndex]="10000" (onHide)="hidePopup()">
+  <div class="row" style="padding-bottom: 25px">
+    <div class="col-md-12" *ngIf="isAward" style="min-height: 300px;max-height: 300px">
+      <div class="row">
+        <div class="col-md-12 Comparison">
+          <p style="margin: 1px;">
+            Please select a manufacturer to award or update the status of your part(s). </p>
+          <p>Thank you for doing your part to support the MFG.com marketplace.
+            The manufacturers who quoted your part(s) greatly appreciate it.</p>
+
+        </div>
+      </div>
+      <!-- *ngFor="let Part of NPartArrayColl; let i =index" -->
+      <div class="loading" *ngIf="isLoader">
+        <div class="loader animation-start">
+          <span class="circle delay-1 size-2"></span>
+          <span class="circle delay-2 size-4"></span>
+          <span class="circle delay-3 size-6"></span>
+          <span class="circle delay-4 size-7"></span>
+          <span class="circle delay-5 size-7"></span>
+          <span class="circle delay-6 size-6"></span>
+          <span class="circle delay-7 size-4"></span>
+          <span class="circle delay-8 size-2"></span>
+        </div>
+      </div>
+      <div *ngFor="let Part of awardingModelQuoteDetailsViewModel; let i =index">
+        <div class="nawardBlock">
+          <div class="row">
+            <div class="col-md-12 NPartName">
+              {{Part.partName}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              {{Part.partNumber}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-5">
+              <!-- <input type="text" [value]="Part.manName" class="form-control" readonly /> -->
+              <select class="form-control" style="padding: 2px;"
+                (change)=getAwardingModelQuoteQuantityData($event.target.value,Part,i)>
+                <option value="null" selected>Select Manufacturer</option>
+                <option *ngFor="let supplier of  Part.supplierList" [value]="supplier.id">{{supplier.name}}</option>
+              </select>
+            </div>
+            <div class="col-md-7" *ngIf="Part.isRfqStatus!=true">
+
+              <select class="form-control"
+                *ngIf="( Part.rfqQuoteItemList.length == 0 || Part.rfqQuoteItemList.length !== 1)"
+                [disabled]="Part.manufacturerId==0" (change)="onSelectQuantity($event.target.value,i)">
+                <option value="null" selected> Select Quantity &amp; Price</option>
+                <option [value]="data.rfqQuoteItemsId" *ngFor="let data of Part.rfqQuoteItemList"> {{data.awardedQty}}
+                  parts @ $ {{data.totalPrice}}</option>
+              </select>
+
+              <select class="form-control" *ngIf="(Part.rfqQuoteItemList.length == 1)"
+                [disabled]="Part.manufacturerId==0" (change)="onSelectQuantity($event.target.value,i)">
+                <option [value]="data.rfqQuoteItemsId" *ngFor="let data of Part.rfqQuoteItemList"> {{data.awardedQty}}
+                  parts @ $ {{data.totalPrice}}</option>
+              </select>
+            </div>
+            <div class="col-md-2" style="padding-right: 2px;" *ngIf="Part.isRfqStatus == true">
+
+              <input type="text" [(ngModel)]="Part.unit" #qty1="ngModel" pattern="^[1-9][0-9]*$" (keyup)="onKey(i)"
+                [disabled]="Part.manufacturerId == 18" class="form-control" placeholder="Quantity"
+                onPaste="return false" style="height: 38px;" />
+              <label *ngIf="Part.manufacturerId != 18" class="pull-right optionText">Optional</label>
+              <div *ngIf="qty1.hasError('pattern') && (qty1.dirty || qty1.touched)"
+                style="color: red; text-align: right">Quantity can not be zero! </div>
+            </div>
+
+            <div class="col-md-2" style="padding-right: 2px; padding-left: 2px;" *ngIf="Part.isRfqStatus == true">
+
+              <select id="jobPostingId" class="form-control" [disabled]="Part.manufacturerId == 18"
+                [(ngModel)]="Part.awardedUnitTypeId" name="partQtyUnitId">
+                <option *ngFor="let unit  of iQuantityUnitColl" [value]="unit.id">
+                  {{ unit.value }}
+                </option>
+              </select>
+              <label *ngIf="Part.manufacturerId != 18" class="pull-right optionText">Optional</label>
+            </div>
+
+            <div class="col-md-3" style="padding-left: 2px;" *ngIf="Part.isRfqStatus == true">
+
+              <input type="text" appDecimal [(ngModel)]="Part.price" (keyup)="onKey(i)"
+                [disabled]="Part.manufacturerId == 18" class="form-control" placeholder="$ Price Per Unit"
+                onPaste="return false" style="height: 38px;" />
+              <label *ngIf="Part.manufacturerId !=18" class="pull-right optionText">Optional</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 -Net-Promotor-Scor">
+              <div class="rfq-star">
+                <span style="color:#4a90e2;">{{(Part.noOfStars)? (Part.noOfStars | number : '1.0-1') : 'n/a'}}</span>
+                <ng-template #t let-fill="fill">
+                  <span class="star" [class.full]="fill === 100">
+                    <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+                  </span>
+                </ng-template>
+                <ngb-rating [(rate)]="Part.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="text-align: right;color:#4099ff;cursor: pointer;"><span (click)="removePart(i)">Remove</span></div>
+        <div style="padding-top: 5px"></div>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6" (click)="hidePopup()">
+        <button type="button" class="btn btn-cancel">Cancel</button>
+      </div>
+      <!-- awardQuoteIds.length == 0 -->
+      <!-- [disabled]="awardRequestModel.rfqQuoteItemList.length == 0 || awardRequestModel.rfqQuoteItemList.length !== awardingModelQuoteDetailsViewModel.length""  -->
+      <div class="col-md-6" (click)="awardPart()">
+        <button type="button" class="btn btn-award"
+          [disabled]="isBtnDisabledAfterOneClick || awardRequestModel.rfqQuoteItemList.length  == 0" label="Award">
+          Update Award Status</button>
+      </div>
+    </div>
+  </p-footer>
+</p-dialog>

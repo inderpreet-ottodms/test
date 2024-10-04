@@ -1,0 +1,225 @@
+<div *ngIf="!isloader">
+<div class="background-white"  (clickOutside)="clickOutside()">
+  <div class="row">
+    <div class="col-md-12 popup-svg">
+      <svg
+        class="pull-right"
+        (click)="closeBuyerProfileDrawer()"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <path
+          d="M3.21967 4.28033C2.92678 3.98744 2.92678 3.51256 3.21967 3.21967C3.51256 2.92678 3.98744 2.92678 4.28033 3.21967L12 10.9393L19.7197 3.21967C20.0126 2.92678 20.4874 2.92678 20.7803 3.21967C21.0732 3.51256 21.0732 3.98744 20.7803 4.28033L13.0607 12L20.7803 19.7197C21.0732 20.0126 21.0732 20.4874 20.7803 20.7803C20.4874 21.0732 20.0126 21.0732 19.7197 20.7803L12 13.0607L4.28033 20.7803C3.98744 21.0732 3.51256 21.0732 3.21967 20.7803C2.92678 20.4874 2.92678 20.0126 3.21967 19.7197L10.9393 12L3.21967 4.28033Z"
+          fill="black"
+        />
+      </svg>
+      <!-- <i class="fa fa-times-circle pull-right " style="color:#2E58D6 " (click)="closeBuyerProfileDrawer()"></i> -->
+      <div class="mainheading popup-title" *ngIf="isPremium()">
+        {{ iContactViewModel?.firstName + " " + iContactViewModel?.lastName }}
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="rfq-star">
+        <span class="rating-count">{{
+          iContactViewModel.noOfStars
+            ? (iContactViewModel.noOfStars | number : "1.0-1")
+            : "n/a"
+        }}</span>
+        <ng-template #t let-fill="fill">
+          <span class="star star-size" [class.full]="fill === 100">
+            <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+          </span>
+        </ng-template>
+        <ngb-rating
+          [(rate)]="iContactViewModel.noOfStars"
+          [starTemplate]="t"
+          [readonly]="true"
+          max="5"
+        ></ngb-rating>
+      </div>
+      <div
+        class="title-blue"
+        (click)="readMore(iContactViewModel.companyId)"
+        *ngIf="showViewFullProfileSideDrawer"
+      >
+        <strong>View Profile</strong>
+      </div>
+
+      <div class="row col-sm-12 col-md-12 col-xl-12 buyer-rfq-count-container">
+        <app-rfq-count-viewer
+          [buyerID]="selectedRFQ.contactIdEncrypt"
+          [showOpenRfqsSideDrawer]="showOpenRfqsSideDrawer"
+        ></app-rfq-count-viewer>
+      </div>
+
+      <div class="row m-t-16" *ngIf="isPremium()">
+        <div class="col-md-12">
+          <!-- [disabled]="!isAddratingDisabled" -->
+          <button
+            class="small-button btn"
+            type="button"
+            [disabled]="!isAddratingDisabled"
+            (click)="showRatingModel()"
+          >
+            Add your rating
+          </button>
+        </div>
+      </div>
+      <div class="row m-t-16" *ngIf="isPremium()">
+        <div class="col-md-12">
+          <!-- !iAboutUsModel.isFollowing -->
+          <button
+            *ngIf="
+              !iAboutUsModel.isFollowing && showFollowunFollowBtnSideDrawer
+            "
+            class="small-button btn"
+            type="button"
+            (click)="setFollow(iAboutUsModel.companyId)"
+          >
+            Follow Buyer
+          </button>
+          <button
+            *ngIf="iAboutUsModel.isFollowing && showFollowunFollowBtnSideDrawer"
+            class="small-button btn"
+            type="button"
+            (click)="unFollow(iAboutUsModel.companyId)"
+          >
+            Unfollow Buyer
+          </button>
+        </div>
+        <div class="m-t-16 col-md-12" *ngIf="isPremium()">
+          <button
+            class="small-button btn"
+            type="button"
+            (click)="
+              openFeedbackModel(iAboutUsModel.name, iContactViewModel.companyId)
+            "
+          >
+            Buyer Feedback
+          </button>
+        </div>
+      </div>
+      <div class="block_border"></div>
+    </div>
+
+    <div class="buyerDetails">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-1">
+            <img
+              *ngIf="isPremium()"
+              class="contact_logo img-circle"
+              [src]="contactlogo"
+              alt="contact Logo"
+              onError="this.src='assets/company/avatar-manu-basic-circle.svg'"
+              style="border: 1px solid #bec4cb"
+            />
+          </div>
+          <div class="col-md-11">
+            <div class="title-green" *ngIf="isPremium()">
+              <div class="mainheading comp-name">
+                {{ iContactViewModel?.company?.name }}
+              </div>
+              <div class="comp-info">
+                Member Since:
+                {{ iAboutUsModel?.createdDate | date : "MM/dd/yyyy" }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg_block msg_block_new" *ngIf="isPremium()">
+          <p *ngIf="showMessageBtnSideDrawer" class="buyer-info">
+            <!-- <i class="fa fa-message" ></i> -->
+             <span>
+              <svg
+                class="icon-svg"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+              >
+                <path
+                  d="M2 1C1.44772 1 1 1.44772 1 2V10C1 10.5523 1.44772 11 2 11H11.5858C12.1162 11 12.6249 11.2107 13 11.5858L15 13.5858V2C15 1.44772 14.5523 1 14 1H2ZM14 0C15.1046 0 16 0.895431 16 2V14.7929C16 15.2383 15.4614 15.4614 15.1464 15.1464L12.2929 12.2929C12.1054 12.1054 11.851 12 11.5858 12H2C0.895431 12 0 11.1046 0 10V2C0 0.895431 0.895431 0 2 0H14Z"
+                  fill="#2E58D6"
+                />
+                <path
+                  d="M3 3.5C3 3.22386 3.22386 3 3.5 3H12.5C12.7761 3 13 3.22386 13 3.5C13 3.77614 12.7761 4 12.5 4H3.5C3.22386 4 3 3.77614 3 3.5ZM3 6C3 5.72386 3.22386 5.5 3.5 5.5H12.5C12.7761 5.5 13 5.72386 13 6C13 6.27614 12.7761 6.5 12.5 6.5H3.5C3.22386 6.5 3 6.27614 3 6ZM3 8.5C3 8.22386 3.22386 8 3.5 8H8.5C8.77614 8 9 8.22386 9 8.5C9 8.77614 8.77614 9 8.5 9H3.5C3.22386 9 3 8.77614 3 8.5Z"
+                  fill="#2E58D6"
+                />
+              </svg>
+              <a
+                (click)="
+                  openMessageDrawer($event, selectedRFQ.contactIdEncrypt, currentRfqid)
+                "
+                >Message</a
+              >
+            </span>
+          </p>
+          <p *ngIf="showPhoneNoSideDrawer" class="buyer-info">
+            <!-- <i class="fa fa-phone"></i> -->
+             <span>
+            <svg
+              class="icon-svg"
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+            >
+              <path
+                d="M3.65387 1.32849C3.40343 1.00649 2.92745 0.976861 2.639 1.26531L1.60508 2.29923C1.1216 2.78271 0.94387 3.46766 1.1551 4.06847C2.00338 6.48124 3.39215 8.74671 5.32272 10.6773C7.25329 12.6078 9.51876 13.9966 11.9315 14.8449C12.5323 15.0561 13.2173 14.8784 13.7008 14.3949L14.7347 13.361C15.0231 13.0726 14.9935 12.5966 14.6715 12.3461L12.3653 10.5524C12.2008 10.4245 11.9866 10.3793 11.7845 10.4298L9.59541 10.9771C9.00082 11.1257 8.37183 10.9515 7.93845 10.5181L5.48187 8.06155C5.04849 7.62817 4.87427 6.99919 5.02292 6.40459L5.57019 4.21553C5.62073 4.01336 5.57552 3.79918 5.44758 3.63468L3.65387 1.32849ZM1.88477 0.511076C2.62689 -0.231039 3.8515 -0.154797 4.49583 0.673634L6.28954 2.97983C6.6187 3.40304 6.73502 3.95409 6.60498 4.47423L6.05772 6.66329C5.99994 6.8944 6.06766 7.13888 6.2361 7.30732L8.69268 9.7639C8.86113 9.93235 9.1056 10.0001 9.33671 9.94229L11.5258 9.39502C12.0459 9.26499 12.597 9.3813 13.0202 9.71047L15.3264 11.5042C16.1548 12.1485 16.231 13.3731 15.4889 14.1152L14.455 15.1492C13.7153 15.8889 12.6089 16.2137 11.5778 15.8512C9.01754 14.9511 6.61438 13.4774 4.56849 11.4315C2.5226 9.38562 1.04895 6.98246 0.148838 4.42225C-0.213682 3.39112 0.11113 2.28472 0.85085 1.545L1.88477 0.511076Z"
+                fill="#2E58D6"
+              />
+            </svg>
+            <span class="phone-no">{{ iContactViewModel.phoneNo }}</span>
+          </span>
+          </p>
+          <p *ngIf="showEmailSideDrawer" class="buyer-info">
+            <!-- <i class="fa fa-envelope-o"></i> -->
+             <span>
+              <svg
+                class="icon-svg"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+              >
+                <path
+                  d="M0 4C0 2.89543 0.895431 2 2 2H14C15.1046 2 16 2.89543 16 4V12C16 13.1046 15.1046 14 14 14H2C0.895431 14 0 13.1046 0 12V4ZM2 3C1.44772 3 1 3.44772 1 4V4.2169L8 8.4169L15 4.2169V4C15 3.44772 14.5523 3 14 3H2ZM15 5.3831L10.2919 8.20794L15 11.1052V5.3831ZM14.9662 12.2586L9.32583 8.7876L8 9.5831L6.67417 8.7876L1.03376 12.2586C1.14774 12.6855 1.53715 13 2 13H14C14.4628 13 14.8523 12.6855 14.9662 12.2586ZM1 11.1052L5.70808 8.20794L1 5.3831V11.1052Z"
+                  fill="#2E58D6"
+                />
+              </svg>
+              <a href="mailto:{{ iContactViewModel.emailId }}"> {{
+              iContactViewModel.emailId
+            }} </a>
+            </span>
+          </p>
+        </div>
+        <div *ngIf="isPremium()" class="updated_block_border"></div>
+        <div class="mainheading lineh">Types of RFQ’s Sourced</div>
+
+        <app-rfq-sourced-type
+          [buyerContactId]="iContactViewModel.contactId"
+        ></app-rfq-sourced-type>
+      </div>
+    </div>
+  </div>
+</div>
+<app-buyer-feedback-model
+  [companyName]="companyName"
+  [companyId]="companyId"
+  *ngIf="showFeedbackModel"
+  (modelCloseChange)="showFeedbackModel = $event"
+  (modelChangeReload)="reloadProfile($event)"
+>
+</app-buyer-feedback-model>
+</div>
+<div class="full-page-overlay myrfq" *ngIf="isloader">
+  <div class="rfqLoader"></div>
+</div>

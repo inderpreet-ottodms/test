@@ -1,0 +1,33 @@
+ngb-popover-window{
+  &:before{
+    content: "";
+    position: sticky;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 99999999;
+    display: none;
+  }
+  .arrow,.popover-header,.popover-body{
+    position: sticky;
+    z-index: 9;
+  }
+  .popover-body {
+  //  background: #fff;
+   // border-radius: 0 0 3px 3px;
+    width:226px;
+    border-radius: 1px;
+    box-shadow: 0 2px 5px 0 rgba(145, 154, 163, 0.5);
+    background-color: #ffffff;
+    border: solid 1px #bec4cb;
+    position: sticky;
+  }
+}
+.touranchor--is-active{
+  z-index: 2999;
+  position: relative;
+  padding: 5px 10px;
+  background: #fff;
+}

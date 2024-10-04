@@ -1,0 +1,36 @@
+<div class="card" style=" min-height: 205px; " *ngFor="let manufactureDetails of manufactureList;">
+    <div style="min-height: 65px;">
+      <img [src]="manufactureDetails.supplierCompanyLogo" onError="this.src='assets/company/avatar-manu-basic.svg'">
+      <div>
+        <p class="name f-16 f-w-600 word-break" >
+          <span placement="top" data-container="body" ngbTooltip="{{ manufactureDetails.supplierCompany}}">
+              {{ manufactureDetails.supplierCompany  | dotLimit:'25'}}
+          </span>
+        </p>
+        <p class="name f-12 word-break" >{{ manufactureDetails.supplierLocation }}</p>
+      </div>
+    </div>
+    <div class="m-t-10" style="min-height: 65px;">
+      <p> {{ manufactureDetails.ratingMessage }}</p>
+    </div>
+    <div class="m-t-15" style="display:flex;justify-content:space-between;">
+      <button class="btn-noThanks" (click)="setStatus(manufactureDetails)">No Thanks</button>
+      <button  class="btn-addRating" (click)="showRatingModel(manufactureDetails)">Add Ratings</button>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="manufactureList.length === 0">
+    <p class="p-t-20 p-l-10 p-b-20 p-r-10 gray-color f-16 f-w-50">No manufacturers to rate yet.</p>
+  </div>
+  <div *ngIf="loader" class="loading">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>

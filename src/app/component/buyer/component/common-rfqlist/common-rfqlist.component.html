@@ -1,0 +1,1167 @@
+<div class="row" *ngIf="!isBuyerCommpleteProfile()">
+  <div [ngClass]="isSidePanel() ? 'col-md-8 col-9' : 'col-md-12 col-12'">
+    {{ checkIfFollowUnFollowChange() }}
+    <div class="bg-white p-10 rounded shadow">
+      <div class="row">
+        <div class="col-md-6"></div>
+        <div class="col-md-6 pull-right" style="text-align: end">
+          <i [ngClass]="
+              isTilesView
+                ? 'ti-layout-grid2 my-RFQ-list-view active'
+                : 'ti-layout-grid2 my-RFQ-list-view '
+            " (click)="openTilesView()"></i>
+          <i [ngClass]="
+              isGridView
+                ? 'ti-list my-RFQ-list-view active'
+                : 'ti-list my-RFQ-list-view'
+            " (click)="openGridView()"></i>
+        </div>
+      </div>
+      <br />
+      <div class="row">
+        <div class="col-md-2 col-sm-3" *ngIf="RfqStatus == 6">
+          <select class="filter" [(ngModel)]="stateFilterValue" (change)="filterAll()" [disabled]="isLoader">
+            <option value="0">All RFQs</option>
+            <option value="23">Shop IQ</option>
+            <option value="24">Declined Quote</option>
+          </select>
+        </div>
+        <div class="col-md-2 col-sm-3" *ngIf="RfqStatus == 4">
+          <select class="filter" [(ngModel)]="stateFilterValue" (change)="filterAll()" [disabled]="isLoader">
+            <option value="0">All RFQs</option>
+            <option value="25">Open</option>
+            <option value="26">Closed</option>
+            <option value="27">Shop IQ</option>
+            <option value="30">RFQs with no quotes</option>
+            <option value="31">RFQs with less than 3 quotes</option>
+          </select>
+        </div>
+        <div class="col-md-2 col-sm-3" *ngIf="RfqStatus == 8">
+          <select class="filter" [(ngModel)]="stateFilterValue" (change)="filterAll()" [disabled]="isLoader">
+            <option value="0">All RFQs</option>
+            <option value="32">RFQs with no quotes</option>
+            <option value="33">RFQs with less than 3 quotes</option>
+          </select>
+        </div>
+        <div [ngClass]="
+            RfqStatus == 6 || RfqStatus == 4 || RfqStatus == 8 || RfqStatus == 41
+              ? 'col-md-2 col-sm-3'
+              : 'col-md-3 col-sm-3'
+          ">
+          <select class="recent" [disabled]="isLoader" [(ngModel)]="sortByFilterValue" (change)="setDefaultFilter()">
+            <option value="">Sort By</option>
+            <option *ngIf="RfqStatus == 8" value="buyer">Buyer</option>
+            <option value="quantity">Quantity</option>
+            <option value="material">Material</option>
+            <option value="process">Process</option>
+            <option value="postprocess">Post Process</option>
+            <option value="quoteby">Close Date</option>
+          </select>
+        </div>
+        <div [ngClass]="
+            RfqStatus == 6 || RfqStatus == 4 || RfqStatus == 8 || RfqStatus == 41
+              ? 'col-md-2 col-sm-3'
+              : 'col-md-3 col-sm-3'
+          ">
+          <select class="recent" [disabled]="isLoader" [(ngModel)]="sortFilterValue" (change)="filterAll()">
+            <option *ngIf="sortByFilterValue == 'quoteby' || sortByFilterValue == ''" value="Oldest">
+              Oldest
+            </option>
+            <option *ngIf="sortByFilterValue == 'quoteby' || sortByFilterValue == ''" value="Recent">
+              Recent
+            </option>
+            <option *ngIf="
+                sortByFilterValue == 'buyer' ||
+                sortByFilterValue == 'material' ||
+                sortByFilterValue == 'process' ||
+                sortByFilterValue == 'postprocess'
+              " value="A - Z">
+              A - Z
+            </option>
+            <option *ngIf="
+                sortByFilterValue == 'buyer' ||
+                sortByFilterValue == 'material' ||
+                sortByFilterValue == 'process' ||
+                sortByFilterValue == 'postprocess'
+              " value="Z - A">
+              Z - A
+            </option>
+            <option *ngIf="sortByFilterValue == 'quantity'" value="high">
+              High
+            </option>
+            <option *ngIf="sortByFilterValue == 'quantity'" value="low">
+              Low
+            </option>
+            <!-- <option  value="Shop IQ"></option> -->
+          </select>
+        </div>
+        <div [ngClass]="
+            RfqStatus == 6 || RfqStatus == 4 || RfqStatus == 8 || RfqStatus == 41
+              ? 'col-md-2 col-sm-3'
+              : 'col-md-3 col-sm-3'
+          ">
+          <input type="text" readonly="readonly" [value]="selectedProcessName" class="form-control" data-bs-toggle="modal"
+            data-bs-target="#myModal" />
+        </div>
+        <div [ngClass]="
+            RfqStatus == 6 || RfqStatus == 4 || RfqStatus == 8 || RfqStatus == 41
+              ? 'col-md-4 col-sm-3 col-xs-12 pull-right'
+              : 'col-md-3 col-sm-3 col-xs-12 pull-right'
+          ">
+          <div class="input-container">
+            <i class="fa fa-search icon-search" (click)="filterAll()" placement="top" container="body"
+              ngbTooltip="Search"></i>
+            <input class="search search-text" [disabled]="isLoader" [(ngModel)]="searchFilterValue" placeholder="Search"
+              type="text" (keypress)="searchByKey($event)" (input)="checkSearch(searchFilterValue)" />
+            <i class="fa fa-times-circle icon" (click)="removeTextValue()" placement="top" container="body"
+              ngbTooltip="Remove Text"></i>
+          </div>
+        </div>
+      </div>
+      {{ IsNpsdataback() }}
+
+      <!-- Old lines -->
+      <div *ngIf="isTilesView == true">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <br />
+              <div [ngClass]="isSidePanel() ? 'col-md-6' : 'col-md-3'" *ngFor="let rfq of items; let i = index"
+                id="{{ rfq.rfqId }}">
+                <div class="card1" [ngClass]="rfq.rfqId === currentRfq() ? 'activePart' : ''">
+                  <div class="box-1" *ngIf="rfq.isMfgCommunityRfq == true">
+                    <div class="ribbon ribbon-top-left">
+                      <span>Directory</span>
+                    </div>
+                  </div>
+                  <div class="box cursor-pointer">
+                    <div class="quote-date img-space" style="text-align: right" (click)="
+                        openSidePanel(
+                          rfq.rfqId,
+                          rfq.isRfqLike,
+                          rfq.isRfqDisLike,
+                          rfq.rfqStatusId
+                        )
+                      ">
+                      <ng-template #growthpack>
+                        <div><span class="unlock-growth">Unlock with Growth Package</span><br><span style="width: 800px;">
+                          With the growth package you have the
+                             ability to unlock a certain amount of RFQs each month.
+                             <!-- <span class="learn-more"> Learn more</span> -->
+                        </span> 
+                        </div>
+                  </ng-template>
+                  <!-- Need to add condition here -->
+                  <div>
+                      <span class="icon-img" *ngIf="rfq.actionForGrowthPackage == 'Unlock Rfq Button' && accountType == 'Growth Package'"><img src="assets/images/growth-package/Growth Icon.png" [ngbTooltip]="growthpack"></span>
+                      <span class="icon-img" *ngIf="rfq.isRfqWithMissingInfo"><img src="assets/Shapeways_10PartialRFQs.svg" [ngbTooltip]="missingInfo" style="height: 20px;"></span>
+                      <span class="icon-img" *ngIf="rfq.withOrderManagement"><img src="assets/images/Badge.png" [ngbTooltip]="orderManagement" style="margin-left: 4px;"></span>
+                      <ng-template #orderManagement>
+                        <div><span class="unlock-growth">This RFQ requires Order Management on MFG.
+                        </span> 
+                        </div>
+                     </ng-template>
+                      <ng-template #missingInfo>
+                        <div><span class="unlock-growth">RFQ may be missing info. Please contact the buyer before quoting.
+                             <!-- <span class="learn-more"> Learn more</span> -->
+                        </span> 
+                        </div>
+                     </ng-template>
+                      <ng-template #htmlContent>
+                        <div *ngIf="!checkForDay(rfq.quotesNeededBy)">
+                          Close Date
+                          {{ utcDate(rfq.quotesNeededBy) | date: "MM/dd/yyyy" }}
+                        </div>
+                        <div *ngIf="checkForDay(rfq.quotesNeededBy)">
+                          Close Date
+                        </div>
+                        <div *ngIf="
+                            rfq.releaseDate !== '' && rfq.releaseDate !== null
+                          ">
+                          Release Date
+                          {{ rfq.releaseDate | date: "MM/dd/yyyy" }}
+                        </div>
+                      </ng-template>
+                      </div>
+                      <div>
+                      <a *ngIf="
+                          rfq.quotesNeededBy !== null &&
+                          rfq.quotesNeededBy !== '' &&
+                          rfq.releaseDate !== '' &&
+                          rfq.releaseDate !== null
+                        " placement="top" data-container="body" [ngbTooltip]="htmlContent">
+                        <span>Quote by: </span>
+                        <span *ngIf="!checkForDay(rfq.quotesNeededBy)" style="color: #000">
+                          {{
+                            utcDate(rfq.quotesNeededBy) | date: "MM/dd/yyyy"
+                          }}</span>
+                          <ngx-countdown *ngIf="checkForDay(rfq.quotesNeededBy)"   [time]="duration"></ngx-countdown>
+                      </a>
+                      <a *ngIf="
+                          rfq.quotesNeededBy !== null &&
+                          rfq.quotesNeededBy !== '' &&
+                          (rfq.releaseDate === '' || rfq.releaseDate === nul)
+                        " placement="top" data-container="body" [ngbTooltip]="htmlContent">
+                        <span>Quote by:</span>
+                        <span *ngIf="!checkForDay(rfq.quotesNeededBy)" style="color: #000">
+                          {{
+                            utcDate(rfq.quotesNeededBy) | date: "MM/dd/yyyy"
+                          }}</span>
+
+                      </a>
+                      <a *ngIf="rfq.quotesNeededBy === null">MM/dd/yyyy</a>
+                      </div>
+                    </div>
+                    <div *ngIf="RfqStatus == 6 || RfqStatus == 41" style="text-align: right">
+                      <div *ngIf="rfq.isViewed">
+                        <i class="fa fa-eye eye" container="body" ngbTooltip="Viewed"></i>
+                      </div>
+                      <div *ngIf="!rfq.isViewed">
+                        <i class="fa fa-eye-slash eye-slash" container="body" ngbTooltip="Not Viewed"></i>
+                      </div>
+                    </div>
+                    <div style="text-align: center" class="img-logo">
+                      <div *ngIf="!isPremium()" class="col-md-12 site-logo"></div>
+                      <div *ngIf="
+                          (isPremium() &&
+                          RfqStatus == 4 &&
+                          rfq.isSubscriptionSupplier && !rfq.isAllowQuoting) || ((rfq.actionForGrowthPackage == 'Upgrade to Quote' || rfq.actionForGrowthPackage == 'Unlock Rfq Button')&& accountType == 'Growth Package')
+                        " class="col-md-12 site-logo"></div>
+                      <img *ngIf="(isPremium() && RfqStatus != 4)&& (rfq.actionForGrowthPackage === 'No Action')" (click)="
+                          showBuyerProfile(rfq.contactIdEncrypt, rfq.rfqId)
+                        " style="
+                          background-color: #fff;
+                          border-radius: 50%;
+                          border: 1px solid #bec4cb;
+                        " src="{{
+                          rfq.companyLogoPath
+                            ? defaultAwsPath + rfq.companyLogoPath
+                            : 'assets/company/avatar-manu-basic-circle.svg'
+                        }}" />
+                      <img class="rfq-buyer-logo" *ngIf="
+                          RfqStatus == 4 &&
+                          isPremium() &&
+                          ((rfq.isSubscriptionSupplier && rfq.isAllowQuoting) ||
+                            !rfq.isSubscriptionSupplier) && (rfq.actionForGrowthPackage === 'No Action')
+                        " (click)="
+                          showBuyerProfile(rfq.contactIdEncrypt, rfq.rfqId)
+                        " src="{{
+                          rfq.companyLogoPath
+                            ? defaultAwsPath + rfq.companyLogoPath
+                            : 'assets/company/avatar-manu-basic.svg'
+                        }}" />
+                    </div>
+                    <div class="col-md-12 company-name">
+                      <!-- copy condition -->
+                      <h6 *ngIf="
+                          !isPremium() ||(rfq.actionForGrowthPackage == 'Upgrade to Quote' && accountType == 'Growth Package')||
+                          (RfqStatus == 4 &&
+                            isPremium() &&
+                            rfq.isSubscriptionSupplier &&
+                            !rfq.isAllowQuoting)
+                        " style="cursor: auto">
+                        <app-upgrade-account-btn [quoteRFQ]=true [RfqId]="currentRfqId"></app-upgrade-account-btn>
+                      </h6>
+                      <button *ngIf="rfq.actionForGrowthPackage == 'Unlock Rfq Button' && accountType == 'Growth Package'" (click)="setRfdId(rfq.rfqId)" class="button-green" style="width: 70%;padding: 5px 6px;" data-bs-target="#cacheConfirmModel" data-bs-toggle="modal" type="button">
+                        <span style="margin-right: 10px;"><img src="assets/images/growth-package/Growth Icon.png">
+                        </span>Unlock RFQ
+                    </button>
+                      <h6 *ngIf="(isPremium() && RfqStatus != 4) && rfq.actionForGrowthPackage === 'No Action'" class="cursor-pointer text-truncate"
+                        (click)=" showBuyerProfile(rfq.contactIdEncrypt, rfq.rfqId) " placement="top"
+                        data-container="body" ngbTooltip="{{ rfq.companyName }}">
+                        {{ rfq.companyName }}
+                      </h6>
+
+                      <h6 *ngIf="
+                          (isPremium() &&
+                          RfqStatus == 4 &&
+                          ((rfq.isSubscriptionSupplier && rfq.isAllowQuoting) ||
+                            !rfq.isSubscriptionSupplier)) && rfq.actionForGrowthPackage === 'No Action'
+                        " (click)="
+                          showBuyerProfile(rfq.contactIdEncrypt, rfq.rfqId)
+                        " class="cursor-pointer text-truncate" placement="top" data-container="body"
+                        ngbTooltip="{{ rfq.companyName }}">
+                        {{ rfq.companyName}}
+                      </h6>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="rfq-star">
+                        <span style="color: #212A37">{{
+                          rfq.noOfStars
+                            ? (rfq.noOfStars | number: "1.0-1")
+                            : "n/a"
+                        }}</span>
+                        <ng-template #t let-fill="fill">
+                          <span class="star" [class.full]="fill === 100">
+                            <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+                          </span>
+                        </ng-template>
+                        <ngb-rating [(rate)]="rfq.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <span class="badge badge-pill">{{ rfq.state }} , {{ rfq.country }}
+                      </span>
+                      <br />
+                    </div>
+                    <hr />
+                    <div (click)="
+                        openSidePanel(
+                          rfq.rfqId,
+                          rfq.isRfqLike,
+                          rfq.isRfqDisLike,
+                          rfq.rfqStatusId
+                        )
+                      ">
+                      <img class="img" *ngIf="
+                          (!rfq.rfqThumbnail || rfq.rfqThumbnail === '') &&
+                          !rfq.isMfgCommunityRfq
+                        " src="assets/supplier/3-d-big.png" srcset="
+                          assets/supplier/3-d-big@2x.png 2x,
+                          assets/supplier/3-d-big@3x.png 3x
+                        " />
+                      <img class="img" *ngIf="
+                          (!rfq.rfqThumbnail || rfq.rfqThumbnail === '') &&
+                          rfq.isMfgCommunityRfq
+                        " src="assets/directrfq.png" srcset="
+                          assets/directrfq@2x.png 2x,
+                          assets/directrfq@3x.png 3x
+                        " />
+
+                      <img *ngIf="!(!rfq.rfqThumbnail || rfq.rfqThumbnail === '')"
+                        [src]="getLoadableImg(rfq.rfqThumbnail)" class="img-circle box-fit img" />
+                    </div>
+                    <h2 class="cursor-pointer text-truncate" placement="top" data-container="body"
+                      ngbTooltip="{{ rfq.rfqName }}" (click)="goToRfqDdetails(rfq.rfqId)">
+                      {{ rfq.rfqName }}
+                      <br />
+                      <span>RFQ #{{ rfq.rfqId }} - ({{ rfq.rfqPartCount }}) Parts
+                      </span>
+                    </h2>
+                    <hr (click)="
+                        openSidePanel(
+                          rfq.rfqId,
+                          rfq.isRfqLike,
+                          rfq.isRfqDisLike,
+                          rfq.rfqStatusId
+                        )
+                      " />
+                    <p (click)="
+                        openSidePanel(
+                          rfq.rfqId,
+                          rfq.isRfqLike,
+                          rfq.isRfqDisLike,
+                          rfq.rfqStatusId
+                        )
+                      " placement="top" container="body" ngbTooltip=" {{ getQuantityToolTip(rfq) }}">
+                      {{ rfq.partQty }} {{ rfq.partQtyUnit | Na }}
+                    </p>
+                    <hr (click)="
+                        openSidePanel(
+                          rfq.rfqId,
+                          rfq.isRfqLike,
+                          rfq.isRfqDisLike,
+                          rfq.rfqStatusId
+                        )
+                      " />
+                    <p (click)="
+                        openSidePanel(
+                          rfq.rfqId,
+                          rfq.isRfqLike,
+                          rfq.isRfqDisLike,
+                          rfq.rfqStatusId
+                        )
+                      ">
+                      {{ rfq.partsMaterialName | dotLimit: "23" }}
+                    </p>
+                    <hr (click)="
+                        openSidePanel(
+                          rfq.rfqId,
+                          rfq.isRfqLike,
+                          rfq.isRfqDisLike,
+                          rfq.rfqStatusId
+                        )
+                      " />
+                    <p (click)="
+                        openSidePanel(
+                          rfq.rfqId,
+                          rfq.isRfqLike,
+                          rfq.isRfqDisLike,
+                          rfq.rfqStatusId
+                        )
+                      ">
+                      {{ rfq.partCategoryName | dotLimit: "23" }}
+                    </p>
+                    <hr (click)="
+                        openSidePanel(
+                          rfq.rfqId,
+                          rfq.isRfqLike,
+                          rfq.isRfqDisLike,
+                          rfq.rfqStatusId
+                        )
+                      " />
+                    <p (click)="
+                        openSidePanel(
+                          rfq.rfqId,
+                          rfq.isRfqLike,
+                          rfq.isRfqDisLike,
+                          rfq.rfqStatusId
+                        )
+                      "
+                      [ngStyle]="{'margin-bottom':rfq.postProductionProcessName == null || rfq.postProductionProcessName == '' ? '24px' : '0px' }"
+                      >
+                      {{ rfq.postProductionProcessName == null || rfq.postProductionProcessName == '' ? '' : rfq.postProductionProcessName | dotLimit: "23" }}
+                    </p>
+                  </div>
+                  <div class="bottomaction">
+                    <ul *ngIf="RfqStatus == 4">
+                      <li *ngIf="!rfq.isRfqLike">
+                        <a>
+                          <i class="fa fa-thumbs-o-up" aria-hidden="true" placement="top" container="body"
+                            ngbTooltip="Like RFQ"></i>
+                        </a>
+                      </li>
+                      <li *ngIf="rfq.isRfqLike">
+                        <a (click)="
+                            removelikeRfq(
+                              rfq.rfqId,
+                              rfq.isRfqLike,
+                              rfq.isRfqDisLike,
+                              i
+                            )
+                          " style="cursor: default !important">
+                          <i class="fa fa-thumbs-up" ngbTooltip="Remove Like RFQ" placement="top" container="body"
+                            aria-hidden="true"></i>
+                        </a>
+                      </li>
+                      <li *ngIf="rfq.specialInstructions">
+                        <a><i placement="top" [ngbPopover]="popAttachment" container="body" #q="ngbPopover"
+                            (document:click)="q.close()" (click)="$event.stopPropagation()" class="fa fa-info-circle"
+                            aria-hidden="true"></i></a>
+                      </li>
+                      <ng-template #popAttachment>
+                        <p *ngIf="rfq.specialInstructions">
+                          {{ rfq.specialInstructions }} … <br />
+                          <span style="color: #2E58D6; cursor: pointer" (click)="goToRfqDdetails(rfq.rfqId)">Read
+                            more</span>
+                        </p>
+                        <p *ngIf="!rfq.specialInstructions">
+                          <b>There Is No Special Instruction</b>
+                        </p>
+                      </ng-template>
+
+                      <li class="pull-right" *ngIf="rfq.isRfqLike">
+                        <a (click)="disLikeMyLikeRfq(rfq.rfqId, i)">
+                          <i class="fa fa-thumbs-o-down" aria-hidden="true" placement="top" container="body"
+                            ngbTooltip="Disike RFQ"></i>
+                        </a>
+                      </li>
+                      <li class="pull-right" *ngIf="!rfq.isRfqLike">
+                        <a (click)="disLikeMyLikeRfq(rfq.rfqId, i)">
+                          <i class="fa fa-thumbs-down" aria-hidden="true" placement="top" container="body"
+                            ngbTooltip="Remove Dislike RFQ"></i>
+                        </a>
+                      </li>
+                    </ul>
+                    <ul *ngIf="RfqStatus != 4">
+                      <li *ngIf="!rfq.isRfqLike">
+                        <a (click)="
+                            likeRfq(rfq.rfqId, rfq.isRfqLike, rfq.isRfqDisLike)
+                          ">
+                          <i class="fa fa-thumbs-o-up" aria-hidden="true" placement="top" container="body"
+                            ngbTooltip="Like RFQ"></i>
+                        </a>
+                      </li>
+                      <li *ngIf="rfq.isRfqLike">
+                        <a (click)="
+                            removelikeRfq(
+                              rfq.rfqId,
+                              rfq.isRfqLike,
+                              rfq.isRfqDisLike
+                            )
+                          ">
+                          <i class="fa fa-thumbs-up" aria-hidden="true" placement="top" container="body"
+                            ngbTooltip="Remove Like RFQ"></i>
+                        </a>
+                      </li>
+                      <li *ngIf="RfqStatus == 13">
+                        <a data-bs-target="#removeConfirmModel" data-bs-toggle="modal" (click)="getRfqId(rfq.rfqId)">
+                          <i class="fa fa-trash cursor-pointer" placement="top" container="body"
+                            ngbTooltip="Remove RFQ"></i>
+                        </a>
+                      </li>
+                      <li *ngIf="rfq.specialInstructions">
+                        <a>
+                          <i placement="top" [ngbPopover]="popAttachment" container="body" #q="ngbPopover"
+                            (document:click)="q.close()" (click)="$event.stopPropagation()" class="fa fa-info-circle"
+                            aria-hidden="true"></i>
+                        </a>
+                      </li>
+                      <ng-template #popAttachment>
+                        <p *ngIf="rfq.specialInstructions">
+                          {{ rfq.specialInstructions }} … <br />
+                          <span style="color: #2E58D6; cursor: pointer" (click)="goToRfqDdetails(rfq.rfqId)">Read
+                            more</span>
+                        </p>
+                        <p *ngIf="!rfq.specialInstructions">
+                          <b>There Is No Special Instruction</b>
+                        </p>
+                      </ng-template>
+
+                      <li class="pull-right" *ngIf="rfq.isRfqDisLike">
+                        <a (click)="
+                            removeDisLikeRfq(
+                              rfq.rfqId,
+                              rfq.isRfqLike,
+                              rfq.isRfqDisLike
+                            )
+                          ">
+                          <i class="fa fa-thumbs-down" aria-hidden="true" placement="top" container="body"
+                            ngbTooltip="Remove Dislike RFQ"></i>
+                        </a>
+                      </li>
+                      <li class="pull-right" *ngIf="!rfq.isRfqDisLike">
+                        <a (click)="
+                            disLikeRfq(
+                              rfq.rfqId,
+                              rfq.isRfqLike,
+                              rfq.isRfqDisLike
+                            )
+                          ">
+                          <i class="fa fa-thumbs-o-down" aria-hidden="true" placement="top" container="body"
+                            ngbTooltip="Dislike RFQ"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isGridView == true">
+        <div *ngIf="!isRfqAvailable">
+          <div class="row">
+            <div class="col-md-4">
+              <span style="font-weight: bold; margin-left: 20px">Company</span>
+            </div>
+            <div class="col-md-8">
+              <span style="font-weight: bold">RFQ Info</span>
+            </div>
+          </div>
+          <div class="row rfq-row" *ngFor="let rfq of items; let i = index" id="{{ rfq.rfqId }}"
+            [ngClass]="rfq.rfqId === currentRfq() ? 'activePart' : ''">
+            <div class="box-1" *ngIf="rfq.isMfgCommunityRfq == true">
+              <div class="ribbon ribbon-top-left"><span>Directory</span></div>
+            </div>
+            <div class="col-md-4 rfq-border">
+              <div class="row" style="padding: 5px 10px">
+                <div class="col-md-12 rfq-quote-date img-space">
+                  <ng-template #growthpack>
+                    <div><span class="unlock-growth">Unlock with Growth Package</span><br><span style="width: 800px;">
+                      With the growth package you have the
+                         ability to unlock a certain amount of RFQs each month.
+                         <!-- <span class="learn-more"> Learn more</span> -->
+                    </span> 
+                    </div>
+                  </ng-template>
+                  <!-- Need to add condition here -->
+                  <div>
+                  <span class="icon-img" *ngIf="rfq.actionForGrowthPackage == 'Unlock Rfq Button' && accountType == 'Growth Package'"><img src="assets/images/growth-package/Growth Icon.png" [ngbTooltip]="growthpack"></span>
+                  <span class="icon-img" *ngIf="rfq.isRfqWithMissingInfo"><img src="assets/Shapeways_10PartialRFQs.svg" [ngbTooltip]="missingInfo" style="height: 20px;"></span>
+                  <span class="icon-img" *ngIf="rfq.withOrderManagement"><img src="assets/images/Badge.png" [ngbTooltip]="orderManagement" style="margin-left: 4px;"></span>
+                      <ng-template #orderManagement>
+                        <div><span class="unlock-growth">This RFQ requires Order Management on MFG.
+                        </span> 
+                        </div>
+                     </ng-template>
+                  <ng-template #missingInfo>
+                    <div><span class="unlock-growth">RFQ may be missing info. Please contact the buyer before quoting.
+                         <!-- <span class="learn-more"> Learn more</span> -->
+                    </span> 
+                    </div>
+                 </ng-template>
+                  <ng-template #htmlContent>
+                    <div *ngIf="!checkForDay(rfq.quotesNeededBy)">
+                      Close Date
+                      {{ utcDate(rfq.quotesNeededBy) | date: "MM/dd/yyyy" }}
+                    </div>
+                    <div *ngIf="checkForDay(rfq.quotesNeededBy)">
+                      Close Date
+                    </div>
+                    <div *ngIf="rfq.releaseDate !== '' && rfq.releaseDate !== null">
+                      Release Date {{ rfq.releaseDate | date: "MM/dd/yyyy" }}
+                    </div>
+                  </ng-template>
+                  </div>
+                  <div>
+                  <span *ngIf="
+                      rfq.quotesNeededBy !== null &&
+                      rfq.quotesNeededBy !== '' &&
+                      rfq.releaseDate !== '' &&
+                      rfq.releaseDate !== null
+                    " placement="top" data-container="body" [ngbTooltip]="htmlContent">
+                    <span>Quote by: </span>
+                    <span *ngIf="!checkForDay(rfq.quotesNeededBy)" style="color: #000">
+                      {{
+                        utcDate(rfq.quotesNeededBy) | date: "MM/dd/yyyy"
+                      }}</span>
+                  </span>
+                  <span *ngIf="
+                      rfq.quotesNeededBy !== null &&
+                      rfq.quotesNeededBy !== '' &&
+                      (rfq.releaseDate === '' || rfq.releaseDate === nul)
+                    " placement="top" data-container="body" [ngbTooltip]="htmlContent">
+                    <span>Quote by: </span>
+                    <span *ngIf="!checkForDay(rfq.quotesNeededBy)" style="color: #000">
+                      {{
+                        utcDate(rfq.quotesNeededBy) | date: "MM/dd/yyyy"
+                      }}</span>
+                  </span>
+                  <span *ngIf="rfq.quotesNeededBy === null">MM/dd/yyyy</span>
+                </div>
+                </div>
+                <div [ngClass]="isSidePanel() ? 'col-md-3' : 'col-md-2'" style="padding: 0px">
+                  <div *ngIf="!isPremium()"
+                    class="col-md-12 rfq-buyer-logo site-logo"></div>
+
+                  <div *ngIf="
+                  (isPremium() &&
+                  RfqStatus == 4 &&
+                  rfq.isSubscriptionSupplier && !rfq.isAllowQuoting) || ((rfq.actionForGrowthPackage == 'Upgrade to Quote' || rfq.actionForGrowthPackage == 'Unlock Rfq Button')&& accountType == 'Growth Package')
+                    " class="col-md-12 site-logo"></div>
+
+                  <img class="rfq-buyer-logo" *ngIf="(isPremium() && RfqStatus != 4)&& (rfq.actionForGrowthPackage === 'No Action')"
+                    (click)="showBuyerProfile(rfq.contactIdEncrypt, rfq.rfqId)" src="{{
+                      rfq.companyLogoPath
+                        ? defaultAwsPath + rfq.companyLogoPath
+                        : 'assets/company/avatar-manu-basic.svg'
+                    }}" />
+
+                  <img class="rfq-buyer-logo" *ngIf="
+                  RfqStatus == 4 &&
+                  isPremium() &&
+                  ((rfq.isSubscriptionSupplier && rfq.isAllowQuoting) ||
+                    !rfq.isSubscriptionSupplier) && (rfq.actionForGrowthPackage === 'No Action')
+                    " (click)="showBuyerProfile(rfq.contactIdEncrypt, rfq.rfqId)" src="{{
+                      rfq.companyLogoPath
+                        ? defaultAwsPath + rfq.companyLogoPath
+                        : 'assets/company/avatar-manu-basic.svg'
+                    }}" />
+                </div>
+                <div [ngClass]="isSidePanel() ? 'col-md-9' : 'col-md-10'" class="col-md-9 company-name"
+                  style="margin-bottom: 0px">
+                  <h6 *ngIf="
+                  !isPremium() ||(rfq.actionForGrowthPackage == 'Upgrade to Quote' && accountType == 'Growth Package')||
+                  (RfqStatus == 4 &&
+                    isPremium() &&
+                    rfq.isSubscriptionSupplier &&
+                    !rfq.isAllowQuoting)
+                    " style="cursor: auto">
+                    <app-upgrade-account-btn [quoteRFQ]=true [RfqId]="currentRfqId"></app-upgrade-account-btn>
+                  </h6>
+                  <button *ngIf="rfq.actionForGrowthPackage == 'Unlock Rfq Button' && accountType == 'Growth Package'" (click)="setRfdId(rfq.rfqId)" class="button-green" style="width: 70%;padding: 5px 6px;" data-bs-target="#cacheConfirmModel" data-bs-toggle="modal" type="button">
+                    <span style="margin-right: 10px;"><img src="assets/images/growth-package/Growth Icon.png">
+                    </span>Unlock RFQ
+                </button>
+                  <h6 *ngIf="(isPremium() && RfqStatus != 4) && rfq.actionForGrowthPackage === 'No Action'" class="cursor-pointer text-truncate"
+                    (click)="showBuyerProfile(rfq.contactIdEncrypt, rfq.rfqId)" placement="top" data-container="body"
+                    ngbTooltip="{{ rfq.companyName }}">
+                    {{ rfq.companyName }}
+                  </h6>
+
+                  <h6 *ngIf="
+                      (isPremium() &&
+                      RfqStatus == 4 &&
+                      ((rfq.isSubscriptionSupplier && rfq.isAllowQuoting) ||
+                        !rfq.isSubscriptionSupplier)) && rfq.actionForGrowthPackage === 'No Action'
+                    " (click)="showBuyerProfile(rfq.contactIdEncrypt, rfq.rfqId)" class="cursor-pointer text-truncate"
+                    placement="top" data-container="body" ngbTooltip="{{ rfq.companyName }}">
+                    {{ rfq.companyName }}
+                  </h6>
+
+                  <div class="rfq-star">
+                    <span style="color: #212A37; margin-left: 5px">{{
+                      rfq.noOfStars ? (rfq.noOfStars | number: "1.0-1") : "n/a"
+                    }}</span>
+                    <ng-template #t let-fill="fill">
+                      <span class="star" [class.full]="fill === 100">
+                        <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+                      </span>
+                    </ng-template>
+                    <ngb-rating [(rate)]="rfq.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+                  </div>
+                  <span class="badge badge-pill" style="color: #000">{{ rfq.state }} , {{ rfq.country }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 rfq-border" style="border-right: 0px" (click)="
+                openSidePanel(
+                  rfq.rfqId,
+                  rfq.isRfqLike,
+                  rfq.isRfqDisLike,
+                  rfq.rfqStatusId
+                )
+              ">
+              <div class="row" style="padding: 5px 10px">
+                <div class="col-md-2">
+                  <div style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      height: 100%;
+                    ">
+                    <img *ngIf="
+                        (!rfq.rfqThumbnail || rfq.rfqThumbnail === '') &&
+                        !rfq.isMfgCommunityRfq
+                      " src="assets/supplier/3-d-big.png" srcset="
+                        assets/supplier/3-d-big@2x.png 2x,
+                        assets/supplier/3-d-big@3x.png 3x
+                      " style="
+                        width: 75px;
+                        height: 75px;
+                        border-radius: 50%;
+                        border: 1px solid #bec4cb;
+                      " />
+                    <img *ngIf="
+                        (!rfq.rfqThumbnail || rfq.rfqThumbnail === '') &&
+                        rfq.isMfgCommunityRfq
+                      " src="assets/directrfq.png" srcset="
+                        assets/directrfq@2x.png 2x,
+                        assets/directrfq@3x.png 3x
+                      " style="
+                        width: 75px;
+                        height: 75px;
+                        border-radius: 50%;
+                        border: 1px solid #bec4cb;
+                      " />
+                    <img *ngIf="!(!rfq.rfqThumbnail || rfq.rfqThumbnail === '')"
+                      [src]="getLoadableImg(rfq.rfqThumbnail)" class="box-fit img" style="
+                        width: 75px;
+                        height: 75px;
+                        border-radius: 50%;
+                        border: 1px solid #bec4cb;
+                      " />
+                  </div>
+                </div>
+                <div class="col-md-4 company-name cursor-pointer" style="margin-bottom: 0px; margin-top: 15px"
+                  (click)="goToRfqDdetails(rfq.rfqId)">
+                  <h6 class="m-l-0 text-truncate" placement="top" data-container="body" ngbTooltip="{{ rfq.rfqName }}">
+                    {{ rfq.rfqName}}
+                  </h6>
+                  <div class="f-12 f-w-600 color-light-gray">
+                    RFQ #{{ rfq.rfqId }} - ({{ rfq.rfqPartCount }}) Parts
+                  </div>
+                </div>
+                <div style="padding-top: 1%" class="cursor-pointer col-md-5">
+                  <p style="font-weight: bold; font-size: 13px">
+                    <span placement="top" container="body"
+                      ngbTooltip=" {{ getQuantityToolTip(rfq) }} ">{{ rfq.partQty | Na }}
+                      {{ rfq.partQtyUnit | Na }}</span>
+                  </p>
+                  <p style="font-weight: bold; font-size: 13px">
+                    {{ rfq.partsMaterialName | dotLimit: "19" }}
+                  </p>
+                  <p style="font-weight: bold; font-size: 13px">
+                    {{ rfq.partCategoryName | dotLimit: "19" }}
+                  </p>
+                </div>
+                <div class="col-md-1">
+                  <div *ngIf="RfqStatus == 6 || RfqStatus == 41">
+                    <div *ngIf="rfq.isViewed">
+                      <i class="fa fa-eye eye m-t-40" container="body" ngbTooltip="Viewed"></i>
+                    </div>
+                    <div *ngIf="!rfq.isViewed">
+                      <i class="fa fa-eye-slash eye-slash m-t-40" container="body" ngbTooltip="Not Viewed"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-2 tdbackgorungcolor rfq-border" style="border-left: 0px">
+              <div *ngIf="RfqStatus == 4" style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  height: 100%;
+                ">
+                <div style="width: 40px; padding: 5px">
+                  <a *ngIf="!rfq.isRfqLike">
+                    <i class="fa fa-thumbs-o-up fa-size" aria-hidden="true" placement="top" container="body"
+                      ngbTooltip="Like RFQ"></i>
+                  </a>
+
+                  <a (click)="removelikeRfq(rfq.rfqId, i)" *ngIf="rfq.isRfqLike">
+                    <i class="fa fa-thumbs-up fa-size" aria-hidden="true" placement="top" container="body"
+                      ngbTooltip="Remove Like RFQ"></i>
+                  </a>
+                </div>
+
+                <div *ngIf="rfq.specialInstructions" style="width: 40px; padding: 5px; color: #2E58D6">
+                  <a style="font-size: 18px"><i placement="top" [ngbPopover]="popAttachment" container="body"
+                      #q="ngbPopover" (document:click)="q.close()" (click)="$event.stopPropagation()"
+                      class="fa fa-info-circle" aria-hidden="true"></i></a>
+                  <ng-template #popAttachment>
+                    <p *ngIf="rfq.specialInstructions">
+                      {{ rfq.specialInstructions }} … <br />
+                      <span style="color: #2E58D6; cursor: pointer" (click)="goToRfqDdetails(rfq.rfqId)">Read
+                        more</span>
+                    </p>
+                  </ng-template>
+                </div>
+                <div style="width: 40px; padding: 5px">
+                  <a (click)="disLikeMyLikeRfq(rfq.rfqId, i)" *ngIf="rfq.isRfqLike">
+                    <i class="fa fa-thumbs-o-down fa-size" aria-hidden="true" placement="top" container="body"
+                      ngbTooltip="Disike RFQ"></i>
+                  </a>
+
+                  <a (click)="disLikeMyLikeRfq(rfq.rfqId, i)" *ngIf="!rfq.isRfqLike">
+                    <i class="fa fa-thumbs-down fa-size" aria-hidden="true" placement="top" container="body"
+                      ngbTooltip="Remove Dislike RFQ"></i>
+                  </a>
+                </div>
+              </div>
+
+              <div *ngIf="RfqStatus != 4" style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  height: 100%;
+                ">
+                <div style="width: 40px; padding: 5px">
+                  <a *ngIf="!rfq.isRfqLike" (click)="
+                      likeRfq(rfq.rfqId, rfq.isRfqLike, rfq.isRfqDisLike)
+                    ">
+                    <i class="fa fa-thumbs-o-up fa-size" aria-hidden="true" placement="top" container="body"
+                      ngbTooltip="Like RFQ"></i>
+                  </a>
+
+                  <a (click)="
+                      removelikeRfq(rfq.rfqId, rfq.isRfqLike, rfq.isRfqDisLike)
+                    " *ngIf="rfq.isRfqLike">
+                    <i class="fa fa-thumbs-up fa-size" aria-hidden="true" placement="top" container="body"
+                      ngbTooltip="Remove Like RFQ"></i>
+                  </a>
+                </div>
+
+                <div *ngIf="RfqStatus == 13" style="width: 40px; padding: 5px; color: #2E58D6">
+                  <a style="font-size: 18px" data-bs-target="#removeConfirmModel" data-bs-toggle="modal"
+                    (click)="getRfqId(rfq.rfqId)">
+                    <i class="fa fa-trash cursor-pointer" placement="top" container="body" ngbTooltip="Remove RFQ"></i>
+                  </a>
+                </div>
+
+                <div *ngIf="rfq.specialInstructions" style="width: 40px; padding: 5px; color: #2E58D6">
+                  <a style="font-size: 18px"><i placement="top" [ngbPopover]="popAttachment" container="body"
+                      #q="ngbPopover" (document:click)="q.close()" (click)="$event.stopPropagation()"
+                      class="fa fa-info-circle" aria-hidden="true"></i></a>
+                  <ng-template #popAttachment>
+                    <p *ngIf="rfq.specialInstructions">
+                      {{ rfq.specialInstructions }} … <br />
+                      <span style="color: #2E58D6; cursor: pointer" (click)="goToRfqDdetails(rfq.rfqId)">Read
+                        more</span>
+                    </p>
+                  </ng-template>
+                </div>
+                <div style="width: 40px; padding: 5px">
+                  <a (click)="removeDisLikeRfq(rfq.rfqId)" *ngIf="rfq.isRfqDisLike">
+                    <i class="fa fa-thumbs-down fa-size" aria-hidden="true" placement="top" container="body"
+                      ngbTooltip="Remove Dislike RFQ"></i>
+                  </a>
+                  <a (click)="disLikeRfq(rfq.rfqId)" *ngIf="!rfq.isRfqDisLike">
+                    <i class="fa fa-thumbs-o-down fa-size" aria-hidden="true" placement="top" container="body"
+                      ngbTooltip="Dislike RFQ"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="myRFQ-rfq-no-available" *ngIf="isRfqAvailable">
+        <div class="row" style="text-align: center; padding-top: 106px">
+          <div class="col-md-12">
+            <div>
+              <img src="assets/rfq/no-rfq.png" srcset="
+                  assets/rfq/no-rfq@2x.png 2x,
+                  assets/rfq/no-rfq@3x.png 3x
+                " class="myRFQ-Group" />
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding-top: 34px">
+          <div class="col-md-12">
+            <div class="f-22 f-w-600 color-gray text-center" *ngIf="RfqStatus == 4">
+              You don’t have any Liked RFQs at this time.
+            </div>
+            <div class="f-22 f-w-600 color-gray text-center" *ngIf="RfqStatus == 5">
+              You don’t have any Special Invite RFQs at this time.
+            </div>
+            <div class="f-22 f-w-600 color-gray text-center" *ngIf="RfqStatus == 6">
+              You don’t have any Quoted RFQs at this time.
+            </div>
+            <div class="f-22 f-w-600 color-gray text-center" *ngIf="RfqStatus == 41">
+              You don’t have any Unlocked RFQs at this time.
+            </div>
+            <div class="f-22 f-w-600 color-gray text-center" *ngIf="RfqStatus == 13">
+              You don’t have any Draft RFQs at this time.
+            </div>
+            <div class="f-22 f-w-600 color-gray text-center" *ngIf="RfqStatus == 7">
+              You don’t have any Awarded RFQs at this time.
+            </div>
+            <div class="f-22 f-w-600 color-gray text-center" *ngIf="RfqStatus == 8">
+              You don’t have any Followed Buyer's RFQs at this time.
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding-top: 10px">
+          <div class="col-md-12">
+            <div class="f-14  color-gray text-center">
+              Please Add Rfq from MyRfqs.
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End of old lines -->
+
+      <div *ngIf="isLoader">
+        <div class="loader animation-start">
+          <span class="circle delay-1 size-2"></span>
+          <span class="circle delay-2 size-4"></span>
+          <span class="circle delay-3 size-6"></span>
+          <span class="circle delay-4 size-7"></span>
+          <span class="circle delay-5 size-7"></span>
+          <span class="circle delay-6 size-6"></span>
+          <span class="circle delay-7 size-4"></span>
+          <span class="circle delay-8 size-2"></span>
+        </div>
+      </div>
+
+      <!-- ------------------------- Pagination start----------------------- -->
+      <div class="row" *ngIf="!isRfqAvailable">
+        <div class="col-md-2" *ngIf="!isLoader">
+          <div class="dataTables_length" id="example_length">
+            <label>Show
+              <select name="example_length" aria-controls="example" class="" [(ngModel)]="pageSize"
+                (change)="filterAll()">
+                <option value="24">24</option>
+                <option value="48">48</option>
+                <option value="96">96</option>
+              </select>
+              entries</label>
+          </div>
+        </div>
+        <div class="col-md-10" *ngIf="!isLoader">
+          <div class="paginations">
+            <div>
+              <div id="radioBtn" class="btn-group">
+                <a [ngClass]="{ disabled: currentIndex == 1 || pageNumber == 0 }"
+                  class="btn btn-primary btn-sm notActive" (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                  Previous
+                </a>
+                <a *ngFor="let page of pagesIndex" (click)="setPage(page)" [ngClass]="
+                    currentIndex == page
+                      ? 'btn btn-primary btn-sm active'
+                      : 'btn btn-primary btn-sm notActive'
+                  " data-bs-toggle="fun" data-title="X">
+                  {{ page }}
+                </a>
+                <a [ngClass]="{ disabled: currentIndex == pageNumber }" class="btn btn-primary btn-sm notActive"
+                  (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                  Next
+                </a>
+              </div>
+              <input type="hidden" name="fun" id="fun" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="!isRfqAvailable">
+        <div class="col-md-12" *ngIf="!isLoader">
+          <div class="pull-right padd-right">
+            <label class="showreccount">
+              {{ currentIndex }} of {{ pageNumber }}
+            </label>
+          </div>
+        </div>
+      </div>
+      <!-- ------------------------- Pagination end----------------------- -->
+    </div>
+  </div>
+  <div class="col-md-4 sideDrawer" *ngIf="isSidePanel()">
+    <div *ngIf="isRfqDrawer()">
+      <app-supplier-rfq-detail-sidepanel [rfqId]="getCurrentRfqId()" (drawer_OnClose)="drawerClose($event)">
+      </app-supplier-rfq-detail-sidepanel>
+    </div>
+    <div *ngIf="isBuyerMiniProfile()">
+      <app-mini-buyer-profile (drawer_OnClose)="drawerClose($event)"></app-mini-buyer-profile>
+    </div>
+    <div *ngIf="isMessageRfqPanel()">
+      <app-message-send-drawer (drawer_OnClose)="drawerClose($event)"></app-message-send-drawer>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="isBuyerCommpleteProfile()">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-10"></div>
+      <div class="col-md-2 floatRight">
+        <button type="button" class="btn btn-submit-rfq-close-1 RectangleYes-2-1" (click)="goBack()">
+          Go Back to RFQ
+        </button>
+      </div>
+    </div>
+    <div>
+      <app-buyer-view-profile></app-buyer-view-profile>
+    </div>
+  </div>
+</div>
+<form #modelForm="ngForm">
+  <div id="myModal" class="modal fade" data-keyboard="false" data-backdrop="static" role="dialog">
+    <div class="modal-dialog custom-model">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-8 Select-the-processes">
+              Select the processes to include
+            </div>
+            <div class="col-md-3 Deselect-All" (click)="deSelectAll()">
+              Deselect All
+            </div>
+            <div class="col-md-1">
+              <button type="button" class="close" aria-label="Close" style="margin-top: 0px" data-bs-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6" style="max-width: 45% !important">
+              <div class="Rectangle-indi manufac_scroll" style="padding: 5px">
+                <div *ngFor="
+                    let singlePart of iCustomProcessViewModelColl
+                      | groupBy: 'parentDisciplineName';
+                    let iPart = index
+                  ">
+                  <ul>
+                    <li class="Main-Topic" [class.d-none]="
+                        getChildProcess(singlePart.key).length ==
+                        getSelectedChildProcess(singlePart.key).length
+                      " (click)="addAllToSelection(singlePart.key)">
+                      {{ singlePart.key }}
+                    </li>
+                    <li class="Subtopic-1-Subtopic" *ngFor="let child of getChildProcess(singlePart.key)"
+                      (click)="addToSelection(child.childDisciplineId)">
+                      <span [class.d-none]="
+                          selectedProcess(singlePart.key) &&
+                          selectedChildProcess(child.childDisciplineId)
+                        ">{{ child.childDisciplineName }}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-1" style="padding-top: 97px">
+              <i class="fa fa-exchange" aria-hidden="true"></i>
+            </div>
+            <div class="col-md-5">
+              <div class="Rectangle-indi manufac_scroll" style="padding: 5px">
+                <div *ngFor="let singlePart of selectedParent">
+                  <ul>
+                    <li class="Main-Topic" (click)="
+                        removeALLFromSelection(
+                          singlePart.value[0].sparentDisciplineId
+                        )
+                      ">
+                      {{ singlePart.key }}
+                    </li>
+                    <li class="Subtopic-1-Subtopic" *ngFor="
+                        let child of getSelectedChildProcess(singlePart.key)
+                      " (click)="removeFromSelection(child.schildDisciplineId)">
+                      {{ child.schildDisciplineName }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer footer-modal">
+          <button type="button" class="award-enable" data-bs-dismiss="modal" (click)="filterAll()">
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isModelShow()">
+    <app-rating-model></app-rating-model>
+  </div>
+</form>
+<div class="modal fade" id="removeConfirmModel" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Remove RFQ</h4>
+        <button type="button" class="color-blue close" data-bs-dismiss="modal">
+          <i class="fa fa-times-circle" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="modal-body" class="text-left">
+        <p class="f-14; m-t-20; f-w-100 p-10">
+          Are you sure you want to remove this RFQ from your Quotes In Progress list?
+          <!--<br /> You will not be able to edit this RFQ once it is archived-->
+          <!-- Are you sure you want to archive this RFQ? <br />This RFQ will be moved to Archive RFQs. Would you like to archive this RFQ? -->
+        </p>
+      </div>
+      <div class="row modal-footer1" style="padding: 10px">
+        <div class="col-md-6">
+          <button type="button" style="padding: 7px !important;" class="btn button-green-border" data-bs-dismiss="modal">
+            No
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn button-green" data-bs-dismiss="modal"
+            (click)="removeRfqFromQuotesInProgressList()">
+            Yes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="cacheConfirmModel" role="dialog">
+  <div class="flexDialog">
+   <div class="modal-dialog">
+     <!-- Modal content-->
+     <div class="w-fit" style="position: relative;top: 210px;">
+      <div class="modal-content content-backgroud"> 
+        <div class="modal-header" style="border: none;">
+          
+          <button type="button" style="color: #2E58D6;" class="close" data-bs-dismiss="modal"><i class="fa fa-times-circle"
+              aria-hidden="true"></i></button>
+        </div>
+        <div class="modal-body body-margin"> 
+         <p class="text-align" style="text-align: center;margin: -5px 60px 40px;">Are you sure you want to use your Growth package to unlock this RFQ?</p>     
+         
+          <div class="modal-footer1" style="padding: 0 0 20px 0">
+              <div class="col-md-12 text-center" style="display: flex;justify-content:space-around">
+                <button style="width: 30%;" type="button"  class="btn button-green" data-bs-dismiss="modal" (click)="goRfqDetailsPage()">Yes</button>
+                <button style="width: 30%;" type="button" class="btn button-green" data-bs-dismiss="modal" (click)= "goBackbutton()">No</button>
+           
+              </div>
+          </div>
+      </div>
+    </div>
+    </div>
+   </div>
+  </div>  
+ </div>
+

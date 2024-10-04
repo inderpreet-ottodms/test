@@ -1,0 +1,35 @@
+<div class="p-10">
+  <div class="row">
+    <div [ngClass]="isSidePanel() ? 'col-md-8 col-9' : 'col-md-12 col-12'">
+      <app-rfq-warning-banner [page]="'MYRFQ'"></app-rfq-warning-banner>
+      <div>
+        <div class="row m-t-10">
+          <div class="col-md-6 f-24 f-w-600 color-gray">My RFQs</div>
+          <div class="col-md-6 text-right">
+            <div class="row">
+              <div class="col-md-12">
+                <button type="button" class="btn button-green-border m-r-10" [routerLink]="['/rfq/draftrfqs']">
+                  Draft RFQs
+                </button>
+                <button type="button" class="btn button-green-border" (click)="redirectToCreateRfqPage()">
+                  Create an RFQ
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row m-t-10">
+          <div class="col-md-12">
+            <div class="bg-white rounded shadow">
+              <app-rfq-list></app-rfq-list>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isSidePanel()" class="sideDrawer">
+      <app-rfq-detail-sidepanel [rfqId]="getCurrentRfqId()" (drawer_OnClose)="drawerClose($event)">
+      </app-rfq-detail-sidepanel>
+    </div>
+  </div>
+</div>

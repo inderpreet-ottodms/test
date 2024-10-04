@@ -1,0 +1,562 @@
+<div class="row" *ngIf="!isBuyerCommpleteProfile()">
+  <div [ngClass]="(isSidePanel())?'col-md-8':'col-md-12'">
+
+    <div class="row">
+      <div class="col-md-8 lead-header">
+        <span>MFG Magic Lead List</span>
+      </div>
+      <div class="col-md-4 m-t-5" style="text-align: right;" *ngIf="!isPremium() || !showMagicLeadList">
+        <app-upgrade-account-btn [quoteRFQ]=false [RfqId]="0"></app-upgrade-account-btn>
+        <!-- <button type="button" class="btn upgrade-btn" (click)="upgradeClick()">
+              Upgrade your account
+          </button> -->
+      </div>
+    </div>
+    <div class="row" style="padding:40px;">
+      <div class="myRFQ-rfq-main-div">
+
+        {{checkIfFollowUnFollowChange()}}
+        <div style="padding:19px" class="col-md-12" [ngClass]="(!isLoader)?'':'loader-height'">
+          <div class="row">
+            <div class="col-md-6">
+              <!-- <div class="btn-group">
+            <button type="button" (click)="setStatusFilter('All')"
+              [ngClass]="(activeStatusFilterBtn == 'All')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+              All</button>
+            <button type="button" (click)="setStatusFilter('Blacklisted')"
+              [ngClass]="(activeStatusFilterBtn == 'Blacklisted')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+              Blacklisted
+            </button>
+            <button type="button" (click)="setStatusFilter('Archived')"
+              [ngClass]="(activeStatusFilterBtn == 'Archived')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+              Archived
+            </button>
+          </div> -->
+            </div>
+            <div class="col-md-6 pull-right" style="text-align: end;padding-top:7px;">
+              <i _ngcontent-c4=""
+                [ngClass]="(isTilesView)?'ti-layout-grid2 my-RFQ-list-view active':'ti-layout-grid2 my-RFQ-list-view '"
+                (click)="openTilesView()"></i>
+              <i _ngcontent-c4="" [ngClass]="(isGridView)?'ti-list my-RFQ-list-view active':'ti-list my-RFQ-list-view'"
+                (click)="openGridView()"></i>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12" style="padding: 5px 15px;border-radius: 5px;margin-top: 15px; ">
+              <span style=" font-size: 14px; color: #919aa3;">This is your MFG Magic Lead List! Be sure to check here
+                every Monday to view new leads that match your capabilities. The leads will include any buyer that you
+                have not interacted with in the marketplace and who have posted an RFQ in the last 6 months. These leads
+                will be refreshed every Monday morning.</span>
+            </div>
+          </div>
+          <!-- <div class="row contact_filter" style="padding:10px 0px">
+        <div [ngClass]="(isSidePanel())?'col-md-4':'col-md-4'">
+          <angular2-multiselect [data]='iCountryModel' name="processdrop" [(ngModel)]="selectedcountry"
+            [settings]='countrySettings' (onDeSelect)="filterAll()" (onSelect)="filterAll()"
+            (onSelectAll)="filterAll()" (onDeSelectAll)="filterAll()">
+          </angular2-multiselect>
+        </div>
+        <div [ngClass]="(isSidePanel())?'col-md-4':'col-md-4'">
+          <angular2-multiselect [data]='iIndustryModel' [(ngModel)]="selectedIndustry" name="postsProcess"
+            [settings]='industrySettings' (onDeSelect)="filterAll()" (onSelect)="filterAll()"
+            (onSelectAll)="filterAll()" (onDeSelectAll)="filterAll()">
+          </angular2-multiselect>
+        </div>
+        <div [ngClass]="(isSidePanel())?'col-md-4':'col-md-4'">
+          <div class="input-container">
+            <i class="fa fa-search icon-search" (click)="onSearch()" placement="top" container="body"
+              ngbTooltip="Search"></i>
+            <input class="search search-text" [(ngModel)]="searchFilterValue" placeholder="Search" type="text"
+              (keypress)="searchByKey($event)" (input)="checkSearch(searchFilterValue)" />
+            <i class="fa fa-times-circle icon" (click)="removeTextValue()" placement="top" container="body"
+              ngbTooltip="Remove Text"></i>
+          </div>
+        </div>
+      </div> -->
+
+          <!-- ---------------------  loader start   --------------------  -->
+          <div *ngIf="isLoader">
+            <div class="loader animation-start">
+              <span class="circle delay-1 size-2"></span>
+              <span class="circle delay-2 size-4"></span>
+              <span class="circle delay-3 size-6"></span>
+              <span class="circle delay-4 size-7"></span>
+              <span class="circle delay-5 size-7"></span>
+              <span class="circle delay-6 size-6"></span>
+              <span class="circle delay-7 size-4"></span>
+              <span class="circle delay-8 size-2"></span>
+            </div>
+          </div>
+          <!-- ---------------------  loader end   --------------------  -->
+
+          <div class="row" *ngIf="isTilesView == true  && showMagicLeadList">
+            <div class="col-md-12">
+              <div class="" style="margin-top: 10px;">
+                <div class="row">
+                  <br>
+                  <!-- ----------------------loop for card start------------------ -->
+                  <div style="display: flex;" *ngFor='let supplier of items'>
+                    <!-- card start -->
+                    <div class="card" id="{{ supplier.buyerContactId }}"
+                      [ngClass]="(supplier.buyerContactId === currentContact())?'actievPart':''">
+                      <!-- card body start  -->
+                      <div class="pointerCursor">
+                        <div class="card-img" *ngIf="isPremium()">
+                          <img class="imagwidtheight"
+                            *ngIf="(supplier.companyLogo === '' || supplier.companyLogo === null || supplier.companyLogo === 'string')"
+                            src="assets/company/avatar-manu-basic.svg">
+                          <img class="imagwidtheight"
+                            *ngIf="!(supplier.companyLogo === '' || supplier.companyLogo === null || supplier.companyLogo === 'string')"
+                            src="{{ supplier.companyLogo }}" onerror="this.src='assets/company/avatar-manu-basic.svg'">
+                        </div>
+                        <div class="card-img" *ngIf="!isPremium()">
+                          <img class="imagwidtheight" src="assets/logo.png">
+                        </div>
+                        <div class="card-title">
+                          <h2 *ngIf="isPremium()" class="pointerCursor text-truncate"
+                            (click)="openBuyerDrawer(supplier.encryptedContactId, supplier.buyerContactId )">
+                            {{ supplier.buyerCompany }} </h2>
+                          <h2 *ngIf="!isPremium()" class="pointerCursor text-truncate"
+                            (click)="openBuyerDrawer(supplier.encryptedContactId, supplier.buyerContactId )"> Upgrade
+                            your account </h2>
+                          <div class="rfq-star">
+                            <!-- <span style="color:#4a90e2;font-size: 14px;">{{ (supplier.noOfStars)? (supplier.noOfStars| number : '1.0-1') : 0 }}</span> -->
+                            <span
+                              style="color:#4a90e2;font-size: 14px;">{{ (supplier.noOfStars)? (supplier.noOfStars | number : '1.0-1') : 'n/a' }}</span>
+                            <ng-template #t let-fill="fill">
+                              <span class="star" [class.full]="fill === 100"> <span class="fill-star"
+                                  [style.width.%]="fill">&#9733;</span>&#9733;
+                              </span>
+                            </ng-template>
+                            <ngb-rating [(rate)]="supplier.noOfStars" [starTemplate]="t" [readonly]="true" max="5">
+                            </ngb-rating>
+                          </div>
+                        </div>
+                        <div class="card-sub-title">
+                          <hr />
+                          <div class="address_div">
+                            <p>
+                              {{ supplier.streetAddress }}{{ (supplier.deptAddress)? ', ' + supplier.deptAddress: '' }}
+                              <br />
+                              {{ (supplier.city)? '' + supplier.city: '' }}{{ (supplier.regionName)? ', ' + supplier.regionName : ''}}{{ (supplier.postalCode)? ', ' + supplier.postalCode: ''}}
+                              <br /> {{ (supplier.countryName)? '' + supplier.countryName: '' }}
+                            </p>
+
+                          </div>
+                          <hr />
+                          <p class="text-truncate" *ngIf="isPremium()">{{ supplier.companyphone | Na}}</p>
+                          <p class="text-truncate" *ngIf="!isPremium()">Upgrade your account</p>
+                          <hr />
+                          <p class="company_url text-truncate" placement="top"
+                            (click)="websiteClick(supplier.companyWeb)" container="body"
+                            ngbTooltip="{{supplier.companyWeb }}" *ngIf="isPremium()">
+                            {{ supplier.companyWeb | Na}}</p>
+                          <p class="company_url text-truncate" *ngIf="!isPremium()">Upgrade your account</p>
+                        </div>
+
+                      </div>
+                      <!-- card body end  -->
+                      <!-- card footer start  -->
+                      <div class="bottomaction">
+                        <ul>
+                          <li *ngIf="isPremium()">
+                            <a (click)="openMessageDrawer($event,supplier.buyerContactId,0,supplier.buyerCompany)">
+                              <i class="fa fa-envelope-o pointerCursor" aria-hidden="true" placement="top"
+                                container="body" ngbTooltip="Message Buyer"></i>
+                            </a>
+                          </li>
+                          <li class="pull-right" *ngIf="activeStatusFilterBtn !== 'Archived'">
+                            <!-- <a (click)="removeContact(supplier.buyerCompanyId)">
+                          <img src="assets/rfq/not-allow.png" srcset="assets/rfq/not-allow@2x.png 2x, assets/rfq/not-allow@3x.png 3x" class="award-rfq-icon-class pointerCursor" placement="top" container="body" ngbTooltip="Remove Contact">
+                        </a> -->
+                          </li>
+                          <li *ngIf="isPremium()" style="cursor:auto;">
+                            <a style="cursor:auto;"
+                              (click)="openFeedbackModel(supplier.buyerCompany, supplier.buyerCompanyId)">
+                              <i placement="top" container="body" ngbTooltip="Buyer Feedback"
+                                class="fa fa-exclamation-circle f-16" aria-hidden="true"></i>
+                            </a>
+                          </li>
+                          <li class="pull-right">
+                            <a *ngIf="!supplier.isFollowing" (click)="setFollow(supplier.buyerCompanyId)">
+                              <img src="assets/user-follow.svg" container="body" ngbTooltip="Follow Buyer">
+                            </a>
+                            <a *ngIf="supplier.isFollowing" (click)="unFollow(supplier.buyerCompanyId)">
+                              <img src="assets/user-follow.svg" container="body" ngbTooltip="Unfollow Buyer"
+                                style="filter: invert(1) sepia(1) saturate(8) hue-rotate(-37deg);">
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                      <!-- card footer start  -->
+                    </div>
+                    <!-- card start -->
+                  </div>
+                  <!-- ----------------------loop for card end------------------ -->
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="isTilesView == true  && !showMagicLeadList">
+            <div class="col-md-12 m-t-10" *ngIf="!isPremium() || !showMagicLeadList ">
+              <h6>Upgrade your account to unlock your MFG Magic Lead List today!</h6>
+            </div>
+            <div class="col-md-12">
+              <div class="" style="margin-top: 10px;">
+                <div style="display: flex;">
+                  <!-- ----------------------loop for card start------------------ -->
+                  <!-- <div class="col-md-3"> -->
+                  <!-- card start -->
+                  <div class="card" *ngFor='let supplier of dummyData'>
+                    <!-- card body start  -->
+                    <div>
+                      <div class="card-img"></div>
+                      <div class="card-title">
+                        <h2 class="text-truncate" style="color:#919aa3;cursor: auto;"> {{supplier.companyName}} </h2>
+                        <div class="rfq-star-gray">
+                          <span style="color:#919aa3;font-size: 14px;">{{supplier.rating}}</span>
+                          <ng-template #t let-fill="fill">
+                            <span class="star" [class.full]="fill === 100"> <span class="fill-star"
+                                [style.width.%]="fill">&#9733;</span>&#9733;
+                            </span>
+                          </ng-template>
+                          <ngb-rating [rate]="supplier.rating" [starTemplate]="t" [readonly]="true" max="5">
+                          </ngb-rating>
+                        </div>
+                      </div>
+                      <div class="card-sub-title">
+                        <hr />
+                        <div class="address_div">
+                          <p style="color:#919aa3;" [innerHTML]="supplier.address"></p>
+                        </div>
+                        <hr />
+                        <p class="text-truncate" style="color:#919aa3;">{{supplier.phone}}</p>
+                        <hr />
+                        <p class="text-truncate" style="color:#919aa3;">{{supplier.website}}</p>
+                      </div>
+                    </div>
+                    <!-- card body end  -->
+                    <!-- card footer start  -->
+                    <div class="bottomaction">
+                      <ul style="cursor:auto;">
+                        <li style="cursor:auto;">
+                          <a style="color:#919aa3;cursor:auto;">
+                            <i style="color:#919aa3;cursor:auto;" class="fa fa-envelope-o" aria-hidden="true"></i>
+                          </a>
+                        </li>
+                        <li style="cursor:auto;">
+                          <a style="color:#919aa3;cursor:auto;">
+                            <i style="color:#919aa3;cursor:auto;" class="fa fa-exclamation-circle f-14"
+                              aria-hidden="true"></i>
+                          </a>
+                        </li>
+                        <li class="pull-right" style="cursor:auto;">
+                          <a style="cursor:auto;">
+                            <img style="cursor:auto;" src="assets/user-follow-gray.svg">
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <!-- card footer start  -->
+                  </div>
+                  <!-- card start -->
+                  <!-- ----------------------loop for card end------------------ -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--   -----------------------grid view starts--------------------------- -->
+          <!-- && !isRfqAvailable" -->
+          <div class="row" *ngIf=" showMagicLeadList && isGridView ">
+            <div class="col-md-12">
+              <div class="row" style="margin-top: 20px; ">
+                <div class="col-md-1"></div>
+                <div class="col-md-3">
+                  <span style="font-size: 12px;font-weight: bold;">Company Name</span>
+                </div>
+                <div class="col-md-3">
+                  <span style="font-size: 12px;font-weight: bold;">Address</span>
+                </div>
+                <div class="col-2">
+                  <span style="font-size: 12px;font-weight: bold;">Phone</span>
+                </div>
+                <div class="col-2">
+                  <span style="font-size: 12px;font-weight: bold;">Website</span>
+                </div>
+                <div class="col-1">
+                  <span style="font-size: 12px;font-weight: bold;">Actions</span>
+                </div>
+              </div>
+              <div class="row custom-details" *ngFor='let supplier of items'>
+                <div class="col-md-1">
+                  <div *ngIf="isPremium()" class="cardtile-img">
+                    <img
+                      *ngIf="(supplier.companyLogo === '' || supplier.companyLogo === null || supplier.companyLogo === 'string')"
+                      src="assets/company/avatar-manu-basic.svg">
+                    <img
+                      *ngIf="!(supplier.companyLogo === '' || supplier.companyLogo === null || supplier.companyLogo === 'string')"
+                      src="{{ supplier.companyLogo }}" onerror="this.src='assets/company/avatar-manu-basic.svg'">
+                  </div>
+                  <div *ngIf="!isPremium()"
+                    style="background-image: url('assets/logo.png');background-size: 180px;background-repeat: no-repeat;height: 50px;width: 50px;background-color: #eeeeee;">
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <h2 *ngIf="isPremium()" class="pointerCursor text-truncate"
+                    (click)="openBuyerDrawer(supplier.encryptedContactId, supplier.buyerContactId)"
+                    style="font-size: 16px; color: #4a90e2;"> {{ supplier.buyerCompany }} </h2>
+                  <h2 *ngIf="!isPremium()" class="pointerCursor text-truncate"
+                    (click)="openBuyerDrawer(supplier.encryptedContactId, supplier.buyerContactId)"
+                    style="font-size: 16px; color: #4a90e2;"> Upgrade your account </h2>
+                  <div class="rfq-star">
+                    <!-- <span style="color:#4a90e2;font-size: 14px;">{{ (supplier.noOfStars)? (supplier.noOfStars| number : '1.0-1') : 0 }}</span> -->
+                    <span
+                      style="color:#4a90e2;font-size: 14px;">{{ (supplier.noOfStars)? (supplier.noOfStars | number : '1.0-1') : 'n/a' }}</span>
+                    <ng-template #t let-fill="fill">
+                      <span class="star" [class.full]="fill === 100"> <span class="fill-star"
+                          [style.width.%]="fill">&#9733;</span>&#9733;
+                      </span>
+                    </ng-template>
+                    <ngb-rating [(rate)]="supplier.noOfStars" [starTemplate]="t" [readonly]="true" max="5">
+                    </ngb-rating>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <p style="font-size: 12px;color:#222222">
+                    {{ supplier.streetAddress }}{{ (supplier.deptAddress)? ', ' + supplier.deptAddress: '' }}
+                    <br />
+                    {{ (supplier.city)? '' + supplier.city: '' }}{{ (supplier.regionName && supplier.regionName !== 'Unknown - Do not delete')? ', ' + supplier.regionName : ''}}{{ (supplier.postalCode)? ', ' + supplier.postalCode: ''}}
+                    <br /> {{ (supplier.countryName)? '' + supplier.countryName: '' }}
+                  </p>
+                </div>
+                <div class="col-md-2">
+                  <span style="font-size: 12px;color:#222222" *ngIf="isPremium()"> {{ supplier.companyphone | Na}}
+                  </span>
+                  <span style="font-size: 12px;color:#222222" *ngIf="!isPremium()"> Upgrade your account </span>
+                </div>
+                <div class="col-md-2 text-truncate">
+                  <span style=" color:#4a90e2 !important; padding-bottom:10px !important; cursor: pointer;"
+                    placement="top" container="body" ngbTooltip="{{supplier.companyWeb }}"
+                    (click)="websiteClick(supplier.companyWeb)" container="body" *ngIf="isPremium()">
+                    {{ supplier.companyWeb | Na}} </span>
+                  <span style="font-size: 12px;color:#222222;" *ngIf="!isPremium()"> Upgrade your account </span>
+                </div>
+                <div class="col-md-1 editdelete"
+                  style="font-size: 16px; font-weight: bold; margin:-10px 0px; color: #4a90e2;display: flex; justify-content: space-around; align-items: center; padding: 3px;">
+                  <a *ngIf="supplier.isFollowing" (click)="unFollow(supplier.buyerCompanyId)">
+                    <img src="assets/user-follow.svg" container="body" ngbTooltip="Unfollow Buyer"
+                      style="filter: invert(1) sepia(1) saturate(8) hue-rotate(-37deg);">
+                  </a>
+                  <a *ngIf="!supplier.isFollowing" (click)="setFollow(supplier.buyerCompanyId)">
+                    <img src="assets/user-follow.svg" container="body" ngbTooltip="Follow Buyer">
+                  </a>
+                  <a *ngIf="isPremium()" style="cursor:auto;"
+                    (click)="openFeedbackModel(supplier.buyerCompany, supplier.buyerCompanyId)">
+                    <i placement="top" container="body" ngbTooltip="Buyer Feedback"
+                      class="fa fa-exclamation-circle f-16  pointerCursor" aria-hidden="true"></i>
+                  </a>
+                  <a (click)="openMessageDrawer($event,supplier.buyerContactId,0,supplier.buyerCompany)">
+                    <i class="fa fa-envelope-o pointerCursor" aria-hidden="true" placement="top" container="body"
+                      ngbTooltip="Message Buyer" style="font-weight: bold; "></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="!showMagicLeadList && isGridView">
+            <div class="col-md-12 m-t-10" *ngIf="!isPremium() || !showMagicLeadList">
+              <h6>Upgrade your account to unlock your MFG Magic Lead List today!</h6>
+            </div>
+
+            <div class="col-md-12">
+              <div class="row" style="margin-top: 20px; ">
+                <div class="col-md-1"></div>
+                <div class="col-md-3">
+                  <span style="font-size: 12px;font-weight: bold;">Company Name</span>
+                </div>
+                <div class="col-md-3">
+                  <span style="font-size: 12px;font-weight: bold;">Address</span>
+                </div>
+                <div class="col-2">
+                  <span style="font-size: 12px;font-weight: bold;">Phone</span>
+                </div>
+                <div class="col-2">
+                  <span style="font-size: 12px;font-weight: bold;">Website</span>
+                </div>
+                <div class="col-1">
+                  <span style="font-size: 12px;font-weight: bold;">Actions</span>
+                </div>
+              </div>
+              <div class="row custom-details" *ngFor='let supplier of dummyData'>
+                <div class="col-md-1">
+                  <div class="cardtile-img" style="background-color:#e1e1e1;height: 50px;border-radius: 5px;">
+                  </div>
+
+                </div>
+                <div class="col-md-3">
+                  <h2 class="pointerCursor text-truncate" style="font-size: 16px; color: #919aa3;cursor: auto;">
+                    {{ supplier.companyName }} </h2>
+
+                  <div class="rfq-star-gray">
+                    <span style="color:#919aa3;font-size: 14px;">{{supplier.rating}}</span>
+                    <ng-template #t let-fill="fill">
+                      <span class="star" [class.full]="fill === 100"> <span class="fill-star"
+                          [style.width.%]="fill">&#9733;</span>&#9733;
+                      </span>
+                    </ng-template>
+                    <ngb-rating [rate]="supplier.rating" [starTemplate]="t" [readonly]="true" max="5">
+                    </ngb-rating>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <p style="font-size: 12px;color:#919aa3" class="m-b-0" [innerHTML]="supplier.address"></p>
+                </div>
+                <div class="col-md-2">
+                  <span style="font-size: 12px;color:#919aa3"> {{supplier.phone}} </span>
+
+                </div>
+                <div class="col-md-2 text-truncate">
+                  <span
+                    style=" color:#919aa3 !important; padding-bottom:10px !important; cursor: auto;">{{supplier.website}}
+                  </span>
+
+                </div>
+                <div class="col-md-1 editdelete"
+                  style="font-size: 16px; font-weight: bold; margin:-10px 0px; color: #919aa3;display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+                  <a style="cursor:auto;">
+                    <img style="color:#919aa3;cursor:auto;" src="assets/user-follow-gray.svg">
+                    <!-- <i class="fa fa-user-circle" aria-hidden="true" style="font-weight: bold;"></i> -->
+                  </a>
+
+                  <a style="cursor:auto;">
+                    <i class="fa fa-exclamation-circle f-14" aria-hidden="true"></i>
+                  </a>
+                  <a style="cursor:auto;">
+                    <i class="fa fa-envelope-o" aria-hidden="true" style="font-weight: bold;cursor:auto;"></i>
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- --------------------grid view ends------------------------- -->
+
+          <!-- ---------------------  Empty Box start   --------------------  -->
+          <!-- <div class="myRFQ-rfq-no-available" *ngIf="isRfqAvailable">
+              <div class="row" style="text-align: center;padding-top:60px">
+                <div class="col-md-12">
+                  <div>
+                    <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x, assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="padding-top:34px;margin-bottom:100px;">
+                <div class="col-md-12">
+                  <div class="myRFQ-noRFQActive-helper-text">You don’t have any Contacts at this time.</div>
+                </div>
+              </div>
+
+            </div> -->
+          <!-- ---------------------  Empty Box end   --------------------  -->
+
+          <!-- *ngIf="!isRfqAvailable" -->
+          <!-- <div class="row" *ngIf="!isRfqAvailable">
+                <div class="col-md-4">
+                  <div class="dataTables_length" id="example_length">
+                    <label>Show
+                      <select name="example_length" aria-controls="example" class="" [(ngModel)]="inputLength"
+                        (ngModelChange)="ChangeinputLength()">
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                      </select>
+                      entries</label>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="paginations">
+                    <div>
+                      <div id="radioBtn" class="btn-group">
+                        <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}"
+                          class="btn btn-primary btn-sm notActive" (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                          Previous
+                        </a>
+                        <a *ngFor="let page of pagesIndex" (click)="setPage(page)"
+                          [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                          data-bs-toggle="fun" data-title="X">
+                          {{page}}
+                        </a>
+                        <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+                          (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                          Next
+                        </a>
+                      </div>
+                      <input type="hidden" name="fun" id="fun">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="!isRfqAvailable">
+                <div class="col-md-12">
+                  <div class="pull-right padd-right">
+                    <label class="showreccount"> {{currentIndex   }} of {{pageNumber}} </label>
+                  </div>
+                </div>
+              </div> -->
+          <!-- </div> -->
+          <!-- <div class="custom-confirmation" *ngIf="isCancel1stStep"> -->
+          <p-confirmDialog header="Confirmation" icon="" width="629" height="220" #cd>
+            <p-footer>
+              <div class="row">
+                <div class="col-md-6">
+                  <button type="button" class="btn btn-ignore-rfq" (click)="cd.reject()">No</button>
+                </div>
+                <div class="col-md-6">
+                  <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="cd.accept()">Yes</button>
+                </div>
+              </div>
+            </p-footer>
+          </p-confirmDialog>
+          <!-- </div> -->
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <div *ngIf="isSidePanel()" class="col-md-4 sideDrawer Drawer-Shadow m-t-20"
+    style="padding: 20px;top:70px;position:fixed;width:380px;right: 0;overflow-y: auto;height:100%;padding-bottom:150px !important; background-color: #fff;">
+    <div *ngIf="isRfqDrawer()">
+      <app-supplier-rfq-detail-sidepanel [rfqId]="getCurrentRfqId()"></app-supplier-rfq-detail-sidepanel>
+    </div>
+    <div *ngIf="isBuyerprofileDrawer()">
+      <app-mini-buyer-profile></app-mini-buyer-profile>
+    </div>
+    <div *ngIf="isMessageDrawer()">
+      <app-message-send-drawer></app-message-send-drawer>
+    </div>
+  </div>
+</div>
+<div *ngIf="isBuyerCommpleteProfile()">
+  <div class="row">
+    <div class="col-md-10">
+
+    </div>
+    <div class="col-md-2 floatRight">
+      <button type="button" class="btn btn-submit-rfq-close-1 RectangleYes-2-1" (click)="goBack()">Go Back</button>
+    </div>
+  </div>
+  <div>
+    <app-buyer-view-profile></app-buyer-view-profile>
+  </div>
+
+</div>
+<div *ngIf="isModelShow()">
+  <app-rating-model></app-rating-model>
+</div>
+
+<!-- <app-upgrade-account *ngIf="showUpgradeAccountModal" [quoteRFQ]=false [RfqId]=0 (modalCloseEvent)="closeModal($event)"></app-upgrade-account> -->
+<app-buyer-feedback-model [companyName]="companyName" [companyId]="companyId" *ngIf="showFeedbackModel"
+  (modelCloseChange)="showFeedbackModel = $event"></app-buyer-feedback-model>

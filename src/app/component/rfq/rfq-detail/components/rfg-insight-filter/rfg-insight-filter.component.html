@@ -1,0 +1,10 @@
+<div>
+  <div style=" width: 100%; display: flex; justify-content: start; ">
+
+    <div class="lead-box" *ngFor="let filter of rfqFilterObjectArray;  let i = index;" (click)="setStatus(i, filter.status)" [ngClass]="{'active': selectedBox === i }">
+      <h5>{{ filter.statusCount }}</h5>
+      <span>{{ filter.status }}</span>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,307 @@
+<div [ngClass]="(isSidePanel())?'col-md-9 col-9':'col-md-12'">
+
+  <div style="padding: 10px;">
+    <div class="row myRFQ-Header">
+      My Orders 
+    </div>
+    <div class="header">
+      <div class="row header-filters">
+        <div class="col-md-3">
+          <select style="width: 100%;height: 35px;" [(ngModel)]="allStatusFilterValue" (change)="filterAll()">
+            <option value=null>Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Cancelled">Cancelled</option>
+            <option value="Retracted">Retracted</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select style="width: 100%;height: 35px;" [(ngModel)]="companyFilterValue" (change)="filterAll()">
+            <option value=null>Company Name</option>
+            <option *ngFor="let order of uniquesupplierArray;let i = index" [value]=order.companyId>
+              {{order.supplierCompanyName}}</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select style="width: 100%;height: 35px;" [(ngModel)]="contactFilterValue" (change)="filterAll()">
+            <option value=null>Contact Name</option>
+            <option *ngFor="let order of uniqueObjectArray;let i = index" [value]=order.contactId>{{order.contactName}}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-3" *ngIf="supplierSide">     
+          <select style="width: 100%;height: 35px;" [(ngModel)]="companyUsersFilterValue" (change)="filterAll()">
+            <option value="0">All</option>
+            <option *ngFor="let order of uniqueContactArray;let i = index" 
+                    [value]=order.contactId
+                   >{{order.fullName }}
+            </option>
+          </select>
+        </div>
+        <!-- [selected] = "order.contactId == this.LoggedId" -->
+
+        <!-- <div class="col-md-4">
+                <input style="width: 100%;height: 30px;" type="text" placeholder="Search">
+            </div> -->
+        <div class="col-md-3">
+          <div class="input-container" [ngClass]="supplierSide ? 'searchBox': '' ">
+            <i class="fa fa-search icon-search" (click)="filterAll()" placement="top" container="body"
+              ngbTooltip="Search by RFQ#, PO# or Company name"></i>
+            <input class="search search-text" [(ngModel)]="searchFilterValue"
+              placeholder="Search by RFQ#, PO# or Company name" type="text" (keypress)="searchByKey($event)"
+              (input)="checkSearch(searchFilterValue)" />
+            <i class="fa fa-times-circle icon" (click)="removeTextValue()" placement="top" container="body"
+              ngbTooltip="Remove Text"></i>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="row col-md-12 row-header-mobile-view">
+        <div class="col-md-2 col-2">RFQ</div>
+        <div class="col-md-2 col-3">Order</div>
+        <div class="col-md-3 col-3">Status</div>
+        <div class="col-md-3 col-4">Company name</div>
+        <div class="col-md-2 col-2">Actions</div>
+      </div> -->
+
+      <!-- (click)="openSidePanel(order.supplierContactId,order.contactName,order.supplierCompanyName,order.rfqId,i)" -->
+      <div class="col-md-12 header-bgcolor" *ngFor="let order of orderListArray;let i = index">
+        <div class="order-header-info">
+          <div class="rfqNo">
+            <span class="mr-2">RFQ: </span><div style="color:#2E58D6;margin-bottom: 8px;">{{order.rfqId}}</div>
+          </div>
+          <div class="orderNo">
+            <span class="mr-2">Order: </span><div style="color:#2E58D6;cursor: pointer;" [innerHTML]="order.orderNumber"></div>
+          </div>
+          <!-- <div style="color:#2E58D6;" class="col-md-2">{{order.orderNumber}}</div> -->
+          <div class="ordSt">Status: {{order.status}}</div>
+          <div class="cpny mt-5">
+            <span class="mr-2">Company: </span>
+            <div style="color:#2E58D6;cursor: pointer; " (click)="openProfileSideDrawer(order.encryptedContactId, order.contactId,order.contactName,order.supplierCompanyName,order.rfqId,i)">
+              {{order.supplierCompanyName}}
+            </div>
+            <span>
+              <div class="env" style="display: flex;">
+                <i style="color:#2E58D6; position: relative; top: 4px;" class="fa fa-envelope-o icon-second p-l-10"
+                  (click)="openMessageDrawer($event,order.contactId, order.rfqId, order.contactName)">
+                </i>
+                <div *ngIf="order.poFileUrl.length != 0" style="margin-left: -2px"><i style="color:#2E58D6;;" class="fa fa-download Selectable p-l-10" (click)="downloadPoFile(order.poFileUrl, true)"></i></div> 
+              </div>
+            </span>
+          </div>
+          <div class="show" style="display: flex;">
+            <div (click)="onExpand(i)" (click)="(selectedDivIndex === i)" style="margin: -4px 0 0 8px; cursor: pointer;">
+              <i class="fa fa-chevron-down" aria-hidden="true" *ngIf="selectedDivIndex !== i" style="color: #2E58D6;"></i>
+              <span *ngIf="selectedDivIndex !== i" class="menu-name">{{ showDetails }}</span>
+              <i class="fa fa-chevron-up" aria-hidden="true" *ngIf="selectedDivIndex === i" style="color: #2E58D6;;"></i>
+              <span *ngIf="selectedDivIndex === i" class="menu-name">{{hideDetails}}</span>
+            </div>
+          </div>
+        </div>
+
+        <ng-container *ngIf="selectedDivIndex === i">
+         
+            <div class="bg-white shadow-sm p-3 hide-content" *ngFor="let items of partsAvail;let j = index">
+            
+              <!-- <div style="font-weight: bold;" class="row col-md-12">
+                <div class="col-md-2">Part</div>
+                <div class="col-md-2">Status</div>
+                <div class="col-md-2">Quantity</div>
+                <div class="col-md-2">Price(/unit)</div>
+                <div class="col-md-2">Price(Total)</div>
+                <div class="col-md-2">Actions</div>
+              </div> -->
+              <div class="ptr-info mb-2">
+              <div class="prt"><label for="prt">Part:</label> {{items.rfq_part_description}} {{items.rfq_part_id}}</div>
+              <div class="sts"><label for="sts">Status:</label> {{items.rfq_part_status}}</div>
+              <div class="qtty"><label for="qtty">Quantity:</label> {{items.rfq_part_quoted_quantity}}</div>
+              <div class="pru"><label for="pru">Price(/unit):</label> {{items.rfq_part_quoted_price_per_unit}}</div>
+              <div class="prt"><label for="prt">Price(Total):</label> {{items.rfq_part_quoted_quantity_total_price}}</div>
+              <div style="display: flex; flex-wrap: nowrap;">
+                <!-- {{po_file}} FILE NAME
+              <i style="color:#2E58D6;padding: 5px;" class="fa fa-download Selectable p-l-10" (click)="downloadPoFile(poFile, true)"></i> -->
+
+                <a style="padding: 5px;color:#2E58D6;" class="manu-name" (click)="openViewAllSidePanel(items.rfq_part_id)">View Status</a>
+                <i style="padding: 5px;color:#2E58D6;" (click)="onExpandParts(j)" (click)="(selectedPartDivIndex === j)" [ngClass]="selectedPartDivIndex===j?'fa fa-chevron-down':'fa fa-chevron-up'" aria-hidden="true"></i>
+              </div>
+              </div>
+           
+              <!-- <div class="col-md-12">
+                <div class="container-progress">
+                  <ul class="progressbar">
+                    <li class="actived" [class.navi]="isSecondTabCompleted">
+                      Add Parts
+                    </li>
+                    <li [class.actived]="isSecondTabCompleted && !isThirdTabCompleted"
+                      [class.navi]="isSecondTabCompleted && isThirdTabCompleted">
+                      Add RFQ Details
+                    </li>
+                    <li [class.actived]="isSecondTabCompleted && isThirdTabCompleted">
+                      Review
+                    </li>
+                  </ul>
+                </div>
+              </div> -->
+              <ng-container *ngIf="selectedPartDivIndex === j">
+                <div>
+                  <p class="p-details">Details</p>
+                  <div class="block-content">
+                    <div class="block-content-details">
+                      <!-- <p class="block-content-info">
+                    New or Existing Part ?: {{items.rfq_part_existing}} <br>
+                    1st Quantity <br>
+                    Quantity Unit
+                  </p> -->
+                      <p class="detail-content">
+                        New or Existing Part ?:
+                        <span class="detail-info">{{
+                          items.rfq_part_existing
+                          }}</span>
+                      </p>
+                      <p class="detail-content">
+                        Awarded Quantity:
+                        <span class="detail-info">{{
+                          items.rfq_part_first_quantity
+                          }}</span>
+                      </p>
+                      <p class="detail-content">
+                        Quantity Unit:<span class="detail-info">{{
+                          items.rfq_part_first_quantity_unit
+                          }}</span>
+                      </p>
+                    </div>
+                    <div class="block-content-details">
+                      <!-- <p class="block-manu-info">
+                    Manufacturing Process: {{items.rfq_part_manufacturing_process}} <br>
+                    Manufacturing Technique: {{items.rfq_part_manufacturing_technique}}<br>
+                    Material {{items.rfq_part_material}}
+                  </p> -->
+                      <p class="detail-content">
+                        Manufacturing Process:
+                        <span class="detail-info">{{
+                          items.rfq_part_manufacturing_process
+                          }}</span>
+                      </p>
+                      <p class="detail-content">
+                        Manufacturing Technique:
+                        <span class="detail-info">{{
+                          items.rfq_part_manufacturing_technique
+                          }}</span>
+                      </p>
+                      <p class="detail-content">
+                        Material:
+                        <span class="detail-info">{{
+                          items.rfq_part_material
+                          }}</span>
+                      </p>
+                    </div>
+                    <div class="block-content-details">
+                      <!-- <p class="block-part-info">
+                    Post-Prod. Process:{{items.rfq_part_process}}<br>
+                    Part Specification: {{items.rfq_part_specification}}<br>
+                    Part information for Manufacturing: {{items.rfq_part_information}}
+                  </p> -->
+                      <p class="detail-content">
+                        Post-Prod. Process:
+                        <span class="detail-info">{{
+                          items.rfq_part_process
+                          }}</span>
+                      </p>
+                      <p class="detail-content" title="{{ items.rfq_part_specification }}" readonly="true">
+                        Part Specification:
+                        <span class="detail-info">{{items.rfq_part_specification}}</span>
+                      </p>
+                      <p class="detail-content" title="{{ items.rfq_part_information }}" readonly="true">
+                        Part information for Manufacturing:
+                        <span *ngIf="items.rfq_part_information" class="detail-info">{{
+                          items.rfq_part_information
+                          }}</span>
+                        <span *ngIf='items.rfq_part_information == ""' class="detail-info">NA</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+            </div>
+
+        </ng-container>
+      </div>
+
+
+      <div *ngIf="isSidePanel()" class="col-md-3 sideDrawer Drawer-Shadow">
+        <div *ngIf="isBuyerProfileDrawer()">
+          <app-mini-buyer-profile></app-mini-buyer-profile>
+        </div>
+        <div *ngIf="isMessageDrawer() && !isBuyerProfileDrawer()">
+          <app-message-send-drawer></app-message-send-drawer>
+        </div>
+
+        <div *ngIf="isMyOrder()">
+          <app-my-order-view-all></app-my-order-view-all>
+        </div> 
+
+        <div *ngIf="isSupplierProfileDrawer()">
+          <app-my-order-supplier-profile></app-my-order-supplier-profile>
+        </div>
+        
+      </div>
+
+
+
+
+      <!-- ------------------------- Pagination start----------------------- -->
+      <div class="row col-md-12 order-pagination">
+        <div class="col-md-4">
+          <div class="dataTables_length" id="example_length">
+            <label>
+              Show
+              <select name="example_length" aria-controls="example" class [(ngModel)]="inputLength">
+                <option value="24">24</option>
+                <option value="48">48</option>
+                <option value="96">96</option>
+              </select>
+              entries
+            </label>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="paginations">
+            <div>
+              <div id="radioBtn" class="btn-group">
+                <a [ngClass]="{ disabled: currentIndex == 1 || pageNumber == 0 }"
+                  class="btn btn-primary btn-sm notActive" data-bs-toggle="fun" data-title="Y">
+                  Previous
+                </a>
+                <a *ngFor="let page of pagesIndex" (click)="setPage(page)" [ngClass]="currentIndex == page
+                        ? 'btn btn-primary btn-sm active'
+                        : 'btn btn-primary btn-sm notActive'" data-bs-toggle="fun" data-title="X">
+                  {{ page }}
+                </a>
+                <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+                  data-bs-toggle="fun" data-title="N">
+                  Next
+                </a>
+                <!-- <a [ngClass]="currentIndex == pageNumber || pageNumber == 0
+                        ? 'btn btn-primary btn-sm active'
+                        : 'btn btn-primary btn-sm notActive'" (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                    Next
+                  </a> -->
+              </div>
+              <input type="hidden" name="fun" id="fun" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- *ngIf="!isRfqAvailable" -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="pull-right padd-right">
+            <label class="showreccount">{{ currentIndex }} of {{ pageNumber }}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ------------------------- Pagination end----------------------- -->
+  </div>
+ 
+</div>

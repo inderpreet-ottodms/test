@@ -1,0 +1,131 @@
+<div  *ngIf="quoteViewModel.length">
+  <div class="quote-main-row" *ngFor="let quote of quoteViewModel; let i = index"  style="margin-bottom: 10px;">
+
+
+  <div class="flex-container" >
+    <div class="border-checkbox-section" style="width: 3%;padding-top:15px">
+      <div class="border-checkbox-group border-checkbox-group-primary">
+        <input disabled class="border-checkbox" type="checkbox">
+        <label class="border-checkbox-label"></label>
+      </div>
+    </div>
+    <div style="width: 14%;">
+      <span class="f-16" style="color:#4a90e2;" placement="top" data-container="body"
+        ngbTooltip="{{  quote.rfqPartStatus }}">
+        {{ quote.rfqPartStatus | dotLimit:'12' }} </span>
+      <div class="rfq-star">
+        <span style="color:#4a90e2;">n/a</span>
+        <ng-template #t let-fill="fill">
+          <span class="star" [class.full]="fill === 100">
+            <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+          </span>
+        </ng-template>
+        <ngb-rating rate="0" [starTemplate]="t" [readonly]="true" max="5">
+        </ngb-rating>
+      </div>
+    </div>
+    <div class="pointerCursor" style="width: 16%;padding-top:15px">
+      <!-- 10/23/2020 -->
+      <!-- {{  | date: 'MM/dd/yyyy'}} -->
+    </div>
+    <div style="width: 18%;padding-top:15px">
+      {{quote.unit}} {{quote.unitType }} <br /> $ {{quote.price}}
+      <!-- {{ (rfq.qty1) ? '$'  : '' }}{{rfq.qty1 | Na }}  -->
+    </div>
+    <div class="quote-main-col" style="width:20%;padding-top:10px">
+      <div class="f-12"
+        style="background-color: #ccc;width: 35px;height: 35px;padding: 6px 5px 5px 7px;border-radius: 50%;"
+        *ngIf="quote.rfqPartStatusId === 17">
+        <img src="assets/non-mfg-award.svg" data-container="body"
+        ngbTooltip="Awarded">
+      </div>
+      <div class="f-12"  *ngIf="quote.rfqPartStatusId === 18">
+        <span class="fa-stack fa-lg"   data-container="body"
+        ngbTooltip="Not Awarded" style="color:#ccc;">
+          <i class="fa fa-trophy fa-stack-1x"></i>
+          <i class="fa fa-ban fa-stack-2x"></i>
+        </span>
+
+      </div>
+      <div class="f-12"
+        *ngIf="quote.rfqPartStatusId === 16">
+        <img src="assets/rfq/award2-12.png" srcset="assets/rfq/award2-12@2x.png 2x, assets/rfq/award2-12@3x.png 3x"  data-container="body"
+        ngbTooltip="Awarded">
+      </div>
+      <div class="f-12"
+      *ngIf="quote.rfqPartStatusId === 20">
+      <img src="assets/rfq/award2-12.png" srcset="assets/rfq/award2-12@2x.png 2x, assets/rfq/award2-12@3x.png 3x"  data-container="body"
+      ngbTooltip="Awarded">
+    </div>
+    </div>
+    <div  *ngIf="quote.otherThanAwardedStatusTileExpansionDataList && quote.otherThanAwardedStatusTileExpansionDataList.length" class="p-t-20">({{quote.otherThanAwardedStatusTileExpansionDataList.length}}) Parts</div>
+    <div style="width:13%;"></div>
+    <div class="fill-area-content flexbox-item-grow"
+      style="width: 16%;font-size: 28px; font-weight: bold; padding-right: 5px;background-color: #edeff7;padding-left: 10px;padding-top: 10px;">
+      <i class="icon-third" style="float: right;color:#4099ff;" data-container="body" ngbTooltip="Click To Expand"
+        [ngClass]="(showBlock === 1)?'fa fa-angle-down':'fa fa-angle-right'" (click)="toggle(i+1)"></i>
+    </div>
+  </div>
+  <div style="border-top: 1px solid #dee2e6;display: none;" [style.display]="showBlock === (i+1)? 'block':'none'">
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4 common_heading f-12" style="padding: 10px;"> All prices are quoted in USD </div>
+    </div>
+    <div class="row" style="border-radius: 3px;border: 1px solid #dee2e6;padding:10px;margin: 5px 15px;"
+      *ngFor="let partDetails of quote.otherThanAwardedStatusTileExpansionDataList">
+      <div class="col-md-3">
+        <span class="f-14 f-w-600">{{ partDetails.partName}}</span><br />
+        <span class="f-14">#{{ partDetails.partNumber}}</span>
+      </div>
+      <div class="col-md-4">{{partDetails.unit}} {{partDetails.unitType }} <br />
+        $ {{partDetails.price}}</div>
+      <div class="col-md-3">
+
+        <div class="f-12"
+        style="background-color: #ccc;width: 35px;height: 35px;padding: 6px 5px 5px 7px;border-radius: 50%;"
+        *ngIf="partDetails.rfqPartStatusId === 17">
+        <img src="assets/non-mfg-award.svg" data-container="body"
+        ngbTooltip="Awarded">
+      </div>
+      <div class="f-12"  *ngIf="partDetails.rfqPartStatusId === 18">
+        <span class="fa-stack fa-lg"   data-container="body"
+        ngbTooltip="Not Awarded" style="color:#ccc;">
+          <i class="fa fa-trophy fa-stack-1x"></i>
+          <i class="fa fa-ban fa-stack-2x"></i>
+        </span>
+
+      </div>
+      <div class="f-12"
+        *ngIf="partDetails.rfqPartStatusId === 16">
+        <img src="assets/rfq/award2-12.png" srcset="assets/rfq/award2-12@2x.png 2x, assets/rfq/award2-12@3x.png 3x"  data-container="body"
+        ngbTooltip="Awarded">
+      </div>
+      <div class="f-12"
+      *ngIf="partDetails.rfqPartStatusId === 20">
+      <img src="assets/rfq/award2-12.png" srcset="assets/rfq/award2-12@2x.png 2x, assets/rfq/award2-12@3x.png 3x"  data-container="body"
+      ngbTooltip="Awarded">
+    </div>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-retract" (click)="retractAward(partDetails.rfqPartId,partDetails.rfqPartStatusId)" [disabled]="rfqStatus == 1 || rfqStatus == 2">Retract</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<ng-template #content let-d="dismiss" data-backdrop="static" data-keyboard="false">
+
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Retract Award</h4>
+  </div>
+  <div class="modal-body">
+    <div class="m-b-20">
+      <span>Are you sure you want to retract your award?</span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn csvErrorModelBtn" (click)="closeErrorCSVModel();"
+      style="width: 45%; ">Cancel</button>
+    <button type="button" class="btn csvErrorModelBtn1" (click)="singleDecline();" style="width: 50%; ">Retract Award</button>
+  </div>
+</ng-template>

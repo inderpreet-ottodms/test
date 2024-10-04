@@ -1,0 +1,43 @@
+<ng-template #ndaModel let-d="dismiss" data-backdrop="static" data-keyboard="false">
+    <div class="modal-header">
+      <h4 class="modal-title">NDA Agreement</h4>
+      <button type="button" class="close" data-bs-dismiss="modal" (click)="d('notNow');closeAccountUpgradePopUp(false)">
+        <i class="fa fa-times-circle" aria-hidden="true" style="color: #4a90e2;"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 text-left">
+            <p>
+                Do you agree to the Buyer's NDA agreement?
+            </p>
+        </div>
+        <div class="col-md-12 text-left" style="background-color: #f6f7fb;">
+          <div style="display: flex;justify-content: space-between; padding:10px">
+              <div>
+                Standard MFG NDA Agreement Terms
+                </div>
+                <div (click)="onClickNda()">
+                  <button type="button" class="btn read-button">Read NDA</button>
+                </div>
+          </div>
+          <div *ngIf="isNDAContent">
+              <p [innerHTML]="ndaContent | sanitizeNolimit"></p>
+          </div>
+            
+        </div>
+        <div class="col-md-12">
+            <p class="f-12" style="color:#919aa3;">
+              <span>NOTE:</span>&nbsp;
+              <span>By not accepting the NDA, you will not be able to view the attached file(s).</span>
+            </p>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 button-margin text-center">
+          <button type="button" class="cancel-button" (click)="closeAccountUpgradePopUp(false)">No</button>
+          <button type="button" class="accept-button m-r-10" (click)="closeAccountUpgradePopUp(true)">Accept</button>
+        </div>
+      </div>
+    </div>
+    </ng-template>

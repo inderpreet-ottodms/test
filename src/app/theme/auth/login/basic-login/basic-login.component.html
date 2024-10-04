@@ -1,0 +1,114 @@
+<div class="login-bg login2" style="font-family: Poppins !important">
+  <section>
+    <div class="container">
+      <div class="row justify-content-center align-items-center">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="loginpage-logo">
+            <img style="width: 35%;" src={{logo}} alt="MFG Logo">
+          </div>
+          <div id="login-box-login">
+            <div class="background-white-login">
+              <div class="tabbable-line-login">
+                <ul class="nav nav-tabs login-tabs">
+                  <li class="parent50 align-li active"><a>SIGN IN </a></li>
+                </ul>
+                <div class="tab-content-login">
+                  <div id="login" class="active loginregister">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="login-page-title">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="login-page-header">Welcome to the manufacturing marketplace!</div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="login-page-subheader">Please sign in to continue.</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <form name="form" (ngSubmit)="onLogin()" #f="ngForm" novalidate>
+                        <div class="form-group"
+                          [ngClass]="{ 'has-error': !username.valid && (f.form.controls.username?.dirty || f.form.controls.username?.touched) }">
+                          <label for="username">Email</label>
+                          <input type="text" class="form-control" [(ngModel)]="loginModel.username" #username="ngModel"
+                            name="username" required />
+                          <div
+                            *ngIf="!username.valid && (f.form.controls.username?.dirty || f.form.controls.username?.touched)"
+                            class="help-block">Email is required</div>
+                        </div>
+                        <div class="form-group"
+                              [ngClass]="{ 'has-error':!password.valid && (f.form.controls.password?.dirty || f.form.controls.password?.touched) }">
+                              <label for="password">Password</label>
+                              <div class="" style="height: auto;">
+                                <input type="password" class="form-control" [(ngModel)]="loginModel.password" #password="ngModel" name="password" required [type]="passwordVisible ? 'text' : 'password'" style="height: 100%;" />
+                                <span class="col-1 text-inverse eye-icon" style="position: relative; float: right; top: -25px;" (click)="togglePasswordVisibility()">
+                                      <i class="fa" [ngClass]="passwordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                </span>
+                              </div>
+                              <div
+                                *ngIf="!password.valid && (f.form.controls.password?.dirty || f.form.controls.password?.touched)"
+                                class="help-block">Password is required</div>
+                              </div>
+                        <div class="row m-t-25 text-left">
+                          <div class="col-12">
+                            <div class="checkbox-fade fade-in-primary d-">
+                              <label>
+                                <input type="checkbox" [(ngModel)]="loginModel.isRemember"
+                                  class="ng-untouched ng-pristine ng-valid" name="isRemember">
+                                <span class="cr" style="color: #2E58D6;">
+                                  <i class="cr-icon fa fa-check txt-primary" style="color: #2E58D6;"></i>
+                                </span>
+                                <span class="text-inverse">Remember me</span>
+                              </label>
+                            </div>
+                            <div class="forgot-phone text-right f-right">
+                              <a class="text-right f-w-600 activelink" href="#/auth/forgot"> Forgot Password?</a>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="input-group login-failed" *ngIf="isLoginFailed">
+                          {{errorLoginMessage}}
+                        </div>
+                        <div class="form-group b-t-10" style="margin-bottom: 0px;">
+                          <button type="submit" [disabled]="!f.form.valid" class="btn btn-md btn-block waves-effect text-center m-b-20 login-btn " style="width: 100%;">Sign In &nbsp; <i class="fa fa-spinner fa-spin" *ngIf="isLoginResonse"></i></button>
+                        </div>
+                        <div class="form-group b-t-10" style="margin-bottom: 0px;">
+                          <button type="button" class="btn btn-md btn-block waves-effect text-center m-b-20 btn-linkedin" (click)="loginWithLinkIn()"><i class="fa fa-linkedin" aria-hidden="true"></i>Sign in with LinkedIn &nbsp; </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tabbable-line-login">
+                <!-- <ul class="nav nav-tabs login-tabs">
+                  <li class="parent50 align-li active"><a>Register</a></li>
+                </ul> -->
+                <div>
+                  <div class="row" style="padding: 0px 40px;margin-bottom: 10px;">
+                    <div class="col-md-12 p-10">
+                     <div class="text-center">
+                      <p style="color: #919aa3">Not a member? <a (click)='openRegistrationLink()' class="register_here"> Register here.</a></p>
+                     </div> 
+                    </div>                    
+                    <!-- <div class="col-md-6 p-10">
+                      <a href="https://www.mfg.com/find-mfg" class="btn btn-md btn-block text-center m-b-20 m-t-20 buyer-btn">Buyer Register</a>
+                    </div>
+                    <div class="col-md-6 p-10">
+                      <a href="https://www.mfg.com/get-leads/" class="btn btn-md btn-block text-center m-b-20 m-t-20 supplier-btn">Manufacturer Register</a>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

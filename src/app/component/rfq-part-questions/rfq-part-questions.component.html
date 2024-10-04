@@ -1,0 +1,11 @@
+<div class="col-md-12 inner-div" *ngFor="let que of questionList;let i=index">
+  <label for="description" class="label-part-detail">{{que.question}}</label>
+  <div class="form-radio m-b-10">
+    <div class="radio" [class.no-pointer]="setDisabled == '1'"  *ngFor="let ans of que.optionList;">
+      <label>
+        <input type="radio" class="form-control" [name]="i" [value]="ans.value" (change)="checkAnswer(que.questionId, $event.target.value)" [checked]="que.optionSelected === ans.value" [disabled]="setDisabled == '1'? true: ''">
+        <i class="helper"></i>{{ ans.label }}
+      </label>
+    </div>
+  </div>
+</div>

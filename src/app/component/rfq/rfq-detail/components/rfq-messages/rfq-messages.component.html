@@ -1,0 +1,182 @@
+<div class="tab-pane" id="messages">
+  <section>
+    {{reloadMessages()}}
+    <div *ngIf="isLoader">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+    <div class="input-group">
+      <div id="radioBtn" class="btn-group">
+        <a class="btn btn-primary btn-sm" data-bs-toggle="fun" data-title="Y" (click)="setStatusFilter('All')"
+          [ngClass]="(activeStatusFilterBtn == 'All')? 'active': 'notActive'">All</a>
+        <a class="btn btn-primary btn-sm" data-bs-toggle="fun" data-title="X" (click)="setStatusFilter('Read')"
+          [ngClass]="(activeStatusFilterBtn == 'Read')? 'active': 'notActive'">Read</a>
+        <a class="btn btn-primary btn-sm" data-bs-toggle="fun" data-title="N" (click)="setStatusFilter('Unread')"
+          [ngClass]="(activeStatusFilterBtn == 'Unread')? 'active': 'notActive'">Unread</a>
+          <a class="btn btn-primary btn-sm" data-bs-toggle="fun" data-title="Y" (click)="setStatusFilter('sent')" [ngClass]="(activeStatusFilterBtn == 'sent')? 'active': 'notActive'">Sent</a>
+        </div>
+      <input type="hidden" name="fun" id="fun">
+    </div>
+    <br>
+    <div class="table-responsive"  *ngIf="!isLoader && !isRfqAvailable" >
+      <div class="tbl-header fixed-header">
+        <table class="nda-table">
+          <thead>
+            <tr>
+              <td class="message-results"> {{items?.length}} results</td>
+              <td class="message-results2"> <div *ngIf="selectedRowCount > 1">{{selectedRowCount}} selected</div></td>
+              <td><i [ngClass]="(selectedRowCount > 1)? 'iconEnabled' :'iconDisabled'" class="fa fa-envelope" (click)="openSidePanel('')" ngbTooltip="Message Manufacturers" placement="top" container="body"></i></td>
+              <td><i class="fa fa-trash" [ngClass]="(selectedRowCount > 1)? 'iconEnabled' :'iconDisabled'" (click)="deleteMultipleMessage()" ngbTooltip="Archive Messages" placement="top" container="body"></i></td>
+            </tr>
+          </thead>
+        </table>
+        <table class="table table-hover rfqtable">
+          <thead>
+            <tr>
+              <th class="nda-checkboxth"><input type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();"><span class="pl-2">Select All</span></th>
+              <!-- <th class="message-contact">Company Name</th>
+              <th class="message-contact">{{ sendOrRecived }}</th>
+              <th class="message-subject">Subject</th>
+              <th class="message-date">Date</th>
+              <th colspan="2" style="color: #2E58D6;">Actions</th> -->
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="tbl-content">
+        <div class="table table-hover rfqtable">
+          <div *ngFor="let message of items; let i = index; ">
+            <div style="width:100%" [ngClass]="{'active-msg': selectedDivIndex===i } ">
+              <div class="messg-container" [ngClass]="(message.messageRead == true)? 'grayTr' : '' " (click)="openMessageThreadDrawer(message)">
+                <div class="nda-checkbox chk">
+                  <div>
+                    <input type="checkbox" [(ngModel)]="message.isSelected" (change)="checkIfAllSelected()">
+                  </div>
+                </div>
+
+                <div class=" pointerCursor contct" style="white-space: initial !important">
+                  <div class="message-date mb-2">
+                    {{message.messageDate  | date: 'MMM-dd-yyyy'}}
+                  </div>
+                  <div class="comp-name" *ngIf="activeStatusFilterBtn !== 'sent'">
+                    <b>Company Name:</b> {{message.companyName | dotLimit:'17'}}
+                  </div>
+                  <div *ngIf="activeStatusFilterBtn === 'sent'">
+                      To: {{message.toCompanyName | dotLimit:'17'}}
+                  </div>
+                  <div *ngIf="activeStatusFilterBtn !== 'sent'">
+                    {{ sendOrRecived }}: {{message.fromContName}}
+                  </div>
+                  <div *ngIf="activeStatusFilterBtn === 'sent'">
+                    {{ sendOrRecived }}: {{message.toContName}}
+                  </div>
+                </div>
+                
+                <!-- {{message.messageSubject}} -->
+                <div class="message-subject subj" style="white-space: initial !important">
+                    <div [innerHTML]="getCompleteMessage(message, message.messageSubject,message.messageDescr) | dotLimit:'200'" > </div>
+                </div>
+
+                <div class="tgl"  [ngClass]="(message.messageRead == true)?'editdelete grayTr lastTd':'editdelete lastTd'"  (click)="toggleMessageThreadDiv(i)">
+                  <i class="fa fa-chevron-down" aria-hidden="true" *ngIf="selectedDivIndex !== i"></i><i class="fa fa-chevron-up" aria-hidden="true" *ngIf="selectedDivIndex === i"></i>
+                </div>
+
+                <div class="messg-footer ftr">
+                  <div *ngIf=" activeStatusFilterBtn !== 'sent'" [ngClass]="(message.messageRead == true)?'editdelete grayTr topTd':'editdelete topTd'" (click)="openSidePanel1($event, message.fromCont, message.rfqId, message.fromContName)">
+                    <i class="fa fa-envelope"></i>
+                  </div>
+                  <div *ngIf="activeStatusFilterBtn === 'sent'" [ngClass]="(message.messageRead == true)?'editdelete grayTr topTd':'editdelete topTd'" (click)="openSidePanel1($event, message.toCont, message.rfqId, message.toContName)">
+                    <i class="fa fa-envelope"></i>
+                  </div>
+                  <div class="pointerCursor editdelete" [ngClass]="(message.messageRead == true)?'grayTr':''"  (click)="deleteMessage(message)"><i class="fa fa-trash" ngbTooltip="Archive Message"></i></div>
+
+                  <!-- <td [ngClass]="(message.messageRead == true)?'editdelete grayTr lastTd':'editdelete lastTd'"  (click)="toggleMessageThreadDiv(i)">
+                    <i class="fa fa-chevron-down" aria-hidden="true" *ngIf="selectedDivIndex !== i"></i><i class="fa fa-chevron-up" aria-hidden="true" *ngIf="selectedDivIndex === i"></i>
+                  </td> -->
+                  <!-- <td  *ngIf="message.isMessageThread == false" [ngClass]="(message.messageRead == true)?'editdelete grayTr lastTd':'editdelete lastTd'"  >
+                    <i class="fa fa-chevron-down iconDisabled" aria-hidden="true"></i>
+                  </td> -->
+                </div>
+              </div>
+            </div>
+            <div style="width: 98%;padding-left:25px;" *ngIf="selectedDivIndex===i">
+                <app-message-threads [message]="message" (changeToReply)="openMessageThreadDrawer($event)" ></app-message-threads>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <br>
+  <div class="row"  *ngIf="!isRfqAvailable">
+    <div class="col-md-12">
+        <div class="paginations" >
+            <div>
+              <div id="radioBtn" class="btn-group">
+                <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" class="btn btn-primary btn-sm notActive"
+                  (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                  Previous
+                </a>
+                <a *ngFor="let page of pagesIndex" (click)="setPage(page)" [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                  data-bs-toggle="fun" data-title="X">
+                  {{page}}
+                </a>
+                <a [ngClass]="(currentIndex == pageNumber || pageNumber == 0)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                  (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                  Next
+                </a>
+              </div>
+              <input type="hidden" name="fun" id="fun">
+            </div>
+          </div>
+      </div>
+      <div class="col-md-12">
+          <div class="pull-right padd-right">
+            <label class="showreccount"> {{currentIndex }} of {{pageNumber}} </label>
+          </div>
+        </div>
+    </div>
+
+</div>
+<div class="myRFQ-rfq-no-available" *ngIf="isRfqAvailable">
+    <div class="row" style="text-align: center;padding-top:70px">
+      <div class="col-md-12">
+        <div>
+          <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+          assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-top:34px">
+      <div class="col-md-12">
+        <div class="myRFQ-noRFQActive-helper-text">You don’t have any Message at this time.</div>
+      </div>
+    </div>
+    <div class="row" style="padding-top:10px">
+      <div class="col-md-12">
+        <div class="myRFQ-noRFQActive-helper-sub-text">You will be notified when you have Message.</div>
+      </div>
+    </div>
+  </div>
+<div class="custom-confirmation" *ngIf="isCencel2">
+  <p-confirmDialog header="Confirmation" icon="" width="629" height="220" #msgDlt>
+    <p-footer>
+      <div class="row">
+        <div class="col-md-6">
+          <button type="button" class="btn btn-ignore-rfq" (click)="msgDlt.reject()">Cancel</button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="msgDlt.accept()"> Archive Message</button>
+        </div>
+      </div>
+    </p-footer>
+  </p-confirmDialog>
+</div>

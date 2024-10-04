@@ -1,0 +1,252 @@
+<div class="">
+
+  <div class="row" *ngIf="!isInvoicePdfPreview" style="padding: 0px 14px; margin-bottom: -10px;">
+    <div class="col-12 m-t-15">
+      <h4>Create Invoice</h4>
+    </div>
+  </div>
+
+  <div class="row">
+    <div [ngClass]="isSidePanel()?'col-md-8':'col-md-12'">
+
+      <div class="row bg-white background-white" [@slideInOut]="showPdfPreview">
+        <div class="col-md-12" >
+          <span class="color-blue" (click)="goBack()"><i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;Back to Invoice List</span>
+        </div>
+
+
+
+
+        <div class="col-md-12 m-t-20 text-center">
+          <h5>Invoice Details</h5>
+          <!-- {{invoicePreviewData | json}} -->
+
+        </div>
+        <div class="col-md-12 m-t-10">
+          <form class="" [formGroup]="invoiceDetailForm">
+            <div class="row">
+              <div class="col-4 offset-2 m-b-10">
+                <label><span class="color-red">*</span> &nbsp;Invoice For</label>
+                <angular2-multiselect [data]='ContactModelList' [(ngModel)]="selectedContact"
+                  formControlName="invoiceFor" name="Processdrop" [settings]='companySettings'>
+                </angular2-multiselect>
+              </div>
+              <div class="col-4 m-b-10">
+                <div class="from-group">
+                  <label> <span class="color-red">*</span> &nbsp;Quote Reference<span class="helpertext">(Number or Name)</span></label>
+                  <input class="form-control" placeholder="Enter Quote Reference"
+                    formControlName="referenceNumber" type="text" name="referenceNumber" id="">
+
+                  <div class="has-danger"
+                    *ngIf=" (invoiceDetailForm.controls['referenceNumber'].dirty || invoiceDetailForm.controls['referenceNumber'].touched) && invoiceDetailForm.controls['referenceNumber'].invalid">
+                    <span *ngIf=" invoiceDetailForm.controls['referenceNumber'].hasError('required') ">
+                      Please enter quote reference number.
+                    </span>
+                    <span *ngIf="invoiceDetailForm.controls['referenceNumber'].hasError('pattern')">
+                      Only alpha Numeric.
+                    </span>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-4 offset-2 m-b-10">
+                <div class="from-group">
+                  <label> <span class="color-red"></span>&nbsp;Invoice Name</label>
+                  <input class="form-control" placeholder="Enter Invoice Name" formControlName="invoiceName" type="text"
+                    name="invoiceName" id="">
+                </div>
+              </div>
+              <div class="col-4 m-b-10">
+                <div class="from-group">
+                  <label> <span class="color-red">*</span>&nbsp;Invoice Number</label>
+                  <input class="form-control" (focusout)="isInvoiceNoRepeated()" placeholder="Enter Invoice Number" formControlName="invoiceNumber"
+                    type="text" name="invoiceNumber" id="">
+                  <div class="has-danger"
+                    *ngIf=" invoiceDetailForm.controls['invoiceNumber'].invalid">
+                    <span *ngIf=" invoiceDetailForm.controls['invoiceNumber'].hasError('required') ">
+                      Please enter invoice number.
+                    </span>
+
+                    <span *ngIf="invoiceDetailForm.controls['invoiceNumber'].hasError('pattern')">
+                      Please enter numeric value and invoice number should not  start with zero.
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-4 offset-2 m-b-10">
+                <div class="from-group">
+                  <label><span class="color-red">*</span>&nbsp;Issue Date</label>
+                  <p-calendar name="quotesNeededBy" formControlName="issueDate"
+                    [style]="{'width':'96%' ,'height':'37px'}" [readonlyInput]="true"
+                    [inputStyle]="{'width':'96%' ,'height':'37px','border-bottom-color':'none'}" [showIcon]="true"
+                    placeholder="MM/DD/YYYY"></p-calendar>
+                </div>
+              </div>
+              <div class="col-4 m-b-10">
+                <div class="from-group">
+                  <label><span class="color-red">*</span>&nbsp;Currency</label>
+                  <select id="vertical-dropdown-icon" disabled class="form-control" formControlName="currency"
+                    name="paymentTerm" style="width: 100%">
+                    <option value=''>
+                      Select Currency
+                    </option>
+                    <option *ngFor="let currency  of currencyList" [value]="currency.currencyId">
+                      {{ currency.currencyCode }}
+                    </option>
+                  </select>
+
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4 offset-2">
+                <div class="from-group">
+                  <label><span class="color-red">*</span>&nbsp;Purchase Order Number</label>
+                  <input class="form-control" placeholder="Enter Purchase Order Number"
+                    formControlName="purchaseOrderNumber" type="text" name="purchaseOrderNumber" id="">
+                  <div class="has-danger"
+                    *ngIf=" (invoiceDetailForm.controls['purchaseOrderNumber'].dirty || invoiceDetailForm.controls['purchaseOrderNumber'].touched) && invoiceDetailForm.controls['purchaseOrderNumber'].invalid">
+                    <span *ngIf=" invoiceDetailForm.controls['purchaseOrderNumber'].hasError('required') ">
+                      Please enter purchase order number.
+                    </span>
+                    <span *ngIf=" invoiceDetailForm.controls['purchaseOrderNumber'].hasError('pattern') ">
+                      Only Numeric.
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <label>Payment Terms</label>
+                <select id="vertical-dropdown-icon" class="form-control" formControlName="paymentTerms"
+                  name="paymentTerm" style="width: 100%">
+                  <option value=''>
+                    Select Payment Terms
+                  </option>
+                  <option *ngFor="let payment  of iPaymentTermsViewModel" [value]="payment.qmsPaymentTermId">
+                    {{ payment.qmsPaymentTerms }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-12 m-t-50 m-b-40 text-center">
+          <h5>Select Invoice Parts</h5>
+        </div>
+        <div class="col-md-12">
+          <div class="row m-5">
+            <div style="margin-left: 12px;">
+              <div class="border-checkbox-section ">
+                {{isAllPartChecked()}}
+                <div class="border-checkbox-group border-checkbox-group-primary">
+                  <input class="border-checkbox" type="checkbox" id="9999" [(ngModel)]="checkAllPart"
+                    (change)="checkALL_change()"   [disabled]="!isChildFormValid()">
+                  <label class="border-checkbox-label" for="9999"></label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-11" style="margin-left: -14px;">
+              <span class="color-blue">Part Name</span>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col-md-12" *ngFor="let item of qmsQuotePartInvoice">
+      <app-invoice-part [partInfo]='item' [onSavePartInvoice]="onSavePart"
+                        (isOtherCheckChangeEventHandler)="isOtherCheck($event)"
+                        [checkAllPart]="checkAllPart"
+                        [invoiceId]="invoiceId" [qmsQuoteId]="qmsDetail.qmsQuoteId"
+                        (amountChange)="calculateTotalAmount()"
+                        (isFormValidChangeEventHandler)="setChildFormValid($event)">
+        </app-invoice-part>
+    </div> -->
+        <!-- <span style="color: red;">
+        {{qmsQuotePartInvoice | json}}
+    </span> -->
+        <div class="part-invoice" *ngFor="let partInfo of qmsQuotePartInvoice; let partIndex= index">
+          <!-- {{partInfo | json}} -->
+
+            <!-- {{partInfo | json}} -->
+
+            <app-qms-invoice-part-update [partIndex]="partIndex" (amountChange)="calculateTotalAmount($event)"
+            [partName]="partInfo.partName"  (isOtherCheckChangeEventHandler)="isOtherCheck($event)"   [checkAllPart]="checkAllPart"
+            [partNumber]="partInfo.partNumber"   (isFormValidChangeEventHandler)="setChildFormValid($event)"
+              [partID]="partInfo.qmsQuotePartId" [qmsQuoteID]="qmsDetail.qmsQuoteId" [invoiceID]="invoiceId"
+              [(partUpdateInfo)]="partInfo.partDetails" [(isPartOfInvoice)]="partInfo.isPartOfInvoice"
+              [proceedToSave]="proceedToSaveQuoteParts" [proceedToPreview]="proceedToGenerateThePdf"
+              [decimalValueDefault]='decimalValueDefault' (partSpecialFeeUpdateChange)="partSpecialFeeUpdateChange($event)" [partInvoiceID]="partInfo.qmsQuoteInvoicePartId">
+            </app-qms-invoice-part-update>
+
+        </div>
+
+
+
+
+
+
+        <div class="col-md-12" style=" text-align: right;" (click)="calculateGrandTotal()">
+          <span class="f-w-900 pointer" style=" margin-right: 85px;font-size: 18pt;">
+            Total Amount : ${{grandTotal | number: '1.1-4'}}</span>
+        </div>
+        <!-- <div class="col-md-12">
+        <app-invoice-part></app-invoice-part>
+    </div> -->
+        <!-- <div class="col-md-8 offset-2">
+
+      <span>Total</span>
+
+    </div> -->
+        <div class="col-md-8 offset-2">
+
+          <label>Note</label>
+          <div class="from-group">
+            <textarea rows="5" [(ngModel)]="notes" class="w-p-100"></textarea>
+          </div>
+        </div>
+        <div class="col-md-12 text-center m-t-20 m-b-20">
+          <button class="btn btn-green m-b-10" [disabled]="invoiceDetailForm.invalid || !isPartChecked()"
+            (click)="showPdfInvoicePreview()">Preview Invoice</button>
+          <button class="btn btn-green m-b-10" [disabled]="invoiceDetailForm.invalid || !isPartChecked()"
+            (click)="onSaveInvoice()">Save Invoice</button>
+          <button class="btn btn-green m-b-10" [disabled]="invoiceDetailForm.invalid || !isPartChecked()"
+            (click)="saveInvoicePriorToSendToCustomer()"><i class="fa fa-spinner fa-spin"
+              *ngIf="isInvoiceSaved"></i>Save and Email Customer</button>
+          <button class="btn btn-green-border m-b-10" (click)="cancelInvoice()">Cancel Invoice</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 sideDrawer Drawer-Shadow " *ngIf="isSidePanel()">
+      <div *ngIf="isMessageDrawer()" class="m-t-20">
+        <app-message-tab-drawer [isInvoiceMail]="1" [customerMsgModel]="qmsMailModel"
+          (isMsgDrawerClosed)="onMessageDrawerClose($event)"></app-message-tab-drawer>
+      </div>
+    </div>
+
+
+  </div>
+
+
+  <!-- {{invoicePreviewData | json}} -->
+  <div [@slideInOut]="isPDFViewed">
+    <app-invoice-pdf (goBackTo)="goBackTo($event)" [(invoiceDetails)]="invoicePreviewData"
+      [decimalValueDefault]='decimalValueDefault'></app-invoice-pdf>
+  </div>
+</div>
+<p-confirmDialog header="Confirmation" icon="" width="629" height="220" #msgDlt>
+  <p-footer>
+    <div class="row qms-section">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-ignore-rfq" (click)="msgDlt.reject()">No</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="msgDlt.accept()"> Yes</button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>

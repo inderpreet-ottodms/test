@@ -1,0 +1,439 @@
+.left-border {
+  border-left: 1px solid #c3c3c3 !important;
+}
+
+.rfq-no-available {
+  height: 423px;
+  background-color: #ffffff;
+}
+
+.Save-Rfq-button-active {
+  width: 331px;
+  height: 45px;
+  border-radius: 2px;
+  background-color: #81db6d;
+  color: #fff;
+}
+
+.loader-height {
+  height: 628px;
+}
+.pull-right {
+  float: right !important;
+}
+.pull-left {
+  float: left !important;
+}
+.list-view {
+  padding: 7px;
+  background-color: #ffffff;
+  border: solid 1px #bec4cb;
+  cursor: pointer;
+}
+.active {
+  color: #448ada;
+}
+.filter {
+  width: 100%;
+  padding: 5px;
+  border-radius: 2px;
+  border: solid 1px #bec4cb;
+  margin-bottom: 15px;
+}
+.recent {
+  width: 100%;
+  padding: 5px;
+  border-radius: 2px;
+  border: solid 1px #bec4cb;
+  margin-bottom: 15px;
+}
+
+.filter:focus {
+  background: #fff;
+}
+
+.search {
+  width: 100%;
+  padding: 6px;
+  border-radius: 2px;
+  border: solid 1px #bec4cb;
+}
+
+/*----------------------------------------Filters-----------------------------------*/
+
+/*----------------------------------------Cards-----------------------------------*/
+
+.card {
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 0 3px 0 rgba(12, 12, 12, 0.5);
+  border-radius: 3px;
+  transition: 0.3s;
+  padding: 2px;
+  margin-bottom: 19px;
+}
+
+.card:hover {
+  box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+}
+
+.card .box {
+  left: 0;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.flag i {
+  font-size: 12px;
+  color: #ed4141;
+}
+
+.hourglass i {
+  font-size: 12px;
+  color: #f8e71c;
+}
+
+.star,
+.star i {
+  font-size: 12px;
+  color: #81db6d;
+  display: block;
+}
+
+.card .box .img {
+  width: 190px;
+  height: 190px;
+  background-color: #f6f7fb;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #919aa3;
+}
+.resimg {
+  width: 100%;
+  height: 100%;
+}
+
+.card .box h2 {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 9px auto 0px;
+  text-align: center;
+  color: #2E58D6;
+}
+
+.card .box h2 span {
+  font-size: 12px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #919aa3;
+}
+
+.card .box p {
+  color: #262626;
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 1px;
+}
+
+.card .bottomaction {
+  height: 40px;
+  width: 100%;
+  padding-top: 7px;
+  border-radius: 3px;
+  background-color: #edeff7;
+}
+
+.card .bottomaction ul {
+  margin: 0;
+  padding: 0;
+}
+
+.card .bottomaction ul li {
+  list-style: none;
+  float: left;
+}
+
+.card .bottomaction ul li a {
+  display: block;
+  color: #2E58D6;
+  margin: 0 10px;
+  font-size: 20px;
+  transition: 0.5s;
+  text-align: center;
+}
+
+.card .bottomaction ul li:hover a {
+  color: #e91e63;
+  transform: rotateY(360deg);
+}
+/*----------------------------------------Cards-----------------------------------*/
+.rfqtable {
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  border-radius: 3px;
+}
+.rfqtable thead tr th {
+  padding: 0px 8px;
+  border: 0 none !important;
+  border-top: 0 none !important;
+}
+.rfqtable tbody tr {
+  -moz-box-shadow: 0 0 1px 0 rgba(145, 154, 163, 0.5);
+  -webkit-box-shadow: 0 0 1px 0 rgba(145, 154, 163, 0.5);
+  box-shadow: 0 0 1px 0 rgba(145, 154, 163, 0.5);
+  border-radius: 3px;
+  transition: 0.3s;
+  background-color: #ffffff;
+  margin-bottom: 11px;
+}
+.rfqtable tbody tr:hover {
+  -moz-box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+  -webkit-box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+  box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+  border-radius: 3px;
+  background-color: #ffffff;
+}
+@media screen and (max-width: 767px) {
+  .table-responsive {
+    border: none !important;
+  }
+}
+.rfqtable td {
+  font-size: 12px;
+  font-weight: bold;
+  color: #222222;
+  vertical-align: middle !important;
+}
+.rfqtable td i {
+  font-size: 16px;
+  font-weight: bold;
+  color: #2E58D6;
+}
+.rfqtable .rfqtd {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 9px auto;
+  color: #2E58D6;
+  padding: 11px;
+}
+.rfqtable td span {
+  font-size: 12px;
+  font-weight: bold;
+  color: #919aa3;
+}
+.rfqtable th {
+  font-size: 12px;
+  font-weight: bold;
+}
+.flagred {
+  color: #ed4141 !important;
+}
+.hourglassyellow {
+  color: #f8e71c !important;
+}
+.stargreen {
+  color: #81db6d !important;
+}
+.editdelete {
+  border-radius: 3px;
+  background-color: #edeff7;
+  text-align: center;
+}
+
+/*----------------------------------------RFQ-------------------------------------*/
+/*----------------------------------------RightPanel-------------------------------------*/
+.rightpanel i {
+  color: #2E58D6;
+  font-size: 19px;
+}
+
+.panelheading {
+  font-size: 16px;
+  font-weight: bold;
+  color: #222;
+  margin-top: 2px !important;
+  line-height: 22px;
+}
+.panelheading span {
+  font-size: 12px;
+  font-weight: bold;
+  color: #919aa3;
+}
+hr {
+  border: solid 1px #e2e2e5 !important;
+  float: left !important;
+  width: 100% !important;
+  margin-top: 11px !important;
+  margin-bottom: 5px !important;
+}
+.innerpanelheading {
+  font-size: 16px;
+  font-weight: bold;
+  color: #222;
+  width: 100%;
+  border-bottom: solid 1px #e2e2e5 !important;
+  padding-bottom: 5px;
+  margin-bottom: 19px;
+}
+.subinnerpanelheading {
+  font-size: 14px;
+  font-weight: bold;
+  color: #222222;
+  text-transform: uppercase;
+}
+/*----------------------------------------RightPanel-------------------------------------*/
+/*----------------------------------------RightPanel Accordion-------------------------------------*/
+.panel-heading .accordion-toggle:after {
+  font-family: "Glyphicons Halflings";
+  content: "\e080";
+  float: right;
+  color: #2E58D6;
+  font-size: 12px;
+  line-height: 7px;
+}
+.panel-heading .accordion-toggle.collapsed:after {
+  content: "\e114";
+  top: 15px;
+}
+.panel {
+  box-shadow: none !important;
+  border: none !important;
+  margin-bottom: 11px !important;
+}
+.panel-default > .panel-heading {
+  background: #f6f7fb;
+}
+.panel-title a {
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 22px;
+  color: #222;
+}
+.attachment {
+  font-size: 11px !important;
+  line-height: 8px !important;
+  display: flex;
+}
+.attachment i {
+  font-size: 18px !important;
+  line-height: 8px !important;
+  color: #2E58D6 !important;
+}
+.panel-title a:hover {
+  text-decoration: none;
+}
+.panel-title a span {
+  font-size: 12px;
+  color: #222222;
+}
+/*----------------------------------------RightPanel Accordion-------------------------------------*/
+.col-wrap {
+  white-space: normal;
+}
+
+.fa-edit,
+.fa-trash,
+.fa-times-circle,
+.hand,
+select {
+  cursor: pointer;
+}
+
+.box-fit {
+  width: 100%;
+  height: 100%;
+}
+.paginations {
+  float: right;
+  margin-bottom: 15px;
+}
+#radioBtn .notActive {
+  color: #2E58D6;
+  padding: 5px 15px 5px 15px;
+  background-color: #fff;
+}
+#radioBtn .active {
+  background-color: #bec4cb;
+  color: #fff;
+  box-shadow: none;
+  padding: 5px 15px 5px 15px;
+}
+.rfq-loc {
+  color: #919aa3 !important;
+  margin-bottom: 5px !important;
+}
+.box-1 {
+  position: relative;
+  background: #fff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+.ribbon {
+  width: 80px;
+  height: 78px;
+  overflow: hidden;
+  position: absolute;
+}
+.ribbon::before,
+.ribbon::after {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  display: block;
+  border: 5px solid #2980b9;
+}
+.ribbon span {
+  position: absolute;
+  display: block;
+  width: 73px;
+  padding: 5px 0;
+  background-color: #3498db;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  color: #fff !important;
+  font: 700 9px/1 "Lato", sans-serif !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+/* top left*/
+.ribbon-top-left-row {
+  top: 0px;
+  left: 0px;
+}
+
+.ribbon-top-left {
+  top: -13px;
+  left: -11px;
+}
+.ribbon-top-left-row::before,
+.ribbon-top-left-row::after,
+.ribbon-top-left::before,
+.ribbon-top-left::after {
+  border-top-color: transparent;
+  border-left-color: transparent;
+}
+.ribbon-top-left-row::before,
+.ribbon-top-left::before {
+  top: 0;
+  right: 0;
+}
+.ribbon-top-left-row::after,
+.ribbon-top-left::after {
+  bottom: 0;
+  left: 0;
+}
+.ribbon-top-left-row span,
+.ribbon-top-left span {
+  right: 26px;
+  top: 10px;
+  transform: rotate(-45deg);
+}
+.icon-img img{
+  height: 25px;
+}

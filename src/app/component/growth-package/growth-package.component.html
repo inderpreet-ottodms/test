@@ -1,0 +1,880 @@
+
+<div style="display: flex;justify-content: left;">
+ <a class="view-details" (click)="backToDashboard()">
+    Back to Dashboard
+  </a>
+</div>
+<!-- Growth package Start-->
+<div id="scroll_up">
+  <div class="mfg-package-header">
+    <h1 class="mfg-title">MFG Packages</h1>
+    <p class="mfg-p" *ngIf="!scheduleDemoBtn">
+      Upgrade your account today and get your business in front of even more buyers.
+    </p>
+    <p class="mfg-p" *ngIf="scheduleDemoBtn">
+      Upgrade your account today and get your business in front of even more buyers.<br>
+    Not sure which package is right for you? <a
+    class="color-blue f-16"
+   (click)="scheduleDemo()"
+    >Schedule a demo</a> to learn more about our options.
+  </p>
+  </div>
+
+  <div class="package-card-container">
+
+    <!-- Basic package start -->
+    <div class="tier-container">
+      <!-- <div style="visibility: hidden;" class="mfg-recommeded">Growth-package Banner</div> -->
+      <div class="card-list cards justify-content-center">
+        <div class="cards">
+          <div class="card-header">
+            <div class="center-text">
+              <div>
+                <h5>Free</h5>
+              </div>
+              <div>
+                <h3 style="color: #212a37;">$0</h3>
+                <p>Always</p>
+              </div>
+            </div>
+            <div class="cursor-pointer text-center m-t-20 m-b-20">
+              <button class="button-green" style="background: #B6BCC4;border-radius: 4px;cursor:auto ">
+                Standard Features
+              </button>
+            </div>
+            <div class="card-list">
+              <ul class="ul-p">
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Manufacturer Profile</span>
+                  </div>
+                </li>
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Photo gallery on profile</span>
+                  </div>
+                </li>
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Profile messaging</span>
+                  </div>
+                </li>
+                <!-- <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Access to <span style="color: #2e58d6;">MFG Community</span> </span>
+                  </div>
+                </li> -->
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- basic package ends -->
+
+    <!-- Starter package start-->
+    <!-- isStarterPackageTaken{{isStarterPackageTaken}}
+    isStarterPackage{{isStarterPackage}}
+    isGrowthPackage{{isGrowthPackage}} -->
+    <div class="tier-container">
+      <div class="card-list cards justify-content-center">
+        <!-- <div *ngIf="(isGrowthPackage == 'true' && isStarterPackageTaken == 'false') || (isGrowthPackage == 'false' && isStarterPackageTaken == 'true') && isStarterPackageTaken == 'true'&& isPremiumClicked =='false'" class="mfg-recommeded-extra" style="visibility: hidden;"></div>
+        <div *ngIf="isStarterPackage == 'true' && isStarterPackageTaken =='false'" class="mfg-recommeded">Recommended for you</div> -->
+        <div class="cards">
+          <div class="card-header">
+            <div class="center-text">
+              <div>
+                <h5>Starter</h5>
+              </div>
+              <div>
+                <h3 style="color: #212a37;">{{starterPrice}}</h3>
+                <p>Per month</p>
+              </div>
+            </div>
+
+            <div class="cursor-pointer text-center m-t-20 m-b-20">
+              <!-- [disabled]="upgradeState" -->
+              <!-- [disabled]="(isGrowthPackage == 'true' && isStarterPackageTaken == 'false') || (isGrowthPackage == 'false' && isStarterPackageTaken == 'true') && isStarterPackageTaken == 'true'" -->
+              <button *ngIf="accountLevel != 'Starter' && accountLevel != 'Growth Package' && accountLevel != 'Platinum'" class="button-green"
+
+                (click)="openStarterStripe(); mixPanelTracking('freeTrialClicked')"
+
+                [ngClass]="isStarterPackage == 'true' && isStarterPackageTaken =='false'?'act':'dsb'"
+                >
+                Try For Free
+              </button>
+              <!-- [disabled]="isGrowthPackage == 'true'" -->
+
+              <button class="button-green"  *ngIf="accountLevel === 'Starter'"  
+              (click)="openStarterStripe()" 
+              [ngClass]="isStarterPackage == 'true' && isStarterPackageTaken =='false'?'act':'dsb'"   
+              disabled      
+              >
+                Current Plan
+              </button>
+
+              <button
+                *ngIf="accountLevel === 'Growth Package' || accountLevel === 'Platinum'"
+                class="button-green"
+                [ngClass]="isStarterPackage == 'true' && isStarterPackageTaken =='false'?'act':'dsb'"
+                style="background: #B6BCC4;border-radius: 4px;cursor:auto"   
+              >
+                Included
+              </button>
+            </div>
+            <div>
+              <p class="center-text">Free features plus:</p>
+            </div>
+            <div class="card-list">
+              <ul class="ul-p">
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Pay a small fee to unlock the Requests for Quote (RFQs) you want and access buyer details.</span>
+                  </div>
+                </li>
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Access to discounted raw materials marketplace through <span (click)="mfgMaterials()" style="color: #2e58d6; cursor: pointer;">MFG
+                        Materials</span> (Currently U.S. and Canada only)</span>
+                  </div>
+                </li>
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Priority search placement in <span (click)="mfgDirectory()" style="color: #2e58d6; cursor: pointer;">MFG Manufacturer Directory</span>
+                    </span>
+                  </div>
+                </li>
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Ratings and reviews from customers</span>
+                  </div>
+                </li>
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Profile badges</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div style="display: flex;justify-content: center;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Starter package end -->
+    
+    <!-- Growth package start -->
+    <div class="tier-container">
+      <!-- <div *ngIf="isStarterPackage == 'true' && isStarterPackageTaken =='false'" class="mfg-recommeded-extra" style="visibility: hidden;"></div>
+      <div *ngIf="(isGrowthPackage == 'true' && isStarterPackageTaken == 'false') || (isGrowthPackage == 'false' && isStarterPackageTaken == 'true') && isStarterPackageTaken == 'true'" class="mfg-recommeded">Recommended for you</div> -->
+      <div class="card-list cards justify-content-center">
+        <div class="cards">
+          <div class="card-header">
+            <div class="center-text">
+              <div>
+                <h5>Growth</h5>
+              </div>
+              <div>
+                <h3 style="color: #212a37;">{{growthPrice}}</h3>
+                <p>Per month</p>
+              </div>
+            </div>
+             <div class="cursor-pointer text-center m-t-20 m-b-20">
+             <button class="button-green" 
+                [ngClass]="isStarterPackageTaken == 'false' || isStarterPackageTaken == 'true'?'act':'dsb'"
+                *ngIf="accountLevel != 'Growth Package' && accountLevel != 'Platinum'"
+                (click)="subscribeCapability();mixPanelTracking('growthUpgradeClicked')"
+
+                >
+                Upgrade now
+              </button>
+
+              <button *ngIf="accountLevel === 'Growth Package'"  class="button-green"  
+              [ngClass]="isStarterPackage == 'true' && isStarterPackageTaken =='false'?'act':'dsb'"   
+              disabled           
+              >
+                Current Plan
+              </button>
+
+              <button
+                *ngIf="accountLevel === 'Platinum'"
+                class="button-green"
+                [ngClass]="isStarterPackage == 'true' && isStarterPackageTaken =='false'?'act':'dsb'"
+                style="background: #B6BCC4;border-radius: 4px;cursor:auto"   
+              >
+                Included
+              </button>
+            </div>
+            <div>
+              <p class="center-text">Starter features plus:</p>
+            </div>
+            <div class="card-list">
+              <ul class="ul-p">
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Unlock 2 Requests for Quote (RFQs) for any capability each month, plus purchase additional RFQ unlocks individually</span>
+                  </div>
+                </li>
+                <!-- <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>3D Model Viewer for accurate and fast quoting</span>
+                  </div>
+                </li> -->
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Ability to see who has viewed your profile and quotes</span>
+                  </div>
+                </li>
+                <!-- <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>2 new buyer leads available every week, curated by MFG</span>
+                  </div>
+                </li> -->
+                <!-- <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Visibility into competing quotes on RFQs through ShopIQ</span>
+                  </div>
+                </li> -->
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Provide order updates to MFG customers via Parts Tracking</span>
+                  </div>
+                </li>
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Seamless customer invoicing via Transactions, powered by <span (click)="stripeRedirect()" style="color: #2e58d6; cursor: pointer;">Stripe</span> </span>
+                  </div>
+                </li>
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>History of your RFQ interactions</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div style="display: flex;justify-content: center;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Premium package Start -->
+    <div class="tier-container">
+      <!-- <div *ngIf="(isGrowthPackage == 'true' && isStarterPackageTaken == 'false') || (isGrowthPackage == 'false' && isStarterPackageTaken == 'true') && isStarterPackageTaken == 'true'|| isPremiumClicked =='false'" style="visibility: hidden;" class="mfg-recommeded">Growth-package Banner</div>
+      <div *ngIf="isStarterPackage == 'false' && isStarterPackageTaken =='false' && isPremiumClicked =='true'" class="mfg-recommeded">Recommended for you</div> -->
+      <div class="card-list cards justify-content-center">
+        <div class="cards">
+          <div class="card-header">
+            <div class="center-text">
+              <div>
+                <h5>Premium</h5>
+              </div>
+              <div>
+                <h3 style="color: #212a37;">Custom</h3>
+                <p>Per year</p>
+              </div>
+            </div>
+            <div class="cursor-pointer text-center m-t-20 m-b-20">
+              <button
+                *ngIf="accountLevel != 'Platinum'"
+                class="button-green premium"
+                (click)="upgradeClick(false)">
+                Request Upgrade
+              </button>
+
+              <button *ngIf="accountLevel === 'Platinum'"  class="button-green"  
+              [ngClass]="isStarterPackage == 'true' && isStarterPackageTaken =='false'?'act':'dsb'"   
+              disabled           
+              >
+                Current Plan
+              </button>
+            </div>
+            <a *ngIf="interactiveDemoStatus" (click)="openInteractiveDemo()" class="interactive-demo m-l-10" >Try Our Interactive Demo</a>
+            <div>
+              <p class="center-text">All Starter and Growth features plus:</p>
+            </div>
+            <div class="card-list">
+              <ul class="ul-p">
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Unlimited Requests for Quote (RFQs), leads, and RFQ responses in your chosen capabilities</span>
+                  </div>
+                </li>
+               
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Ability to unlock multiple manufacturing capabilities</span>
+                  </div>
+                </li>
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Premium priority search placement, placed above Growth and Starter manufacturers</span>
+                  </div>
+                </li>
+                <li style="display: flex">
+                  <div class="m-r-10 checkbox">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <span>Unrestricted support hours with dedicated account manager</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    <!-- Premium package end -->
+  </div>
+</div>
+<!-- Growth package end-->
+<!-- Matrix code start -->
+<div class="matrix-table">
+  <table>
+    <tbody>
+      <tr class="table-row">
+        <td style="border-bottom: 1px solid #ccc;"></td>
+        <td class="header-border">
+          <span class="table-header">Basic</span>
+        </td>
+        <td class="header-border">
+          <span class="table-header">Starter</span>
+        </td>
+        <td class="header-border">
+          <span class="table-header">Growth</span>
+        </td>
+        <td class="header-border" style="border-right: none;">
+          <span class="table-header" >Premium</span>
+        </td>
+      </tr>
+      <!-- request for qoute -->
+      <tr>
+        <td class="column-heading">
+          <strong>Requests for Quotes</strong>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="table-column">Access to Quote RFQs</td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">2 RFQs per month</td>
+        <td class="table-data">Unlimited</td>
+      </tr>
+      <tr>
+        <td class="table-column">3D Model Viewer</td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+      </tr>
+      <tr>
+        <td class="table-column">Email Notifications for Relevant Jobs</td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+      </tr>
+      <tr>
+        <td class="table-column">
+          Shop IQ<i class="fa fa-info-circle" ngbTooltip="See the high, low, and average quote amounts for closed RFQs in order to benchmark your pricing."></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+          
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+      </tr>
+      <!-- request for qoute end -->
+      <!-- lead -->
+      <tr>
+        <td class="column-heading" >
+          <strong>Leads</strong>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <!-- <tr>
+        <td class="table-column">
+          Magic Lead List <i class="fa fa-info-circle" ngbTooltip="Magic Lead List is a curated list of potential customers who have previously released RFQs on MFG."></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data"> <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">5 leads per week</td>
+      </tr> -->
+      <tr>
+        <td class="table-column">
+          Leadstream<i class="fa fa-info-circle"  ngbTooltip="Get a live list of leads who have viewed your profile on the Manufacturer Directory, viewed a quote, and other intent-filled actions."></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+      </tr>
+      <tr>
+        <td class="table-column">
+          Follow Buyers<i class="fa fa-info-circle" ngbTooltip="When you follow a buyer, you can view all previous RFQs and get alerts when they post new ones."></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+      </tr>
+      <!-- lead end-->
+      <!-- raw material -->
+      <tr>
+        <td class="column-heading">
+          <strong>Raw Materials</strong>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="table-column">
+          Exclusive Discounts on Raw Material<i class="fa fa-info-circle"  ngbTooltip="Online marketplace is available to browse and purchase from 24/7 (U.S. Only)."></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+      </tr>
+      <tr>
+        <td class="table-column">Custom Quotes</td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+      </tr>
+      <tr>
+        <td class="table-column">Dedicated Sourcing Advisor</td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+      </tr>
+      <!-- raw material end-->
+         <!-- order  -->
+
+         <tr>
+          <td class="column-heading">
+            <strong>Order Management and Transactions</strong>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="table-column">
+            Integration with Stripe<i class="fa fa-info-circle" ngbTooltip="Through a secure integration with Stripe, manufacturers can send invoices directly through MFG."></i>
+          </td>
+          <td class="table-data">
+            <i class="fa fa-times-circle"></i>
+          </td>
+          <td class="table-data">
+            <i class="fa fa-times-circle"></i>
+          </td>
+          <td class="table-data">
+            <i class="fa fa-solid fa-check"></i>
+          </td>
+          <td class="table-data">
+            <i class="fa fa-solid fa-check"></i>
+          </td>
+        </tr>
+        <tr>
+          <td class=" table-column">
+            Part Tracking Updates<i class="fa fa-info-circle"  ngbTooltip="Provide customers with real-time updates on your manufacturing process, keeping them in the know without manual communications."></i>
+          </td>
+          <td class="table-data">
+            <i class="fa fa-times-circle"></i>
+          </td>
+          <td class="table-data">
+            <i class="fa fa-times-circle"></i>
+          </td>
+          <td class="table-data">
+            <i class="fa fa-solid fa-check"></i>
+          </td>
+          <td class="table-data">
+            <i class="fa fa-solid fa-check"></i>
+          </td>
+        </tr>
+        <tr>
+          <td class=" table-column">QuicksBooks Integration</td>
+          <td class="table-data">
+            <i class="fa fa-times-circle"></i>
+          </td>
+          <td class="table-data">
+            <i class="fa fa-times-circle"></i>
+          </td>
+          <td class="table-data">
+            <i class="fa fa-solid fa-check"></i>
+          </td>
+          <td class="table-data">
+            <i class="fa fa-solid fa-check"></i>
+          </td>
+        </tr>
+        <!-- order  -->
+      <!-- Manufacturer Directory -->
+      <tr>
+        <td class="column-heading">
+          <strong>Manufacturer Directory</strong>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="table-column">Listing in Manufacturer Directory</td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+      </tr>
+      <tr>
+        <td class="table-column">
+          Profile Badges <i class="fa fa-info-circle" ngbTooltip="Profile badges are earned based on activities such as quoting jobs, being awarded jobs, etc."></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+      </tr>
+      <tr>
+        <td class="table-column">Preferred Placement</td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">Above Starter and Basic</td>
+        <td class="table-data">Above all other subscriptions</td>
+      </tr>
+      <tr>
+        <td class="table-column">
+          Direct RFQ Access<i class="fa fa-info-circle" ngbTooltip="Manufacturers can receive RFQs that are open to only them, and no other manufacturers for quoting."></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+      </tr>
+      <tr>
+        <td class="table-column">Receive Messages</td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+      </tr>
+      <tr>
+        <td class="table-column">Receive Ratings and Reviews</td>
+        <td class="table-data">
+          <i class="fa fa-times-circle"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+        <td class="table-data">
+          <i class="fa fa-solid fa-check"></i>
+        </td>
+      </tr>
+      <!-- Manufacturer Directory end-->
+     
+ 
+    
+    </tbody>
+  </table>
+</div>
+<!-- Matrix code end -->
+  <div class="package-faq-container">
+    <h3>
+      Frequently Asked Questions
+    </h3> <br>
+    <span class="package-faq-header-instructions">
+      (click rows to expand)
+    </span>
+  </div>
+  <div class="accordion package-faq-accordion-container" id="myAccordion">
+    <div *ngFor="let faq of packageFaq; let i = index" class="package-faq-accordion">
+      <div
+        type="button"
+        class="accordion-button collapsed package-faq-accordion-control"
+        data-bs-toggle="collapse"
+        attr.data-bs-target="#collapsible-{{i}}"
+        data-bs-parent="#myAccordion"
+        aria-expanded="false"
+        aria-controls="#collapsible-{{i}}"
+        >
+        <label class="package-faq-accordion-label">
+          <strong>
+            {{faq.label}}
+          </strong>
+        </label>
+        <div class="pull-right">
+          <i class="ti-angle-down"></i>
+          <i class="ti-angle-up"></i>
+        </div>
+      </div>
+      <div attr.id="collapsible-{{i}}" class="collapse" [innerHTML]="faq.faq"></div>
+    </div>
+  </div>
+
+  <div style="display: flex;justify-content: center;padding-top:10px;margin-top:20px;">
+    <a class="view-details" (click)="scrollUp()" style="left: 10px; position: absolute; bottom: 10px;" >
+      Back to pricing
+    </a>
+  </div>
+
+  <div>
+    <!-- Capability Modal Start -->
+    <div class="modal fade" id="cacheConfirmModel" role="dialog">
+      <div class="flexDialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="w-fit">
+            <div class="modal-content content-backgroud">
+              <div class="modal-header border-none">
+                <h4 class="modal-title text-align">Subscribe to Growth Package</h4>
+              </div>
+              <div class="modal-body body-margin">
+                <p class="text-align">Select the capability you want to quote</p>
+                <form>
+                  <div class="form-group dropdown">
+                    <select class="form-control capability" id="exampleFormControlSelect1"
+                      (change)="changeCapability($event);mixPanelTracking('growthChooseCapability')" >
+                      <option class="capability">Choose a Capability</option>
+                      <option *ngFor="let opt of capabilitiesArray" [value]="opt.processAPIID">{{opt.process}}</option>
+                    </select>
+                  </div>
+                </form>
+                <div class="modal-footer1" style="padding: 0 0 20px 0">
+                  <div class="col-md-12 text-center">
+                    <button style="width: 50%;" type="button" (click)="subscribeCapability()"
+                      [disabled]="!subscribeButtonActive" class="btn button-green" data-bs-dismiss="modal">Subscribe</button>
+                  </div>
+
+<!-- Capability Modal Start -->
+<div>
+  <div class="modal fade" id="cacheConfirmModel" role="dialog">
+    <div class="flexDialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="w-fit">
+          <div class="modal-content content-backgroud">
+            <div class="modal-header border-none">
+              <h4 class="modal-title text-align">Subscribe to Growth Package</h4>
+            </div>
+            <div class="modal-body body-margin">
+              <p class="text-align">Select the capability you want to quote</p>
+              <form>
+                <div class="form-group dropdown">
+                  <select class="form-control capability" id="exampleFormControlSelect1"
+
+                    (change)="changeCapability($event);mixPanelTracking('growthChooseCapability')" >
+
+                    <option class="capability">Choose a Capability</option>
+                    <option *ngFor="let opt of capabilitiesArray" [value]="opt.processAPIID">{{opt.process}}</option>
+                  </select>
+                </div>
+              </form>
+              <div class="modal-footer1" style="padding: 0 0 20px 0">
+                <div class="col-md-12 text-center">
+                  <button style="width: 50%;" type="button" (click)="subscribeCapability()"
+                    [disabled]="!subscribeButtonActive" class="btn button-green" data-bs-dismiss="modal">Subscribe</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+<!-- Capability Modal end -->
+
+<!-- Premium account modal Start-->
+<app-upgrade-account *ngIf="showUpgradeAccountModal" [isCustomer]="isCustomer" [quoteRFQ]="isQuoteRfq" [RfqId]=0
+  (contactSaleModel)="openSaleModel()" (modalCloseEvent)="closeModal($event)">
+</app-upgrade-account>
+<app-contact-sales-model *ngIf="toShowContactModel" (modelUpdateInfoChange)="toShowContactModel= $event">
+</app-contact-sales-model>
+<!-- Premium account modal end-->

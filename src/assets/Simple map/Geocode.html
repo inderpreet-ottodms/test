@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <script type='text/javascript'>
+    var map, searchManager;
+
+    function GetMap() {
+        var urlParams = new URLSearchParams(window.location.search);
+        setTimeout(function()
+        { 
+                map = new Microsoft.Maps.Map('#myMap', {
+                zoom:12,
+                showMapTypeSelector: true,
+                showBreadcrumb: false,
+                showLogo: false,
+                showLocateMeButton: false,
+                showScalebar: false,
+                showTrafficButton: false,
+                showZoomButtons: false,
+                showTermsLink: false
+            });
+            geocodeQuery(urlParams.get('address'));
+        }, 1);
+        
+
+		
+        //Make a request to geocode New York, NY.
+        
+        //alert(urlParams.get('address'));
+        // geocodeQuery("pune");
+    }
+
+    function geocodeQuery(query) {
+        //If search manager is not defined, load the search module.
+        if (!searchManager) {
+            //Create an instance of the search manager and call the geocodeQuery function again.
+            Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+                searchManager = new Microsoft.Maps.Search.SearchManager(map);
+                geocodeQuery(query);
+            });
+        } else {
+            var searchRequest = {
+                where: query,
+                callback: function (r) {
+                    //Add the first result to the map and zoom into it.
+                    if (r && r.results && r.results.length > 0) {
+                        var pin = new Microsoft.Maps.Pushpin(r.results[0].location,
+                        {
+                            icon:'https://www.bingmapsportal.com/Content/images/poi_custom.png',
+                            anchor: new Microsoft.Maps.Point(12, 39)
+                        });
+                        
+                        map.entities.push(pin);
+
+                        map.setView({ bounds: r.results[0].bestView });
+                    }
+                },
+                errorCallback: function (e) {
+                    //If there is an error, alert the user about it.
+                    // alert("No results found.");
+                }
+            };
+
+            //Make the geocode request.
+            searchManager.geocode(searchRequest);
+        }
+    }
+    </script>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=Ati_Z_amxD5tU6JVe15R7HhYbIGry76x5kJzkPv-Z2rfB5TkJI9OPjMbaVvf0N58' async defer></script>
+</head>
+<body>
+    <div id="myMap">
+        <b style="font-family:arial;">Loading....</b>
+    </div>
+</body>
+<style>
+    #myMap
+    {
+        width:100%;
+        height:100%; 
+        position: unset!important;
+    }
+    .MicrosoftMap 
+    .NavBar_Container 
+    .NavBar_MapTypeButtonContainerWrapper 
+    {
+        /* float: right; */
+        cursor: default;
+        background: none;
+        top: 200px;
+        position: relative;
+        left: 72%;
+    }
+    .MicrosoftMap .NavBar_Container.Light .NavBar_MapTypeButtonContainer.withBackground 
+    {
+        /* background: rgba(255,255,255,.85); */
+        background-color: white;
+        border: solid 1px silver;
+    }
+    .MicrosoftMap .NavBar_Container .NavBar_MapTypeButtonHeight 
+    {
+        height: 35px;
+        line-height: 35px;
+        /* width: 411px; */
+    }
+</style>
+</html>

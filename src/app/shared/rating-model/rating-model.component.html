@@ -1,0 +1,82 @@
+<p-dialog [header]="npsRatingPopupTitle" [(visible)]="isNPSPupupShow" [modal]="true"  [responsive]="true" (onHide)="cancel()" [width]="500" styleClass="Rectangle-3">
+
+  <div class="container">
+    <form #myForm="ngForm" (submit)="submitRating(myForm.value)">
+    <div class="row">
+      <div class="col-md-12 manufacturer-name">
+        <span>{{companyName}}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 popup-helper-menu">
+        <span *ngIf="!isBuyer">How would you rate your experience <br /> working  with {{manufactureName}}?</span>
+        <span *ngIf="isBuyer">How likely would you recommend this buyer <br /> to another business needing parts made?</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2 p-0 d-flex align-items-center justify-content-end">
+        <span class="color-light-gray">Not Likely</span>
+      </div>
+      <div class="col-md-8" style="text-align:center;">
+        <div class="form-radio">
+          <div class="radio radio-inline radio-block">
+            <label>
+              <input type="radio" name="radio" [value]=1 ngModel required >
+              <i class="helper-text"></i><br />
+              <div class="radio-label">1</div>
+            </label>
+          </div>
+          <div class="radio radio-inline radio-block">
+            <label>
+              <input type="radio" name="radio" [value]=2 ngModel >
+              <i class="helper-text"></i>
+              <br />
+              <div class="radio-label">2</div>
+            </label>
+          </div>
+          <div class="radio radio-inline radio-block">
+            <label>
+              <input type="radio" name="radio" [value]=3 ngModel>
+              <i class="helper-text"></i>
+              <br />
+              <div class="radio-label">3</div>
+            </label>
+          </div>
+          <div class="radio radio-inline radio-block">
+            <label>
+              <input type="radio" name="radio" [value]=4 ngModel>
+              <i class="helper-text"></i><br />
+              <div class="radio-label">4</div>
+            </label>
+          </div>
+          <div class="radio radio-inline radio-block" style="margin-right: 0px;">
+            <label>
+              <input type="radio" name="radio" [value]=5 ngModel>
+              <i class="helper-text"></i><br />
+              <div class="radio-label">5</div>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2 p-0 d-flex align-items-center">
+        <span class="color-light-gray">Very Likely</span>
+      </div>
+    </div>
+    <div class="row" style="padding-top:20px">
+      <div class="col-md-12">
+        <label style="color:#222222;font-size:12px;font-weight: bold">Comment</label>
+        <textarea class="form-control" name="comment" [(ngModel)]="iRatingResponseViewModel.comment" placeholder="Please provide comments here" maxlength="5000"></textarea>
+        <span style="float:right;color:#919aa3;font-size:11px">5000 characters</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 button-margin">
+        <button type="button" class="cancelbutton btn" (click)="closeNPSPopup()">Not Now</button>
+      </div>
+      <div class="col-md-6 button-margin">
+        <button type="submit" class="btn savebutton" [disabled]="myForm.invalid || disableBtn">Submit</button>
+      </div>
+    </div>
+  </form>
+  </div>
+</p-dialog>

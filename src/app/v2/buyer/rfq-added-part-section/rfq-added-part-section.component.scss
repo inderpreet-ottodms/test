@@ -1,0 +1,26 @@
+  .rightAccordion {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 5px rgba(0,0,0, 0.6);
+  }
+  
+  .rightFileTitle { 
+    background-color: #fff;
+    border: 1px solid #EAEAEA;
+    border-radius: 4px;
+    color: #2E58D6;
+    padding: 10px;
+  }
+ .rightAccordion .right-container{
+  overflow-y: auto;
+    max-height: 54vh;
+    overflow-x: hidden;
+    padding-right: 2px;
+  }
+  .partContainer {
+    margin: 0px;
+    padding: 0 10px;
+  }
+  
+  

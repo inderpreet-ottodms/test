@@ -1,0 +1,326 @@
+<div class="row">
+  <div class="" [ngClass]="isSidePanel()?'col-md-8':'col-md-12'">
+    <div class="row">
+      <div [ngClass]="'col-md-12'">
+        <div class="lead-body">
+
+          <div class="row">
+            <div class="offset-9 col-md-3 m-b-10" *ngIf="invoiceType == 1">
+              <i class="fa fa-search icon-search" (click)="filterAll()" placement="top" container="body"
+                ngbTooltip="Search"></i>
+              <input class="search search-text" [disabled]="isLoader" placeholder="Invoice Number or Quote number"
+                type="text" (keypress)="searchByKey($event)" [(ngModel)]="searchFilterValue"
+                (input)="checkSearch(searchFilterValue)" />
+              <i class="fa fa-times-circle icon" (click)="removeTextValue()" placement="top" container="body"
+                ngbTooltip="Remove Text"></i>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <select class="form-control" [(ngModel)]="sortsAllStatusFilterValue" (change)="filterAll()"
+                  [disabled]="isLoader">
+                  <option value='' selected>Sort By</option>
+                  <option value=''>All Invoices</option>
+                  <option value="Customer">Customer</option>
+                  <option value="Status">Status</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <select class="form-control" [(ngModel)]="sortsStatusFilterValue" [disabled]="isLoader"
+                  (change)="filterAll()">
+                  <option value="1" *ngIf="sortsAllStatusFilterValue == ''">Recent</option>
+                  <option value="2" *ngIf="sortsAllStatusFilterValue == ''">Oldest</option>
+                  <option value="3" *ngIf="sortsAllStatusFilterValue  !== ''">A - Z</option>
+                  <option value="4" *ngIf="sortsAllStatusFilterValue  !== ''">Z - A</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <!-- [(ngModel)]="sortsStatusFilterValue" -->
+                <select class="form-control status-drop-down" [(ngModel)]="invoiceStatusFilterValue"
+                  [disabled]="isLoader" (change)="filterAll()">
+                  <option value="">Invoice status</option>
+                  <option [value]="data.status" *ngFor="let data of  invoiceStatusList">{{data.status}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <angular2-multiselect [data]='contactCompanyList' name="processdrop"
+                  [(ngModel)]="sortCompanyFilterValue" [settings]='countrySettings' (onDeSelect)="filterAll()"
+                  (onSelect)="filterAll()" (onSelectAll)="filterAll()" (onDeSelectAll)="filterAll()">
+                </angular2-multiselect>
+              </div>
+            </div>
+            <div class="col-md-3" *ngIf="invoiceType == 1">
+              <div class="form-group">
+                <select class="form-control" [(ngModel)]="sortQuoterFilterValue" [disabled]="isLoader"
+                  (change)="filterAll()">
+                  <option value="0">Invoice Creator</option>
+                  <option [value]="data.quoterContactId" *ngFor="let data of  quoterList"> {{data.quoterName}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3" *ngIf="invoiceType == 2">
+              <i class="fa fa-search icon-search" (click)="filterAll()" placement="top" container="body"
+                ngbTooltip="Search"></i>
+              <input class="search search-text" [disabled]="isLoader" placeholder="Invoice Number or Quote number"
+                type="text" (keypress)="searchByKey($event)" [(ngModel)]="searchFilterValue"
+                (input)="checkSearch(searchFilterValue)" />
+              <i class="fa fa-times-circle icon" (click)="removeTextValue()" placement="top" container="body"
+                ngbTooltip="Remove Text"></i>
+            </div>
+
+          </div>
+          <div class="row" *ngIf="isMyQoutsAvailable">
+            {{reloadPageOnQuotedrawerClose()}}
+            <div class="col-12">
+              <div class="row quote-heading-section">
+                <div class="col-md-1 lead-subhead"><span>Invoice Number</span>
+                  <i (click)="toggleColumn('invoice_id')"
+                    [ngClass]="(toggleInvoice)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                </div>
+                <div [class.col-md-2]="invoiceType == 1" [class.col-md-3]="invoiceType == 2" class=" lead-subhead">
+                  <span>Customer Name</span>
+                  <i (click)="toggleColumn('customerName')"
+                    [ngClass]="(toggleCustomerName)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                </div>
+                <div *ngIf="invoiceType == 1" class="col-md-2 lead-subhead"><span>Invoice Creator</span>
+                  <i (click)="toggleColumn('supplier')"
+                    [ngClass]="(toggleSupplier)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                </div>
+                <div [class.col-md-2]="invoiceType == 2" [class.col-md-1]="invoiceType == 1" class=" lead-subhead">
+                  <span>LiveQuote #</span>
+                  <i (click)="toggleColumn('quoteId')"
+                    [ngClass]="(toggleQuoteId)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                </div>
+                <div class="col-md-2 lead-subhead"><span>Status </span>
+                  <i (click)="toggleColumn('status')" [ngClass]="(toggleStatus)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                </div>
+
+                <div class="col-md-2 lead-subhead"><span>Total Amount</span>
+                  <i (click)="toggleColumn('total')" [ngClass]="(toggleTotal)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                </div>
+
+                <div class="col-md-2 lead-subhead" style="text-align: center"><span>Actions</span></div>
+
+              </div>
+
+            </div>
+          </div>
+          <div *ngIf="isLoader" class="loading">
+            <div class="loader animation-start">
+              <span class="circle delay-1 size-2"></span>
+              <span class="circle delay-2 size-4"></span>
+              <span class="circle delay-3 size-6"></span>
+              <span class="circle delay-4 size-7"></span>
+              <span class="circle delay-5 size-7"></span>
+              <span class="circle delay-6 size-6"></span>
+              <span class="circle delay-7 size-4"></span>
+              <span class="circle delay-8 size-2"></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row lead-info" *ngFor="let invoice of items">
+
+                <div class="col-md-1 lead-subhead lead-name pointer-cursor p-t-20 p-b-20">
+                  <span
+                    (click)="onNavigate(invoice.qmsQuoteEncryptId, invoice.qmsQuoteInvoiceId)">{{invoice.invoiceNo }}</span>
+                  <br>
+                </div>
+
+                <div [class.col-md-2]="invoiceType == 1" [class.col-md-3]="invoiceType == 2"
+                  class="col-md-2 lead-subhead lead-name text-truncate pointer-cursor p-t-20 p-b-20">
+                  <span (click)="openCompanyDrawer(invoice.customerIdEncrypted, $event)" placement="top"
+                    data-container="body"
+                    ngbTooltip="{{invoice.customer}}">{{(invoice.customer)?(invoice.customer | dotLimit:'15'):'N/A'}}</span>
+                </div>
+                <div *ngIf="invoiceType == 1" class="col-md-2 lead-subhead text-truncate pointer-cursor p-t-20 p-b-20">
+                  <span placement="top" data-container="body"
+                    ngbTooltip="{{invoice.customer}}">{{(invoice.supplier)?(invoice.supplier | dotLimit:'15'):'N/A'}}</span>
+                </div>
+                <div [class.col-md-2]="invoiceType == 2" [class.col-md-1]="invoiceType == 1"
+                  class=" lead-subhead lead-name text-truncate pointer-cursor p-t-20 p-b-20" placement="top"
+                  data-container="body">
+                  <span
+                    (click)=openQMSDetailsPage(invoice.qmsQuoteId,invoice.quoteId,$event);>{{ invoice.quoteId }}</span>
+                </div>
+
+
+
+                <div class="col-md-2 lead-subhead pointer-cursor lead-name text-wrap p-t-20 p-b-20">
+                  <span *ngIf="invoiceType == 2" placement="top" data-container="body">{{ invoice.status}}</span>
+                  <select *ngIf="invoiceType == 1" class="form-control status-drop-down" [(ngModel)]="invoice.statusId"
+                    [disabled]="isLoader" (change)="changeQmsInvoiceStatus(invoice.qmsQuoteInvoiceId,$event)">
+                    <option [value]="data.qmsStatusId" *ngFor="let data of  invoiceStatusList">{{data.status}}</option>
+                  </select>
+                </div>
+
+                <div class="col-md-2 lead-subhead pointer-cursor text-wrap p-t-20 p-b-20">
+                  <span placement="top" data-container="body">${{ getInvoiceAmtByDecimal(invoice.amountDue)}}</span>
+                </div>
+                <div class="col-md-2 lead-subhead actiondiv">
+                  <span [ngClass]="isSidePanel()?'iconQmsDrawer':'iconQms'"
+                    (click)="onNavigate(invoice.qmsQuoteEncryptId, invoice.qmsQuoteInvoiceId)">
+                    <i class="fa fa-edit" placement="top" container="body" ngbTooltip="Edit Invoices"></i>
+                  </span> <!-- [routerLink]="['/qms/invoicePdf/', invoice.qmsQuoteInvoiceId]" -->
+                  <span [ngClass]="isSidePanel()?'iconQmsDrawer':'iconQms'">
+                    <i class="fa fa-file-pdf-o" aria-hidden="true" placement="top" container="body"
+                      ngbTooltip="View Invoice" data-bs-toggle="modal" data-bs-target="#myModal"
+                      (click)="showInvoicePreview(invoice.qmsQuoteEncryptId, invoice.qmsQuoteInvoiceId, false, invoice.qmsCustomerId, invoice.customer, invoice.qmsQuoteId)"></i>
+                  </span>
+                  <span
+                    (click)="showInvoicePreview(invoice.qmsQuoteEncryptId, invoice.qmsQuoteInvoiceId, true, invoice.qmsCustomerId, invoice.customer,invoice.qmsQuoteId)"
+                    [ngClass]="isSidePanel()?'iconQmsDrawer':'iconQms'">
+                    <i class="fa fa-envelope" placement="top" container="body" ngbTooltip="Email Invoice"></i>
+                  </span>
+                  <span [ngClass]="isSidePanel()?'iconQmsDrawer':'iconQms'">
+                    <i class="fa fa-trash" style="cursor: pointer;" placement="top" container="body"
+                      ngbTooltip="Delete Invoice" (click)="deleteInvoice(invoice.qmsQuoteInvoiceId)"></i>
+                  </span>
+                </div>
+
+
+              </div>
+
+            </div>
+          </div>
+          <div class="myRFQ-rfq-no-available" *ngIf="!isMyQoutsAvailable">
+            <div class="row" style="text-align: center;padding-top:106px">
+              <div class="col-md-12">
+                <div>
+                  <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+                      assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+                </div>
+              </div>
+            </div>
+            <div class="row" style="padding-top:34px">
+              <div class="col-md-12">
+                <div class="myRFQ-noRFQActive-helper-text">No Invoices to Display</div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- ------------------------- Pagination start----------------------- -->
+          <div class="row" style="margin-top: 20px;" *ngIf="isMyQoutsAvailable">
+            <div class="col-md-3">
+              <div class="dataTables_length" id="example_length">
+                <label>Show
+                  <select name="example_length" aria-controls="example" class="" [(ngModel)]="pageSize"
+                    (change)="filterAll()">
+                    <option value="24">24</option>
+                    <option value="48">48</option>
+                    <option value="96">96</option>
+                  </select>
+                  entries</label>
+              </div>
+            </div>
+            <div class="col-md-9" *ngIf="!isLoader">
+              <div class="paginations">
+                <div>
+                  <div id="radioBtn" class="btn-group">
+                    <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}"
+                      class="btn btn-primary btn-sm notActive" (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                      Previous
+                    </a>
+                    <a *ngFor="let page of pagesIndex" (click)="setPage(page)"
+                      [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                      data-bs-toggle="fun" data-title="X">
+                      {{page}}
+                    </a>
+                    <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+                      (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                      Next
+                    </a>
+                  </div>
+                  <input type="hidden" name="fun" id="fun">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12" *ngIf="isMyQoutsAvailable">
+              <div class="pull-right padd-right">
+                <label class="showreccount"> {{currentIndex }} of {{pageNumber}} </label>
+              </div>
+            </div>
+          </div>
+          <!-- ------------------------- Pagination end----------------------- -->
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-4 sideDrawer Drawer-Shadow " *ngIf="isSidePanel()">
+    <div *ngIf="isCompanyDrawer()" class="background-white-1">
+      <app-my-customer-drawer [mqsContactIdEncrypt]='mqsContactIdEncrypt'></app-my-customer-drawer>
+    </div>
+    <div class="background-white-1" *ngIf="isQuoteReviewDrawer()">
+      <app-invoice-preview-drawer></app-invoice-preview-drawer>
+    </div>
+    <div *ngIf="isMessageDrawer()">
+      <app-message-tab-drawer [isInvoiceMail]="1" [customerMsgModel]="qmsMailModel"></app-message-tab-drawer>
+    </div>
+    <!-- *ngIf="isSidePanel()" [mqsQuoteId]='mqsQuoteId'-->
+  </div>
+</div>
+{{isPdfDownload()}}
+<div *ngIf="isEmilPdfPreview">
+  <app-qms-pdf [qmsId]=quoteId></app-qms-pdf>
+</div>
+
+<p-confirmDialog header="Confirmation" icon="" width="629" height="220" #msgDlt>
+  <p-footer>
+    <div class="row qms-section">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-ignore-rfq" (click)="msgDlt.reject()">Cancel</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="msgDlt.accept()"> Yes</button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>
+
+<div *ngIf="isMailed">
+  <app-invoice-pdf [(invoiceDetails)]="invoicePreviewData" [decimalValueDefault]='decimalValueDefault'>
+  </app-invoice-pdf>
+</div>
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog custom-model addItem-model-container modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="col-md-12 col-sm-12 col-lg-12">
+          <button type="button" class="close" aria-label="Close" style="margin-top:0px;" data-bs-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="row" style="padding-bottom: 7px;">
+          <div class="col-md-12 col-lg-12 col-sm-12">
+            <span (click)="generateInvoicePDF()" class="title"> {{pdfButtonTitle}} </span>
+          </div>
+        </div>
+        <hr class="line" />
+        <div class="row">
+          <!-- {{invoicePreviewData | json}} -->
+          <div class="col-md-12 col-sm-12 col-lg-12 model-popup-text" style="max-height: 100%; overflow-y: auto;">
+            <app-invoice-pdf [(invoiceDetails)]="invoicePreviewData" [decimalValueDefault]='decimalValueDefault'>
+            </app-invoice-pdf>
+            <!-- {{invoicePreviewData | json}} -->
+          </div>
+        </div>
+        <!-- <hr class="line" />
+          <div class="action-container">
+            <input type="button" class="clear-action" value="Cancel" (click)="closeMe()" />
+            <div class="clearFix"></div>
+          </div> -->
+      </div>
+    </div>
+  </div>
+</div>

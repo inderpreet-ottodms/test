@@ -1,0 +1,345 @@
+<div class="background-white">
+  <div *ngIf="isApi">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>
+  <div class="row" *ngIf="!isApi">
+    <div class="col-md-12 rightpanel">
+      <i class="fa fa-times-circle pull-right" (click)="closeMessageThreadDrawer('ReadMessage')"></i>
+      <h2 *ngIf="(userAccount === 'Basic'); else showMsgDesc"></h2>
+      <ng-template #showMsgDesc>
+        <h2 class="panelheading" [innerHTML]="removeHtmlTag(inputMsgObj.messageSubject) | sanitizeNolimit"></h2>
+      </ng-template>
+
+    </div> <br>
+    <hr>
+    <div class="col-md-12 rightpanel">
+      <img *ngIf="messageThreadList[0] && IsactiveBtn !== 'sent' && messageThreadList[0].messageTypeId !== 225"
+        class="contact_logo img-circle" style="cursor: pointer;border: 1px solid #bec4cb;" (click)="readMore()"
+        [src]="inputMsgObj.companylogo" alt="contact Logo"
+        onError="this.src='assets/company/avatar-manu-basic-circle.svg'" />
+      <img *ngIf="messageThreadList[0] && IsactiveBtn === 'sent' && messageThreadList[0].messageTypeId !== 225"
+        class="contact_logo img-circle" style="cursor: pointer;border: 1px solid #bec4cb;" (click)="readMore()"
+        [src]="getReceiverLogo(messageThreadList[0])" alt="contact Logo"
+        onError="this.src='assets/company/avatar-manu-basic-circle.svg'" />
+      <img *ngIf="messageThreadList[0].messageTypeId === 225" class="contact_logo img-circle"
+        style="cursor: pointer;border: 1px solid #bec4cb;" src="assets/company/avatar-manu-basic-circle.svg"
+        alt="contact Logo" />
+      <div style="display: inline;" *ngIf="messageThreadList[0]">
+        <h6 *ngIf="(userAccount === 'Basic'); else showContactName"
+          style="display: inline; margin-left: 10px; cursor: pointer;"></h6>
+        <ng-template #showContactName>
+          <h6 style="display: inline; margin-left: 10px; cursor: pointer;">{{OpenContactName}}</h6>
+        </ng-template>
+        <br>
+
+      </div>
+    </div>
+    <div class="col-md-12"><br>
+      <div class="chat-bg0">
+        <div class="chat-bg1" *ngIf="(userAccount === 'Basic'); else showContact">
+          <h2 style="display: inline;" class="panelheading">Contact Name<br></h2>
+        </div>
+        <ng-template #showContact>
+          <div class="chat-bg1">
+            <div class="row">
+              <div class="col-md-5 f-w-600">Company Name</div>
+              <div class="col-md-7 f-w-600" style="color: #919aa3;">{{ compName|Na}}</div>
+              <div class="col-md-5 f-w-600">Contact Name</div>
+              <div class="col-md-7 f-w-600" style="color: #919aa3;">{{OpenContactName |Na}}</div>
+              <div class="col-md-5 f-w-600"
+                *ngIf="compName !== null && compName !== undefined && compName !== '' && messageThreadList[0].messageTypeId === 225">
+                Company Name</div>
+              <div class="col-md-7" style="color: #919aa3;"
+                *ngIf="compName !== null && compName !== undefined && compName !== '' && messageThreadList[0].messageTypeId === 225">
+                {{compName}}</div>
+              <div class="col-md-5 f-w-600" *ngIf="email !== null && email !== undefined && email !== ''">Email</div>
+              <div class="col-md-7" style="color: #919aa3;"
+                *ngIf="email !== null && email !== undefined && email !== ''">{{email}}</div>
+              <div class="col-md-5 f-w-600" *ngIf="phoneNo !== null && phoneNo !== undefined && phoneNo !== ''">Phone
+              </div>
+              <div class="col-md-7" style="color: #919aa3;"
+                *ngIf="phoneNo !== null && phoneNo !== undefined && phoneNo !== ''">{{phoneNo}}</div>
+            </div>
+            <div>
+              <a style="color:#4a90e2;" (click)="readMore()" *ngIf="companyId != 0"> View Profile</a>
+            </div>
+
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- <div style="text-align: center" *ngIf="!isPremium() && !isUserAccountType()">
+        <app-upgrade-account-btn [quoteRFQ]=false [RfqId]="0" [btnClass]=1></app-upgrade-account-btn>
+      </div> -->
+      <div class="form-group" *ngIf="isPremium() || (!isPremium()  && isUserAccountType())">
+        <div *ngIf="messageThreadList[0].messageTypeId !== 232 && messageThreadList[0].messageTypeId !== 234 && messageThreadList[0].messageTypeId !== 235 && messageThreadList[0].messageTypeId !== 236 && messageThreadList[0].messageTypeId !== 237 && isExternalFlag == false">
+          <div class="error-msg">
+            <app-field-error-display [displayError]="sendMessageError" errorMsg="Enter the Message">
+            </app-field-error-display>
+            <span class="f-12" style="color: #a94442;">{{errorDisMsg}}</span>
+          </div>
+          <p-editor name="sdsd" [(ngModel)]="messageToSend" [style]="{'height':'160px'}"
+            (onTextChange)="changeText($event)">
+            <p-header>
+              <span class="ql-formats">
+                <select class="ql-size">
+                  <option value="2em">Heading</option>
+                  <option value="1.5em">Subheading</option>
+                  <option value="0.5em" selected>Normal</option>
+                </select>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-bold" aria-label="Bold"></button>
+                <button class="ql-italic" aria-label="Italic"></button>
+                <button class="ql-underline" aria-label="Underline"></button>
+                <button class="ql-strike" aria-label="Strike"></button>
+              </span>
+              <span class="ql-formats">
+                <select class="ql-color" tabindex="-1"></select>
+                <select class="ql-background" tabindex="-1"></select>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-list" value="ordered" aria-label="Ordered List" tabindex="-1"></button>
+                <button class="ql-list" value="bullet" aria-label="Unordered List" tabindex="-1"></button>
+                <select class="ql-align" tabindex="-1">
+                  <option selected tabindex="-1"></option>
+                  <option value="center" tabindex="-1"></option>
+                  <option value="right" tabindex="-1"></option>
+                  <option value="justify" tabindex="-1"></option>
+                </select>
+              </span>
+            </p-header>
+          </p-editor>
+          <div class="message-action">
+            <i class="fa fa-paper-plane pull-right" (click)="sendReplyMessage()" placement="top" container="body"
+              ngbTooltip="Send"></i>
+            <input type="file" #messageAttachment id="file-upload" class="display-none" ng2FileSelect
+              [uploader]="attachFilesUploader" multiple (change)="onFileSelect($event)">
+            <i class="fa fa-paperclip pull-left" (click)="messageAttachment.click()" placement="top" container="body"
+              ngbTooltip="Attach file(s)"></i>
+          </div>
+          <div class="text-right">
+            <span class="description-helper">1000 characters</span>
+          </div>
+        </div>
+        <div *ngIf="messageThreadList[0].messageTypeId === 225 && iLeadMessageDataViewModel.contactId !== 0 && isExternalFlag == true">
+          <div class="error-msg">
+            <app-field-error-display [displayError]="sendMessageError" errorMsg="Enter the Message">
+            </app-field-error-display>
+            <span class="f-12" style="color: #a94442;">{{errorDisMsg}}</span>
+          </div>
+          <p-editor name="sdsd" [(ngModel)]="messageToSend" [style]="{'height':'160px'}"
+            (onTextChange)="changeText($event)">
+            <p-header>
+              <span class="ql-formats">
+                <select class="ql-size">
+                  <option value="2em">Heading</option>
+                  <option value="1.5em">Subheading</option>
+                  <option value="0.5em" selected>Normal</option>
+                </select>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-bold" aria-label="Bold"></button>
+                <button class="ql-italic" aria-label="Italic"></button>
+                <button class="ql-underline" aria-label="Underline"></button>
+                <button class="ql-strike" aria-label="Strike"></button>
+              </span>
+              <span class="ql-formats">
+                <select class="ql-color" tabindex="-1"></select>
+                <select class="ql-background" tabindex="-1"></select>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-list" value="ordered" aria-label="Ordered List" tabindex="-1"></button>
+                <button class="ql-list" value="bullet" aria-label="Unordered List" tabindex="-1"></button>
+                <select class="ql-align" tabindex="-1">
+                  <option selected tabindex="-1"></option>
+                  <option value="center" tabindex="-1"></option>
+                  <option value="right" tabindex="-1"></option>
+                  <option value="justify" tabindex="-1"></option>
+                </select>
+              </span>
+            </p-header>
+          </p-editor>
+          <div class="message-action">
+            <i class="fa fa-paper-plane pull-right" (click)="sendReplyMessage()" placement="top" container="body"
+              ngbTooltip="Send"></i>
+            <input type="file" #messageAttachment id="file-upload" class="display-none" ng2FileSelect
+              [uploader]="attachFilesUploader" multiple (change)="onFileSelect($event)">
+            <i class="fa fa-paperclip pull-left" (click)="messageAttachment.click()" placement="top" container="body"
+              ngbTooltip="Attach file(s)"></i>
+          </div>
+          <div class="text-right">
+            <span class="description-helper">1000 characters</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="sendMessageObj.messageFileNames.length !== 0">
+
+        <div *ngFor=" let file of sendMessageObj.messageFileNames;let i=index;">
+          <span class="fileName">{{file| originalShortName: 30}}</span>
+          <span class="activeLink" (click)="removeSavedAttachFile(file,i)">Remove</span>
+        </div>
+
+      </div>
+      <hr />
+      <div class="chatbox" *ngIf="(userAccount === 'Basic')">
+        <div class="row" style="text-align: center">
+          <div class="col-md-12">
+            <app-upgrade-account-btn [quoteRFQ]=false [RfqId]="0" [btnClass]=1></app-upgrade-account-btn>
+
+          </div>
+
+
+        </div>
+        <div class="row" style="text-align: center">
+          <div class="col-md-12">
+            <button type="button" class="btn btn-upgrade" data-bs-dismiss="modal" (click)="openContactModal()">Contact
+              Sales </button>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="chatbox"
+        *ngIf="(userAccount !== 'Basic' && messageThreadList[ messageThreadList.length -1 ].messageTypeId === 225); else showChat">
+        <ul class="chat" *ngIf="messageThreadList && messageThreadList.length > 0">
+          <ng-container *ngFor="let messageObj of messageThreadList; let i = index">
+            <li class="clearfix" [ngClass]="isBuyerMessage(messageObj)? 'right' : 'left'">
+              <span class="chat-img" [ngClass]="isBuyerMessage(messageObj)? 'pull-right' : 'pull-left'">
+                <img [src]="getProfilePic(messageObj)" alt="" class="img-circle"
+                  style="width:100%;border: 1px solid #bec4cb;"
+                  onError="this.src='assets/company/avatar-manu-basic-circle.svg'" />
+
+                <br>
+                <span class="time">{{getDate(messageObj.messageDate)}}</span>
+              </span>
+              <div class="chat-body1 clearfix" style=" word-break: break-all; ">
+                <p class="message-description-wrapper"><span
+                    *ngIf="messageObj.messageTypeId === 220 && messageObj.quoteReferenceNumber !== '' && messageObj.quoteReferenceNumber !== null && messageObj.quoteReferenceNumber !== undefined"><b>Quote
+                      Reference Number</b>: {{messageObj.quoteReferenceNumber}} </span> <span
+                    [innerHTML]="messageObj.messageDescr | sanitizeNolimit"></span></p>
+              </div>
+              <div style="text-align: right">
+                <div
+                  *ngIf="messageObj.isNdaRequired === true && (messageObj.isNdaAccepted === false || messageObj.isNdaAccepted === null) ; else showDownloadAll">
+                  <span class="color" *ngIf="messageObj.messageFileNames.length > 1"
+                    (click)="openNdaModel(messageObj.messageId)"><b>Download All</b></span>
+                </div>
+                <ng-template #showDownloadAll>
+                  <span class="color" *ngIf="messageObj.messageFileNames.length > 1"
+                    (click)="downloadAllFiles(messageObj.messageFileNames)"><b>Download All</b></span>
+                </ng-template>
+              </div>
+              <div *ngIf="messageObj.messageFileNames.length !== 0" class="fileArea">
+                <div *ngFor=" let file of messageObj.messageFileNames" class="fileArea">
+                  <span
+                    *ngIf="messageObj.isNdaRequired === true && (messageObj.isNdaAccepted === false || messageObj.isNdaAccepted === null); else showDownload"
+                    class="color" (click)="openNdaModel(messageObj.messageId)">{{file| originalShortName: 28}}</span>
+                  <ng-template #showDownload>
+                    <span class="color" (click)="downloadS3File(file, true)">{{file| originalShortName: 28}}</span>
+                  </ng-template>
+                </div>
+              </div><br>
+
+              <div *ngIf="!messageObj.messageRead">
+                <div [ngClass]="isNextBuyerMessage(i)? 'border-left' : 'border-right'">
+                  <img src="assets/rfq/message-thread/unReadMessage.png"
+                    srcset="assets/rfq/message-thread/unReadMessage@2x.png 2x, assets/rfq/message-thread/unReadMessage@3x.png 3x"
+                    [ngClass]="isNextBuyerMessage(i)? 'border' : 'border mirror-img'">
+                </div>
+              </div>
+              <div *ngIf="messageObj.messageRead">
+                <div *ngIf="isReadFlagAllowed(i)">
+                  <div [ngClass]="isNextBuyerMessage(i)? 'border-left' : 'border-right'">
+                    <img src="assets/rfq/message-thread/readMessage.png"
+                      srcset="assets/rfq/message-thread/readMessage@2x.png 2x, assets/rfq/message-thread/readMessage@3x.png 3x"
+                      [ngClass]="isNextBuyerMessage(i)? 'border mirror-img' : 'border'">
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ng-container>
+
+        </ul>
+      </div>
+
+
+
+      <ng-template #showChat>
+        <div class="chatbox"
+          *ngIf="userAccount !== 'Basic' && messageThreadList[ messageThreadList.length -1 ].messageTypeId !== 225">
+          <ul class="chat" *ngIf="messageThreadList && messageThreadList.length > 0">
+            <ng-container *ngFor="let messageObj of messageThreadList; let i = index">
+              <li class="clearfix" [ngClass]="isBuyerMessage(messageObj)? 'right' : 'left'">
+                <span class="chat-img" [ngClass]="isBuyerMessage(messageObj)? 'pull-right' : 'pull-left'">
+                  <img [src]="getProfilePic(messageObj)" alt="" class="img-circle"
+                    style="width:100%;border: 1px solid #bec4cb;"
+                    onError="this.src='assets/company/avatar-manu-basic-circle.svg'" />
+
+                  <br>
+                  <span class="time">{{messageObj.companyName |Na}}<br>{{getDate(messageObj.messageDate)}}</span>
+                </span>
+                <div class="chat-body1 clearfix" style=" word-break: break-all; ">
+                  <p class="message-description-wrapper"><span
+                      *ngIf="messageObj.messageTypeId === 220 && messageObj.quoteReferenceNumber !== '' && messageObj.quoteReferenceNumber !== null && messageObj.quoteReferenceNumber !== undefined"><b>Quote
+                        Reference Number</b>: {{messageObj.quoteReferenceNumber}} </span>&nbsp;<span
+                      [innerHTML]="messageObj.messageDescr | sanitizeNolimit"></span></p>
+                </div>
+                <div style="text-align: right">
+                  <span class="color" *ngIf="messageObj.messageFileNames.length > 1"
+                    (click)="downloadAllFiles(messageObj.messageFileNames)"><b>Download All</b></span>
+                </div>
+                <div *ngIf="messageObj.messageFileNames.length !== 0" class="fileArea">
+                  <div *ngFor=" let file of messageObj.messageFileNames" class="fileArea">
+                    <span class="color" (click)="downloadS3File(file, true)">{{file| originalShortName: 28}}</span>
+                  </div>
+                </div><br>
+
+                <div *ngIf="!messageObj.messageRead">
+                  <div [ngClass]="isNextBuyerMessage(i)? 'border-left' : 'border-right'">
+                    <img src="assets/rfq/message-thread/unReadMessage.png"
+                      srcset="assets/rfq/message-thread/unReadMessage@2x.png 2x, assets/rfq/message-thread/unReadMessage@3x.png 3x"
+                      [ngClass]="isNextBuyerMessage(i)? 'border' : 'border mirror-img'">
+                  </div>
+                </div>
+                <div *ngIf="messageObj.messageRead">
+                  <div *ngIf="isReadFlagAllowed(i)">
+                    <div [ngClass]="isNextBuyerMessage(i)? 'border-left' : 'border-right'">
+                      <img src="assets/rfq/message-thread/readMessage.png"
+                        srcset="assets/rfq/message-thread/readMessage@2x.png 2x, assets/rfq/message-thread/readMessage@3x.png 3x"
+                        [ngClass]="isNextBuyerMessage(i)? 'border mirror-img' : 'border'">
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ng-container>
+
+          </ul>
+
+
+        </div>
+      </ng-template>
+
+
+
+
+    </div>
+  </div>
+
+</div>
+
+
+<app-nda-model *ngIf="showNdaModel" [msgId]="msgId" (modalCloseEvent)="closeNDAModelEvent($event)"></app-nda-model>
+<app-contact-sales-model *ngIf="toShowContactModel" (modelUpdateInfoChange)="toShowContactModel= $event">
+</app-contact-sales-model>

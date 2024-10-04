@@ -1,0 +1,73 @@
+.nawardBlock {
+  padding: 10px;
+  border-radius: 3px;
+  border: solid 1px #e2e2e5;
+}
+.Comparison {
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #222222;
+}
+.btn-cancel{
+  border:2px solid #bec4cb;
+  color:#919aa3;
+  background-color: white;
+  width:100%
+}
+.NPartName {
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+}
+.btn-award{
+  background-color: #81db6d;
+  color:#fff;
+  width:100%
+}
+.btn-award:disabled {
+  cursor: not-allowed !important;
+  background-color: #9ca0a5;
+  color:#ffffff;
+}
+/* Absolute Center Spinner */
+.loading {
+  position: fixed;
+  z-index: 999;
+  height: 2em;
+  width: 2em;
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+/* Transparent Overlay */
+.loading:before {
+  content: '';
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+  background-color: #666666;
+}
+
+.optionText {
+  color: #919aa3;
+  font-size: 11px;
+}

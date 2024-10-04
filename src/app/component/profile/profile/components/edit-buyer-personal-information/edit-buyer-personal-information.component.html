@@ -1,0 +1,104 @@
+<div class="background-white">
+  <div class="row row-border-bottom">
+    <div class="col-md-12 rightpanel"><br>
+      <i class="fa fa-times-circle pull-right custom-cursor icon" (click)="closePartDrawer()"></i>
+      <h2 class="panelheading heading-text pb-3">Edit Personal Information</h2>
+    </div>
+  </div><br>
+
+  <form *ngIf="!isLoader" class="md-float-material" [formGroup]="personalInfoForm" (ngSubmit)="onSaveContactInfo();">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">First Name</label>
+          <input type="text" maxlength="50" class="form-control" placeholder="First Name" autocomplete="off"
+            formControlName="firstName">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isFieldValid('firstName')" errorMsg="First Name Is required">
+            </app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Last Name</label>
+          <input type="text" maxlength="50" class="form-control" placeholder="Last name" formControlName="lastName">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isFieldValid('lastName')" errorMsg="Last Name is required">
+            </app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Title</label>
+          <select placeholder="Select Title" id="jobPostingId" class="form-control" formControlName="title" name="title">
+            <option value="0" disabled selected>Select Title</option>
+            <option value="Engineer">Engineer</option>
+            <option value="Buyer">Buyer</option>
+            <option value="Purchasing Manager">Purchasing Manager</option>
+          </select>
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="isFieldValid('title')" errorMsg="Title Is required">
+            </app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Language Preferred</label>
+          <select placeholder="Language Preferred" id="jobPostingId" class="form-control" formControlName="languageId" name="languageId">
+            <option value="0" disabled selected>Select Language Preferred</option>
+            <option *ngFor="let language of iLanguageModelColl" [value]="language.languageId">
+              {{ language.languageName }}
+            </option>
+          </select>
+          <div class="editProfileerror-msg5">
+            <app-field-error-display [displayError]="isFieldValid('languageId')" errorMsg="Language Is required">
+            </app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row row-padding-top">
+      <div class="mb-2" style="width: -webkit-fill-available;">
+        <button type="button" class="Rectangle-3" (click)="closePartDrawer(1)">
+          <span class="button-lbl">Cancel</span>
+        </button>
+      </div>
+      <div style="width: -webkit-fill-available;">
+        <button type="submit"
+          [ngClass]="(personalInfoForm.valid)?'btn Save-Equipment-active':'btn Save-Equipment-Deactive '"
+          [disabled]="!personalInfoForm.valid">Save</button>
+      </div>
+    </div>
+
+  </form>
+
+  <div *ngIf="isLoader">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,837 @@
+<div>
+    <div *ngIf="iscompanyDescription()" class="background-white">
+      <div class="row row-border-bottom">
+        <div class="col-md-12 rightpanel">
+          <i class="fa fa-times-circle pull-right" (click)="closePartDrawer()"></i>
+          <h2 class="panelheading heading-text pb-3">{{ iCompanyViewModel.description == '' ? 'Add Company Description' : 'Edit Company Description' }}</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h4 class="Company-Description1">Company Description</h4>
+        </div>
+      </div>     
+      <!-- <app-edit-buyer-contact-us></app-edit-buyer-contact-us> -->
+      <app-edit-buyer-mailing></app-edit-buyer-mailing>
+      <!-- <form [formGroup]="companyDescriptionForm" (ngSubmit)="editCompanyDescription()">
+        <div class="row">
+          <div class="col-md-12">
+            <textarea class="Rectangle-description" maxlength="2000" formControlName="description"></textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 dHelper-align">
+            <span class="description-helper">2000 characters</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <app-field-error-display [displayError]="isFieldValid('description')" errorMsg="Company description Is required"></app-field-error-display>
+          </div>
+        </div>
+        <div class="row-padding-top">
+          <div class="col-md-6">
+            <button type="button" class="Rectangle-3" (click)="closePartDrawer(1)">
+              <span class="button-lbl" style="color: #81db6d">Cancel</span>
+            </button>
+          </div>
+          <div class="col-md-6">
+            <button type="submit" [ngClass]="companyDescriptionForm.valid? 'btn Save-Equipment-active' : 'btn Save-Equipment-Deactive'">Save</button>
+          </div>
+        </div>
+      </form> -->
+    </div>
+    <div *ngIf="iscompanyEquipment()" class="background-white">
+      <div class="row row-border-bottom">
+        <div class="col-md-12 rightpanel">
+          <i class="fa fa-times-circle pull-right custom-cursor" (click)="closePartDrawer()"></i>
+          <h2 class="panelheading heading-text pb-3 Edit-Equipment">
+              {{ this.iAboutUsModel.equipments.length === 0 ? 'Add Equipment' : 'Edit Equipment' }}
+          </h2>
+        </div>
+      </div>
+      <form *ngIf="!isEqupimentFormActive" class="form-horizontal m-t" [formGroup]="equipmentForm" (ngSubmit)="saveEquipment()">
+        <div class="form-group">
+          <div class="col-md-12 inner-div">
+            <div formArrayName="equipments">
+              <div *ngFor="let child of equipmentForm.controls['equipments'].controls; let i = index" formGroupName="{{i}}"
+                class="margin-top">
+                <div [hidden]="iAboutUsModel?.equipments[i]?.isDeleted === true">
+                  <label for="partNumber" class="I-am-a-person-that">Equipment</label>
+                  <div class="row-padding-top">
+                    <div class="col-md-10">
+                      <input type="text" placeholder="Equipment Name Here" class="form-control" id="PartQty"
+                        formControlName="equipmentText" />
+                    </div>
+                    <div class="col-md-2 remove-padding-right">
+                      <a (click)="deleteQuantity(i)"><span class="upload-part-detail-remove pointerCursor">Remove</span></a>
+                    </div>
+                  </div>
+                  <app-show-errors [control]="equipmentForm.controls['equipments'].controls[i].controls.equipmentText"></app-show-errors>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12 quantity-div" *ngIf="(this.equipmentForm.controls['equipments'].length - deleteEquipmentCount) < 5">
+            <a class="Add-Another-Quanti pointerCursor" (click)="addNewQuantity()">+ Add another piece of equipment</a>
+          </div>
+        </div>
+        <div class="row-padding-top">
+          <div class="mb-2" style="width: -webkit-fill-available;">
+            <button type="button" class="Rectangle-3" (click)="closePartDrawer(1)">
+              <span class="button-lbl" >Cancel</span>
+            </button>
+          </div>
+          <div style="width: -webkit-fill-available;">
+             <button type="submit" [disabled]="!equipmentForm.valid" [ngClass]="equipmentForm.valid? 'btn Save-Equipment-active': 'btn Save-Equipment-Deactive'">Save</button>
+            <!-- <button type="submit" class="btn Save-Equipment-active">Save</butto -->
+          </div>
+        </div>
+      </form>
+      <div *ngIf="isEqupimentFormActive">
+        <div class="loader animation-start">
+          <span class="circle delay-1 size-2"></span>
+          <span class="circle delay-2 size-4"></span>
+          <span class="circle delay-3 size-6"></span>
+          <span class="circle delay-4 size-7"></span>
+          <span class="circle delay-5 size-7"></span>
+          <span class="circle delay-6 size-6"></span>
+          <span class="circle delay-7 size-4"></span>
+          <span class="circle delay-8 size-2"></span>
+        </div>
+      </div>
+    </div>
+    
+    <div  *ngIf="iscompanyPhotos()" class="background-white">
+      <div class="row">
+        <div class="col-md-12 rightpanel">
+          <!-- <i class="fa fa-times-circle pull-right" (click)="closePartDrawer()"></i> -->
+          <h2 class="panelheading heading-text pb-3">{{ iAboutUsModel?.specialFiles?.length === 0 ? 'Add Photos' : 'Edit Photos' }}</h2>
+        </div>
+      </div>
+      <div class="row" [hidden]="isRenameMode">
+        <div class="col-md-12">
+          <div *ngIf="isFileUpladed == true">
+            <div class="loader animation-start">
+              <span class="circle delay-1 size-2"></span>
+              <span class="circle delay-2 size-4"></span>
+              <span class="circle delay-3 size-6"></span>
+              <span class="circle delay-4 size-7"></span>
+              <span class="circle delay-5 size-7"></span>
+              <span class="circle delay-6 size-6"></span>
+              <span class="circle delay-7 size-4"></span>
+              <span class="circle delay-8 size-2"></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 add-margin" *ngFor="let item of iAboutUsModel.specialFiles; let i = index">
+              <img class="img-thumbnail show-image" [src]="getFileUrl(item.fileName)" alt="Another alt text" />
+              <div class="img-meta">
+                <span class="cursor-pointer" *ngIf="!!item.fileTitle && item.fileTitle !== ''" (click)="enableRenameMode(item)">{{
+                  item.fileTitle }}</span>
+                <span class="cursor-pointer" *ngIf="!(!!item.fileTitle && item.fileTitle !== '')" (click)="enableRenameMode(item)">+ Add Title</span>
+                <i class="fa fa-trash-o fa-lg delete-img" (click)="deleteImage(i)"></i>
+              </div>
+            </div>
+          </div>
+          <div class="row space-add-another" *ngIf="!uploadAnother">
+            <div class="col-md-12" style="text-align: center" *ngIf="(iAboutUsModel.specialFiles.length == 0)">
+              <span class="active-link" (click)="enableUploader()">
+                + Add Photos</span>
+
+            </div>
+            <div class="col-md-12" style="text-align: center" *ngIf="(iAboutUsModel.specialFiles.length !== 0)">
+                <span *ngIf="(iAboutUsModel.specialFiles.length < 18)" class="active-link" (click)="enableUploader()">
+                  + Add another</span>
+                <span  ngbTooltip="Maximum files are uploaded" *ngIf="(iAboutUsModel.specialFiles.length >= 18 )" class="inActive-link">
+                  + Add another </span>
+              </div>
+          </div>
+          <div class="gallary-item-upload-box" ng2FileDrop [uploader]="gallaryItemUploader" *ngIf="uploadAnother">
+            <img src="assets/supplier/about_us/gallary-file-upload.png" srcset="
+                assets/supplier/about_us/gallary-file-upload@2x.png 2x,
+                assets/supplier/about_us/gallary-file-upload@3x.png 3x
+              "
+              class="gallary-browse-Icon-default" />
+            <div class="gallary-Drag-drop-text">Drag & drop file here</div>
+            <div class="gallary-browse-file-text">
+              <span class="or"> or</span>
+              <span class="cursor-pointer">browse your files.</span>
+              <input type="file" ng2FileSelect multiple [uploader]="gallaryItemUploader" class="custom-file-input cursor-pointer"
+                style="top:-27px;color:#337ab7" accept="image/jpeg, image/png, video/mp4, video/x-m4v" />
+            </div>
+            <div class="gallary-browse-file-type">
+              (JPG or PNG only, 500mb max/upload)
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="row" *ngIf="isRenameMode">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12">
+              <span class="active-link" (click)="closeFileRenameDrawer()">
+                <i class="fa fa-arrow-left"></i> All Photos</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <img class="img-thumbnail show-image1" [src]="getFileUrl(renameModeObj.fileName)" alt="Another alt text" />
+            </div>
+          </div>
+          <div class="row edit-photo-padding">
+            <div class="col-md-12">
+              <label [ngClass]="
+                  fileTitleVal.errors &&
+                  (fileTitleVal.dirty || fileTitleVal.touched)
+                    ? 'Label-focus-red'
+                    : labelFocus === 'fileTitleVal'
+                    ? 'Label-focus'
+                    : 'Label-class'
+                "
+                *ngIf="checkIfLabelNeeded('fileTitle')">Photo Title</label>
+              <label class="Label-class" *ngIf="!checkIfLabelNeeded('fileTitle')"></label>
+
+              <input type="text" class="form-control" maxlength="150" placeholder="Photo Title" autocomplete="off"
+                (focus)="setFocus('fileTitleVal')" (blur)="setFocus('no')" [(ngModel)]="renameModeObj.fileTitle" required
+                #fileTitleVal="ngModel" />
+              <div *ngIf="
+                  fileTitleVal.errors &&
+                  (fileTitleVal.dirty || fileTitleVal.touched)
+                "
+                style="color: red; text-align: right">
+                Please Enter File Title
+              </div>
+            </div>
+          </div>
+          <div class="row edit-photo-padding">
+            <div class="col-md-12">
+              <label [ngClass]="
+                  fileCaptionVal.errors &&
+                  (fileCaptionVal.dirty || fileCaptionVal.touched)
+                    ? 'Label-focus-red'
+                    : labelFocus === 'fileCaptionVal'
+                    ? 'Label-focus'
+                    : 'Label-class'
+                "
+                *ngIf="checkIfLabelNeeded('fileCaption')">Caption</label>
+              <label class="Label-class" *ngIf="!checkIfLabelNeeded('fileCaption')"></label>
+
+              <input type="text" class="form-control" maxlength="400" placeholder="Caption" autocomplete="off" (focus)="setFocus('fileCaptionVal')"
+                (blur)="setFocus('no')" [(ngModel)]="renameModeObj.fileCaption" required #fileCaptionVal="ngModel" />
+              <div *ngIf="
+                  fileCaptionVal.errors &&
+                  (fileCaptionVal.dirty || fileCaptionVal.touched)
+                "
+                style="color: red; text-align: right">
+                Please Enter File Caption
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class=" col-md-6 dropimagebuttons">
+          <button type="button" class="cancelbutton1" (click)="closeFileRenameDrawer()">
+            Cancel
+          </button>
+        </div>
+        <div class=" col-md-6 dropimagebuttons">
+          <button type="button" [ngClass]=" isDisabledSpecialFilesave() ? 'disabled-btn1' : 'enabled-btn1' " [disabled]="isDisabledSpecialFilesave()" (click)="saveSpecialFile()">
+            Save
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div *ngIf="iscompanyDemographics()" class="background-white">
+      <div *ngIf="isLoder">
+        <div class="loader animation-start">
+          <span class="circle delay-1 size-2"></span>
+          <span class="circle delay-2 size-4"></span>
+          <span class="circle delay-3 size-6"></span>
+          <span class="circle delay-4 size-7"></span>
+          <span class="circle delay-5 size-7"></span>
+          <span class="circle delay-6 size-6"></span>
+          <span class="circle delay-7 size-4"></span>
+          <span class="circle delay-8 size-2"></span>
+        </div>
+      </div>
+      <div *ngIf="!isLoder">
+        <div class="row">
+          <div class="col-md-12 rightpanel">
+            <i class="fa fa-times-circle pull-right" (click)="closePartDrawer()"></i>
+            <h2 class="panelheading heading-text pb-3">
+              Edit Company Demographics
+            </h2>
+          </div>
+        </div>
+        <div class="row" style="height: 40px;
+
+          background-color: #f6f7fb;">
+          <div class="col-md-12 MFGcom-Member-Since">
+            MFG.com Member Since:
+            {{ iAboutUsModel?.createdDate | date: "MM/dd/yy" }}
+          </div>
+        </div>
+        <div class="panel panel-default" style="padding-top: 15px">
+          <div class="panel-body panel-body-padding">
+            <form class="form-horizontal m-t">
+              <!-- <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <div class="col-md-12 inner-div">
+                      <select id="supplierTypeId" class="form-control" [(ngModel)]="iSupplierTypeViewModel.supplierTypeId"
+                        name="supplierTypeId">
+                        <option value="0" disabled selected>Company Type</option>
+                        <option *ngFor="let companyType of supplierTypeViewModelColl" [value]="companyType.supplierTypeId">
+                          {{ companyType.supplierTypeNameEn }}
+                        </option>
+                      </select>
+                      <select id="supplierTypeId" class="form-control" [(ngModel)]="iSupplierTypeViewModel.supplierTypeId "
+                        name="supplierTypeId">
+                        <option value="0" disabled selected>Company Type</option>
+                        <option *ngFor="let companyType of buyerTypeViewModelColl" [value]="companyType.industryBranchesId">
+                          {{ companyType.industryBranchesNameEn }}
+                        </option>
+                      </select>
+                      
+                        <div class="error-msg2">
+                          <app-field-error-display [displayError]="isDemographicsSupplierTypeValid('supplierTypeId')" errorMsg="Country Is required"></app-field-error-display>
+
+                        </div>
+                     
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+              <!-- <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <div class="col-md-12 inner-div">
+                      <select id="companyTypeId" class="form-control" [(ngModel)]="iAboutUsModel.employeeCountRangeId" name="employeeCountRangeId">
+                        <option value="0" disabled selected># of Employees</option>
+                        <option *ngFor="
+                            let employeeRange of employeesCountRangeViewModelColl
+                          "
+                          [value]="employeeRange.employeeCountRangeId">
+                          {{ employeeRange.range }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <div class="col-md-12 inner-div">
+                      <label class="label-language-detail">1st Language </label>
+                      <select id="firstLanguageId" class="form-control" [(ngModel)]="firstLanguageId" name="firstLanguageId"
+                        (change)="getSelectedLanguages($event, firstLanguageId)">
+                        <option selected></option>
+                        <option *ngFor="let language of iLanguageModelColl" [value]="language.languageId">
+                          {{ language.languageName }}
+                        </option>
+                      </select>
+                      <div class="form-group">
+                        <div class="col-md-12 language-div" *ngIf="addSecondLanguageDiv">
+                          <a class="Add-Another-Lang" (click)="addSecondLanguage()">+ Add Another Language
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="secondLanguageDiv">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <div class="col-md-12 inner-div">
+                      <label class="label-language-detail">2nd Language </label>
+                      <select id="secondLanguageId" class="form-control" [(ngModel)]="secondLanguageId" name="secondLanguageId"
+                        (change)="getSelectedLanguages($event, secondLanguageId)">
+                        <option value="0" disabled selected>Languages</option>
+                        <option *ngFor="let language of iLanguageModelSecondLangColl" [value]="language.languageId">
+                          {{ language.languageName }}
+                        </option>
+                      </select>
+                      <div class="col-md-4 remove-padding-right">
+                        <a (click)="deleteSecondLanguage()">
+                          <span class="language-detail-remove pointerCursor">Remove</span>
+                        </a>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-12 language-div" *ngIf="addThirdLanguageDiv">
+                          <a class="Add-Another-Lang" (click)="addThirdLanguage()">+ Add Another Language
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="thirdLanguageDiv">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <div class="col-md-12 inner-div">
+                      <label class="label-language-detail">3rd Language </label>
+                      <select id="thirdLanguageId" class="form-control" [(ngModel)]="thirdLanguageId" name="thirdLanguageId"
+                        (change)="getSelectedLanguages($event, thirdLanguageId)">
+                        <option value="0" disabled selected>Languages</option>
+                        <option *ngFor="let language of iLanguageModelThirdLangColl" [value]="language.languageId">
+                          {{ language.languageName }}
+                        </option>
+                      </select>
+                      <div class="col-md-4 remove-padding-right">
+                        <a (click)="deleteThirdLanguage()">
+                          <span class="language-detail-remove pointerCursor">Remove</span>
+                        </a>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-12 language-div" *ngIf="addFourthLanguageDiv">
+                          <a class="Add-Another-Lang" (click)="addFourthLanguage()">+ Add Another Language
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="fourthLanguageDiv">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <div class="col-md-12 inner-div">
+                      <label class="label-language-detail">4th Language </label>
+                      <select id="fourthLanguageId" class="form-control" [(ngModel)]="fourthLanguageId" name="fourthLanguageId"
+                        (change)="getSelectedLanguages($event, fourthLanguageId)">
+                        <option value="0" disabled selected>Languages</option>
+                        <option *ngFor="let language of iLanguageModelFourthLangColl" [value]="language.languageId">
+                          {{ language.languageName }}
+                        </option>
+                      </select>
+                      <div class="col-md-4 remove-padding-right">
+                        <a (click)="deleteFourthLanguage()">
+                          <span class="language-detail-remove pointerCursor">Remove</span>
+                        </a>
+                      </div>
+
+                      <div class="form-group">
+                        <div class="col-md-12 language-div" *ngIf="addFifthLanguageDiv">
+                          <a class="Add-Another-Lang" (click)="addFifthLanguage()">+ Add Another Language
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="fifthLanguageDiv">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <div class="col-md-12 inner-div">
+                      <label class="label-language-detail">5th Language </label>
+                      <select id="fifthLanguageId" class="form-control" [(ngModel)]="fifthLanguageId" name="fifthLanguageId"
+                        (change)="getSelectedLanguages($event, fifthLanguageId)">
+                        <option value="0" disabled selected>Languages</option>
+                        <option *ngFor="let language of iLanguageModelFifthLangColl" [value]="language.languageId">
+                          {{ language.languageName }}
+                        </option>
+                      </select>
+                      <div class="col-md-4 remove-padding-right">
+                        <a (click)="deleteFifthLanguage()">
+                          <span class="language-detail-remove pointerCursor">Remove</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <div class="col-md-12 inner-div">
+                      <select id="companyTypeId" class="form-control" [(ngModel)]="iAboutUsModel.employeeCountRangeId" name="employeeCountRangeId">
+                        <option value="0" disabled selected># of Employees</option>
+                        <option *ngFor="
+                            let employeeRange of employeesCountRangeViewModelColl
+                          "
+                          [value]="employeeRange.employeeCountRangeId">
+                          {{ employeeRange.range }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <div class="col-md-12 inner-div">
+                      <label>D-U-N-S #</label> <label class="Label-class"></label>
+                      <input [(ngModel)]="iAboutUsModel.dunsNumber"  type="text"  maxlength="9" class="form-control" placeholder="D-U-N-S  #" name="dunsNumber"    (keyup)="onlyNumber(event)" />
+                      <div class="Loginerror-msg" *ngIf="!iserror">
+                        <p style="color: red">D-U-N-S  # Is accept only number</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <div class="col-md-12 inner-div">
+                      <label>Cage Code</label> <label class="Label-class"></label>
+                      <input type="text" [(ngModel)]="iAboutUsModel.cageCode" maxlength="5" class="form-control"
+                        placeholder="Cage Code" (keyup)="keyUp($event)" name="cageCode" [pattern]="'^[a-zA-Z \-\']$'" />
+                      <div class="Loginerror-msg">
+                        <app-field-error-display errorMsg="Cage Code Is required"></app-field-error-display>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="form-group">
+
+                            <div class="col-md-12 inner-div">
+
+                                <button type="button" class="btn-cancel-part-details">
+
+                                    <span class="btn-cancel-text">Cancel</span>
+
+                                </button>
+
+                                <button type="button" class="btn btn-save-part-details" (click)="saveDemographicDetails()">
+
+                                    <span class="btn-save-text-part">Save</span>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+              -->
+              <div class="row-padding-top">
+                <div class="mb-2">
+                  <button type="button" class="Rectangle-3" (click)="closePartDrawer(1)">
+                    <span class="button-lbl">Cancel</span>
+                  </button>
+                </div>
+                <div>
+                  <button type="button" class="btn Save-Equipment-active" (click)="saveDemographicDetails()">Save</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="iscompanyCertifications()" class="background-white">
+      <div class="row">
+        <div class="col-md-12 rightpanel">
+          <i class="fa fa-times-circle pull-right" (click)="closePartDrawer()"></i>
+          <h2 class="panelheading heading-text pb-3">{{ certificateViewModelList.length === 0  ? 'Add Certifications' : 'Edit Certifications' }}</h2>
+        </div>
+      </div>
+      <div class="col-md-12 inner-div">
+        <label for="postProduction" class="label-part-detail">
+          Certification</label>
+        <angular2-multiselect [data]="iCertificationViewModelColl" [(ngModel)]="CertificationselectedItems" name="postsProcess"
+          (onSelect)="onPostCertificationProcess1($event)" [settings]="certificatesettings"></angular2-multiselect>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="col-md-8 inner-div">
+            <label for="delivery" class="label-part-detail">Date of certification</label>
+            <div class="input-group">
+              <p-calendar placeholder="MM/DD/YYYY" [showIcon]="true" [(ngModel)]="certificateDate1"></p-calendar>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isFileUpladed1 == true">
+        <div class="loader animation-start">
+          <span class="circle delay-1 size-2"></span>
+          <span class="circle delay-2 size-4"></span>
+          <span class="circle delay-3 size-6"></span>
+          <span class="circle delay-4 size-7"></span>
+          <span class="circle delay-5 size-7"></span>
+          <span class="circle delay-6 size-6"></span>
+          <span class="circle delay-7 size-4"></span>
+          <span class="circle delay-8 size-2"></span>
+        </div>
+      </div>
+      <div class="gallary-item-upload-box" ng2FileDrop [uploader]="certificateUploader1" *ngIf="certificateAttacghmentFileName1 === ''">
+        <img src="assets/supplier/group-4.png" srcset="assets/supplier/oval-2@2x.png 2x, assets/oval-2@3x.png 3x" class="gallary-browse-Icon-default" />
+        <div class="Drag-drop-your-cer">Drag & drop Certification here</div>
+        <div class="gallary-browse-file-text" style="padding-top: 10px;">
+          <span class="or"> or</span>
+          <span class="cursor-pointer">browse your files.</span>
+          <input type="file" ng2FileSelect multiple [uploader]="certificateUploader1" class="custom-file-input cursor-pointer"
+            style="top:-27px;color:#337ab7" accept="application/pdf" />
+        </div>
+        <div class="gallary-browse-file-type " style="padding-top: 15px;">
+          PDF files only
+        </div>
+      </div>
+      <div class="row" *ngIf="certificateAttacghmentFileName1 !== ''">
+        <div class="col-md-9 " style="word-break: break-all">{{ getOriginalFineName(certificateAttacghmentFileName1)}}</div>
+        <div class="col-md-3 remove-padding-right Remove-Copy">
+          <a (click)="deleteFileRemove1()">
+            <span class="upload-part-detail-remove pointerCursor">Remove</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="row add-certi-space" *ngIf="!secondCertificateDiv">
+        <div class="col-md-12">
+          <a class="-Add-Another-Catego" (click)="addSecondCertficate()">+ Add Another Certificate
+          </a>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="secondCertificateDiv">
+        <div class="col-md-12 inner-div">
+          <label for="postProduction" class="label-part-detail">
+            Certification</label>
+          <angular2-multiselect [data]="iCertificationViewModelColl" [(ngModel)]="CertificationselectedItems2" name="postsProcess"
+            (onSelect)="onPostCertificationProcess2($event)" [settings]="certificatesettings"></angular2-multiselect>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="col-md-8 inner-div">
+              <label for="delivery" class="label-part-detail">Date of certification
+              </label>
+              <div class="input-group">
+                <p-calendar placeholder="MM/DD/YYYY" [showIcon]="true" [(ngModel)]="certificateDate2"></p-calendar>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="isFileUpladed2 == true">
+          <div class="loader animation-start">
+            <span class="circle delay-1 size-2"></span>
+            <span class="circle delay-2 size-4"></span>
+            <span class="circle delay-3 size-6"></span>
+            <span class="circle delay-4 size-7"></span>
+            <span class="circle delay-5 size-7"></span>
+            <span class="circle delay-6 size-6"></span>
+            <span class="circle delay-7 size-4"></span>
+            <span class="circle delay-8 size-2"></span>
+          </div>
+        </div>
+        <div class="gallary-item-upload-box" ng2FileDrop [uploader]="certificateUploader2" *ngIf="certificateAttacghmentFileName2 == ''">
+          <img src="assets/supplier/group-4.png" srcset="assets/supplier/oval-2@2x.png 2x, assets/oval-2@3x.png 3x" class="gallary-browse-Icon-default" />
+          <div class="gallary-Drag-drop-text">Drag & drop Certification here</div>
+          <div class="gallary-browse-file-text">
+            <span class="or"> or</span>
+            <span class="cursor-pointer">browse your files.</span>
+            <input type="file" ng2FileSelect multiple [uploader]="certificateUploader2" class="custom-file-input cursor-pointer"
+              style="top:-27px;color:#337ab7" accept="application/pdf" />
+          </div>
+          <div class="gallary-browse-file-type">PDF files only</div>
+        </div>
+        <div class="row" *ngIf="certificateAttacghmentFileName2 !== ''">
+          <div class="col-md-9"style="word-break: break-all">{{ getOriginalFineName(certificateAttacghmentFileName2)}}</div>
+          <div class="col-md-3 remove-padding-right Remove-Copy">
+            <a (click)="deleteFileRemove2()">
+              <span class="upload-part-detail-remove pointerCursor ">Remove</span>
+            </a>
+          </div>
+        </div>
+        <div class="row add-certi-space" *ngIf="!thirdCertificateDiv">
+          <div class="col-md-9">
+            <a class="-Add-Another-Catego" (click)="addThirdCertificate()">+ Add Another Certificate
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="thirdCertificateDiv">
+        <div class="col-md-12 inner-div">
+          <label for="postProduction" class="label-part-detail">
+            Certification</label>
+          <angular2-multiselect [data]="iCertificationViewModelColl" [(ngModel)]="CertificationselectedItems3" name="postsProcess"
+            (onSelect)="onPostCertificationProcess3($event)" [settings]="certificatesettings"></angular2-multiselect>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="col-md-8 inner-div">
+              <label for="delivery" class="label-part-detail">Date of certification
+              </label>
+              <div class="input-group">
+                <p-calendar placeholder="MM/DD/YYYY" [showIcon]="true" [(ngModel)]="certificateDate3"></p-calendar>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="isFileUpladed3 == true">
+          <div class="loader animation-start">
+            <span class="circle delay-1 size-2"></span>
+            <span class="circle delay-2 size-4"></span>
+            <span class="circle delay-3 size-6"></span>
+            <span class="circle delay-4 size-7"></span>
+            <span class="circle delay-5 size-7"></span>
+            <span class="circle delay-6 size-6"></span>
+            <span class="circle delay-7 size-4"></span>
+            <span class="circle delay-8 size-2"></span>
+          </div>
+        </div>
+        <div class="gallary-item-upload-box" ng2FileDrop [uploader]="certificateUploader3" *ngIf="certificateAttacghmentFileName3 == ''">
+          <img src="assets/supplier/group-4.png" srcset="assets/supplier/oval-2@2x.png 2x, assets/oval-2@3x.png 3x" class="gallary-browse-Icon-default" />
+          <div class="gallary-Drag-drop-text">Drag & drop Certification here</div>
+          <div class="gallary-browse-file-text">
+            <span class="or"> or</span>
+            <span class="cursor-pointer">browse your files.</span>
+            <input type="file" ng2FileSelect multiple [uploader]="certificateUploader3" class="custom-file-input cursor-pointer"
+              style="top:-27px;color:#337ab7" accept="application/pdf" />
+          </div>
+          <div class="gallary-browse-file-type">PDF files only</div>
+        </div>
+        <div class="row" *ngIf="certificateAttacghmentFileName3 !== ''">
+          <div class="col-md-9"style="word-break: break-all">{{ getOriginalFineName(certificateAttacghmentFileName3)}}</div>
+          <div class="col-md-3 remove-padding-right Remove-Copy">
+            <a (click)="deleteFileRemove3()">
+              <span class="upload-part-detail-remove pointerCursor">Remove</span>
+            </a>
+          </div>
+        </div>
+        <div class="row add-certi-space" *ngIf="!fourthCertificateDiv">
+          <div class="col-md-9">
+            <a class="-Add-Another-Catego" (click)="addFourthCertificate()">+ Add Another Certificate
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="fourthCertificateDiv">
+        <div class="col-md-12 inner-div">
+          <label for="postProduction" class="label-part-detail">
+            Certification</label>
+          <angular2-multiselect [data]="iCertificationViewModelColl" [(ngModel)]="CertificationselectedItems4" name="postsProcess"
+            (onSelect)="onPostCertificationProcess4($event)" [settings]="certificatesettings"></angular2-multiselect>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="col-md-8 inner-div">
+              <label for="delivery" class="label-part-detail">Date of certification
+              </label>
+              <div class="input-group">
+                <p-calendar placeholder="MM/DD/YYYY" [showIcon]="true" [(ngModel)]="certificateDate4"></p-calendar>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="isFileUpladed4 == true">
+          <div class="loader animation-start">
+            <span class="circle delay-1 size-2"></span>
+            <span class="circle delay-2 size-4"></span>
+            <span class="circle delay-3 size-6"></span>
+            <span class="circle delay-4 size-7"></span>
+            <span class="circle delay-5 size-7"></span>
+            <span class="circle delay-6 size-6"></span>
+            <span class="circle delay-7 size-4"></span>
+            <span class="circle delay-8 size-2"></span>
+          </div>
+        </div>
+        <div class="gallary-item-upload-box" ng2FileDrop [uploader]="certificateUploader4" *ngIf="certificateAttacghmentFileName4 == ''">
+          <img src="assets/supplier/group-4.png" srcset="assets/supplier/oval-2@2x.png 2x, assets/oval-2@3x.png 3x" class="gallary-browse-Icon-default" />
+          <div class="gallary-Drag-drop-text">Drag & drop Certification here</div>
+          <div class="gallary-browse-file-text">
+            <span class="or"> or</span>
+            <span class="cursor-pointer">browse your files.</span>
+            <input type="file" ng2FileSelect multiple [uploader]="certificateUploader4" class="custom-file-input cursor-pointer"
+              style="top:-27px;color:#337ab7" accept="application/pdf" />
+          </div>
+          <div class="gallary-browse-file-type">PDF files only</div>
+        </div>
+        <div class="row" *ngIf="certificateAttacghmentFileName4 !== ''">
+          <div class="col-md-9"style="word-break: break-all">{{ getOriginalFineName(certificateAttacghmentFileName4)}}</div>
+          <div class="col-md-3 remove-padding-right Remove-Copy">
+            <a (click)="deleteFileRemove4()">
+              <span class="upload-part-detail-remove pointerCursor">Remove</span>
+            </a>
+          </div>
+        </div>
+        <div class="row add-certi-space" *ngIf="!fifthCertificateDiv">
+          <div class="col-md-9">
+            <a class="-Add-Another-Catego" (click)="addFifthCertificate()">+ Add Another Certificate
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="fifthCertificateDiv">
+        <div class="col-md-12 inner-div">
+          <label for="postProduction" class="label-part-detail">
+            Certification</label>
+          <angular2-multiselect [data]="iCertificationViewModelColl" [(ngModel)]="CertificationselectedItems5" name="postsProcess"
+            (onSelect)="onPostCertificationProcess5($event)" [settings]="certificatesettings"></angular2-multiselect>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="col-md-8 inner-div">
+              <label for="delivery" class="label-part-detail">Date of certification
+              </label>
+              <div class="input-group">
+                <p-calendar placeholder="MM/DD/YYYY" [showIcon]="true" [(ngModel)]="certificateDate5"></p-calendar>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="isFileUpladed5 == true">
+          <div class="loader animation-start">
+            <span class="circle delay-1 size-2"></span>
+            <span class="circle delay-2 size-4"></span>
+            <span class="circle delay-3 size-6"></span>
+            <span class="circle delay-4 size-7"></span>
+            <span class="circle delay-5 size-7"></span>
+            <span class="circle delay-6 size-6"></span>
+            <span class="circle delay-7 size-4"></span>
+            <span class="circle delay-8 size-2"></span>
+          </div>
+        </div>
+        <div class="gallary-item-upload-box" ng2FileDrop [uploader]="certificateUploader5" *ngIf="certificateAttacghmentFileName5 == ''">
+          <img src="assets/supplier/group-4.png" srcset="assets/supplier/oval-2@2x.png 2x, assets/oval-2@3x.png 3x" class="gallary-browse-Icon-default" />
+          <div class="gallary-Drag-drop-text">Drag & drop Certification here</div>
+          <div class="gallary-browse-file-text">
+            <span class="or"> or</span>
+            <span class="cursor-pointer">browse your files.</span>
+            <input type="file" ng2FileSelect multiple [uploader]="certificateUploader5" class="custom-file-input cursor-pointer"
+              style="top:-27px;color:#337ab7" accept="application/pdf" />
+          </div>
+          <div class="gallary-browse-file-type">PDF files only</div>
+        </div>
+        <div class="row" *ngIf="certificateAttacghmentFileName5 !== ''">
+          <div class="col-md-9"style="word-break: break-all">{{ getOriginalFineName(certificateAttacghmentFileName5)}}</div>
+          <div class="col-md-3 remove-padding-right Remove-Copy">
+            <a (click)="deleteFileRemove5()">
+              <span class="upload-part-detail-remove pointerCursor">Remove</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row-padding-top">
+        <div class="mb-2" style="width: -webkit-fill-available;">
+          <button type="button" class="Rectangle-3" (click)="closePartDrawer(1)">
+            <span class="button-lbl" >Cancel</span>
+          </button>
+        </div>
+        <div style="width: -webkit-fill-available;">
+          <button type="button" class="btn" [ngClass]="!isCertificatesReady() ? 'Save-Equipment-Deactive' : 'Save-Equipment-active'"
+            [disabled]="!isCertificatesReady()" (click)="saveCetifications()">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

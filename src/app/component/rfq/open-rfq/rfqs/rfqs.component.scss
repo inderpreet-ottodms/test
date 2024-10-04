@@ -1,0 +1,151 @@
+@import '../../../../../styles.scss';
+
+.rfq-counts
+{
+  font-size: 10pt;
+}
+
+.listiew-options
+{
+    padding: 7px;
+    background-color: #ffffff;
+    border: solid 1px #bec4cb;
+    margin: 2px;
+    cursor: pointer;
+    float: right!important;
+}
+.listiew-options :active{
+    color: #448ada;
+}
+
+.filter-container
+{
+    display: flex;
+    // position:sticky;
+    // position: -webkit-sticky;
+    // top:1000px;
+}
+
+.filter-container .filter{
+	width:100%;
+	padding:5px;
+	border-radius: 2px;
+	border: solid 1px #bec4cb;
+	margin-bottom:15px;
+}
+
+.filter-container .input-container {
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    width: 100%;
+    margin-bottom: 15px;
+    position: relative;
+  }
+  .filter-container .search
+  {
+    width: 100%;
+    padding: 6px;
+    border-radius: 2px;
+    border: solid 1px #bec4cb;
+  }
+  .filter-container .icon-search{
+    position: absolute;
+    padding: 10px;
+    color: #fff;
+    //background-color: #ccc;
+    background-color: #0378ff;
+  }
+  .filter-container .search-text{
+    padding-left: 35px!important;
+    padding-right: 30px !important;
+  }
+
+  .manufac_scroll {
+    max-height:100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    line-height: 1;
+  }
+  .Rectangle-indi {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 218px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    border: solid 1px #bec4cb;
+    text-align: left;
+  }
+  .Main-Topic {
+    font-family: Poppins;
+    font-size: 13px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #222222;
+    cursor: pointer;
+  }
+  .Subtopic-1-Subtopic {
+    font-family: Poppins;
+    font-size: 13px;
+    padding-left: 7px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #222222;
+    cursor: pointer;
+  }
+  .Deselect-All
+  {
+    text-align: right;
+    padding: 0px;
+    color: blue;
+    font-size: 9pt;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .award-enable {
+    margin-right: 10px;
+    width: 80px;
+    border-radius: 2px;
+    background-color: #81db6d;
+    font-size: 14px;
+    height: 27px;
+    border: 1px solid #81db6d;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+  }
+  .rfq-sideDrawer
+  {
+    position: absolute;
+    top: 0px;
+    right: 0%;
+    overflow-y: scroll;
+    max-height: 100vh;
+    background-color: white;
+    -webkit-box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+    box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+    margin-top: 65px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  .btn-submit-rfq-close-1 {
+    height: 45px;
+    border-radius: 2px;
+    background-color: #81db6d;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+}

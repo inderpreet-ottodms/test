@@ -1,0 +1,33 @@
+<div class="background-white">
+    <div class="row row-border-bottom">
+      <div class="col-md-12 rightpanel">
+        <i class="fa fa-times-circle pull-right" (click)="closeRatingReply()"></i>
+        <h2 class="panelheading heading-text pb-3">Response Reply</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row input-top-padding">
+          <div class="col-md-12">
+            <label *ngIf="responseTyped()"
+              [ngClass]="(replyTyped.errors && (replyTyped.dirty || replyTyped.touched ))?'Label-focus-red':(labelFocus === 'replyTyped')? 'Label-focus':'Label-class'">Reply</label>
+            <label class="Label-class" *ngIf="!responseTyped()"></label>
+            <textarea type="text" class="form-control" maxlength="5000" placeholder="Reply" autocomplete="off" (focus)="setFocus('replyTyped')"
+              (blur)="setFocus('no')" [(ngModel)]="iRatingResponseViewModel.comment" required #replyTyped="ngModel"></textarea>
+            <div *ngIf="replyTyped.errors && (replyTyped.dirty || replyTyped.touched )" style="color: red; text-align: right">
+              Please Enter Reply message.
+            </div>
+          </div>
+        </div>
+        <div class="reply-help">5000 characters</div>
+        <div class="row">
+          <div class="col-md-12 dropimagebuttons1">
+            <button type="button" class="cancelbutton1" (click)="closeRatingReply()">Cancel</button>
+            <button type="button" [ngClass]="(isNotAllowsSendResponse())?'disabled-btn1':'enabled-btn1'" [disabled]="isNotAllowsSendResponse()"
+              (click)="sendResponse()">Post</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

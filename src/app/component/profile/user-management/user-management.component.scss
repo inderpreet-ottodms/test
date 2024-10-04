@@ -1,0 +1,149 @@
+.editdelete{
+    border-radius: 3px;
+    background-color: #edeff7;
+    text-align: center;
+  }
+
+.invite-user-btn {
+    width: 150px;
+}
+
+/*----------------------------------------Modal Popup-------------------------------------*/
+ .modal-header {
+	padding-bottom: 5px;
+}
+.modal-title{
+	font-size: 21px !important;
+	font-weight:bold !important;
+}
+.modal-footer .btn-group button {
+	height:40px;
+	border-top-left-radius : 0;
+	border-top-right-radius : 0;
+	border: none;
+	border-right: 1px solid #ddd;
+}
+.btn-ignore-rfq {
+  width: 284px;
+  height: 45px;
+  border-radius: 2px;
+  border: solid 2px #2E58D6;
+  background-color:#fff;
+  color:#2E58D6
+}
+.btn-cancel-rfq {
+  width: 285px;
+  height: 45px;
+  border-radius: 2px;
+  background-color: #2E58D6;
+  color:#ffffff;
+}
+.myRFQ-noRFQActive-helper-text {
+  height: 29px;
+  font-family: Poppins;
+  font-size: 21px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #222222;
+  margin-bottom:40px;
+}
+/*----------------------------------------Modal Popup-------------------------------------*/
+
+.Rectangle-3 {
+  border-radius: 5px;
+  box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+  background-color: #ffffff;
+}
+
+.Rectanglebtn-active {
+  background-color: #2E58D6 !important;
+  color: white !important;
+}
+.Rectanglebtn-inactive {
+  background-color: #bec4cb !important;
+  color: white !important;
+  cursor:default !important;
+}
+
+.Rectangle-description {
+  width: 330px;
+  height: 80px;
+  border-radius: 2px;
+  border: solid 1px  #2E58D6;
+  background-color: #ffffff;
+}
+
+// For Pagination
+#radioBtn .notActive{
+  color: #4a90e2;
+  padding: 5px 15px 5px 15px;
+  background-color: #fff;
+}
+#radioBtn .notActive.disabled {
+  color:#bec4cb;
+}
+#radioBtn .active{
+  // background-color: #f6f7fb;
+  // color: #222;
+  font-weight: bold;
+  box-shadow: none;
+  padding: 5px 15px 5px 15px;
+}
+.paginations{
+  float:right;
+}
+.paginations a {
+  border-color:rgba(145, 154, 163, 0.65) !important;
+}
+.padd-right {
+  padding-right:  62px;
+}
+.pagination-summary {
+  height: 15px;
+  border-radius: 2px;
+  background-color: #bec4cb;
+}
+.showreccount {
+  width: 48px;
+  height: 15px;
+  border-radius: 2px;
+  background-color: #bec4cb;
+  font-size:10px;
+  font-weight: bold;
+  text-align: center;
+  color: #ffffff;
+}
+/* ********* pagination end *********** */
+.form-control:disabled {
+  cursor: default !important;
+  opacity: 0.001 !important;
+}
+
+.active-rfq-btn {
+  padding: 5px 18px;
+  border-radius: 5px;
+  background-color: #2E58D6;
+  color:#fff;
+  border: solid 1px #2E58D6;
+}
+
+.deactivate-rfq-btn {
+  padding: 5px 7px;
+  border-radius: 5px;
+  background-color: #fff;
+  border: solid 1px #2E58D6;
+   color:#2E58D6;
+}
+.sideDrawer {
+  padding-right:0px !important;
+  position:fixed !important;
+  width:28% !important;
+  right: 0 !important;
+  overflow-y: auto !important;
+  height:100% !important;
+  padding-bottom:150px !important;
+}

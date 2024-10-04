@@ -1,0 +1,78 @@
+<ng-template #contentNewforSilver let-d="dismiss" data-backdrop="static" data-keyboard="false">
+  <div class="custom-modal">
+
+    <div class="modal-header">
+      <h4 class="modal-title">Upgrade Today! </h4>
+      <button type="button" class="close" data-bs-dismiss="modal" (click)="d('notNow');closeUpgradeModal()"><i
+          class="fa fa-times-circle" aria-hidden="true" style="color: #4a90e2;"></i></button>
+    </div>
+    <div>
+      <div class="loading" *ngIf="isLoader">
+        <div class="loader animation-start">
+          <span class="circle delay-1 size-2"></span>
+          <span class="circle delay-2 size-4"></span>
+          <span class="circle delay-3 size-6"></span>
+          <span class="circle delay-4 size-7"></span>
+          <span class="circle delay-5 size-7"></span>
+          <span class="circle delay-6 size-6"></span>
+          <span class="circle delay-7 size-4"></span>
+          <span class="circle delay-8 size-2"></span>
+        </div>
+      </div>
+      <div class="graphic-header2">
+        <div class="head-text-center-1">
+          Boost Your Profile
+        </div>
+        <div class="head-text-center-2">
+          Premium features that maximize your marketing
+        </div>
+      </div>
+      <div class="subject-section" style="text-align: left!important;">
+        <div class="padding-space2">
+          <b>You currently have a free account.</b> Upgrade now to unlock valuable
+          features to maximize your visibility and engage even more buyers.
+        </div>
+        <div class="padding-space row">
+          <div class="col-md-6">
+            <div class="d-flex m-b-10">
+              <span class="m-r-5"><i class="fa fa-check-square color-blue f-14" aria-hidden="true"></i></span> <span> Get
+                priority placement in our Manufacturer Directory</span>
+            </div>
+            <div class="d-flex">
+              <span class="m-r-5"><i class="fa fa-check-square color-blue f-14 " aria-hidden="true"></i></span> <span>
+                Allow buyers to send you RFQs directly from your profile </span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex m-b-10">
+              <span class="m-r-5"><i class="fa fa-check-square color-blue f-14 " aria-hidden="true"></i></span> <span>
+                Give Buyers a history of the custom parts you make</span>
+            </div>
+            <div class="d-flex">
+              <span class="m-r-5"><i class="fa fa-check-square color-blue f-14 " aria-hidden="true"></i></span> <span>Display
+                badges and let your MFG history speak for itself</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center payText2">
+        <span>Upgrade to Silver Profile - Only $99/month</span>
+      </div> 
+      <p class="text-center">No Contract Required.</p> 
+    </div>
+    <div class="modal-footer-section m-t-50">
+      <div class="row">
+        <div class="col-md-6" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-cancel" data-bs-dismiss="modal" (click)="d('notNow');closeUpgradeModal();">Not
+            Now</button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" (click)="upgradeAccount()" class="btn btn-upgrade" data-bs-dismiss="modal">Upgrade
+            Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</ng-template>

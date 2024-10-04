@@ -1,0 +1,11 @@
+.btn-save {
+    border: 2px solid #56c23e;
+    color: #fff;
+    background-color: #56c23e;
+  }
+  button:disabled {
+    cursor: not-allowed;
+    color: #fff;
+    background-color: #bec4cb;
+    border-color: #bec4cb;
+  }

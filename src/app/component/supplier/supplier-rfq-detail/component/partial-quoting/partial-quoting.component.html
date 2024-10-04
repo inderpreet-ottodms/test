@@ -1,0 +1,365 @@
+<div class="background-white">
+  <form #loginForm="ngForm">
+    <div class="row">
+      <div class="col-md-12 rightpanel">
+        <i class="fa fa-times-circle pull-right pointer" (click)="closePartDrawer()"></i>
+        <h2 class="panelheading">Part Name :
+          <span placement="top" data-container="body" ngbTooltip="{{partName}}">{{partName | dotLimit:'25'}}</span>
+        </h2>
+        <h2 class="panelheading">Part Number :
+          <span placement="top" data-container="body" ngbTooltip="{{partNumber}}"> {{partNumber}}</span>
+        </h2>
+      </div>
+      <hr>
+    </div>
+    <div *ngIf="isLoader">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+    <div *ngIf="!isLoader">
+
+
+      <div [hidden]="!isPart1Present">
+        <div class="row">
+          <div class="col-md-5 lbl-bold" *ngIf="!part1Div">
+            Quantity - 1 <br>
+            {{part1Quantity}} pieces
+          </div>
+          <div [ngClass]="(part1Div)?'col-md-12':'col-md-7'" style="text-align: -webkit-right">
+            <div class="col-md-1 expand-icon-div" (click)="showPart1Div()" style="text-align:right">
+              <i *ngIf="!part1Div" class="fa fa-angle-right"></i>
+              <i *ngIf="part1Div" class="fa fa-angle-down"></i>
+            </div>
+          </div>
+        </div>
+        <div class="row" [hidden]="!part1Div">
+          <div class="col-md-4" style="padding-left: 5px;">
+            <div class="row">
+              <div class="col-md-12">
+                <label></label>
+              </div>
+            </div>
+            <div class="row padd-top">
+              <div class="col-md-12">
+                <label></label>
+              </div>
+            </div>
+            <div class="row padd-top">
+              <div class="col-md-12 lbl-bold" style="padding-top:20px">
+                Quantity - 1 <br>
+                {{part1Quantity}} pieces
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8" style="padding-left: 0px; ">
+            <div class="row">
+              <div class="col-md-12 text-right">
+                <label class="lable-size">Required</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 text-right" style="padding: 0px;">
+                <label class="f-12 f-w-600">Price Per Unit</label>
+              </div>
+              <div class="col-md-8">
+                <input appDecimal class="form-control" (focus)="Focus1()" (change)="blur1()" [(ngModel)]="iRfqQuoteItemsViewModel1.perUnitPrice" name="perUnitPrice1" #perUnitPrice="ngModel" placeholder="Price Per Unit" required />
+                <div *ngIf="perUnitPrice.errors && (perUnitPrice.dirty || perUnitPrice.touched)" style="color: red; text-align: right">{{priceLable}}</div>
+
+              </div>
+            </div>
+
+            <div class="row padd-top m-t-10">
+              <div class="col-md-4 text-right" style="padding: 0px;">
+                <label class="f-12 f-w-600">Tooling</label>
+              </div>
+              <div class="col-md-8">
+                <input appDecimal class="form-control" (change)="blur1()" [(ngModel)]="iRfqQuoteItemsViewModel1.toolingAmount" name="perUnitPrice2" #toolingAmount1="ngModel" placeholder="Tooling" />
+              </div>
+            </div>
+
+            <div class="row padd-top m-t-10">
+              <div class="col-md-4 text-right" style="padding: 0px;">
+                <label class="f-12 f-w-600">Miscellaneous</label>
+              </div>
+              <div class="col-md-8">
+                <input appDecimal (change)="blur1()" [(ngModel)]="iRfqQuoteItemsViewModel1.miscellaneousAmount" name="perUnitPrice3" class="form-control" #toolingAmount12="ngModel" placeholder="Miscellaneous" />
+              </div>
+            </div>
+
+            <div class="row padd-top m-t-10">
+              <div class="col-md-4 text-right" style="padding: 0px;">
+                <label class="f-12 f-w-600">Shipping</label>
+              </div>
+              <div class="col-md-8">
+                <input appDecimal (change)="blur1()" [(ngModel)]="iRfqQuoteItemsViewModel1.shippingAmount" name="perUnitPrice4" class="form-control" #toolingAmount122="ngModel" placeholder="Shipping" />
+              </div>
+            </div>
+            <div class="row padd-top">
+              <div class="col-md-2">
+              </div>
+              <div class="col-md-3">
+                Subtotal
+              </div>
+              <div class="col-md-7 lbl-bold" style="text-align: right">
+                $ {{part1Total | number: '1.1-4'}}&nbsp;(USD)
+              </div>
+            </div>
+
+          </div>
+          <div class="row leadtime m-t-15 m-b-5">
+            <div class="col-md-4 lbl-bold">
+              <label>Est. Lead Time (ARO)</label>
+            </div>
+            <div class="col-md-4">
+
+              <input type="text" appDecimal value='-1' placeholder="Enter #" class="form-control" [(ngModel)]="iRfqQuoteItemsViewModel1.estLeadTimeValue" name="estLeadTimeValue1" #estLeadTimeValue133="ngModel">
+            </div>
+            <div class="col-md-4">
+
+              <select class="form-control" [(ngModel)]="iRfqQuoteItemsViewModel1.estLeadTimeRange" name="estLeadTimeRange2" #estLeadTimeRange177="ngModel">
+                <option value='Days'>Days</option>
+                <option value='Weeks'>Weeks</option>
+                <option value='Months'>Months</option>
+                <option value='Business_Days'>Business Days</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+      <div [hidden]="!isPart2Present">
+        <div class="row">
+          <div class="col-md-5 lbl-bold" *ngIf="!part2Div">
+            Quantity - 2 <br>
+            {{part2Quantity}} pieces
+          </div>
+          <div [ngClass]="(part2Div)?'col-md-12':'col-md-7'" style="text-align: -webkit-right">
+            <div class="col-md-1 expand-icon-div" (click)="showPart2Div()" style="text-align:right">
+              <i *ngIf="!part2Div" class="fa fa-angle-right"></i>
+              <i *ngIf="part2Div" class="fa fa-angle-down"></i>
+            </div>
+          </div>
+        </div>
+        <div class="row" [hidden]="!part2Div">
+          <div class="col-md-4" style="padding-left: 5px;">
+            <div class="row">
+              <div class="col-md-12">
+                <label></label>
+              </div>
+            </div>
+            <div class="row padd-top">
+              <div class="col-md-12">
+                <label></label>
+              </div>
+            </div>
+            <div class="row padd-top">
+              <div class="col-md-12 lbl-bold" style="padding-top:20px">
+                Quantity - 2 <br>
+                {{part2Quantity}} pieces
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8" style="padding-left: 0px; ">
+            <div class="row">
+              <div class="col-md-12 text-right">
+                <label class="lable-size">Required</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 text-right" style="padding: 0px;">
+                <label class="f-12 f-w-600">Price Per Unit</label>
+              </div>
+              <div class="col-md-8">
+                <input appDecimal (focus)="Focus2()" (change)="blur2()" [(ngModel)]="iRfqQuoteItemsViewModel2.perUnitPrice" name="perUnitPrice5" #perUnitPrice2="ngModel" class="form-control" placeholder="Price Per Unit" required />
+                <div *ngIf="isPart2Error" style="color: red; text-align: right">Please Price Per Unit</div>
+                <div *ngIf="perUnitPrice2.errors && (perUnitPrice2.dirty || perUnitPrice2.touched)" style="color: red; text-align: right">{{priceLable}}</div>
+
+              </div>
+            </div>
+            <div class="row padd-top m-t-10">
+              <div class="col-md-4" style="padding: 0px;">
+                <label class="f-12 f-w-600">Tooling</label>
+              </div>
+              <div class="col-md-8 text-right" >
+                <input appDecimal (change)="blur2()" [(ngModel)]="iRfqQuoteItemsViewModel2.toolingAmount" name="perUnitPrice6" class="form-control" #toolingAmoaunt12="ngModel" placeholder="Tooling" />
+              </div>
+            </div>
+            <div class="row padd-top m-t-10">
+              <div class="col-md-4" style="padding: 0px;">
+                <label class="f-12 f-w-600">Miscellaneous</label>
+              </div>
+              <div class="col-md-8">
+                <input appDecimal (change)="blur2()" [(ngModel)]="iRfqQuoteItemsViewModel2.miscellaneousAmount" name="perUnitPrice7" class="form-control" #toasolingAmount12="ngModel" placeholder="Miscellaneous" />
+              </div>
+            </div>
+
+            <div class="row padd-top m-t-10">
+              <div class="col-md-4 text-right" style="padding: 0px;">
+                <label class="f-12 f-w-600">Shipping</label>
+              </div>
+              <div class="col-md-8">
+                <input appDecimal (change)="blur2()" [(ngModel)]="iRfqQuoteItemsViewModel2.shippingAmount" name="perUnitPrice8" class="form-control" #toolinsdsgAmount12="ngModel" placeholder="Shipping" />
+              </div>
+            </div>
+            <div class="row padd-top">
+              <div class="col-md-2">
+              </div>
+              <div class="col-md-3">
+                Subtotal
+              </div>
+              <div class="col-md-7 lbl-bold" style="text-align: right">
+                ${{part2Total | number: '1.1-4'}} &nbsp;(USD)
+              </div>
+            </div>
+          </div>
+          <div class="row leadtime  m-t-15 m-b-5" *ngIf="isPart2Present">
+            <div class="col-md-4 lbl-bold">
+              <label>Est. Lead Time (ARO)</label>
+            </div>
+            <div class="col-md-4">
+              <input type="text" appDecimal value='-1' placeholder="Enter #" class="form-control" [(ngModel)]="iRfqQuoteItemsViewModel2.estLeadTimeValue" name="estLeadTimeValue3" #estLeadTimeValue11="ngModel">
+            </div>
+            <div class="col-md-4">
+              <select class="form-control" [(ngModel)]="iRfqQuoteItemsViewModel2.estLeadTimeRange" name="estLeadTimeRange4" #estLeadTimeRange131="ngModel">
+                <option value='Days'>Days</option>
+                <option value='Weeks'>Weeks</option>
+                <option value='Months'>Months</option>
+                <option value='Business_Days'>Business Days</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+
+      <div [hidden]="!isPart3Present">
+        <div class="row">
+          <div class="col-md-5 lbl-bold" *ngIf="!part3Div">
+            Quantity - 3 <br>
+            {{part3Quantity}} pieces
+          </div>
+          <div [ngClass]="(part3Div)?'col-md-12':'col-md-7'" style="text-align: -webkit-right">
+            <div class="col-md-1 expand-icon-div" (click)="showPart3Div()" style="text-align:right">
+              <i *ngIf="!part3Div" class="fa fa-angle-right"></i>
+              <i *ngIf="part3Div" class="fa fa-angle-down"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" [hidden]="!part3Div">
+          <div class="col-md-4" style="padding-left: 5px;">
+            <div class="row">
+              <div class="col-md-12">
+                <label></label>
+              </div>
+            </div>
+            <div class="row padd-top">
+              <div class="col-md-12">
+                <label></label>
+              </div>
+            </div>
+            <div class="row padd-top">
+              <div class="col-md-12 lbl-bold" style="padding-top:20px">
+                Quantity -3 <br>
+                {{part3Quantity}} pieces
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8" style="padding-left: 0px;">
+            <div class="row">
+              <div class="col-md-12 text-right">
+                <label class="lable-size">Required</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 text-right" style="padding: 0px;">
+                <label class="f-12 f-w-600">Price Per Unit</label>
+              </div>
+              <div class="col-md-8">
+                <input appDecimal (focus)="Focus3()" (change)="blur3()" [(ngModel)]="iRfqQuoteItemsViewModel3.perUnitPrice" #perUnitPrice3="ngModel" class="form-control" placeholder="Price Per Unit" name="perUnitPrice9" required />
+                <div *ngIf="isPart3Error" style="color: red; text-align: right">Please Price Per Unit</div>
+                <div *ngIf="perUnitPrice3.errors && (perUnitPrice3.dirty || perUnitPrice3.touched)" style="color: red; text-align: right">Please Enter Price</div>
+
+              </div>
+            </div>
+            <div class="row padd-top m-t-10">
+              <div class="col-md-4 text-right" style="padding: 0px;">
+                <label class="f-12 f-w-600">Tooling</label>
+              </div>
+              <div class="col-md-8">
+                <input appDecimal (change)="blur3()" [(ngModel)]="iRfqQuoteItemsViewModel3.toolingAmount" name="perUnitPrice10" #toolingAmounddt12="ngModel" class="form-control" placeholder="Tooling" />
+              </div>
+            </div>
+
+            <div class="row padd-top m-t-10">
+              <div class="col-md-4 text-right" style="padding: 0px;">
+                <label class="f-12 f-w-600">Miscellaneous</label>
+              </div>
+              <div class="col-md-8">
+                <input appDecimal (change)="blur3()" [(ngModel)]="iRfqQuoteItemsViewModel3.miscellaneousAmount" name="perUnitPrice11" #toolingAdfdfmount12="ngModel" class="form-control" placeholder="Miscellaneous" />
+              </div>
+            </div>
+
+            <div class="row padd-top m-t-10">
+              <div class="col-md-4 text-right" style="padding: 0px;">
+                  <label class="f-12 f-w-600">Shipping</label>
+              </div>
+              <div class="col-md-8">
+                <input appDecimal (change)="blur3()" name="shippingAmount" [(ngModel)]="iRfqQuoteItemsViewModel3.shippingAmount" name="perUnitPrice13" #toofdlingAmount12="ngModel" class="form-control" placeholder="Shipping" />
+              </div>
+            </div>
+            <div class="row padd-top">
+              <div class="col-md-2">
+              </div>
+              <div class="col-md-3">
+                Subtotal
+              </div>
+              <div class="col-md-7 lbl-bold" style="text-align: right">
+                ${{part3Total | number: '1.1-4'}} &nbsp;(USD)
+              </div>
+            </div>
+          </div>
+          <div class="row leadtime  m-t-15 m-b-5" *ngIf="isPart3Present">
+            <div class="col-md-4 lbl-bold">
+              <label>Est. Lead Time (ARO)</label>
+            </div>
+            <div class="col-md-4">
+              <input type="text" appDecimal value='-1' placeholder="Enter #" class="form-control" [(ngModel)]="iRfqQuoteItemsViewModel3.estLeadTimeValue" name="estLeadTimeValue5" #estLeadTimeValue3388="ngModel">
+            </div>
+            <div class="col-md-4">
+              <select class="form-control" [(ngModel)]="iRfqQuoteItemsViewModel3.estLeadTimeRange" name="estLeadTimeRange6" #estLeadTimeRange1399="ngModel">
+                <option value='Days'>Days</option>
+                <option value='Weeks'>Weeks</option>
+                <option value='Months'>Months</option>
+                <option value='Business_Days'>Business Days</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+      <div class="row" style="padding-top: 20px">
+        <div class="col-md-6 centerAlign">
+          <button type="submit" class="rightcancelbutton" (click)="closePartDrawer()">Cancel</button>
+        </div>
+        <div class="col-md-6 centerAlign">
+          <button type="submit" *ngIf="isQuoteSubmitted" class="invalidbtn" (click)="showWarning()">
+            <i class="fa fa-spinner fa-spin" *ngIf="isApiResponse"></i> Save
+          </button>
+
+          <button type="submit" *ngIf="!isQuoteSubmitted" [ngClass]="(loginForm.form.invalid || disableSave)?'invalidbtn': 'rightaddsubmit'" [disabled]="(loginForm.form.invalid || disableSave)" (click)="SetSupplierRFQQuoteDetails()">
+            <i class="fa fa-spinner fa-spin" *ngIf="isApiResponse"></i> Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,43 @@
+<!-- <div class="row">
+  <div class="col-md-12 m-b-10px">
+
+  </div>
+  <div class="col-md-12">
+    <button type="button" [disabled]="selectedItems.length == 0" (click)="onCopyRfq()" class="btn small-button">Move to
+      Rfq</button>
+  </div>
+</div> -->
+
+            <div class="col-md-12 col-sm-12 col-lg-12" >
+                <button type="button" class="close"
+                        aria-label="Close" style="margin-top:0px;"
+                        data-bs-dismiss="modal" (click)="close()"  #rfqContainer>
+                  <span aria-hidden="true" >&times;</span>
+                </button>
+              </div>
+          <div class="row" style="padding-bottom: 7px;">
+            <div class="col-md-12 col-lg-12 col-sm-12 title">
+             Move To RFQ
+            </div>
+          </div>
+          <hr class="line" />
+          <div class="row m-b-10">
+            <div class="col-md-12 col-sm-12 col-lg-12 model-popup-text">
+              <label style="margin-top: 10px; font-weight: 600;">Select RFQ</label>
+            </div>
+          </div>
+          <div class="row m-b-10">
+              <div class="col-md-12 col-sm-12 col-lg-12 model-popup-text">
+                  <angular2-multiselect [data]='RfqList' [(ngModel)]='selectedItems' name="rfqname" [settings]='rfqSettings'
+                  (onDeSelect)="onRfqDeSelect($event)" (onSelect)="onRfqSelect($event)">
+                </angular2-multiselect>
+
+              </div>
+          </div>
+          <div class="action-container">
+            <input type="button" class="btn btn-lg small-button" [disabled]="selectedItems.length == 0"
+            (click)="onCopyRfq()" value="Move to RFQ" />
+
+            <div class="clearFix"></div>
+          </div>
+

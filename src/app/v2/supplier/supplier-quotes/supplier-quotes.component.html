@@ -1,0 +1,285 @@
+  <div class="bg-white p-10 rounded shadow m-t-10 p-20 my-quoted-container">
+    <!-- Filter code starts -->
+    <div class="row pb-3" (clickOutside)="hideFilterBySection()">
+      <div class="col-lg-5 col-md-12 col-sm-12 full-width-row">
+        <div class="filter-dropdown filter-by d-flex align-items-center">
+          <label class="f-11"> <b>Filter By</b></label>
+          <div class="dropdown">
+            <button class="btn-dropdown {{isOpenFilterDropdown ? 'rotate-arrow' : ''}}"
+              (click)="toggleFilterDropdown()"> {{ selectedFilter ? selectedFilter : 'Choose Filters' }}</button>
+            <ul *ngIf="isOpenFilterDropdown" class="dropdown-list">
+              <li *ngFor="let status of filterOptions">
+                <a class="dropdown-item" (click)="applyStatusFilter(status)">{{status}}</a>
+              </li>
+            </ul>
+          </div>
+          <div class="advance-filter">
+            <span class="blue-text" (click)="clearAll()">Clear</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7 col-md-12 col-sm-12 full-width-row">
+        <div class="filter-dropdown short-filter d-flex align-items-center">
+          <label class="f-11"> <b>Sort By</b></label>
+          <div class="dropdown">
+            <button class="btn-dropdown {{isOpenShortDropdown ? 'rotate-arrow' : ''}}"
+              (click)="toggleShortDropdown()">
+              {{ selectedSortOption }}
+            </button>
+            <ul *ngIf="isOpenShortDropdown" class="dropdown-list">
+              <li *ngFor="let option of sortingOptions">
+                <a class="dropdown-item" (click)="applySort(option)">
+                  {{ option }}
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="filter-search">
+            <i class="search-icon"><img src="/assets/icon/search-icon.svg" /></i>
+            <input class="form-control"  [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange($event)" placeholder="Search" type="text" style="padding-left: 35px;" />
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    <!-- Filter code end -->
+    <div class="rfq-row"  *ngFor="let quoteList of items; let i = index">
+      <div class="row rfq-top justify-content-between align-items-center" >
+        <div class="col-md-4">
+          <div class="d-flex align-items-center" style="height: 100%;">
+            <div class="rfq-left-icon"><img src="assets/supplier/3-d-big.png"
+                style="width: 75px; height: 75px; border-radius: 50%; border: 1px solid #bec4cb;">
+            </div>
+            <div class="rfq-name ps-2">
+              <!-- RFQ Status starts -->
+              <!-- Quoted -->
+              <span class="rfq-status status-quoted" *ngIf="quoteList.isQuoteSubmitted && !quoteList.isWon && !quoteList.isLost">QUOTED</span>
+              <span class="rfq-status-date" *ngIf="quoteList.isQuoteSubmitted && !quoteList.isWon && !quoteList.isLost">{{quoteList.quoteDate | date: 'MM/dd/yyyy' }}</span>
+              <!-- Draft -->
+              <span class="rfq-status status-draft" *ngIf="quoteList.isDraft">DRAFT</span>
+              <!-- Won -->
+              <span class="rfq-status status-won" *ngIf="quoteList.isQuoteSubmitted && quoteList.isWon">WON</span>
+              <!-- LOST -->
+              <span class="rfq-status status-lost" *ngIf="quoteList.isLost">LOST</span>
+              <!-- RFQ Status ends -->
+
+              <h6 placement="top-left" container="body" class="text-truncate rfq-name-ellipsis"
+                style="margin-bottom: 0px; cursor: pointer;">{{ quoteList?.rfqName ? quoteList.rfqName : 'N/A' }}</h6>
+                
+              <p class="rfq-number">{{quoteList.rfqId}} </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 rfq-info">
+          <p><strong>Quote by:</strong><span>{{quoteList.quotesNeededBy | date: 'MM/dd/yyyy' }}</span></p>
+        </div>
+        <div class="col-md-4 rfq-info d-flex justify-content-between align-items-center">
+          <div>
+            <p><strong>Deliver by:</strong><span>{{quoteList.deliveryBy | date: 'MM/dd/yyyy' }}</span></p>
+          </div>
+          <div class="pull-right d-flex align-items-center">
+            <span *ngIf="quoteList.withOrderManagement"class="icon-img"><img src="assets/images/Badge.png" [ngbTooltip]="orderManagement"></span>
+            <span *ngIf="quoteList.certificatesRequired"class="icon-img" ><img src="assets/rfq/cert_badge.svg" ></span>
+            <span *ngIf="quoteList.isRfqWithMissingInfo" class="icon-img"><img src="assets/Shapeways_10PartialRFQs.svg" [ngbTooltip]="missingInfo"></span>
+            <ng-template #orderManagement>
+              <div><span class="unlock-growth">This RFQ requires Order Management on MFG.
+              </span> 
+              </div>
+           </ng-template>
+           <ng-template #missingInfo>
+            <div><span class="unlock-growth">RFQ may be missing info. Please contact the buyer before quoting.
+                 <!-- <span class="learn-more"> Learn more</span> -->
+            </span> 
+            </div>
+         </ng-template>
+          </div>
+        </div>
+      </div>
+      <div class="accordion rfq-middle" id="quoteDetailsAccordion">
+        <ul class="d-flex justify-content-between align-items-center middle-part-container">
+          <li>
+              <strong>Parts: </strong>
+              <span>{{quoteList.partsInformation?.length}}</span>
+          </li>
+          <li>
+              <strong>Quantity: </strong>
+              <span>{{ getSumsCommaSeparatedForRecord(quoteList.partsInformation) }} {{quoteList.unitValue}}</span>
+          </li>
+          <li>
+              <strong>Materials: </strong>
+              <span>{{ quoteList?.material ? quoteList.material : 'N/A' }}</span>
+          </li>
+          <li>
+              <strong>Process: </strong>
+              <span>{{quoteList?.process? quoteList.process : 'N/A'}}</span>
+          </li>
+          <li>
+              <button class="accordion-button part-quote-accordion-btn collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse-' + i"data-bs-target="#quoteDetailsCollapse" aria-expanded="false" aria-controls="quoteDetailsCollapse">
+                Part Quote Details
+              </button>
+          </li>
+        </ul>
+        <div  [id]="'collapse-' + i" class="accordion-collapse collapse" aria-labelledby="quoteDetailsCollapse" data-bs-parent="#quoteDetailsAccordion">
+          <div class="accordion-body">
+            <table class="table quote-details-table" *ngFor="let quoteDetailData of quoteList.partsInformation; let i = index">
+              <thead>
+                
+                <tr>
+                  <th class="header" colspan="9">
+                    <span class="text-white">Part {{ i + 1 }} Name: </span>{{quoteDetailData.materialName}} -{{quoteDetailData.processName}} -{{quoteDetailData.partName}}
+                  </th>
+                </tr>
+                <tr>
+                  <th>Qty 1</th>
+                  <th>Qty 1 Price</th>
+                  <th>Qty 1 Time</th>
+                  <th>Qty 2</th>
+                  <th>Qty 2 Price</th>
+                  <th>Qty 2 Time</th>
+                  <th>Qty 3</th>
+                  <th>Qty 3 Price</th>
+                  <th>Qty 3 Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{quoteDetailData?.qty1 == 0 ? '--' : (quoteDetailData?.qty1 !== null && quoteDetailData?.qty1 !== undefined ? quoteDetailData.qty1 + ' pcs'  : '--') }}</td>
+                  <!--  -->
+                  <td *ngIf="quoteDetailData?.qty1 == 0"> --</td>
+                  <td *ngIf="quoteDetailData?.qty1 != 0">${{quoteDetailData?.unitPriceQty1 * quoteDetailData?.qty1 }} (${{quoteDetailData?.unitPriceQty1}}/{{quoteDetailData?.partUnit}})</td>
+                  <!-- <td>{{quoteDetailData?.unitPriceQty1 == 0 ? '--' : (quoteDetailData?.unitPriceQty1 !== null && quoteDetailData?.unitPriceQty1 !== undefined ? '$' +quoteDetailData.unitPriceQty1 : '--') }}</td> -->
+                  <td>{{quoteDetailData?.qty1TimeValue == 0 ? '--' : (quoteDetailData?.qty1TimeValue !== null && quoteDetailData?.qty1TimeValue !== undefined ? quoteDetailData.qty1TimeValue +' '+quoteDetailData.qty1TimeRange  : '--') }}</td>
+                  <td>{{quoteDetailData?.qty2 == 0 ? '--' : (quoteDetailData?.qty2 !== null && quoteDetailData?.qty2 !== undefined ? quoteDetailData.qty2 + ' pcs'  : '--') }}</td>
+                  <td *ngIf="quoteDetailData?.qty2 == 0"> --</td>
+                  <td *ngIf="quoteDetailData?.qty2 != 0"> ${{quoteDetailData?.unitPriceQty2 * quoteDetailData?.qty2 }} (${{quoteDetailData?.unitPriceQty2}}/{{quoteDetailData?.partUnit}})</td>
+                  <!-- <td>{{quoteDetailData?.unitPriceQty2 == 0 ? '--' : (quoteDetailData?.unitPriceQty2 !== null && quoteDetailData?.unitPriceQty2 !== undefined ? '$' +quoteDetailData.unitPriceQty2 : '--') }}</td> -->
+                  <td>{{quoteDetailData?.qty2TimeValue == 0 ? '--' : (quoteDetailData?.qty3TimeValue !== null && quoteDetailData?.qty3TimeValue !== undefined ? quoteDetailData.qty3TimeValue +' '+quoteDetailData.qty2TimeRange  : '--') }}</td>
+                  <td>{{quoteDetailData?.qty3 == 0 ? '--' : (quoteDetailData?.qty3 !== null && quoteDetailData?.qty3 !== undefined ? quoteDetailData.qty3 + ' pcs'  : '--') }}</td>
+                  <td *ngIf="quoteDetailData?.qty3 == 0"> --</td>
+                  <td *ngIf="quoteDetailData?.qty3 != 0">${{quoteDetailData?.unitPriceQty3 * quoteDetailData?.qty3 }} (${{quoteDetailData?.unitPriceQty3}}/{{quoteDetailData?.partUnit}})</td>
+                  <!-- <td>{{quoteDetailData?.unitPriceQty3 == 0 ? '--' : (quoteDetailData?.unitPriceQty3 !== null && quoteDetailData?.unitPriceQty3 !== undefined ? '$' +quoteDetailData.unitPriceQty3 : '--') }}</td> -->
+                  <td>{{quoteDetailData?.qty3TimeValue == 0 ? '--' : (quoteDetailData?.qty3TimeValue !== null && quoteDetailData?.qty3TimeValue !== undefined ? quoteDetailData.qty3TimeValue +' '+quoteDetailData.qty3TimeRange  : '--') }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-between rfq-bottom">
+        <div class="d-flex align-items-center">
+          <div class="rfq-btns-container">
+            <button class="rfq-card-btn text-center" (click)="editQuote(quoteList.rfqId)">Edit Quote</button>
+            <button (click)="
+            openSidePanel(
+              quoteList.rfqId,
+              quoteList.isRfqLike,
+              quoteList.isRfqDisLike,
+              quoteList.rfqStatusId,
+              quoteList
+            )
+          " class="rfq-btn-view-detail">View Details</button>   
+            <div class="viewed-quote">
+              <p *ngIf="quoteList.buyerViewedDate != null">{{quoteList.buyerName}} viewed your quote on {{quoteList.buyerViewedDate | date: 'MM/dd/yyyy' }}</p>
+              <p *ngIf="quoteList.buyerViewedDate == null">{{quoteList.buyerCompanyName}} viewed your quote</p>
+            </div>           
+          </div>
+        </div>          
+        <div class="d-flex align-items-center ng-star-inserted">
+          <div class="d-flex align-items-center" style="cursor: pointer;" (click)="showBuyerProfile(quoteList.contactIdEncrypt, quoteList.rfqId,quoteList)">
+            <!-- <div class="avatar-name-circle" style="display: block;"></div>
+            <img class="rfq-buyer-logo"
+              src="https://s3.us-east-2.amazonaws.com/mfg.mp2020.uat.test/logos/636936145894211896_S3_avatarmanubasic.svg"
+              style="display: none;"> -->
+              <div class="avatar-name-circle" id="buyerImageInitialsRfqId{{quoteList.rfqId}}"
+              style="display: none !important;">
+              {{ getCompanyInitialsForLogo(quoteList) }}
+            </div>
+            <img id="buyerImageRfqId{{quoteList.rfqId}}" (error)="imageLoadOnError(quoteList.rfqId)" class="rfq-buyer-logo"
+              src="{{defaultAwsPath +  quoteList.companyLogoPath}}" />
+            <div class="ps-2">
+              <h6 class="rfq-buyer-name text-truncate mb-0">{{quoteList.buyerCompanyName}} </h6>
+            </div>
+          </div>
+          <div class="rfq-star">
+            <span style="color: #212a37; margin:0 10px">{{
+              quoteList.noOfStars ? (quoteList.noOfStars | number: "1.0-1") : "n/a"
+              }}</span>
+            <ng-template #t let-fill="fill">
+              <span class="star" [class.full]="fill === 100">
+                <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+              </span>
+            </ng-template>
+            <ngb-rating [(rate)]="quoteList.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+          </div>
+        </div>
+      </div>
+    </div>
+     <!-- ------------------------- Pagination start----------------------- -->
+     <ng-container *ngIf="items && items.length > 0">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="dataTables_length" id="example_length">
+            <label>Show
+              <select name="example_length" aria-controls="example" class="" [(ngModel)]="pageSize"
+                (change)="onPageChange(1)">
+                <option value="24">24</option>
+                <option value="48">48</option>
+                <option value="96">96</option>
+              </select>
+              entries</label>
+          </div>
+        </div>
+        <div class="col-md-10">
+          <div class="paginations">
+            <div>
+              <div id="radioBtn" class="btn-group">
+                <a [ngClass]="{ disabled:page === 1}" class="btn btn-primary btn-sm notActive"
+                  (click)="onPageChange(page - 1)">
+                  Previous
+                </a>
+                <a *ngFor="let ind of pagesIndex" (click)="onPageChange(ind)" [ngClass]="
+                ind == page
+                    ? 'btn btn-primary btn-sm active'
+                    : 'btn btn-primary btn-sm notActive'
+                ">
+                  {{ ind }}
+                </a>
+                <a [ngClass]="{ disabled: page * pageSize >= totalItems}" class="btn btn-primary btn-sm notActive"
+                  (click)="onPageChange(page + 1)">
+                  Next
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="pull-right padd-right">
+            <label class="showreccount">
+              {{ page }} of {{ totalPage }}
+            </label>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <!-- ------------------------- Pagination end----------------------- -->
+  </div>
+  <!-- Side Drawer and Buyer profile -->
+  <div class="new-drawer-wrapper" *ngIf="isSidePanel()">
+    <div class="col-md-12 ">
+      <div *ngIf="isRfqDrawer()">
+        <new-app-supplier-rfq-detail-sidepanel [selectedRFQ]="selectedRFQ"
+          (parentEmitter)="rfqDetailSidepanelDataHandler($event)"></new-app-supplier-rfq-detail-sidepanel>
+      </div>
+      <div *ngIf="isBuyerMiniProfile()">
+        <new-app-mini-buyer-profile  (drawer_OnClose)="appMiniBuyerReceiver($event)" [selectedRFQ]="selectedRFQ"></new-app-mini-buyer-profile>
+      </div>
+      <div *ngIf="isMessageRfqPanel()">
+        <app-message-send-drawer></app-message-send-drawer>
+      </div>
+    </div>
+  </div>
+  <div class="full-page-overlay" *ngIf="!isDataLoaded">
+    <div class="rfqLoader"></div>
+  </div>

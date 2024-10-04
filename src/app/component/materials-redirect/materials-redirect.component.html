@@ -1,0 +1,4 @@
+<div *ngIf="!isLoggedIn">
+<app-basic-login returnUrl="materials-redirect" forceReload="true" logo="assets/logo_mfgmaterials.svg"></app-basic-login>
+<p class='no-login-link'><a (click)="redirectToMaterialsAsGuest()">No thanks, I'm just window shopping.</a></p>
+</div>

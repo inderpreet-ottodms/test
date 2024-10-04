@@ -1,0 +1,123 @@
+.btn-cancel {
+  color: #2E58D6;
+  border: 2px solid #2E58D6;
+  width: 90%;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  background: none;
+  padding: 9px 10px !important;
+}
+
+.btn-upgrade {
+  color: #fff;
+  background-color: #2E58D6;
+  width: 90%;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-upgrade-section {
+  padding-left: 0px !important;
+}
+
+.btn-cancel-section {
+  padding-right: 0px !important;
+}
+// /assets/supplier/upgrade-account.png
+.graphic-header {
+  background-image: radial-gradient(circle at 49% 50%, rgba(81, 81, 81, 0), #000000),
+  url('/assets/supplier/upgrade_model_banner.png');
+  height: 220px;
+  width: 598px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  text-align: center;
+  background-color: gray;
+  color: #fff;
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 45px;
+  padding: 0px 30px;
+  display: flex;
+  align-items: center;
+}
+
+.subject-text {
+  font-size: 16px;
+  padding: 20px 30px;
+}
+
+.subject-value {
+  padding: 0px 60px 30px;
+}
+
+.subject-value ul li {
+  list-style-type: circle;
+}
+
+.okay-button {
+  width: 285px;
+  border-radius: 2px;
+  background-color: #2E58D6;
+  font-size: 16px;
+  border: solid 2px #2E58D6;
+  text-align: center;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  font-weight: bold;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.button-margin {
+  padding: 20px;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.show-success {
+  font-family: Poppins;
+  font-size: 14px;
+  color: #222222;
+  font-weight: normal !important;
+}
+
+/* Absolute Center Spinner */
+.loading {
+  position: fixed;
+  z-index: 999;
+  height: 2em;
+  width: 2em;
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+/* Transparent Overlay */
+.loading:before {
+  content: '';
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+  background-color: #666666;
+}
+
+.payText {
+  color: #4a90e2;
+  background-color: #f5f5f5;
+  border-radius: 14px;
+  padding: 6px;
+  width: 80%;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 0 auto 20px !important;
+}

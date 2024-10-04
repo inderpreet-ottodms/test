@@ -1,0 +1,53 @@
+name: Build & Push Base Image to ECR
+on:
+    workflow_dispatch: {}
+    release:
+        types: [created]
+jobs:
+
+    dev_base_build_and_push_to_ecr:
+        name: dev_build_and_push_to_ecr
+        runs-on: ubuntu-20.04
+        env:
+            account_id: 589441444885
+            branch_name: ${{ github.head_ref || github.ref_name }}
+            aws_region: us-east-1
+            platform: linux/amd64
+
+        permissions:
+            contents: write
+            id-token: write
+
+        steps:
+            - name: Generate image tag
+              id: image-tag
+              run: |
+                  branch=${GITHUB_REF##*/}
+                  sha=$(echo $GITHUB_SHA | head -c 8)
+                  ts=$(date +%s)
+                  echo "::set-output name=tag::sw-${sha}-${ts}"
+                  echo "::set-output name=repository::${GITHUB_REPOSITORY#*/}"
+        
+            - name: Check out code
+              uses: actions/checkout@v3
+
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v1
+              with:
+                  role-to-assume: arn:aws:iam::${{ env.account_id }}:role/github_actions_role
+                  aws-region: ${{ env.aws_region }}
+
+            - name: Login to Amazon ECR
+              id: login-ecr
+              uses: aws-actions/amazon-ecr-login@v1
+
+
+            - name: Build & Push Image
+              env:
+                  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+                  ECR_REPOSITORY: ${{ steps.image-tag.outputs.repository }}
+                  IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
+                  NPM_TOKEN: ${{ secrets.SHAPEWAYS_ACCESS_TOKEN_PACKAGES_RO }}
+              run: |
+                  DOCKER_BUILDKIT=1 docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:base -f DockerfileBaseImage .
+                  docker push $ECR_REGISTRY/$ECR_REPOSITORY:base

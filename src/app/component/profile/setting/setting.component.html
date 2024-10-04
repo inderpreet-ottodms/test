@@ -1,0 +1,1378 @@
+<section style="padding-top:9px">
+  <app-rfq-warning-banner></app-rfq-warning-banner>
+  <div class="">
+    <div class="page-header">
+      <h4>Settings</h4>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="panel with-nav-tabs panel-default cus-Border">
+          <div class="panel-heading">
+            <ul class="nav nav-tabs text-center" *ngIf="isSupplier">
+              <li *ngIf="isMQSEnable == 'true'" class="width-25 p-t-10 p-b-10"
+                [ngClass]="{'active1': activeTab === 4 }">
+                <a href="Javascript:void(0);" class="custom-a width-30"  (click)="addClass(4)">LIVE QUOTE
+                </a>
+              </li>
+              <li class="width-25 p-t-10 p-b-10" [ngClass]="{'active1': activeTab === 1 }">
+                <a href="Javascript:void(0);" class="custom-a width-30" (click)="addClass(1)">PREFERENCES
+                </a>
+              </li>
+              <li class="width-25 p-t-10 p-b-10" [ngClass]="{'active1': activeTab === 2 }">
+                <a href="Javascript:void(0);" class="custom-a width-30" 
+                  (click)="addClass(2)">NOTIFICATIONS</a>
+              </li>
+              <li *ngIf="!isSupplier" class="width-25 p-t-10 p-b-10" [ngClass]="{'active1': activeTab === 3 }">
+                <a href="Javascript:void(0);" class="custom-a width-30"  (click)="addClass(3)">NDA</a>
+              </li>
+              <li class="width-25 p-t-10 p-b-10" [ngClass]="{'active1': activeTab === 5 }">
+                <a href="Javascript:void(0);" class="custom-a width-30"  (click)="addClass(5)">CHANGE
+                  PASSWORD</a>
+              </li>
+              <li class="width-25 p-t-10 p-b-10" [ngClass]="{'active1': activeTab === 6 }">
+                <a href="Javascript:void(0);" class="custom-a width-30"  (click)="addClass(6)">CHANGE
+                  E-MAIL</a>
+              </li>
+            </ul>
+            <ul class="nav nav-tabs text-center" *ngIf="!isSupplier">
+              <li class="width-25 p-t-10 p-b-10" [ngClass]="{'active1': activeTab === 1 }">
+                <a href="Javascript:void(0);" class="custom-a width-30"  (click)="addClass(1)">PREFERENCES
+                </a>
+              </li>
+              <li class="width-25 p-t-10 p-b-10" [ngClass]="{'active1': activeTab === 2 }">
+                <a href="Javascript:void(0);" class="custom-a width-30" 
+                  (click)="addClass(2)">NOTIFICATIONS</a>
+              </li>
+              <li *ngIf="!isSupplier" class="width-25 p-t-10 p-b-10"
+                [ngClass]="{'active1': activeTab === 3 }">
+                <a href="Javascript:void(0);" class="custom-a width-30"  (click)="addClass(3)">NDA</a>
+              </li>
+              <li class="width-25 p-t-10 p-b-10" [ngClass]="{'active1': activeTab === 5 }">
+                <a href="Javascript:void(0);" class="custom-a width-30"  (click)="addClass(5)">CHANGE
+                  PASSWORD</a>
+              </li>
+              <li class="width-25 p-t-10 p-b-10" [ngClass]="{'active1': activeTab === 6 }">
+                <a href="Javascript:void(0);" class="custom-a width-30"  (click)="addClass(6)">CHANGE
+                  E-MAIL</a>
+              </li>
+            </ul> 
+
+
+          </div>
+          <div class="panel-body">
+            <div class="tab-content">
+              <!-- Process and Materials -->
+              <div class="p-15 tab-pane" [ngClass]="{ 'in active show': isMQSEnable == 'true' }" 
+              *ngIf="currentTab=='tab4default'"
+                style="min-height: 700px;">
+                <div class="row">
+                  <div class="col-md-5">
+                    <div class="row" class="m-l-5">
+                      <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="f-16">
+                          <label><b>Processes and Materials</b></label>
+                        </div>
+                        <div>
+                          <app-process-and-matherial></app-process-and-matherial>
+                        </div>
+
+                        <div class="f-16">
+                          <label><b>Terms & Conditions</b></label>
+                        </div>
+
+                        <div class="row">
+
+                          <div class="col-md-12" *ngIf=" !termConditionFileName ">
+                            <div class="dash" ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                              [uploader]="uploader">
+                              <div class="m-t-20 m-l-15">
+                                <img src="assets/supplier/group-4.png"
+                                  srcset="assets/supplier/oval-2@2x.png 2x, assets/oval-2@3x.png 3x"
+                                  class="gallary-browse-Icon-default" />
+                              </div>
+                              <div class="m-t-20 m-l-5">
+                                <p>Drag & drop or
+                                  <label class="m-b-0 f-14">
+                                    <input type="file" #file style="display: none;" accept="application/pdf"
+                                      (change)="onChange(file.files)" />
+                                    <a class="underline">click here</a>
+                                  </label>
+                                  to add your terms & conditions,<br>
+                                  <span class="f-12">PDF files only</span>
+                                </p>
+                              </div>
+                            </div>
+                            <div>
+                            </div>
+                          </div>
+                          <div class="col-md-12" *ngIf="isFileDownloaded !== 0">
+                            <div class="loader animation-start">
+                              <span class="circle delay-1 size-2"></span>
+                              <span class="circle delay-2 size-4"></span>
+                              <span class="circle delay-3 size-6"></span>
+                              <span class="circle delay-4 size-7"></span>
+                              <span class="circle delay-5 size-7"></span>
+                              <span class="circle delay-6 size-6"></span>
+                              <span class="circle delay-7 size-4"></span>
+                              <span class="circle delay-8 size-2"></span>
+                            </div>
+                          </div>
+                          <div class="col-md-12 term-text" *ngIf="termConditionFileName ">
+                            <div class="text-truncate"><span
+                                (click)="downloadS3File(termConditionFile, true)">{{ termConditionFileName }}</span>
+                            </div>
+                            <span (click)="removeTermConditionFile()">Remove</span>
+                          </div>
+                        </div>
+                        <div class="col-md-12" *ngIf="isLoader">
+                          <div class="loading">
+                            <div class="loader animation-start">
+                              <span class="circle delay-1 size-2"></span>
+                              <span class="circle delay-2 size-4"></span>
+                              <span class="circle delay-3 size-6"></span>
+                              <span class="circle delay-4 size-7"></span>
+                              <span class="circle delay-5 size-7"></span>
+                              <span class="circle delay-6 size-6"></span>
+                              <span class="circle delay-7 size-4"></span>
+                              <span class="circle delay-8 size-2"></span>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="offset-1 col-md-5">
+                    <div class="row" class="m-l-5">
+                      <div class="col-sm-12 col-md-12 col-lg-12">
+
+                        <div class="f-16">
+                          <label><b>Costs, Shipping Methods and Payment Terms </b></label>
+                        </div>
+                        <app-costs-and-shipping></app-costs-and-shipping>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- end -->
+              <div class="tab-pane fade" *ngIf="currentTab=='tab1default'" [ngClass]="{ 'in active show': isMQSEnable == 'false' }">
+                <form class="md-float-material" [formGroup]="settingPreferenceForm">
+                  <div style="padding: 0 12px 0 20px">
+                    <div class="row">
+                      <div class="col-sm-12 col-md-12 col-lg-12">
+                        <!-- Is Supplier  dashboard start-->
+                        <div *ngIf="this.isSupplier" class="supplierPreference">
+                          <div class="row">
+                            <div class="col-md-5">
+                              <div class="row" *ngIf="showDashboard">
+                                <div class="col-sm-12 col-md-12">
+                                  <label>
+                                    <b class="f-16">Default Dashboard</b>
+                                    <br />
+                                    <span class="text-inverse">If you have both Buyer and Manufacturer profiles, this
+                                      allows<br>
+                                      you to set which dashboard you want to see.</span>
+                                  </label>
+                                </div>
+                                <div class="col-sm-12 col-md-12 dashboardButton">
+                                  <button type="button"
+                                    [ngClass]="(this.ipreferenceModel.isBuyerDashboard == true) ? 'btn-manu-active' : 'btn-manu-inactive'"
+                                    name="buyerDashboard" class="btn" value="sourcing"
+                                    (click)="onDashboardBtnClick(true)">Buyer</button>
+                                  <button type="button"
+                                    [ngClass]="(this.ipreferenceModel.isBuyerDashboard == false || this.ipreferenceModel.isBuyerDashboard == null) ? 'btn-manu-active' : 'btn-manu-inactive'"
+                                    name="buyerDashboard" class="btn" value="manufacturing"
+                                    (click)="onDashboardBtnClick(false)">Manufacturer</button>
+                                </div>
+                              </div>
+                              <!-- Time format-->
+                              <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                  <label>
+                                    <b class="f-16">Time Format</b>
+                                    <br />
+                                    <span class="text-inverse"></span>
+                                  </label>
+                                </div>
+                                <div class="col-sm-12 col-md-12 timeFormatButton">
+                                  <button class="btn"
+                                    [ngClass]="(this.ipreferenceModel.timeFormat == '12H') ? 'btn-manu-active' : 'btn-manu-inactive'"
+                                    type="button" name="timeFormat" value="12H" (click)="setTimeFormat('12H')">12
+                                    Hrs</button>
+                                  <button class="btn"
+                                    [ngClass]="(this.ipreferenceModel.timeFormat == '24H') ? 'btn-manu-active' : 'btn-manu-inactive'"
+                                    type="button" name="timeFormat" value="24H" (click)="setTimeFormat('24H')">24
+                                    Hrs</button>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-6 offset-1">
+                              <label> <b class="f-16">Ratings and Reviews Email Recipients </b></label>
+                              <div class="row">
+                                <div class="col-md-8">
+                                  <form [formGroup]="ratingMailForm">
+                                    <div formArrayName="items"
+                                      *ngFor="let item of ratingMailForm.get('items')['controls']; let i = index;">
+                                      <div [formGroupName]="i" class="m-t-10">
+                                        <input class="form-control" name="data" formControlName="email" type="text">
+                                      </div>
+                                      <label *ngIf="i==0"></label>
+                                      <span
+                                        *ngIf=" i == ratingMailForm.get('items')['controls'].length -1 && ratingMailForm.get('items')['controls'].length < 3"
+                                        class="emailAdd" (click)=addItem();>Add More Email <span *ngIf="ratingMailForm.get('items')['controls'].length>1 &&
+                                        ratingMailForm.get('items')['controls'].length<=2"> | </span></span>
+                                      <span *ngIf="i!=0" class="emailAdd" (click)=removeItem(i);>Remove</span>
+
+                                      <div style="color: red"
+                                        *ngIf="item.get('email').hasError('pattern') && item.get('email').dirty &&  item.get('email').touched">
+                                        Invalid email
+                                      </div>
+
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Is Supplier  dashboard end-->
+                        <!-- Is Buyer dashboard start -->
+                        <div *ngIf="!this.isSupplier">
+                          <div class="row" *ngIf="showDashboard">
+                            <div class="col-sm-3">
+                              <label>
+                                <b>Default Dashboard</b>
+                                <br />
+                                <span class="text-inverse">If you have both Buyer and Manufacturer profiles, this
+                                  allows
+                                  you to set which dashboard you want to see.</span>
+                              </label>
+                            </div>
+                            <!-- style radio starts-->
+                            <div class="col-sm-5">
+                              <div class="form-radio m-b-30">
+                                <div class="radio radio-inline">
+                                  <label>
+                                    <input type="radio" class="form-control" formControlName="buyerDashboard"
+                                      name="buyerDashboard" value="sourcing">
+                                    <i class="helper"></i>Sourcing
+                                  </label>
+                                </div>
+                                <div class="radio radio-inline">
+                                  <label>
+                                    <i _ngcontent-c4="" class="ti-info-alt" placement="right" data-container="body"
+                                      ngbTooltip="Select this if you are looking for manufactures to make your parts most of the time."></i>
+                                  </label>
+                                </div>
+                                <div class="row">
+
+                                  <div class="col-sm-4">
+                                    <div class="radio radio-inline">
+                                      <label>
+                                        <input type="radio" name="buyerDashboard" class="form-control"
+                                          formControlName="buyerDashboard" value="manufacturing">
+                                        <i class="helper"></i>Manufacturer
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div class="radio radio-inline">
+                                    <label>
+                                      <i _ngcontent-c4="" class="ti-info-alt" placement="right" data-container="body"
+                                        ngbTooltip="Select this if you manufacturer parts most of the time."></i>
+                                      <!-- <img src="../../../../assets/images/auth/info.png" placement="right" style="width: 20px"
+                                        data-container="body" ngbTooltip="Select this if you manufacturer parts most of the time."> -->
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- style radio ends.-->
+                          </div>
+                          <div *ngIf="showDashboard">
+                            <hr />
+                          </div>
+                          <!-- Time format-->
+                          <div class="row" *ngIf="!this.isSupplier">
+                            <div class="col-sm-3">
+                              <label>
+                                <b>Time Format</b>
+                                <br />
+                                <span class="text-inverse"></span>
+                              </label>
+                            </div>
+                            <div class="col-sm-8">
+                              <div class="form-radio m-b-30">
+                                <div class="radio radio-inline">
+                                  <label>
+                                    <input type="radio" name="timeFormat" class="form-control"
+                                      formControlName="timeFormat" value="12H">
+                                    <i class="helper"></i>12 Hrs
+                                  </label>
+                                </div>
+                                <div class="row">
+                                  <div class="col-sm-8">
+                                    <div class="radio radio-inline">
+                                      <label>
+                                        <input type="radio" name="timeFormat" class="form-control"
+                                          formControlName="timeFormat" value="24H">
+                                        <i class="helper"></i>24 Hrs
+                                      </label>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Is Buyer dashboard end-->
+                        <!-- Manufactured location.-->
+                        <hr *ngIf="!this.isSupplier" />
+                        <div class="row" *ngIf="!this.isSupplier">
+                          <div class="col-sm-3">
+                            <label>
+                              <b>Preferred Manufacturing Location </b>
+                              <span class="text-inverse"> </span>
+                            </label>
+                          </div>
+                          <div class="col-sm-7">
+
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-primary">
+                                <input class="border-checkbox" type="checkbox" id="isUSManufacturing" name="us"
+                                  [value]="constManufactLocationCodeColl[4]" formControlName="isUSManufacturing"
+                                  [attr.disabled]="(settingPreferenceForm.value.isUsaCanadaManufacturing == true)?true:null"
+                                  (change)="isValueChanged('isUSManufacturing')">
+                                <!-- <label class="border-checkbox-label" for="isUSManufacturing">United States</label> -->
+                                <label class="border-checkbox-label"
+                                  for="isUSManufacturing">{{iTerritoryClassificationNames.territoryClassificationName4}}</label>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-6">
+                                <div class="border-checkbox-section">
+                                  <div class="border-checkbox-group border-checkbox-group-primary">
+                                    <input class="border-checkbox" type="checkbox" id="isMexicoManufacturing"
+                                      [value]="constManufactLocationCodeColl[6]" name="mexico"
+                                      formControlName="isMexicoManufacturing"
+                                      (change)="isValueChanged('isMexicoManufacturing')">
+                                    <!-- <label class="border-checkbox-label" for="isMexicoManufacturing">Mexico</label> -->
+                                    <label class="border-checkbox-label"
+                                      for="isMexicoManufacturing">{{iTerritoryClassificationNames.territoryClassificationName6}}</label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-5">
+                                <div class="border-checkbox-section">
+                                  <div class="border-checkbox-group border-checkbox-group-primary">
+                                    <input class="border-checkbox" type="checkbox"
+                                      [value]="constManufactLocationCodeColl[3]" id="isAsPacManufacturing" name='asia'
+                                      formControlName="isAsPacManufacturing"
+                                      (change)="isValueChanged('isAsPacManufacturing')">
+                                    <!-- <label class="border-checkbox-label" for="isAsPacManufacturing">Asia Pacific</label> -->
+                                    <label class="border-checkbox-label"
+                                      for="isAsPacManufacturing">{{iTerritoryClassificationNames.territoryClassificationName3}}</label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-5">
+                                <div class="border-checkbox-section">
+                                  <div class="border-checkbox-group border-checkbox-group-primary">
+                                    <input class="border-checkbox" type="checkbox"
+                                      [value]="constManufactLocationCodeColl[5]" id="isCanadaManufacturing" name="canda"
+                                      formControlName="isCanadaManufacturing"
+                                      [attr.disabled]="(settingPreferenceForm.value.isUsaCanadaManufacturing == true)?true:null"
+                                      (change)="isValueChanged('isCanadaManufacturing')">
+                                    <!-- <label class="border-checkbox-label" for="isCanadaManufacturing">Canada</label> -->
+                                    <label class="border-checkbox-label"
+                                      for="isCanadaManufacturing">{{iTerritoryClassificationNames.territoryClassificationName5}}</label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-5">
+                                <div class="border-checkbox-section">
+                                  <div class="border-checkbox-group border-checkbox-group-primary">
+                                    <input class="border-checkbox" type="checkbox"
+                                      [value]="constManufactLocationCodeColl[2]" id="isEMEAManufacturing"
+                                      formControlName="isEMEAManufacturing" name="europe"
+                                      (change)="isValueChanged('isEMEAManufacturing')">
+                                    <!-- <label class="border-checkbox-label" for="isEMEAManufacturing">EMEA</label> -->
+                                    <label class="border-checkbox-label"
+                                      for="isEMEAManufacturing">{{iTerritoryClassificationNames.territoryClassificationName2}}</label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-5">
+                                <div class="border-checkbox-section">
+                                  <div class="border-checkbox-group border-checkbox-group-primary">
+                                    <input class="border-checkbox" type="checkbox"
+                                      [value]="constManufactLocationCodeColl[7]" id="isUsaCanadaManufacturing"
+                                      name="us&canda"
+                                      [attr.disabled]="(settingPreferenceForm.value.isUSManufacturing == true || settingPreferenceForm.value.isCanadaManufacturing == true )?true:null"
+                                      formControlName="isUsaCanadaManufacturing"
+                                      (change)="isValueChanged('isUsaCanadaManufacturing')">
+                                    <!-- <label class="border-checkbox-label" for="isEMEAManufacturing">EMEA</label> -->
+                                    <label class="border-checkbox-label"
+                                      for="isUsaCanadaManufacturing">{{iTerritoryClassificationNames.territoryClassificationName7}}</label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- <div class="row col-sm-4">
+                              <div class="border-checkbox-section">
+                                <div class="border-checkbox-group border-checkbox-group-primary">
+                                  <input class="border-checkbox" type="checkbox" id="isEarthAll"  formControlName="isEarthAll" (change)="checkAllLocation()">
+                                  <label class="border-checkbox-label" for="isEarthAll">Earth All</label>
+                                </div>
+                              </div>
+                            </div> -->
+                          </div>
+                        </div>
+                        <hr *ngIf="!this.isSupplier" />
+                        <div class="row" *ngIf="!this.isSupplier">
+                          <div class="col-sm-3">
+                            <label>
+                              <b>Preferred Method of Communication</b>
+                              <br />
+                              <span class="text-inverse"></span>
+                            </label>
+                          </div>
+                          <div class="col-sm-8">
+                            <div class="form-radio m-b-30">
+                              <div class="radio ">
+                                <label>
+                                  <input type="radio" name="communicationPreference" class="form-control"
+                                    formControlName="communicationPreference" [value]="120">
+                                  <i class="helper"></i>Call or Email
+                                </label>
+                              </div>
+                              <div class="radio ">
+                                <label>
+                                  <input type="radio" name="communicationPreference" class="form-control"
+                                    formControlName="communicationPreference" [value]="117">
+                                  <i class="helper"></i>Call
+                                </label>
+                              </div>
+                              <div class="radio ">
+                                <label>
+                                  <input type="radio" name="communicationPreference" class="form-control"
+                                    formControlName="communicationPreference" [value]="118">
+                                  <i class="helper"></i>Message
+                                </label>
+                              </div>
+                              <div class="radio ">
+                                <label>
+                                  <input type="radio" name="communicationPreference" class="form-control"
+                                    formControlName="communicationPreference" [value]="119">
+                                  <i class="helper"></i>Email
+                                </label>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                        <hr *ngIf="!this.isSupplier" />
+                        <!-- payment row-->
+                        <div class="row" *ngIf="!this.isSupplier">
+                          <div class="col-sm-3">
+                            <label>
+                              <b>Payment Terms: </b>
+                            </label>
+                          </div>
+                          <div class="col-sm-5 col-md-5 col-lg-5 input-group2">
+                            <!-- <select class="form-control" formControlName="paymentTermId" name="paymentTermId" style="width: 60%">
+                              <option selected></option>
+                              <option *ngFor="let paymentTerm of iPaymentTermModel" [value]="paymentTerm.paymenOptionId">
+                                {{ paymentTerm.paymentOptionName }}
+                              </option>
+                            </select> -->
+                            <!-- <div class="editProfileerror-msg">
+                              <app-field-error-display [displayError]="isFieldValid('LanguageId')" errorMsg="Language Is required"></app-field-error-display>
+                            </div> -->
+
+                            <select id="vertical-dropdown-icon" class="form-control minimal"
+                              formControlName="paymentTermId" name="paymentTermId" style="width: 50%">
+                              <option value="Net15">Net 15</option>
+                              <option value="Net30">Net 30</option>
+                              <option value="Net45">Net 45</option>
+                              <option value="Net60">Net 60</option>
+                            </select>
+                          </div>
+
+                        </div><br>
+
+                        <div class="row" *ngIf="!isSupplier">
+
+
+                          <div Class="col-md-8">
+                            <b style="margin-right:85px">Who Pays For Shipping?</b>
+                            <button
+                              [ngClass]="(ipreferenceModel.isbuyerPayshipping === true)?'buyer-active':'buyer-deactive'"
+                              (click)="setBuyer()">Buyer</button>
+                            <button
+                              [ngClass]="(ipreferenceModel.isbuyerPayshipping === false)?'supplier-active':'supplier-deactive'"
+                              (click)="setSupplier()" style="margin-left: 10px">Manufacturer</button>
+                          </div>
+                        </div><br>
+
+                        <!-- <div class="row">
+                          <div Class="col-md-8">
+                              <b style="margin-right:114px">Default Dashboard :</b>
+                            <button  [ngClass]="(ipreferenceModel.isBuyerDashboard === true)?'buyer-active':'buyer-deactive'" (click)="setBuyer()">Buyer</button>
+                             <button [ngClass]="(ipreferenceModel.isBuyerDashboard === false)?'supplier-active':'supplier-deactive'" (click)="setSupplier()"
+                              style="margin-left: 10px">Supplier</button>
+                          </div>
+                        </div> -->
+
+                        <div class="row" style="padding-top: 30px">
+
+                          <div class="col-sm-4 offset-sm-4">
+                            <button type="button" class="btn btn-primary btn-outline-primary Rectanglebtn form-control"
+                              [disabled]="checkPreferenceForms()" (click)="onSavePreferences()"
+                              style="width: 100%; margin-bottom: 20px; color:#212A37 ;">Save</button>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="tab-pane active show" *ngIf="currentTab=='tab2default'">
+                <div class="right-padding left-padding">
+                  <form class="md-float-material" [formGroup]="notificationsForm"
+                    (ngSubmit)="onSavenotificationsInfo()">
+                    <div class="row form-group">
+                      <div class="col-sm-4 col-md-4 col-lg-4">
+                        <b>Notify by Email:</b>
+                      </div>
+                      <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" name="isNotifyByEmail" [value]=true
+                                    formControlName="isNotifyByEmail">
+                                  <i class="helper"></i>Yes
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" name="isNotifyByEmail" [value]=false
+                                    formControlName="isNotifyByEmail">
+                                  <i class="helper"></i>No
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                      <div class="col-sm-4 col-md-4 col-lg-4">
+                        <b>Award Confirmations:</b>
+                      </div>
+                      <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="awardConfirmations" value="NotifyInstantly"
+                                    formControlName="awardConfirmations">
+                                  <i class="helper"></i>Notify me Instantly
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" name="awardConfirmations" value="IncludeInDailySummary"
+                                    formControlName="awardConfirmations">
+                                  <i class="helper"></i>Include in my daily summary
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" name="awardConfirmations" value="DoNotNotify"
+                                    formControlName="awardConfirmations">
+                                  <i class="helper"></i>Do not notify me
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                      <div class="col-sm-4 col-md-4 col-lg-4">
+                        <b>New Messages:</b>
+                      </div>
+                      <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="newMessages" value="NotifyInstantly"
+                                    formControlName="newMessages">
+                                  <i class="helper"></i>Notify me instantly
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="newMessages" value="IncludeInDailySummary"
+                                    formControlName="newMessages">
+                                  <i class="helper"></i>Include in my daily summary
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="newMessages" value="DoNotNotify"
+                                    formControlName="newMessages">
+                                  <i class="helper"></i>Do not notify me
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr *ngIf="!isSupplier">
+                    <div class="row form-group" *ngIf="!isSupplier">
+                      <div class="col-sm-4 col-md-4 col-lg-4">
+                        <b>New Quotes:</b>
+                      </div>
+                      <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="newQuotes" value="NotifyInstantly"
+                                    formControlName="newQuotes">
+                                  <i class="helper"></i>Notify me instantly
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="newQuotes" value="IncludeInDailySummary"
+                                    formControlName="newQuotes">
+                                  <i class="helper"></i>Include in my daily summary
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="newQuotes" value="DoNotNotify" formControlName="newQuotes">
+                                  <i class="helper"></i>Do not notify me
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr *ngIf="!isSupplier">
+                    <div class="row form-group" *ngIf="!isSupplier">
+                      <div class="col-sm-4 col-md-4 col-lg-4">
+                        <b>NDAs for Approval:</b>
+                      </div>
+                      <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="ndAsToApprove" value="NotifyInstantly"
+                                    formControlName="ndAsToApprove">
+                                  <i class="helper"></i>Notify me instantly
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="ndAsToApprove" value="IncludeInDailySummary"
+                                    formControlName="ndAsToApprove">
+                                  <i class="helper"></i>Include in my daily summary
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="ndAsToApprove" value="DoNotNotify"
+                                    formControlName="ndAsToApprove">
+                                  <i class="helper"></i>Do not notify me
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr *ngIf="!isSupplier">
+                    <div class="row form-group" *ngIf="!isSupplier">
+                      <div class="col-sm-4 col-md-4 col-lg-4">
+                        <b>Order Status Update:</b>
+                      </div>
+                      <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="orderStatusUpdates" value="NotifyInstantly"
+                                    formControlName="orderStatusUpdates">
+                                  <i class="helper"></i>Notify me instantly
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="orderStatusUpdates" value="IncludeInDailySummary"
+                                    formControlName="orderStatusUpdates">
+                                  <i class="helper"></i>Include in my daily summary
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="orderStatusUpdates" value="DoNotNotify"
+                                    formControlName="orderStatusUpdates">
+                                  <i class="helper"></i>Do not notify me
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                      <div class="col-sm-4 col-md-4 col-lg-4">
+                        <b>Ratings to Perform or Ratings Received:</b>
+                      </div>
+                      <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="ratingsToPerformReceived" value="NotifyInstantly"
+                                    formControlName="ratingsToPerformReceived">
+                                  <i class="helper"></i>Notify me instantly
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="ratingsToPerformReceived" value="IncludeInDailySummary"
+                                    formControlName="ratingsToPerformReceived">
+                                  <i class="helper"></i>Include in my daily summary
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="ratingsToPerformReceived" value="DoNotNotify"
+                                    formControlName="ratingsToPerformReceived">
+                                  <i class="helper"></i>Do not notify me
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                      <div class="col-sm-4 col-md-4 col-lg-4">
+                        <b>Send RFQ Filter Emails:</b>
+                      </div>
+                      <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" name="isSendDailySummary" [value]=true
+                                    formControlName="isSendDailySummary">
+                                  <i class="helper"></i>Yes
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" name="isSendDailySummary" [value]=false
+                                    formControlName="isSendDailySummary">
+                                  <i class="helper"></i>No
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                      <div class="col-sm-4 col-md-4 col-lg-4">
+                        <b>System & Maintenance Announcements:</b>
+                      </div>
+                      <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" name="isSystemMaintenanceAnnouncements" [value]=true
+                                    formControlName="isSystemMaintenanceAnnouncements">
+                                  <i class="helper"></i>Yes
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" name="isSystemMaintenanceAnnouncements" [value]=false
+                                    formControlName="isSystemMaintenanceAnnouncements">
+                                  <i class="helper"></i>No
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                      <div class="col-sm-4 col-md-4 col-lg-4">
+                        <b>MFG Newsletters:</b>
+                      </div>
+                      <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" name="isNewsletter" [value]=true formControlName="isNewsletter">
+                                  <i class="helper"></i>Yes
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" name="isNewsletter" [value]=false formControlName="isNewsletter">
+                                  <i class="helper"></i>No
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                      <div class="col-sm-4 col-md-4 col-lg-4">
+                        <b>Special Invitations (e.g. Webinars & Event Announcements):</b>
+                      </div>
+                      <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" name="isSpecialInvitations" [value]=true
+                                    formControlName="isSpecialInvitations">
+                                  <i class="helper"></i>Yes
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" name="isSpecialInvitations" [value]=false
+                                    formControlName="isSpecialInvitations">
+                                  <i class="helper"></i>No
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                      <div class="col-sm-4 col-md-4 col-lg-4">
+                        <b>Preferred email format:</b>
+                      </div>
+                      <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="isSendNotificationsAsHTML" [value]=true
+                                    formControlName="isSendNotificationsAsHTML">
+                                  <i class="helper"></i>HTML
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="isSendNotificationsAsHTML" [value]=false
+                                    formControlName="isSendNotificationsAsHTML">
+                                  <i class="helper"></i>Plain text
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row form-group">
+
+                      <div class="col-sm-4 offset-sm-4">
+                        <!-- <button type="submit" class="btn btn-primary btn-outline-primary Rectanglebtn form-control" [disabled]='!isformval()'>Save</button> -->
+                        <button type="submit" class="btn btn-primary btn-outline-primary Rectanglebtn form-control"
+                          [disabled]='checkForms()'>Save </button>
+
+                      </div>
+
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div *ngIf="!isSupplier && currentTab=== 'tab3default'" class="tab-pane active show" >
+                <div class="right-padding left-padding">
+                  <form class="md-float-material" [formGroup]="ndaForm" (ngSubmit)="onSaveNdaInfo()">
+                    <div class="row form-group">
+                      <div class="col-sm-4 col-md-4 col-lg-4">
+                        <b>Preferred NDA Method:</b>
+                      </div>
+                      <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="ndaLevel" checked="checked" [value]=1 formControlName="ndaLevel">
+                                  <i class="helper"></i>Single Confirm
+                                  <i class="icofont icofont-info-circle gray" placement="right" data-container="body"
+                                    ngbTooltip="Using a Single Confirm means that manufacturers must digitally accept an agreement before they are able to see your parts"></i>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="ndaLevel" [value]=2 formControlName="ndaLevel">
+                                  <i class="helper"></i>Double Confirm
+                                  <i class="icofont icofont-info-circle gray" placement="right" data-container="body"
+                                    ngbTooltip="Using a Double Confirm means that manufacturers must digitally accept an agreement and be approved by you before they can see your parts. You must then approve that manufacturer as a second level of security before they can see your parts"></i>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="errorSetting-msg2">
+                              <app-field-error-display [displayError]="isFieldValid('ndaLevel')"
+                                errorMsg="NDA selection Is required"></app-field-error-display>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                      <div class="col-sm-4 col-md-4 col-lg-4">
+                        <b>Add Your Custom NDA:</b>
+                      </div>
+                      <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="ndaContent" checked="checked" value="formatHTML"
+                                    formControlName="ndaContent" (change)="ndaChanged()">
+                                  <i class="helper"></i>Use MFG.com's standard NDA
+                                </label>
+                              </div>
+                              <div class="radio radio-inline">
+                                <label style="margin-left: -40px !important">
+                                  <i data-bs-toggle="modal" data-bs-target="#exampleModalCenter"
+                                    style="color:#4099ff;cursor: pointer;">View</i>
+                                  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLongTitle">MFG.com's Standard NDA</h5>
+                                          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                          </button>
+                                        </div>
+                                        <div class="modal-body">
+                                          <div class="row wrt form-group">
+                                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                              <div class="form-group"></div>
+                                              <div class="form-group">
+                                                <p [innerHTML]="defaultNdaMessage"></p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="row wrt form-group">
+
+                                            <div class="col-sm-8 offset-sm-2">
+                                              <button type="button" class="btn btn-primary parent-full"
+                                                data-bs-dismiss="modal">
+                                                OK</button>
+                                            </div>
+
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-radio">
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="ndaContent" value="formatText" formControlName="ndaContent"
+                                    (change)="ndaChanged()">
+                                  <i class="helper"></i>Use Custom NDA
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div [hidden]="checkNDAContent()">
+                          <div class="row" [hidden]="!isFileAvilable">
+                            <div class="col-md-8 col-lg-8">
+                              <div class="border-dotted">
+                                <input type="file" id="avatar" accept="application/pdf" (change)="uploadNDAFileChange()"
+                                  #fileInput>
+                              </div>
+                              <div *ngIf="isFileNotPDF" style="color: red; text-align: right">Please select pdf file
+                                only</div>
+                              <div *ngIf="!isFileSelected" style="color: red; text-align: right">Please select the file
+                              </div>
+                            </div>
+                            <div class="col-md-4 col-lg-4"></div>
+                          </div>
+                          <div class="row" [hidden]="isFileAvilable">
+                            <div class="col-md-8 col-lg-8">
+                              <div class="border-dotted">
+                                <div class="row">
+                                  <div class="col-md-8 col-lg-8 cursorPointer"
+                                    (click)="downloadS3File(ndaFileName, true)" style=" word-break: break-all; ">
+                                    {{getOriginalPartName(ndaFileName)}} </div>
+                                  <div class="col-md-4 col-lg-4 ">
+                                    <p style="color:#4099ff" class="float-right cursorPointer"
+                                      (click)="removeNdaFile(ndaFileName)">
+                                      Remove</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-4 col-lg-4"></div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-lg-12">
+                            <div class="errorSetting-msg2">
+                              <app-field-error-display [displayError]="isFieldValid('ndaContent')"
+                                errorMsg="NDA Content selection Is required"></app-field-error-display>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr [hidden]="isNoNDASelected('ndaLevel')">
+                    <div class="row form-group">
+
+                      <div class="col-sm-4 offset-sm-4">
+
+                        <button type="submit" [disabled]="!isNDAbutton"
+                          class="btn btn-primary btn-outline-primary Rectanglebtn form-control">Save</button>
+                        <!-- <button type="submit" class="btn btn-primary btn-outline-primary Rectanglebtn form-control">Save</button> -->
+
+                      </div>
+
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <div  *ngIf="currentTab=== 'tab5default'" class="tab-pane active show">
+
+                <form class="md-float-material" [formGroup]="changePasswordForm" (ngSubmit)="onChangePassword()">
+                  <div style="padding-left:289px">
+                    <div class="row form-group form-group2" style="padding-top: 36px">
+                      <div class="col-md-3 col-lg-3 label-align">
+                        <label>Old Password<label class="reqLbl">*</label></label>
+                      </div>
+                      <div class="col-md-5 col-lg-5 input-group2">
+                        <input type="password" maxlength="20" class="form-control" formControlName="currentPassword"
+                          placeholder="Old Password" autocomplete="off">
+                        <div >
+                          <app-field-error-display [displayError]="isChangeFieldValid('currentPassword')"
+                            errorMsg="Old Password Is required"></app-field-error-display>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row form-group form-group2" style="padding-top: 36px">
+                      <div class="col-md-3 col-lg-3 label-align">
+                        <label>New Password<label class="reqLbl">*</label></label>
+                      </div>
+                      <div class="col-md-5 col-lg-5 input-group2">
+                        <input type="password" maxlength="20" class="form-control" formControlName="newPassword"
+                          placeholder="New Password" autocomplete="off">
+                        
+                          <app-field-error-display [displayError]="isRegisterPasswordValid('newPassword')"
+                            errorMsg="Must be 6-20 characters and contain both upper case and lower case and at least one number and symbol .">
+                          </app-field-error-display>
+                          <app-field-error-display [displayError]="isChangeFieldValid('newPassword')"
+                            errorMsg="New Password Is required"></app-field-error-display>
+                            
+                      </div>
+                    </div>
+                    <div class="row form-group form-group2"
+                      [ngClass]="(isRegisterPasswordValid1()? 'padding-top-50':'padding-top-36')">
+                      <div class="col-md-3 col-lg-3 label-align">
+                        <label for="shippingpostalcode">Re-Enter Password<label class="reqLbl">*</label></label>
+                      </div>
+                      <div class="col-md-5 col-lg-5 input-group2">
+                        <input type="password" maxlength="20" class="form-control" formControlName="password"
+                          placeholder="Re-Enter Password" autocomplete="off">
+                        
+                          <app-field-error-display [displayError]="isChangeFieldValid('password')"
+                            errorMsg="Re-Enter Password  Is required"></app-field-error-display>
+                          <app-field-error-display [displayError]="isRegisterCompare('password','newPassword')"
+                            errorMsg="Re-Enter Password Doesn't Match"></app-field-error-display>
+                            
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row" style="padding-top: 30px;margin-bottom: 20px;">
+
+                    <div class="col-sm-4 offset-sm-4">
+                      <button type="submit" class="btn btn-primary btn-outline-primary Rectanglebtn form-control"
+                        style="width: 100%" [ngClass]="{'donot-allowed': disablePasswordSave()}"
+                        [disabled]="disablePasswordSave()">Save</button>
+                    </div>
+
+                  </div>
+                </form>
+              </div>
+
+
+              <div class="tab-pane active show" *ngIf="currentTab=== 'tab6default'" >
+                <form class="md-float-material" [formGroup]="changeUsernameForm" (ngSubmit)="onChangeUsername()">
+                  <div style="padding-left:289px">
+                    <div class="row form-group form-group2" style="padding-top: 36px">
+                      <div class="col-md-3 col-lg-3 label-align">
+                        <label>New E-mail<label class="reqLbl">*</label></label>
+                      </div>
+                      <div class="col-md-5 col-lg-5 input-group2">
+                        <input type="text" maxlength="75" class="form-control" formControlName="setting_usernameNew"
+                          placeholder="New Email Id" autocomplete="off">
+                        
+                          <div style="color:red;"
+                            *ngIf="changeUsernameForm.get('setting_usernameNew').errors?.required  && (changeUsernameForm.controls['setting_usernameNew'].dirty || changeUsernameForm.controls['setting_usernameNew'].touched)">
+                            E-mail is required</div>
+                          <div style="color:red;"
+                            *ngIf="changeUsernameForm.get('setting_usernameNew').errors?.pattern  && (changeUsernameForm.controls['setting_usernameNew'].dirty || changeUsernameForm.controls['setting_usernameNew'].touched)">
+                            Invalid E-mail</div>
+                          <div style="color:red;"
+                            *ngIf="changeUsernameForm.get('setting_usernameNew').errors?.validateEmail && (changeUsernameForm.controls['setting_usernameNew'].dirty || changeUsernameForm.controls['setting_usernameNew'].touched)">
+                            Email cannot be same as previous</div>
+                        
+                      </div>
+                    </div>
+                    <div class="row form-group form-group2">
+                      <div class="col-md-3 col-lg-3 label-align">
+                        <label for="shippingpostalcode">Confirm E-mail<label class="reqLbl">*</label></label>
+                      </div>
+                      <div class="col-md-5 col-lg-5 input-group2">
+                        <input type="text" maxlength="75" class="form-control" formControlName="usernameRe"
+                          placeholder="Confirm E-mail Id" autocomplete="off">
+                        
+                          <div style="color:red;"
+                            *ngIf="changeUsernameForm.hasError('notSame') && changeUsernameForm.controls['usernameRe'].dirty">
+                            E-mail does not match</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row" style="padding-top: 30px;padding-bottom:30px;">
+                    <div class="col-sm-4 offset-4">
+                      <button type="button" class="btn btn-primary btn-outline-primary Rectanglebtn form-control"
+                        style="width: 100%"
+                        [disabled]="!(changeUsernameForm.valid &&  !changeUsernameForm.hasError('notSame'))"
+                        (click)="cancelRfq()">Save</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<p-dialog header="Update Username" [(visible)]="inviteuser1" [modal]="true" [responsive]="true"
+  [autoZIndex]="false" style="z-index: 10001;width: 600;">
+
+  <div class="row">
+    <div class="col-md-12">
+      <p>
+        Are you sure you want to update your username.
+      </p>
+    </div>
+    <div class="col-md-6">
+      <button type="button" class="btn btn-md btn-block waves-effect text-center m-b-20 Rectanglebtn-active"
+        (click)="updateEmail(false)">Cancel</button>
+    </div>
+    <div class="col-md-6">
+      <button type="submit" class="btn btn-md btn-block waves-effect text-center m-b-20 Rectanglebtn-active" label="Yes"
+        (click)="updateEmail(true)"> Yes</button>
+    </div>
+  </div>
+
+
+</p-dialog>
+
+<p-confirmDialog header="Confirmation" icon="" #cd>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-ignore-rfq" (click)="cd.reject()">No</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="cd.accept()">Yes</button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>

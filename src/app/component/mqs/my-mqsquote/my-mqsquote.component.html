@@ -1,0 +1,17 @@
+<div class="qms-section">
+  <div class="row">
+    <div class="col-md-2">
+      <p class="lead-head">My Quotes</p>
+    </div>
+    <div class="col-md-8">
+      <!-- <p class="lead-head" style="color: #4099ff;">Welcome to LiveQuote BETA! Use it for free until 4/30/20.</p> -->
+    </div>
+    <div class="col-md-2 text-right m-t-5">
+        <button type="button" class="btn-qms" [routerLink]="['/qms/createquotes']">
+         Create a Quote
+        </button>
+      </div>
+
+  </div>
+    <app-common-qms [QmsType]='1'></app-common-qms>
+</div>

@@ -1,0 +1,75 @@
+<div class="row msg-thread" style="padding: 10px" *ngFor="let message of messageThreadList; let i = index">
+  <div class="col-md-11" style="display: flex;">
+    <div style="margin-right: 15px;">
+      <img *ngIf="userAccount !== 'Basic' || message.messageTypeId !== 225"
+      [src]="message.companylogo" 
+      class="img-circle user-img"
+      onError="this.src='assets/company/avatar-manu-basic-circle.svg'" />
+      <img *ngIf="userAccount === 'Basic' && message.messageTypeId === 225"
+      src="assets/company/avatar-manu-basic-circle.svg" 
+      class="img-circle user-img"
+      />
+    </div>
+    <div>
+      <h6 *ngIf="userAccount !== 'Basic' || message.messageTypeId !== 225">{{message.fromContName}}</h6>
+      <h6 *ngIf="userAccount === 'Basic' && message.messageTypeId === 225"></h6>
+      <span class="time">{{getDate(message.messageDate)}}</span>
+      <div>
+          <p *ngIf="userAccount !== 'Basic' || message.messageTypeId !== 225"
+          class="m-t-5 m-b-5">
+            <span class="f-w-0 f-14" [innerHTML]="message.messageDescr | sanitizeNolimit"></span>
+          <p *ngIf="userAccount === 'Basic' && message.messageTypeId === 225"
+          class="m-t-5 m-b-5">
+            <span class="f-w-0 f-14">Upgrade to view this message.</span>
+          </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-1 text-right" *ngIf="i===0">
+      <span *ngIf="(userAccount !== 'Basic' && userAccount !== 'Silver') && replyBtn" class="reply-text"  (click)="openMessageDrawer()">Reply</span>
+    </div>
+  <div class="col-md-11 offset-1">
+     
+  </div>
+  <div>
+    <div class="chatbox"  *ngIf="(userAccount !== 'Basic' && message.messageTypeId === 225); else showChat">
+        <div>
+            <div
+              *ngIf="message.isNdaRequired === true && (message.isNdaAccepted === false || message.isNdaAccepted === null) ; else showDownloadAll">
+              <span class="attach-file" *ngIf="message.messageFileNames.length > 1"
+                (click)="openNdaModel(message.messageId)"><b>Download All</b></span>
+            </div>
+            <ng-template #showDownloadAll>
+              <span class="attach-file" *ngIf="message.messageFileNames.length > 1" (click)="downloadAllFiles(message.messageFileNames)"><b>Download All</b></span>
+            </ng-template>
+          </div>
+          <div *ngIf="message.messageFileNames.length !== 0" class="fileArea">
+            <div *ngFor=" let file of message.messageFileNames" class="fileArea">
+              <span
+                *ngIf="message.isNdaRequired === true && (message.isNdaAccepted === false || message.isNdaAccepted === null); else showDownload"
+                class="attach-file" (click)="openNdaModel(message.messageId)">{{file| originalShortName: 40}}</span>
+              <ng-template #showDownload>
+                <span class="attach-file" (click)="downloadS3File(file, true)">{{file| originalShortName: 40}}</span>
+              </ng-template>
+            </div>
+          </div>
+
+
+    </div>
+    <ng-template #showChat>
+      <div *ngIf="message.messageTypeId !== 225">
+          <div>
+              <span class="attach-file" *ngIf="message.messageFileNames.length > 1" (click)="downloadAllFiles(message.messageFileNames)"><b>Download All</b></span>
+            </div>
+            <div *ngIf="message.messageFileNames.length !== 0" class="fileArea">
+              <div *ngFor=" let file of message.messageFileNames" class="fileArea">
+                <span class="attach-file" (click)="downloadS3File(file, true)">{{file| originalShortName: 40}}</span>
+              </div>
+            </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+
+<app-nda-model *ngIf="showNdaModel" [msgId]="msgId" (modalCloseEvent)="closeNDAModelEvent($event)"></app-nda-model>

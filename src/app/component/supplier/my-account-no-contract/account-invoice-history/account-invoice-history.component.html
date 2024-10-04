@@ -1,0 +1,51 @@
+<div class="row" *ngIf="billingInfoViewModel != null && billingInfoViewModel != undefined && billingInfoViewModel.length != 0" >
+    <div class="col-md-12">
+      <span class="f-16">Invoice History</span>
+      <hr>
+    </div>
+    <div class="col-md-12" *ngIf=" nextBillingDate !== null && nextBillingDate !== undefined && nextBillingDate !== ''">
+      <span class="f-14">Next Billing Date:</span>&nbsp;&nbsp;
+      <span class="f-14 f-w-600" style="float: right;">{{nextBillingDate}}</span>
+    </div>
+    <div class="col-md-12 m-t-10" *ngIf="billingInfoViewModel != null && billingInfoViewModel != undefined && billingInfoViewModel.length != 0">
+       <div class="invoice-list" *ngFor="let invoice of billingInfoViewModel | slice:0:6;">
+         <div class="row">
+           <div class="col-md-4">{{ invoice.invoiceDate }}</div>
+           <div class="col-md-4 text-center">${{ invoice.invoiceAmount }}</div>
+           <div class="col-md-4" style="cursor: pointer" (click)="downloadInvoicePdf(invoice.invoicePDF)">PDF</div>
+         </div>
+       </div>
+       <div *ngIf="toShowExtraInfo == true">
+        <div class="invoice-list" *ngFor="let invoice of billingInfoViewModel | slice:6;">
+          <div class="row">
+            <div class="col-md-4">{{ invoice.invoiceDate }}</div>
+            <div class="col-md-4 text-center">${{ invoice.invoiceAmount }}</div>
+            <div class="col-md-4">PDF</div>
+          </div>
+        </div>
+       </div>
+       <div class="m-t-10" *ngIf="billingInfoViewModel.length > 6">
+         <span (click)="getMoreBillingList()" style="color:#4a90e2;cursor: pointer;" *ngIf="toShowExtraInfo == false">See All Invoices</span>
+         <span (click)="getMoreBillingList()" style="color:#4a90e2;cursor: pointer;" *ngIf="toShowExtraInfo == true">Show less</span>
+       </div>
+
+    </div>
+    <div class="col-md-12 m-t-10" *ngIf="billingInfoViewModel == null || billingInfoViewModel == undefined || billingInfoViewModel.length == 0">
+      <span class="f-14 f-w-600">No invoice history found.</span>
+   </div>
+
+  </div>
+
+  <div *ngIf="isLoader" class="loading">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>
+

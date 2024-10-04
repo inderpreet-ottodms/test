@@ -1,0 +1,142 @@
+<ng-template #upgradeModel let-d="dismiss" data-backdrop="static" data-keyboard="false">
+  <form #modelForm="ngForm">
+    <div class="modal-header">
+      <h4 class="modal-title">Contact our customer success team</h4>
+      <button type="button" class="close" data-bs-dismiss="modal" (click)="d('notNow');closeModel(0)" style="z-index: 100;">
+        <i class="fa fa-times-circle" aria-hidden="true" style="color: #4a90e2; z-index: 1000;"></i></button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="contactMethod !== communicationMethods.schedule">
+        <div class="m-b-5" style="text-align: left">
+          <span class="f-14 f-w-600">{{ contactSalesQA[0].qDesc }}</span>
+        </div>
+        <div class="from-group">
+          <select class="form-control" name="selectedHelpAns" [(ngModel)]="selectedHelpAns">
+            <option *ngFor="let ans of contactSalesDropDownValue;" [value]="ans.aId">
+              {{ans.aDesc}}</option>
+          </select>
+        </div>
+        <div class="m-t-15" style="text-align: left">
+          <span class="f-14 f-w-600">{{ contactSalesQA[1].qDesc }}</span>
+        </div>
+        <div style="display: flex; justify-content: center;">
+          <div *ngFor="let method of contactSalesQA[1].contactSalesAnswerResponseViewModel; let i = index;">
+            <div *ngIf="method.aId === 8 && msUrl != null && msUrl != undefined else notShow" class="action-box"
+              [class.active]="contactMethod == method.aId" (click)="setContactMethod(method.aId)">
+              <div><i [class]="contactMethodIcon[i]" aria-hidden="true" style="font-size: 24px;"></i></div>
+              <div>{{ method.aDesc }}</div>
+            </div>
+            <ng-template #notShow>
+              <div *ngIf="method.aId !== 8" class="action-box" [class.active]="contactMethod == method.aId"
+                (click)="setContactMethod(method.aId)">
+                <div><i [class]="contactMethodIcon[i]" aria-hidden="true" style="font-size: 24px;"></i></div>
+                <div>{{ method.aDesc }}</div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+
+        <div *ngIf="contactMethod == communicationMethods.call" style="text-align:left;">
+          <div class="m-b-15">
+            <span class="f-12 f-w-600">Phone Number</span>
+          </div>
+          <div class="row">
+            <div class="col-md-2">
+              <div class="from-group">
+                <select class="form-control" (change)="userPhoneCode = $event.target.value" required>
+                  <option *ngFor="let country of countryList" [value]="country.codeTelephone" [attr.selected]="country.countryId == 92? true: null">{{country.codeTelephone}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="from-group">
+                <input type="text" class="form-control" minlength="10" maxlength="17" (onBlur)="change($event.target.value);" [(ngModel)]="userPhoneNo" name="userPhone" pattern="^([0-9]{10,15})$" #userPhone required>
+                <div *ngIf="modelForm.form.controls.userPhone?.invalid && (modelForm.form.controls.userPhone?.dirty || modelForm.form.controls.userPhone?.touched)">
+                  <p style="color:red" *ngIf="modelForm.form.controls.userPhone.errors.pattern">Please enter valid contact number.</p>
+                </div>
+                <!-- <p-inputMask type="text" min="12" max="12" (onBlur)="change($event.target.value);" [(ngModel)]="userPhoneNo" name="userPhone" pattern="^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$"  mask="999-999-9999" #userPhone required style="height: 40px;"></p-inputMask> -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div *ngIf="contactMethod == communicationMethods.email" style="text-align:left;">
+          <div class="m-t-15">
+            <span class="f-12 f-w-600">Email Address</span>
+          </div>
+          <div class="from-group">
+            <input type="text" class="form-control" name="sourceEmail" #sourceEmail [(ngModel)]="userEmail" required
+              pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$">
+            <div
+              *ngIf="modelForm.form.controls.sourceEmail?.invalid && (modelForm.form.controls.sourceEmail?.dirty || modelForm.form.controls.sourceEmail?.touched)">
+              <p style="color:red" *ngIf="modelForm.form.controls.sourceEmail.errors.pattern">Please enter valid email.
+              </p>
+            </div>
+          </div>
+          <div class="m-t-15">
+            <span class="f-12 f-w-600">Comment</span>
+          </div>
+          <div class="from-group">
+            <textarea type="text" class="form-control" name="comment" maxlength="1000" [(ngModel)]="userComments"
+              (keyup)="commentChange()" required></textarea>
+            <div class="text-right">
+              <span class="f-12" style="color:#ccc">1000 character max</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <div *ngIf="contactMethod == communicationMethods.schedule" style="text-align:left; height: 350px;">
+        <!-- <div class="m-t-15">
+        <span class="f-12 f-w-600">Schedule Date Time</span>
+      </div>
+      <div class="from-group">
+          <p-calendar [minDate]="minDate"  name="userDate" #userDate [(ngModel)]="userSchedule" showTime="true" hourFormat="24" required [style]="{'width':'96%'}" [showIcon]="true" placeholder="MM/DD/YYYY HH:MM" [readonlyInput]="true"></p-calendar>
+      </div> -->
+        <div *ngIf="frameLoader">
+          <div class="loader animation-start">
+            <span class="circle delay-1 size-2"></span>
+            <span class="circle delay-2 size-4"></span>
+            <span class="circle delay-3 size-6"></span>
+            <span class="circle delay-4 size-7"></span>
+            <span class="circle delay-5 size-7"></span>
+            <span class="circle delay-6 size-6"></span>
+            <span class="circle delay-7 size-4"></span>
+            <span class="circle delay-8 size-2"></span>
+          </div>
+        </div>
+        <iframe *ngIf="msUrl != null && msUrl != undefined" #iframe [src]="msUrl" frameborder="0" width="100%"  height="90%" (load)="uploadDone()"></iframe>
+
+      </div>
+    </div>
+    <div class="modal-footer-section">
+      <div class="row" *ngIf="contactMethod !== communicationMethods.schedule">
+        <div class="col-md-12 text-center m-b-10" data-bs-dismiss="modal">
+          <button type="button" class="btn btnAccept"
+            [disabled]="!modelForm.form.valid || contactMethod == 0 || deactivate " data-bs-dismiss="modal"
+            (click)="sendContact();">Submit</button>
+        </div>
+      </div>
+      <div class="row" *ngIf="contactMethod === communicationMethods.schedule">
+        <div class="col-md-12 text-center m-b-10" data-bs-dismiss="modal">
+          <button type="button" class="btn btnCancel" (click)="contactMethod = communicationMethods.call">Back</button>
+          <button type="button" class="btn btnAccept m-l-15" (click)="d('notNow');closeModel(1)">I am done</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>
+
+<div *ngIf="isLoader" class="loading">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div>

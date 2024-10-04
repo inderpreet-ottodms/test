@@ -1,0 +1,908 @@
+<div class="row">
+  <div [ngClass]="(isSidePanel())?'col-md-8':'col-md-12'"><br>
+          <div class="row supplier-banner" *ngIf="!isApi">
+              <div class="col-md-2 align-middle">
+                <img [src]="supplierLogoPath" class="img-circle supplier-logo-size">
+              </div>
+              <div class="col-md-10" style="margin-top: 15px;">
+                <div class="row">
+                  <div class="col-md-8 text-hight">
+                    <h4>{{iContactViewModel?.company?.name}}</h4>
+                    <!-- <p class="nda-manufacturer supplier-logo"><span>
+                      <span [ngClass]="iContactViewModel?.npsScore | npsState">
+                         {{ ((iContactViewModel?.npsScore !== null) && (iContactViewModel?.npsScore !== '')) ? iContactViewModel?.npsScore : 'N/A' }}</span> Net Promotor Score</span></p> -->
+                  </div>
+                  <div class="col-md-4">
+                    <div class="pull-right">
+                      <h4>{{iContactViewModel?.phoneNo}}</h4>
+                    </div>
+
+                  </div>
+                  <div class="col-md-12">
+                    <div>
+                      <!-- <ul class="circle-icons">
+                        <button>Request Quote</button>
+                      </ul>
+                      <ul class="circle-icons">
+                        <li><a> <img src="assets/images/group/move.png" srcset="assets/images/group/move@2x.png 2x, assets/images/group/move@3x.png 3x"></a></li>
+                      </ul> -->
+                      <ul class="circle-icons">
+                        <li><a (click)="openMessageDrawer($event, currentContactId, currentRfqid)"> <img src="assets/images/group/message.png" srcset="assets/images/group/message@2x.png 2x, assets/images/group/message@3x.png 3x" ngbTooltip="Message Buyer"></a></li>
+                      </ul>
+                      <ul class="circle-icons" *ngIf="!iAboutUsModel.isFollowing">
+                        <li><a (click)="setFollow(iAboutUsModel.companyId)"> <img src="assets/images/group/invalid-name.png" srcset="assets/images/group/invalid-name2@2x.png 2x, assets/images/group/invalid-name@3x.png 3x" ngbTooltip="Follow Buyer"></a></li>
+                      </ul>
+                      <ul class="circle-icons" *ngIf="iAboutUsModel.isFollowing" >
+                        <li><a (click)="unFollow(iAboutUsModel.companyId)"> <img src="assets/images/group/invalid-name.png" srcset="assets/images/group/invalid-name2@2x.png 2x, assets/images/group/invalid-name@3x.png 3x" ngbTooltip="Unfollow Buyer"></a></li>
+                      </ul>
+                   
+                      <ul class="circle-icons" data-bs-toggle="modal" data-bs-target="#myModal" *ngIf="(!isBlacklist)">
+                        <li><a >
+                          <img *ngIf="(!isBlacklist)" placement="top" container="body" ngbTooltip="Blacklist Manufacturer" src="assets/images/group/group-2.png" srcset="assets/images/group/group-2@2x.png 2x, assets/images/group/group-2@3x.png 3x">
+                        </a></li>
+                      </ul>
+                      <ul class="circle-icons" *ngIf="(isBlacklist)">
+                        <li><a (click)= "removeBlacklistUser()">
+                          <i *ngIf="(isBlacklist)"  class="fa fa-user iconDisabled" placement="top" container="body" ngbTooltip="Remove from Blacklist"></i>
+                        </a></li>
+                      </ul>
+
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+        <div class="background-white" *ngIf="!isApi">
+          <div class="tabbable-panel">
+            <div class="tabbable-line">
+              <ul class="nav nav-tabs ">
+                <li [ngClass]="isAboutUsActive?'active':''" (click)="onAboutUs()">
+                  <a href="Javascript:void(0);" data-bs-toggle="tab">ABOUT US</a>
+                </li>
+                <li [ngClass]="isCabalitiesActive?'active':''" (click)="onCabalities()">
+                  <a href="Javascript:void(0);" >CAPABILITIES</a>
+                </li>
+                <li [ngClass]="isContactUsActive?'active':''" (click)="onContact()">
+                  <a href="Javascript:void(0);" data-bs-toggle="tab">CONTACT US</a>
+                </li>
+                <li [ngClass]="isRatingActive?'active':''" (click)="onRatingUs()">
+                  <a href="Javascript:void(0);" data-bs-toggle="tab">RATINGS</a>
+                </li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active" id="aboutus" *ngIf="isAboutUsActive">
+                  <div class="row">
+                    <div [ngClass]="isSidePanel() ? 'col-md-12' : 'col-md-8'">
+                      <div *ngIf="!isSidePanel()">
+                        <div class="row cust-padding">
+                          <div class="col-md-12 bottom-border">
+                            <h2 class="innerpanelheading">Company Description </h2>
+                          </div>
+                        </div>
+                        <div class="row ">
+                          <div class="col-md-12" *ngIf="iAboutUsModel.description !== ''">
+                            <p class="description-wraper" [innerHTML]="iAboutUsModel.description | sanitizeNolimit"> </p>
+                          </div>
+                          <div class="col-md-12" *ngIf="iAboutUsModel.description == ''">
+                            <p>No company description at this time.</p>
+                          </div>
+                        </div>
+                        <div class="row cust-padding">
+                          <div class="col-md-12 bottom-border">
+                            <h2 class="innerpanelheading">Equipment </h2>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12" *ngIf="iAboutUsModel?.equipments?.length !== 0">
+                            <ul class="equipment-list" *ngFor="let item of iAboutUsModel.equipments">
+                              <li class="text-truncate" [title]="item.equipmentText">{{ item.equipmentText }}</li>
+                            </ul>
+                          </div>
+                          <div class="col-md-12" *ngIf="iAboutUsModel?.equipments.length === 0">
+                            <p>No equipment added at this time.</p>
+                          </div>
+                        </div>
+                        <div class="row cust-padding">
+                          <div class="col-md-12 bottom-border">
+                            <h2 class="innerpanelheading">Photos</h2>
+                          </div>
+                        </div>
+                        <div>
+                        </div>
+                        <div class="row" *ngIf="!(iAboutUsModel?.specialFiles?.length === 0)">
+                          <div class="col-md-6 thumb" *ngFor="let item of iAboutUsModel.specialFiles">
+                            <a class="thumbnail" href="#" data-image-id="" (click)="openPhoto(item.fileName)" data-bs-toggle="modal"
+                              data-title="" data-image="item.fileName" data-bs-target="#image-gallery">
+                              <img class="img-thumbnail" [src]="item.fileName" alt="Another alt text" />
+                            </a>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="iAboutUsModel?.specialFiles?.length === 0">
+                          <div class="col-md-12">
+                            <p>No photos added at this time.</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngIf="isSidePanel()">
+                        <div class="row cust-padding">
+                          <div class="col-md-12 bottom-border">
+                            <h2 class="innerpanelheading">Company Description</h2>
+                          </div>
+                        </div>
+                        <div class="row ">
+                          <div class="col-md-6" *ngIf="iAboutUsModel?.description !== ''">
+                            <p class="description-wraper" [innerHTML]="iAboutUsModel.description | sanitizeNolimit"> </p>
+                          </div>
+                          <div class="col-md-6" *ngIf="iAboutUsModel?.description == ''">
+                            <p>No company description at this time.</p>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="row cust-padding">
+                              <div class="col-md-12 bottom-border">
+                                <h2 class="innerpanelheading">Demographics</h2>
+                              </div>
+
+                            </div>
+                            <!-- <div *ngIf="isDemographics">
+                              <p>No Demographics at this time.</p>
+                            </div> -->
+                            <div>
+                              <p class="title-green">
+                                <strong>MFG.com Member Since:</strong><br />{{ iAboutUsModel?.createdDate | date:
+                                "MM/dd/yy" }}
+                              </p>
+                              <p>
+                                <strong>Company Type:</strong><br />
+                                <label *ngIf="iAboutUsModel.supplierType !== null">{{
+                                  iAboutUsModel?.supplierType.supplierTypeNameEn }}</label>
+                              </p>
+                              <p>
+                                <strong># of Employees:</strong><br />{{ iAboutUsModel?.employeeCountRange }}
+                              </p>
+                              <strong>Languages:</strong><br />
+                              <div *ngFor="let language of iAboutUsModel?.languages"> {{ language?.languageName }} </div>
+
+                              <p><strong>D-U-N-S Number:</strong><br /> {{ iAboutUsModel?.dunsNumber }} </p>
+                              <p title="{{ iAboutUsModel.cageCode}}"><strong>Cage Code:</strong><br />{{ iAboutUsModel?.cageCode | dotLimit:'23'}}</p>
+                              <br />
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="row cust-padding">
+                              <div class="col-md-12 bottom-border">
+                                <h2 class="innerpanelheading">Certifications</h2>
+                              </div>
+                            </div>
+                            <div class="col-md-12" *ngIf="certificateViewModelList.length !== 0">
+                              <ul>
+                                <li *ngFor="let certificate of certificateViewModelList">
+                                  <p>
+                                    <strong class="title-blue"> {{ certificate.certificateCode }}</strong><br />
+                                    {{ certificate.creationDate | date }}
+
+                                  </p>
+                                </li>
+                              </ul>
+                            </div>
+                            <div class="col-md-12" *ngIf="certificateViewModelList.length === 0">
+                              <p>No certifications at this time.</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row cust-padding">
+                          <div class="col-md-12 bottom-border">
+                            <h2 class="innerpanelheading">Equipment</h2>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12" *ngIf="iAboutUsModel?.equipments?.length !== 0">
+                            <ul class="equipment-list" *ngFor="let item of iAboutUsModel?.equipments">
+                              <li class="text-truncate" [title]="item.equipmentText">{{ item.equipmentText }}</li>
+                            </ul>
+                          </div>
+                          <div class="col-md-12" *ngIf="iAboutUsModel?.equipments?.length === 0">
+                            <p>No equipment added at this time.</p>
+                          </div>
+                        </div>
+                        <div class="row cust-padding">
+                          <div class="col-md-12 bottom-border">
+                            <h2 class="innerpanelheading">Photos</h2>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="iAboutUsModel?.specialFiles.length !== 0">
+                          <div class="col-md-6 thumb" *ngFor="let item of iAboutUsModel?.specialFiles">
+                            <a class="thumbnail" href="#" data-image-id="" (click)="openPhoto(item.fileName)" data-bs-toggle="modal"
+                              data-title="" data-image="item.fileName" data-bs-target="#image-gallery">
+                              <img class="img-thumbnail" [src]="item.fileName" alt="Another alt text" />
+                            </a>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="iAboutUsModel?.specialFiles.length === 0">
+                          <div class="col-md-12">
+                            <p>No photos added at this time.</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal fade" id="image-gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 class="modal-title" id="image-gallery-title"></h4>
+                              <button type="button" class="close" data-bs-dismiss="modal">
+                                <span aria-hidden="true" style="color: #4a90e2;">×</span><span class="sr-only">Close</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <img id="image-gallery-image" class="img-responsive col-md-12 Bitmap" [src]="currentPhoto" />
+                              <button style="background: none;
+                                      border: none;" class="carousel-control-prev slider"
+                                *ngIf="checkForFirstImage()" (click)="goToPrev()">
+                                <i class="icofont icofont-rounded-left"></i>
+                              </button>
+                              <button style="background: none;
+                                      border: none;" class="carousel-control-next slider"
+                                *ngIf="checkForLastImage()" (click)="goToNext()">
+                                <i class="icofont icofont-rounded-right"></i>
+                              </button>
+                            </div>
+                            <div class="modal-footer">
+                              <p>
+                                <strong>{{ currentPhotoCaption }}</strong><br />{{ currentPhotoTitle }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4" *ngIf="!isSidePanelOpen()">
+                      <div class="row cust-padding">
+                        <div class="col-md-12 bottom-border">
+                          <h2 class="innerpanelheading">Demographics </h2>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <p class="title-green">
+                            <strong>MFG.com Member Since:</strong><br />{{
+                            iAboutUsModel?.createdDate | date: "MM/dd/yy"
+                            }}
+                          </p>
+                          <p>
+                            <strong>Company Type:</strong><br />
+                            {{ iAboutUsModel?.supplierType?.supplierTypeNameEn }}
+                          </p>
+                          <p>
+                            <strong># of Employees:</strong><br />{{
+                            iAboutUsModel?.employeeCountRange
+                            }}
+                          </p>
+                          <strong>Languages:</strong><br />
+                          <div *ngFor="let language of iAboutUsModel?.languages">
+                            {{ language?.languageName }}
+                          </div>
+
+                          <p>
+                            <strong>D-U-N-S Number:</strong><br />
+                            {{ iAboutUsModel?.dunsNumber }}
+                          </p>
+                          <p title="{{ iAboutUsModel.cageCode}}"><strong>Cage Code:</strong><br />{{ iAboutUsModel?.cageCode| dotLimit:'23' }}</p>
+                          <br />
+                        </div>
+                      </div>
+                      <!-- <div class="col-md-12" *ngIf="isDemographics">
+                        <p>No demographics at this time.</p>
+                      </div> -->
+                      <div class="row cust-padding">
+                        <div class="col-md-12 bottom-border">
+                          <h2 class="innerpanelheading">Certifications </h2>
+                        </div>
+
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12" *ngIf="certificateViewModelList?.length !== 0">
+                          <ul>
+                            <li *ngFor="let certificate of certificateViewModelList">
+                              <p>
+                                <strong class="title-blue"> {{ certificate.certificateCode }}</strong><br />
+                                {{ certificate.creationDate | date }}
+
+                              </p>
+                            </li>
+                          </ul>
+                        </div>
+                        <div class="col-md-12" *ngIf="certificateViewModelList?.length === 0">
+                          <p>No certifications at this time.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane" id="capabilities" *ngIf="isCabalitiesActive">
+                  <div class="row">
+                    <div [ngClass]="(isSidePanelOpen())?'col-md-12':'col-md-8'">
+                      <div class="row cust-padding">
+                        <div class="col-md-12 bottom-border">
+                          <h2 class="innerpanelheading">Categories</h2>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12" *ngIf="iCustomProcessViewModelColl?.length !== 0">
+                          <div *ngFor="let version of iCustomProcessViewModelColl  | groupBy:'parentDisciplineName'">
+                            <div class="row cust-padding">
+                              <div class="col-md-12 bottom-border">
+                                <h2 class="innerpanelheading">{{version.key}}</h2>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-6" *ngFor="let versiondetails of version.value">
+                                <div class="equipment-list">{{versiondetails.childDisciplineName}}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-12" *ngIf="iCustomProcessViewModelColl?.length === 0">
+                          <p>
+                            No Categories at this time.
+                          </p>
+                        </div>
+                      </div>
+                      <div class="row" *ngIf="isSidePanelOpen()">
+                        <div class="col-md-12">
+                          <div class="row cust-padding">
+                            <div class="col-md-12 bottom-border">
+                              <h2 class="innerpanelheading">Focus Overview</h2>
+                            </div>
+                          </div>
+                          <p *ngFor="let industry of iFocusOverViewModel?.industryFocus | slice:0:5">{{industry}}</p>
+                          <p><strong>Tolerance:</strong><br>{{iFocusOverViewModel?.tolerance}}</p>
+                          <p>
+                            <p><strong>Material Specialties:</strong><br></p>
+                            <ul class="equipment-list" style="list-style-type:disc;padding-left: 20px">
+                              <li *ngFor="let Material of iMaterialViewModelColl | slice:0:10">
+                                {{Material.childMaterialName}}
+                              </li>
+                            </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="!isSidePanelOpen()" class="col-md-4">
+                      <div class="row cust-padding">
+                        <div class="col-md-6 bottom-border">
+                          <h2 class="innerpanelheading">Focus Overview</h2>
+                        </div>
+
+                      </div>
+                      <p *ngFor="let industry of iFocusOverViewModel?.industryFocus | slice:0:5">{{industry}}</p>
+                      <p><strong>Tolerance:</strong><br>{{iFocusOverViewModel?.tolerance}}</p>
+                      <p>
+                        <p><strong>Material Specialties:</strong><br></p>
+                        <ul class="equipment-list" style="list-style-type:disc;padding-left: 20px">
+                          <li *ngFor="let Material of iMaterialViewModelColl | slice:0:10">
+                            {{Material.childMaterialName}}
+                          </li>
+                        </ul>
+                    </div>
+                  </div>
+
+
+                </div>
+                <div class="tab-pane" id="contactus" *ngIf="isContactUsActive">
+                  <div class="row" *ngIf="!isSidePanelOpen()">
+                    <div class="col-md-4" style="background-color: #f6f7fb;">
+                      <!-- <iframe style="width: 100% !important; height: 240px;" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11880.492291371422!2d12.4922309!3d41.8902102!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x28f1c82e908503c4!2sColosseo!5e0!3m2!1sit!2sit!4v1524815927977"
+                          frameborder="0" style="border:0" allowfullscreen width="100%"></iframe> -->
+                      <!-- <div  >
+                            <input type="text" placeholder="search address" id="address" /> <br>
+                            <button (click)="getMap()" >Locate on map</button> <br>
+                             <button onclick="saveMap()">Confirm map</button>
+                            </div> -->
+                      <div id="map-canvas" style="width: 100% !important; height: 240px;">
+
+                      </div>
+
+                      <div class="row cust-padding">
+                        <div class="col-md-12 bottom-border">
+                          <h2 class="innerpanelheading">Get In Touch</h2>
+                        </div>
+                      </div>
+                      <table>
+                        <tbody>
+                          <tr>
+                            <th>Address</th>
+                            <td>{{iContactViewModel?.address?.streetAddress}},{{iContactViewModel?.address?.deptAddress}}<br>{{iContactViewModel?.address?.state}},<br>
+                              {{iContactViewModel?.address?.postalCode}}, {{iContactViewModel?.address?.country}}</td>
+                          </tr>
+                          <tr>
+                            <th>Phone</th>
+                            <td>{{iContactViewModel?.phoneNo}}</td>
+                          </tr>
+                          <tr>
+                            <th>Website</th>
+                            <td class="title-blue cursor-pointer" (click)="websiteClick(iContactViewModel?.website)">{{iContactViewModel?.website}}</td>
+                          </tr>
+                          <tr>
+                            <th>Social</th>
+                            <td class="social-icons">
+                              <i class="fa fa-twitter cursor-pointer">
+                                <a (click)="websiteClick(iContactViewModel?.tweeter)"  target="blank"></a>
+                              </i>
+                              <i class="fa fa-facebook-f cursor-pointer">
+                                <a (click)="websiteClick(iContactViewModel?.facebook)"   target="blank"></a>
+                              </i>
+                              <i class="fa fa-linkedin cursor-pointer">
+                                <a (click)="websiteClick(iContactViewModel?.linkedIn)"   target="blank"></a>
+                              </i>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="col-md-8">
+                      <h2 class="innerpanelheading">Email Us<span class="required">* All Required</span></h2>
+                      <form action="" [formGroup]="EmailForm"  (ngSubmit)="onEmail()" >
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <input type="text" class="form-control" maxlength="35" formControlName="firstName" id="asdsa" name="firstName"   placeholder="First Name" required>
+                              <div class="error-msg2">
+                                <app-field-error-display [displayError]="isFieldValid('firstName')" errorMsg="First Name  Is required"></app-field-error-display>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <input type="text" class="form-control" maxlength="35" name="lastName" formControlName="lastName"   placeholder="Last Name" required>
+                              <div class="error-msg2">
+                                <app-field-error-display [displayError]="isFieldValid('lastName')" errorMsg="Last Name  Is required"></app-field-error-display>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <input type="text" class="form-control" maxlength="50"  name="lastName" formControlName="companyName"   placeholder="Company Name" required>
+                              <div class="error-msg2">
+                                <app-field-error-display [displayError]="isFieldValid('companyName')" errorMsg="Company Name  Is required"></app-field-error-display>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <input type="text" class="form-control"  maxlength="50" name="sss" formControlName="email"  placeholder="Email" required>
+                              <div class="error-msg2">
+                                <app-field-error-display [displayError]="isFieldValid('email')" errorMsg="Email  Is required"></app-field-error-display>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <input type="text" class="form-control"  maxlength="17" formControlName="phone"  placeholder="Phone" required>
+                              <div class="error-msg2">
+                                <app-field-error-display [displayError]="isFieldValid('phone')" errorMsg="Phone  Is required"></app-field-error-display>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <input type="text" class="form-control"  maxlength="100" formControlName="messageSubject"  placeholder="Subject" required>
+                              <div class="error-msg2">
+                                <app-field-error-display [displayError]="isFieldValid('messageSubject')" errorMsg="Subject  Is required"></app-field-error-display>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <textarea class="form-control"  maxlength="1500" formControlName="messageBody"  id="exampleFormControlTextarea1" placeholder="Message" rows="3"
+                                required></textarea>
+                                <div class="error-msg2">
+                                  <app-field-error-display [displayError]="isFieldValid('messageBody')" errorMsg="Message  Is required"></app-field-error-display>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="dropimagebuttons">
+                              <button type="submit" [ngClass]="(EmailForm.valid)?'btn Contact-btn':'btn Contact-btn-disable'" [disabled] ="!EmailForm.valid" class="">
+                                  <i class="fa fa-spinner fa-spin" *ngIf="isSent"></i>
+                                Send</button>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                  <div *ngIf="isSidePanelOpen()">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div id="map-canvas2" style="width: 100% !important; height: 240px;">
+
+                        </div>
+                        <!-- <iframe style="width: 100% !important; height: 240px;" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11880.492291371422!2d12.4922309!3d41.8902102!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x28f1c82e908503c4!2sColosseo!5e0!3m2!1sit!2sit!4v1524815927977"
+                            frameborder="0" style="border:0" allowfullscreen width="100%"></iframe> -->
+                      </div>
+                    </div>
+                    <div class="row" style="background-color: #f6f7fb;">
+                      <div class="col-md-12">
+                        <div class="row cust-padding">
+                          <div class="col-md-4 bottom-border">
+                            <h2 class="innerpanelheading">Get In Touch...</h2>
+                          </div>
+                          <div class="col-md-8 bottom-border text-right">
+                            <i class="fa fa-pencil-square-o edit-icon" aria-hidden="true"></i>
+                          </div>
+                        </div>
+                        <table>
+                          <tbody>
+                            <tr>
+                              <th>Address</th>
+                              <td>{{iContactViewModel?.address?.streetAddress}},{{iContactViewModel?.address?.deptAddress}}<br>{{iContactViewModel?.address?.state}},<br>
+                                {{iContactViewModel?.address?.postalCode}}, {{iContactViewModel?.address?.country}}</td>
+                            </tr>
+                            <tr>
+                              <th>Phone</th>
+                              <td>{{iContactViewModel?.phoneNo}}</td>
+                            </tr>
+                            <tr>
+                              <th>Website</th>
+                              <td class="title-blue">{{iContactViewModel?.website}}</td>
+                            </tr>
+                            <tr>
+                              <th>Social</th>
+                              <td class="social-icons">
+                                <i class="fa fa-twitter Social">
+                                  <a href="{{iContactViewModel?.tweeter}}" target="blank"></a>
+                                </i>
+                                <i class="fa fa-facebook-f">
+                                  <a href="{{iContactViewModel?.facebook}}" target="blank"></a>
+                                </i>
+                                <i class="fa fa-linkedin">
+                                  <a href="{{iContactViewModel?.linkedIn}}" target="blank"></a>
+                                </i>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <h2 class="innerpanelheading">Email Us<span class="required">* All Required</span></h2>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <input type="text" class="form-control" placeholder="First Name" required>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <input type="text" class="form-control" placeholder="Last Name" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <input type="text" class="form-control" placeholder="Company Name" required>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <input type="text" class="form-control" placeholder="Email" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <input type="text" class="form-control" placeholder="Phone" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <input type="text" class="form-control" placeholder="Subject" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Message" rows="3"
+                            required></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="dropimagebuttons">
+                          <button type="submit" class="btn Contact-btn">Send</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="tab-pane" id="ratings" *ngIf="isRatingActive">
+                    <div class="row">
+                        <div class="col-md-12" >
+                          <div *ngIf="isLoader">
+                            <div class="loader animation-start">
+                              <span class="circle delay-1 size-2"></span>
+                              <span class="circle delay-2 size-4"></span>
+                              <span class="circle delay-3 size-6"></span>
+                              <span class="circle delay-4 size-7"></span>
+                              <span class="circle delay-5 size-7"></span>
+                              <span class="circle delay-6 size-6"></span>
+                              <span class="circle delay-7 size-4"></span>
+                              <span class="circle delay-8 size-2"></span>
+                            </div>
+                          </div>
+                          <h2 class="innerpanelheading">Overall Net Promoter Score <br>
+                            <p style="font-size:3px;margin-bottom: 5px;"> <a style="color:#4a90e2" href="https://www.promoter.io/blog/calculate-net-promoter-score/" target="_blank">What's this?</a></p>
+                        </h2>
+                          <div class="row">
+                            <div class="col-md-5" style="height: 222px;">
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <div class="rang">
+                                    <svg class="meter">
+                                      <text x="44%" y="40%" r="96" cx="135" cy="142" class="cent" dy=".3em" text-anchor="middle"
+                                        alignment-baseline="central"> {{iTempNPSDataModel.nps}} </text>
+                                      <text x="46%" y="62%" r="96" cx="135" cy="142" class="cent2" dy=".3em" text-anchor="middle"
+                                        alignment-baseline="central"> NET PROMOTER</text>
+                                      <text x="46%" y="70%" r="96" cx="135" cy="142" class="cent2" dy=".3em" text-anchor="middle"
+                                        alignment-baseline="central"> SCORE </text>
+                                      <text x="30%" y="83%" r="96" cx="135" cy="142" class="cent3" dy=".3em" text-anchor="middle"
+                                        alignment-baseline="central"> -100 </text>
+                                      <text x="56%" y="83%" r="96" cx="135" cy="142" class="cent3" dy=".3em" text-anchor="middle"
+                                        alignment-baseline="central"> 100 </text>
+                                      <circle [ngClass]="enableMeterFields[0] ? 'meter-1' : 'meter-1-disabled'" r="96" cx="135" cy="142">dfsdsf</circle>
+                                      <circle [ngClass]="enableMeterFields[1] ? 'meter-2' : 'meter-2-disabled'" r="96" cx="129" cy="144">dfsdsf</circle>
+                                      <circle [ngClass]="enableMeterFields[2] ? 'meter-3' : 'meter-3-disabled'" r="96" cx="128" cy="137">dfsdsf</circle>
+                                      <circle [ngClass]="enableMeterFields[3] ? 'meter-4' : 'meter-4-disabled'" r="96" cx="135" cy="135">dfsdsf</circle>
+                                      <circle [ngClass]="enableMeterFields[4] ? 'meter-5' : 'meter-5-disabled'" r="96" cx="136" cy="139">dfsdsf</circle>
+                                      <circle [ngClass]="enableMeterFields[5] ? 'meter-6' : 'meter-6-disabled'" r="95" cx="129" cy="153">dfsdsf</circle>
+                                      <circle [ngClass]="enableMeterFields[6] ? 'meter-7' : 'meter-7-disabled'" r="96" cx="140" cy="143">dfsdsf</circle>
+                                    </svg>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-7" style="height: 205px;">
+                              <div class="pad-top">
+
+                                <label class="PROMOTERS">PROMOTERS</label>
+                                <div class="row">
+                                  <div class="col-md-2 nocount">{{iTempNPSDataModel.promoter}}</div>
+                                  <div class="col-md-10">
+                                    <div class="progress progress-xs">
+                                      <div class="progress-bar progress-bar-danger" role="progressbar" style="background-color: #81db6d"
+                                        [ngStyle]="getPercentageClass(iTempNPSDataModel.promoter)" aria-valuenow="iTempNPSDataModel.promotersCount"
+                                        aria-valuemin="0" aria-valuemax="iTempNPSDataModel.totalResponses"></div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                              </div>
+                              <div class="pad-top">
+
+                                <label class="PROMOTERS">PASSIVES</label>
+                                <div class="row">
+                                  <div class="col-md-2 nocount2">{{iTempNPSDataModel.passives}}</div>
+                                  <div class="col-md-10">
+                                    <div class="progress progress-xs">
+                                      <div class="progress-bar progress-bar-danger" role="progressbar" style="background-color: #f5a623"
+                                        [ngStyle]="getPercentageClass(iTempNPSDataModel.passives)" aria-valuenow="iTempNPSDataModel.passivesCount"
+                                        aria-valuemin="0" aria-valuemax="iTempNPSDataModel.totalResponses"></div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                              </div>
+                              <div class="pad-top">
+                                <label class="PROMOTERS">DETRACTORS</label>
+                                <div class="row">
+                                  <div class="col-md-2 nocount3">{{iTempNPSDataModel.detractors}}</div>
+                                  <div class="col-md-10">
+                                    <div class="progress progress-xs">
+                                      <div class="progress-bar progress-bar-danger" role="progressbar" style="background-color: #ed4141"
+                                        [ngStyle]="getPercentageClass(iTempNPSDataModel.detractors)" aria-valuenow="iTempNPSDataModel.detractors"
+                                        aria-valuemin="0" aria-valuemax="iTempNPSDataModel.totalResponses"></div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div><br>
+                          <h2 class="innerpanelheading" style="margin-top: 20px;">
+                            Latest Responses<span class="required">{{responseStartNumber}} - {{responseEndNumber}} of {{responseArray.length}} Reviews</span>
+                          </h2>
+                          <div *ngFor="let item of items; let i = index">
+                            <div class="row" *ngIf="!item.parentId">
+                              <div class="col-xs-3 col-sm-2 col-md-2 text-center">
+                                <div class="supplier-detail">
+                                  <img [src]="responseLogo(item.imageURL)" class="img-circle supplier-image">
+                                  <h2>{{item.contactName}}</h2>
+                                  <p>{{formatDate(item.createdDate)}}</p>
+                                </div>
+                              </div>
+                              <div class="col-xs-9 col-sm-10 col-md-10">
+                                <div class="">
+                                  <table class="table table-hover supplier-table">
+                                    <tbody>
+                                      <tr>
+                                        <td [ngClass]="activeItems[i] ? 'active-border': 'in-active-border'">
+                                          <div class="circle-queue">{{formatScore(item.score)}}</div>
+                                          <span>{{item.comment}}</span>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row" *ngIf="isReplyAllow(item.parentId, i+1 )">
+                              <div class="col-xs-12 col-sm-12 col-md-12 text-right">
+                                <span *ngIf="!activeItems[i]" class="reply-link"  >Reply</span>
+                                <span *ngIf="activeItems[i]" class="reply-link-disabled">Reply</span>
+                              </div>
+                            </div>
+                            <div class="row" *ngIf="item.parentId">
+                              <div class="col-xs-3 col-sm-2 col-md-2 text-center"></div>
+                              <div class="col-xs-9 col-sm-10 col-md-10">
+                                <div class="">
+                                  <table class="table table-hover supplier-table-reply">
+                                    <tbody>
+                                      <tr>
+                                        <td>
+                                          <img [src]="replyLogo(item.imageURL)" class="img-circle circle-queue-reply">
+                                          <span>{{item.comment}}</span>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                            <br>
+                          </div>
+
+                          <div class="paginations">
+                            <div class="input-group">
+                              <div id="radioBtn" class="btn-group">
+                                <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" class="btn btn-primary btn-sm notActive"
+                                  (click)="prevPage()" data-bs-toggle="fun" data-title="Y">Previous</a>
+                                <a *ngFor="let page of pagesIndex" (click)="setPage(page)" [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                                  data-bs-toggle="fun" data-title="X">{{page}}</a>
+                                <a [ngClass]="(currentIndex == pageNumber || pageNumber == 0)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                                  (click)="nextPage()" data-bs-toggle="fun" data-title="N">Next</a>
+                              </div>
+                              <input type="hidden" name="fun" id="fun">
+                            </div>
+                          </div>
+                          <br>
+                        </div>
+                        <div class="col-md-4" *ngIf="!isSidePanelOpen()"></div>
+                      </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="isApi">
+            <div class="loader animation-start">
+              <span class="circle delay-1 size-2"></span>
+              <span class="circle delay-2 size-4"></span>
+              <span class="circle delay-3 size-6"></span>
+              <span class="circle delay-4 size-7"></span>
+              <span class="circle delay-5 size-7"></span>
+              <span class="circle delay-6 size-6"></span>
+              <span class="circle delay-7 size-4"></span>
+              <span class="circle delay-8 size-2"></span>
+            </div>
+          </div>
+</div>
+
+
+  <div *ngIf="isSidePanel()" class="col-md-4" style="padding-right:0px;position:fixed;width:380px;right: 0;overflow-y: auto;height:100%;padding-bottom:150px;padding-left: 12px">
+
+    <div *ngIf="isBuyerMessage()">
+
+      <!-- <app-message-buyer></app-message-buyer> -->
+      <!-- <app-supplier-message></app-supplier-message> -->
+      <div class="background-white">
+          <div class="row">
+            <div class="col-md-12 rightpanel">
+              <i class="fa fa-times-circle pull-right" (click)="closePartDrawer()"></i>
+              <h2 class="panelheading">Message To:</h2>
+            </div>
+            <hr>
+            <div class="col-md-12"><br>
+
+              <div class="Rectangle-5"> {{ contactIdCount }} </div>
+              <form [formGroup]="messageForm" (ngSubmit)="onMessageSend()">
+                <div class="form-group">
+                  <label class="Label-class" *ngIf="checkMessageField('subject')"></label>
+                  <label [ngClass]="(isFieldValid1('subject'))?'Label-focus-red':(labelFocus === 'subject')? 'Label-focus':'Label-class'"  *ngIf="!checkMessageField('subject')" style="font-weight: bold;" >Subject</label>
+                  <input type="text" class="form-control" id="name" (focus)="setFocus('subject')" (blur)="setFocus('no')" placeholder="Subject" formControlName="subject">
+                  <div class="error-msg">
+                    <!-- <app-field-error-display [displayError]="isFieldValid('subject')" errorMsg="Enter Subject"></app-field-error-display> -->
+                   <!-- <app-field-error-display [displayError]="isSubjectValid('subject')" errorMsg="Enter proper subject"></app-field-error-display>-->
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="Label-class" *ngIf="checkMessageField('message')"></label>
+                  <label [ngClass]="(isFieldValid1('message'))?'Label-focus-red':(labelFocus === 'message')? 'Label-focus':'Label-class'"  *ngIf="!checkMessageField('message')" style="font-weight: bold;" >Message</label>
+                  <textarea class="form-control" type="textarea" (focus)="setFocus('message')" (blur)="setFocus('no')"  placeholder="Message" maxlength="1000" rows="7" formControlName="message"></textarea>
+                  <div class="error-msg">
+                    <!-- <app-field-error-display [displayError]="isFieldValid('message')" errorMsg="Enter Message"></app-field-error-display> -->
+                  <!-- <app-field-error-display [displayError]="isMessageValid('message')" errorMsg="Message Invalid"></app-field-error-display>-->
+                  </div>
+                </div>
+                <!-- <div class="form-group">
+                  <div *ngIf="messageFailureStatus" style="margin-bottom:2.1em;text-align: left;color:red;vertical-align: middle">
+                    {{ successOrFailureMsg }}
+                  </div>
+                  <div *ngIf="messageSuccessStatus" style="margin-bottom:2.1em;text-align: left;color:green;vertical-align: middle">
+                    {{ successOrFailureMsg }}
+                  </div>
+                </div> -->
+                <div class="form-group" *ngIf="iRfqMessageViewModelColl.messageFileNames.length !== 0">
+                  <span class="fileName">{{ getOriginalPartName(iRfqMessageViewModelColl.messageFileNames[0]) }}</span>
+                  <span class="activeLink" (click)="downloadS3File(iRfqMessageViewModelColl.messageFileNames[0], true)">download</span>
+                </div>
+                <div class="form-group" *ngIf="iRfqMessageViewModelColl.messageFileNames.length === 0">
+                  <input type="file" #messageAttachment class="display-none" (change)="onFileSelect($event)">
+                  <span (click)="messageAttachment.click()" class="cusror-pointer">Attach file(s)</span>
+                </div>
+                <div class="">
+                  <div class="row">
+                    <div class="col-md-6 centerAlign">
+                        <button type="button" class="rightcancelbutton" (click)="closePartDrawer()">Cancel</button>
+                    </div>
+                    <div class="col-md-6 centerAlign">
+                        <button type="submit" [disabled]="resetBtn() || uploadingInProg" [ngClass]="((resetBtn() || uploadingInProg) == true )? 'rightaddwithoutsubmit':' rightaddsubmit'">Send</button>
+                      </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+    </div>
+    </div>
+</div>
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Blacklist Manufacturer</h4>
+          <button type="button" class="close" data-bs-dismiss="modal"><i class="fa fa-times-circle" aria-hidden="true"></i></button>
+        </div>
+        <div class="modal-body">
+          <p>You are attempting to block this manufacturer from seeing any future RFQs you create in the future as
+            well as removing you from their search. Are you sure you want to blacklist this manufacturer?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ignore-rfq " data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-cancel-rfq" data-bs-dismiss="modal" (click)="setBlacklist()">Block</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+

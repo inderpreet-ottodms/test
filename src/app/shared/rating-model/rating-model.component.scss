@@ -1,0 +1,95 @@
+.manufacturer-name{
+  font-size: 18px;
+  color: #4a90e2;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+.popup-helper-menu{
+  font-size: 16px;
+  color: #222222;
+  text-align: center;
+}
+.radio-label{
+  margin-left: -17px;
+  color:#222222;
+  font-size:12px;
+  font-weight: bold
+}
+.savebutton{
+  width: 100%;
+	border-radius: 2px;
+	background-color: #2E58D6;
+	font-size: 16px;
+  text-align:center;
+  color: #fff;
+	font-weight: bold;
+  cursor: pointer;
+}
+.savebutton:disabled{
+  background-color: #bec4cb;
+}
+.button-margin {
+  padding:20px;
+  text-align: center;
+}
+.cancelbutton{
+  width: 100%;
+	border-radius: 2px;
+	background-color: #FFF;
+	font-size: 16px;
+	border:  solid 2px #212A37;
+	text-align:center;
+	transition:0.3s;
+	font-weight: bold;
+  color:#212A37;
+  cursor: pointer;
+}
+
+.logo-size {
+  width: 50px !important;
+  height: 50px !important;
+}
+.radio .helper-text::after, .radio .helper-text::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 3px;
+    margin: 0.25rem;
+    width: 1rem;
+    height: 1rem;
+    -webkit-transition: -webkit-transform 0.28s ease;
+    transition: -webkit-transform 0.28s ease;
+    transition: transform 0.28s ease, -webkit-transform 0.28s ease;
+    border-radius: 50%;
+    border: 0.125rem solid #4099ff;
+}
+// .radio .helper-text::after {
+//   -webkit-transform: scale(0);
+//   transform: scale(0);
+//   background-color: #4099ff;
+//   border-color: #4099ff;
+// }
+.radio input:checked ~ .helper-text::after {
+  -webkit-transform: scale(0.5)!important;
+  transform: scale(0.5)!important;
+  background-color: #4099ff;
+  border-color: #4099ff;
+}
+@media only screen and (max-width: 768px){
+  .radio-inline{
+    display: inline-block!important;
+  }
+}
+::ng-deep .ui-dialog.ui-widget .ui-dialog-titlebar .ui-dialog-title {
+  margin-left: 15px;
+}
+
+::ng-deep .p-dialog-header {
+  padding: 0 0 0 1rem !important;
+}
+
+::ng-deep .p-dialog-footer button{
+  width: 100% !important;
+}

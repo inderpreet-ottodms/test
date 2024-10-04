@@ -1,0 +1,132 @@
+<form [formGroup]="rfqAdditionalInfoForm" *ngIf="dataLoaded">
+    <div class="pt-1 pb-3">
+        <label class="labelTxt">Payment Method</label>
+       <div class="mb-1">
+            What are your preferred payment terms?
+        </div>
+        <div class="row">
+            <div class="col-md-3" *ngFor="let paymentTerm of paymentTermList">
+                <div class="customRadio">
+                    <input type="radio" name="payment_term_id" (click)="paymentTermRadioClicked(paymentTerm)"
+                        id="paymentTerm{{paymentTerm.code}}" formControlName="payment_term_id" [value]="paymentTerm.id">
+                    <span class="checkmark"></span>
+                    <label for="paymentTerm{{paymentTerm.code}}">
+                        {{paymentTerm.displayText}}
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="grayFromCont pt-1">
+        <label class="labelTxt">Order Preferences</label>
+        <div class="row orderMfg">
+            <div class="col-md-6 mb-3">
+                <div class="orderMfgSub mb-2 mb-md-0">
+                    <div class="d-flex align-items-center pb-1">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div><input type="checkbox" formControlName="withOrderManagement" name="withOrderManagement"
+                                    [value]="true" /></div>
+                            <div class="pl-2">Order Management</div>
+                        </div>
+                        <div class="pl-2 ml-auto"><img src="/assets/images/buyer-process/badge.png" height="20px" />
+                        </div>
+                    </div>
+
+                    <p>Order Management empowers you to submit a purchase order to your chosen manufacturer and get
+                        proactive part tracking updates through MFG. Check the box if you would like to use these
+                        features.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="orderMfgSub">
+                    <div class="d-flex align-items-center pb-1">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div><input type="checkbox" name="isMFGPay" formControlName="isMFGPay" 
+                                 />
+                            </div>
+                            <div class="pl-2">MFG Pay</div>
+                        </div>
+                        <div class="pl-2 ml-auto"><img src="/assets/images/buyer-process/mfg_pay.png" height="20px" />
+                        </div>
+                    </div>
+
+                    <p>MFG Pay is a safe way to purchase your parts. Pay your chosen manufacturer directly through MFG,
+                        powered by Stripe. Check this box if you would like to utilize this feature.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div *ngIf="!(rfqAdditionalInfoForm?.value?.isRegisterSupplierQuoteTheRfq)">
+        <div class="labelTxt" >
+            Selected Suppliers
+        </div>
+        <div class="d-flex supplierName justify-content-between w-50 mb-2"
+            *ngFor="let manufacturerContact of rfqAdditionalInfoForm?.value?.selectedSuppliers;">
+            <div class="text-truncate pr-2">{{manufacturerContact.companyName}}</div>
+            <div *ngIf="rfqAdditionalInfoForm?.value?.selectedSuppliers?.length>1" class="fw-bold text-dark fx-3 cursor-pointer" (click)="deleteSelectedSuppliers(manufacturerContact)">X</div>
+        </div>
+    </div>
+        <div class="General-Attachments-Special-Request pt-3 labelTxt">
+            General Attachments & Special Requests
+        </div>
+        <div class="row border-bottom mb-3">
+            <div class="col-md-6">
+                <p>
+                    Use this area for general attachments, such as business terms, quality guidelines, or supporting documentation. Adding these details will help you get better quotes.
+                </p>
+                <p class="fw-bold">
+                    *Please do not upload part drawings to this section. All part drawings should be added to the "Part Attachments" section of the "Add Parts" step.</p>
+            </div>
+            <div class="col-md-6">
+
+                <div class="accUploadFile">
+                    <div draggable="true" ngClass="{{dragAreaClass}}">
+                        <input type="file" multiple="multiple" formControlName="manufacturersGeneralAttachment"
+                            (change)="onFileChange($event)" />
+                        <div><img src="/assets/images/buyer-process/upload_icon.png" /></div>
+                        <span>Drag and drop a file here</span>
+                        <div>Click to upload</div>
+                    </div>
+                </div>
+                <div class="row pt-1 pb-2" *ngIf="rfqAdditionalInfoForm.value['rfqGeneralAttachmentsList'].length>0">
+                    <div class="col-md-12"  *ngFor="let rfqGeneralAttachment of rfqAdditionalInfoForm.value['rfqGeneralAttachmentsList'];">
+                        <div class="d-flex rightFileTitle justify-content-between">
+                            <div>{{getFileShortName(rfqGeneralAttachment)}}</div>
+                            <div class="fw-bold text-dark fx-3 cursor-pointer" (click)="removeFile(rfqGeneralAttachment)">X
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="formField">
+                    <label for="certificateCode" class="form-label">Select one or more certifications needed for these
+                        parts.
+                        <span class="fw-normal">(Optional)</span></label>
+                    <angular2-multiselect [data]="specialCertificateList"
+                        formControlName="certificateIdList" [settings]="dropdownSettings"
+                        (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
+                        (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
+                    </angular2-multiselect>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="formField">
+                    <label for="rfqSpecialInstructionToManufacturer1" class="form-label">Add any special instructions needed for these
+                        parts.
+                        <span class="fw-normal">(Optional)</span></label>
+                    <textarea class="form-control" rows="5" cols="5" name="SpecialInstructionToManufacturer"
+                        formControlName="SpecialInstructionToManufacturer" id="rfqSpecialInstructionToManufacturer1"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,276 @@
+<div class="" style="padding:10px">
+    <div class="row" >
+      <div class="col-md-12 RFQs"  *ngIf="!isBuyerCommpleteProfile()">
+          <app-pagetitle-quotebtn pageTitle="My Awarded RFQs"></app-pagetitle-quotebtn>
+      </div>
+
+    </div>
+    <app-common-rfqlist RfqStatus = 7></app-common-rfqlist>
+    <!-- <div class="background-white-1">
+      <div class="row">
+        <div class="col-md-6">
+        </div>
+        <div class="col-md-6 pull-right" style="text-align: end;">
+          <i  [ngClass]="(isTilesView)?'ti-layout-grid2 my-RFQ-list-view active':'ti-layout-grid2 my-RFQ-list-view '"
+            (click)="openTilesView()"></i>
+          <i  [ngClass]="(isGridView)?'ti-list my-RFQ-list-view active':'ti-list my-RFQ-list-view'"
+            (click)="openGridView()"></i>
+        </div>
+      </div>
+      <div class="row" style="padding-top:10px">
+        <div class="col-md-3 col-sm-3">
+          <select class="recent" [(ngModel)]="sortFilterValue" (change)="sortFilter()">
+            <option value="Oldest">Oldest</option>
+            <option value="Recent">Recent</option>
+          </select>
+        </div>
+        <div class="col-md-3 col-sm-3">
+
+        </div>
+        <div class="col-md-3 col-sm-3 col-xs-12 pull-right offset-3">
+          <input class="search" [(ngModel)]="searchFilterValue" (input)="searchFilter($event.target.value)" placeholder="Search by Name"
+            type="text" />
+        </div>
+      </div>
+      <div *ngIf="isTilesView == true">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <br>
+              <div Class="col-md-3" *ngFor='let rfq of items'>
+                <div class="card1">
+                  <div class="box pointerCursor" (click)="goToRfqDdetails(rfq.rfqId)">
+                      <div class="quote">
+                          <a class="pull-right" *ngIf="(rfq.quotesNeededBy !== null)">{{rfq.quotesNeededBy | date: 'MM/dd/yyyy'}}</a>
+                          <a class="pull-right" *ngIf="(rfq.quotesNeededBy === null)">MM/dd/yyyy</a>
+                        </div>
+                    <div class="img">
+                      <img *ngIf="(!rfq.rfqThumbnail || rfq.rfqThumbnail === '')" src="assets/supplier/3-d-big.png" srcset="assets/supplier/3-d-big@2x.png 2x,
+                        assets/supplier/3-d-big@3x.png 3x">
+                      <img *ngIf="!(!rfq.rfqThumbnail || rfq.rfqThumbnail === '')" [src]="getLoadableImg(rfq.rfqThumbnail)" class="img-circle box-fit">
+                    </div>
+                    <h2 class="pointerCursor borderbottomCenter"  placement="top" data-container="body"
+                    ngbTooltip="{{rfq.rfqName}}">{{rfq.rfqName| dotLimit:'15'}}
+                      <br>
+                      <span>RFQ{{rfq.rfqId}} </span>
+                    </h2>
+                    <p class="borderbottom">{{rfq.partQty}} {{rfq.partQtyUnit}} </p>
+                    <p class="borderbottom">{{rfq.partsMaterialName| dotLimit:'23'}}  </p>
+                    <p class="borderbottom">{{rfq.partCategoryName| dotLimit:'23'}}  </p>
+                    <p class="borderbottom">{{rfq.postProductionProcessName| dotLimit:'23'}}  </p>
+                  </div>
+                  <div class="bottomaction">
+                      <ul>
+                          <li *ngIf="!rfq.isRfqLike">
+                              <a (click)="likeRfq(rfq.rfqId, rfq.isRfqLike, rfq.isRfqDisLike)">
+                                  <i class="fa fa-thumbs-o-up" aria-hidden="true" placement="top" container="body" ngbTooltip="Like RFQ"></i>
+                              </a>
+                          </li>
+                        <li *ngIf="rfq.isRfqLike">
+                          <a  (click)="removelikeRfq(rfq.rfqId, rfq.isRfqLike, rfq.isRfqDisLike)">
+                              <i class="fa fa-thumbs-up" aria-hidden="true" placement="top" container="body" ngbTooltip="Remove Like RFQ"></i>
+                          </a>
+                        </li>
+                        <li class="pull-right" *ngIf="rfq.isRfqDisLike">
+                          <a  (click)="removeDisLikeRfq(rfq.rfqId, rfq.isRfqLike, rfq.isRfqDisLike)">
+                              <i class="fa fa-thumbs-down" aria-hidden="true" placement="top" container="body" ngbTooltip="Remove Dislike RFQ"></i>
+                          </a>
+                        </li>
+                        <li class="pull-right" *ngIf="!rfq.isRfqDisLike">
+                            <a  (click)="disLikeRfq(rfq.rfqId, rfq.isRfqLike, rfq.isRfqDisLike)">
+                                <i class="fa fa-thumbs-o-down" aria-hidden="true" placement="top" container="body" ngbTooltip="Dislike RFQ"></i>
+                            </a>
+                          </li>
+                      </ul>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="!isRfqAvailable">
+          <div class="col-md-2">
+            <div class="dataTables_length" id="example_length">
+              <label>Show
+                <select name="example_length" aria-controls="example" class="" [(ngModel)]="inputLength" (ngModelChange)="ChangeinputLength()">
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                  <option value="200">200</option>
+                </select>
+                entries</label>
+            </div>
+          </div>
+          <div class="col-md-10">
+            <div class="paginations">
+              <div  >
+                <div id="radioBtn" class="btn-group">
+                  <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" class="btn btn-primary btn-sm notActive"
+                    (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                    Previous
+                  </a>
+                  <a *ngFor="let page of pagesIndex" (click)="setPage(page)" [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                    data-bs-toggle="fun" data-title="X">
+                    {{page}}
+                  </a>
+                  <a [ngClass]="(currentIndex == pageNumber || pageNumber == 0)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                    (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                    Next
+                  </a>
+                </div>
+                <input type="hidden" name="fun" id="fun">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="!isRfqAvailable">
+          <div class="col-md-12">
+            <div class="pull-right padd-right">
+                <label class="showreccount"> {{currentIndex   }} of {{pageNumber}} </label>
+              </div>
+        </div>
+          </div>
+      </div>
+      <div *ngIf="isGridView == true">
+        <div class="row" >
+          <div class="col-md-12">
+            <div class="background-white">
+              <div class="row">
+                <br>
+                <div class="col-md-12">
+                  <div class="table-responsive" *ngIf="!isRfqAvailable">
+                    <table class="table table-hover rfqtable">
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>Name</th>
+                          <th>Quantiy</th>
+                          <th>Material</th>
+                          <th>Process</th>
+                          <th>Post Process</th>
+                          <th>Closes</th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor='let rfq of items'>
+                          <td class="tdborderleft" (click)="goToRfqDdetails(rfq.rfqId)">
+                            <img src="assets/supplier/3-d-turbine-3-d-auto-cad-drawing.png" srcset="assets/supplier/3-d-turbine-3-d-auto-cad-drawing@2x.png 2x, assets/supplier/3-d-turbine-3-d-auto-cad-drawing@3x.png 3x"
+                              *ngIf="(!rfq.rfqThumbnail || rfq.rfqThumbnail === '')" class="d-Turbine-3D-AutoCAD-Drawing">
+                            <div *ngIf="!(!rfq.rfqThumbnail || rfq.rfqThumbnail === '')" class="d-Turbine-3D-AutoCAD-Drawing">
+                              <img [src]="getLoadableImg(rfq.rfqThumbnail)" class="img-circle box-fit">
+                            </div>
+                          </td>
+                          <td class="rfqtd " (click)="goToRfqDdetails(rfq.rfqId)"  placement="top" data-container="body"
+                          ngbTooltip="{{rfq.rfqName}}">{{rfq.rfqName| dotLimit:'15'}}
+                            <br>
+                            <span>RFQ{{rfq.rfqId}}</span>
+                          </td>
+                          <td (click)="goToRfqDdetails(rfq.rfqId)">{{rfq.partQty}} {{rfq.partQtyUnit}}</td>
+                          <td class="custtd" (click)="goToRfqDdetails(rfq.rfqId)">{{rfq.partsMaterialName| dotLimit:'23'}} </td>
+                          <td class="custtd" (click)="goToRfqDdetails(rfq.rfqId)">{{rfq.partCategoryName| dotLimit:'23'}} </td>
+                          <td class="custtd" (click)="goToRfqDdetails(rfq.rfqId)">{{rfq.postProductionProcessName| dotLimit:'23'}} </td>
+                          <td class="custtd" (click)="goToRfqDdetails(rfq.rfqId)">{{rfq.quotesNeededBy | date: 'MM/dd/yyyy'}} </td>
+                          <td  class="tdbackgorungcolor" *ngIf="!rfq.isRfqLike">
+                            <a (click)="likeRfq(rfq.rfqId, rfq.isRfqLike, rfq.isRfqDisLike)">
+                              <i class="fa fa-thumbs-o-up" aria-hidden="true" placement="top" container="body" ngbTooltip="Like RFQ"></i>
+                            </a>
+                          </td>
+                          <td  class="tdbackgorungcolor" *ngIf="rfq.isRfqLike">
+                            <a (click)="removelikeRfq(rfq.rfqId, rfq.isRfqLike, rfq.isRfqDisLike)">
+                              <i class="fa fa-thumbs-up" aria-hidden="true" placement="top" container="body" ngbTooltip="Remove Like RFQ"></i>
+                            </a>
+                          </td>
+                          <td class="tdbackgorungcolor" *ngIf="rfq.isRfqDisLike">
+                            <a (click)="removeDisLikeRfq(rfq.rfqId, rfq.isRfqLike, rfq.isRfqDisLike)">
+                              <i class="fa fa-thumbs-down" aria-hidden="true" placement="top" container="body" ngbTooltip="Remove Dislike RFQ"></i>
+                            </a>
+                          </td>
+                          <td  class="tdbackgorungcolor" *ngIf="!rfq.isRfqDisLike">
+                            <a (click)="disLikeRfq(rfq.rfqId, rfq.isRfqLike, rfq.isRfqDisLike)">
+                              <i class="fa fa-thumbs-o-down" aria-hidden="true" placement="top" container="body" ngbTooltip="Dislike RFQ"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="!isRfqAvailable">
+          <div class="col-md-2">
+            <div class="dataTables_length" id="example_length">
+              <label>Show
+                <select name="example_length" aria-controls="example" class="" [(ngModel)]="inputLength" (ngModelChange)="ChangeinputLength()">
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                </select>
+                entries</label>
+            </div>
+          </div>
+          <div class="col-md-10">
+            <div class="paginations">
+              <div  >
+                <div id="radioBtn" class="btn-group">
+                  <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" class="btn btn-primary btn-sm notActive"
+                    (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                    Previous
+                  </a>
+                  <a *ngFor="let page of pagesIndex" (click)="setPage(page)" [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                    data-bs-toggle="fun" data-title="X">
+                    {{page}}
+                  </a>
+                  <a [ngClass]="(currentIndex == pageNumber || pageNumber == 0)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                    (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                    Next
+                  </a>
+                </div>
+                <input type="hidden" name="fun" id="fun">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="!isRfqAvailable">
+          <div class="col-md-12">
+              <div class="pull-right padd-right">
+                  <label class="showreccount"> {{currentIndex   }} of {{pageNumber}} </label>
+                </div>
+          </div>
+        </div>
+      </div>
+      <div class="myRFQ-rfq-no-available" *ngIf="isRfqAvailable">
+          <div class="row" style="text-align: center;padding-top:106px">
+            <div class="col-md-12">
+              <div>
+                <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+              assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+              </div>
+            </div>
+          </div>
+          <div class="row" style="padding-top:34px">
+            <div class="col-md-12">
+              <div class="myRFQ-noRFQActive-helper-text">You don’t have any Awarded RFQs at this time.</div>
+            </div>
+          </div>
+        </div>
+      <div *ngIf="isLoader">
+        <div class="loader animation-start">
+          <span class="circle delay-1 size-2"></span>
+          <span class="circle delay-2 size-4"></span>
+          <span class="circle delay-3 size-6"></span>
+          <span class="circle delay-4 size-7"></span>
+          <span class="circle delay-5 size-7"></span>
+          <span class="circle delay-6 size-6"></span>
+          <span class="circle delay-7 size-4"></span>
+          <span class="circle delay-8 size-2"></span>
+        </div>
+      </div>
+    </div> -->
+  </div>
+

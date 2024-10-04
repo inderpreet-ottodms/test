@@ -1,0 +1,74 @@
+.btn-cancel {
+  border: 2px solid #56c23e;
+  background-color: #ccc;
+  color: #56c23e;
+}
+
+.btn-save {
+  border: 2px solid #56c23e;
+  color: #fff;
+  background-color: #56c23e;
+}
+
+body {
+  font-family: Poppins;
+  background: #f6f7fb !important;
+}
+
+/*----------------------------------------Modal Popup-------------------------------------*/
+.modal-header {
+  padding-bottom: 5px;
+}
+
+.modal-title {
+  font-size: 21px !important;
+  font-weight: bold !important;
+}
+
+.modal-footer .btn-group button {
+  height: 40px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border: none;
+  border-right: 1px solid #ddd;
+}
+
+/*----------------------------------------Modal Popup-------------------------------------*/
+
+.Deselect-All {
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a90e2;
+  cursor: pointer;
+}
+
+.Rectangle-indi {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 218px;
+  border-radius: 2px;
+  background-color: #ffffff;
+  border: solid 1px #bec4cb;
+  text-align: left;
+}
+
+.Main-Topic {
+  font-size: 13px;
+  font-weight: 600;
+  color: #222222;
+  cursor: pointer;
+  text-align: left !important;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  color: #fff;
+  background-color: #bec4cb;
+  border-color: #bec4cb;
+}
+
+.selectedCapability li {
+  background-color: #f6f7fb;
+}

@@ -1,0 +1,60 @@
+<ng-template #buyerFeedbackModel let-d="dismiss" data-backdrop="static" data-keyboard="false">
+  <form #modelForm="ngForm">
+    <div class="modal-header">
+      <h4 class="modal-title">Buyer Feedback</h4>
+      <button type="button" class="close" data-bs-dismiss="modal" (click)="d('notNow');closeModel()" style="z-index: 100;">
+        <i class="fa fa-times-circle" aria-hidden="true" style="color: #4a90e2; z-index: 1000;"></i></button>
+    </div>
+    <div class="modal-body" style="min-height: 300px;">
+      <div class="text-center" *ngIf="!isLoader">
+        <div class="m-b-10" style="word-break: break-all;">
+          <span class="f-18 f-w-600 color-blue">{{companyName}}</span>
+        </div>
+        <div class="m-b-10">
+          <span class="f-16">What seems to be the issue with this buyer?</span>
+        </div>
+        <div style="margin:0 auto;text-align: left;width: 50%;">
+
+          <form [formGroup]="form">
+            <div [formArrayName]="'items'" >
+              <div class="border-checkbox-section m-b-10" *ngFor="let control of form.controls.items.controls; let i = index;" [formGroup]="control">
+                <div class="border-checkbox-group border-checkbox-group-primary">
+                  <input  class="border-checkbox" type="checkbox" formControlName="checkbox" id="{{ control.controls.id.value }}">
+                  <label class="border-checkbox-label f-w-600" attr.for="{{ control.controls.id.value }}">{{ control.controls.text.value }}</label>
+                </div>
+              </div>
+            </div>
+          </form>
+          <!-- Checkbox values: {{ form.controls.items.value | json}} -->
+        </div>
+        <div style="padding: 5px 30px;">
+          <span class="f-12 f-w-600">Only select what applies to this buyer. These answers can be changed later if things change.</span>
+        </div>
+
+      </div>
+      <div *ngIf="isLoader" class="loading">
+        <div class="loader animation-start">
+          <span class="circle delay-1 size-2"></span>
+          <span class="circle delay-2 size-4"></span>
+          <span class="circle delay-3 size-6"></span>
+          <span class="circle delay-4 size-7"></span>
+          <span class="circle delay-5 size-7"></span>
+          <span class="circle delay-6 size-6"></span>
+          <span class="circle delay-7 size-4"></span>
+          <span class="circle delay-8 size-2"></span>
+        </div>
+      </div>
+    </div>
+      
+    <div class="modal-footer-section">
+      <div class="row" *ngIf="!isLoader">
+        <div class="col-md-12 text-center m-b-20" data-bs-dismiss="modal">
+          <button type="button" class="btn btnCancel" data-bs-dismiss="modal" (click)="d('notNow');closeModel()">Not Now</button>
+        
+          <button type="button" class="btn btnAccept m-l-20" data-bs-dismiss="modal" (click)="submitFeedback()">Submit &nbsp; <i class="fa fa-spinner fa-spin" *ngIf="isResponse"></i></button>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>
+

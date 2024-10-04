@@ -1,0 +1,135 @@
+<div class="tab-pane" id="revisions">
+  <div class="revision-timeline-centered">
+    <article class="revision-timeline-entry">
+      <div class="revision-timeline-entry-inner">
+        <div class="revision-timeline-icon bg-start">
+          <i class="entypo-feather"></i>
+        </div>
+      </div>
+    </article>
+    <div *ngFor="let version of iRFQRevisionModelColl | groupBy:'versionNum';let i = index;">
+      <article [ngClass]="(i%2 === 0)?'revision-timeline-entry':'revision-timeline-entry left-aligned'">
+        <div class="revision-timeline-entry-inner">
+          <time class="revision-timeline-time"><span> {{ setProperDate(version.key)}}</span><span> {{setProperTimekey(version.key)}}</span> <span>Version
+              {{version.key}}</span></time>
+          <div class="revision-timeline-icon" [ngClass]=" (version.value[0].fieldName === 'PO status updated') ? 'bg-edit': (filedNameAws) ? 'bg-edit':(version.value[0].fieldName === 'PO sent to manufacturer') ? 'bg-edit':  (version.value[0].newValue === 'Cancelled') ? 'bg-times' : (version.value[0].newValue === 'Awarded') ? 'bg-award' : (version.value[0].fieldName === 'RFQ Transfer') ? 'bg-exchange' :  'bg-edit' ">
+            <i class="fa" [ngClass]=" (version.value[0].fieldName === 'PO status updated') ? 'ti-view-list-alt': (filedNameAws) ? 'ti-view-list-alt':(version.value[0].fieldName === 'PO sent to manufacturer') ? 'ti-view-list-alt': (version.value[0].newValue === 'Cancelled') ? 'fa-times' : (version.value[0].newValue === 'Awarded') ? 'fa-trophy' : (version.value[0].fieldName === 'RFQ Transfer') ? 'fa-exchange' :  'fa-edit' "></i>
+          </div>
+          <div class="revision-timeline-label">
+            <div class="revision-timeline-header">
+              <h2><img src="{{getImageUrl(version.key)}}" alt="" class="img-circle timeline-img" />{{getContactName(version.key)}}</h2>
+            </div>
+            <div class="revision-timeline-content">
+              <table class="table" *ngFor="let versionDetails of version.value; let i = index" >
+                <tbody>
+                  <tr>
+                    <th class="cusWidth">Field:</th>
+                    <td>{{versionDetails.fieldName}}</td>
+                  </tr>
+                  <tr>
+                    <th class="cusWidth">Changed From:</th>
+                    <td>{{ getDate(versionDetails.oldValue)}}</td>
+                  </tr>
+                  <tr [ngClass]="( i !== version.value.length -1)?'cust-tr-border':''">
+                    <th class="cusWidth">Changed To:</th>
+                    <td>{{getDate(versionDetails.newValue)}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+    <article class="revision-timeline-entry left-aligned">
+      <div class="revision-timeline-entry-inner">
+        <time class="revision-timeline-time last"><span> : {{setProperDate2(createdDate)}} </span><span class="m-l-10"> {{setProperDate3(createdDate)}}</span><span class="m-l-10">Version 1.0
+          </span></time>
+        <div class="revision-timeline-icon bg-file">
+          <i class="fa fa-file"></i>
+        </div>
+        <div class="revision-timeline-label">
+          <div class="revision-timeline-header">
+            <h2><img src="{{creatorContactImageUrl}}" alt="" class="img-circle timeline-img" />{{creatorContactName}}</h2>
+          </div>
+          <div class="revision-timeline-content">
+            <h2>RFQ Created.</h2>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="revision-timeline-entry bottomiconsbg">
+      <div class="revision-timeline-entry-inner">
+        <div class="revision-timeline-content pull-right bottomicons">
+          <div class="revision-timeline-icon bg-times">
+            <i class="fa fa-times"></i>
+          </div>
+          <h3 style="padding-top: 20px">Cancelled</h3>
+        </div>
+      </div>
+    </article>
+    <article class="revision-timeline-entry bottomiconsbg">
+      <div class="revision-timeline-entry-inner">
+        <div class="revision-timeline-content pull-right bottomicons">
+          <div class="revision-timeline-icon bg-award">
+            <i class="fa fa-trophy"></i>
+          </div>
+          <h3 style="padding-top: 20px">Awarded</h3>
+        </div>
+      </div>
+    </article>
+    <article class="revision-timeline-entry bottomiconsbg">
+      <div class="revision-timeline-entry-inner">
+        <div class="revision-timeline-content pull-right bottomicons">
+          <div class="revision-timeline-icon bg-edit-bottom">
+            <i class="fa fa-edit"></i>
+          </div>
+          <h3 style="padding-top: 20px">Edited</h3>
+        </div>
+      </div>
+    </article>
+    <article class="revision-timeline-entry bottomiconsbg">
+      <div class="revision-timeline-entry-inner">
+        <div class="revision-timeline-content pull-right bottomicons">
+          <div class="revision-timeline-icon bg-exchange">
+            <i class="fa fa-exchange"></i>
+          </div>
+          <h3 style="padding-top: 20px">Transferred</h3>
+        </div>
+      </div>
+    </article>
+
+    <article class="revision-timeline-entry bottomiconsbg">
+      <div class="revision-timeline-entry-inner">
+        <div class="revision-timeline-content pull-right bottomicons">
+          <div class="revision-timeline-icon bg-file1">
+            <i class="fa fa-file"></i>
+          </div>
+          <h3 style="padding-top: 20px">RFQ Created</h3>
+        </div>
+      </div>
+    </article>
+    <article class="revision-timeline-entry bottomiconsbg">
+      <div class="revision-timeline-entry-inner">
+         <div class="revision-timeline-content pull-right bottomicons">
+            <div class="revision-timeline-icon bg-edit" style="margin-top: 0px;">
+              <i class="ti-view-list-alt"></i>
+            </div>
+            <div style="padding-top: 20px;padding-top: 20px;
+            min-width: 150%;
+            font-size: 13px;
+            font-weight: bold;
+            color: #222222;
+            line-height: 1px;">Order Management</div>
+         </div>
+      </div>
+     </article>
+    <article class="revision-timeline-entry begin">
+      <div class="revision-timeline-entry-inner">
+        <div class="revision-timeline-icon bg-last" style="-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg);">
+          <i class="entypo-flight"></i>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>

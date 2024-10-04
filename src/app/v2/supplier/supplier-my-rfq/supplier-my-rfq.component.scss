@@ -1,0 +1,1255 @@
+.my-RFQ-btn-ignore-rfq {
+  width: 284px;
+  height: 45px;
+  border-radius: 2px;
+  border: solid 2px #2e58d6;
+  background-color: #fff;
+  color: #2e58d6;
+}
+
+.background-white-1 {
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+  margin-top: 20px;
+}
+
+.drawer-shadow {
+  border-radius: 5px;
+  background-color: #ffffff;
+  position: fixed;
+  right: 0;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+  height: 100vh;
+  overflow-y: auto;
+  top: 0;
+  z-index: 9999;
+}
+
+.sideDrawer {
+  padding-right: 0px !important;
+  position: fixed !important;
+  width: 28% !important;
+  right: 0 !important;
+  overflow-y: auto !important;
+  height: 100vh !important;
+  top: 0;
+  z-index: 9999;
+}
+
+.custtd {
+  width: 200px;
+  word-break: break-all;
+  white-space: unset;
+}
+
+.d-Turbine-3D-AutoCAD-Drawing {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.manufac_scroll {
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  line-height: 1;
+}
+
+.Rectangle-indi {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 218px;
+  border-radius: 2px;
+  background-color: #ffffff;
+  border: solid 1px #bec4cb;
+}
+
+.Main-Topic {
+  font-family: Poppins;
+  font-size: 13px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+  cursor: pointer;
+}
+
+.Subtopic-1-Subtopic {
+  font-family: Poppins;
+  font-size: 13px;
+  padding-left: 7px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+  cursor: pointer;
+}
+
+.award-width {
+  width: 67px;
+}
+
+.award-enable {
+  margin-right: 10px;
+  width: 80px;
+  border-radius: 2px;
+  background-color: #2e58d6;
+  font-size: 14px;
+  height: 27px;
+  border: 1px solid #2e58d6;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+}
+
+.footer-modal {
+  padding: 5px !important;
+  border-top: none !important;
+}
+
+.custom-model {
+  top: 126px !important;
+  left: 120px !important;
+}
+
+.Select-the-processes {
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+}
+
+.Deselect-All {
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #4a90e2;
+  cursor: pointer;
+}
+
+.rfq-name h6 {
+  font-size: 20px;
+  font-family: Poppins;
+  font-weight: 600;
+  text-transform: capitalize;
+  line-height: 32px;
+
+}
+
+.showreccount {
+  width: 48px;
+  height: 17px;
+  font-size: 13px;
+  border-radius: 2px;
+  background-color: #bec4cb;
+  text-align: center;
+}
+
+.my-RFQ-btn-cancel-rfq {
+  width: 285px;
+  height: 45px;
+  border-radius: 2px;
+  background-color: #2e58d6;
+  color: #ffffff;
+}
+
+.pull-right {
+  float: right !important;
+}
+
+.pull-left {
+  float: left !important;
+}
+
+.hourglass i {
+  font-size: 12px;
+  color: #f8e71c;
+}
+
+.active {
+  color: #448ada;
+}
+
+.my-RFQ-list-view {
+  padding: 7px;
+  background-color: #ffffff;
+  border: solid 1px #bec4cb;
+}
+
+.filter {
+  width: 100%;
+  padding: 5px;
+  border-radius: 2px;
+  border: solid 1px #bec4cb;
+  font-weight: 400;
+  background: #f9fafe;
+}
+
+.recent {
+  width: 100%;
+  padding: 5px;
+  border-radius: 2px;
+  border: solid 1px #bec4cb;
+  margin-bottom: 15px;
+  font-weight: 400;
+  background: #f9fafe;
+}
+
+.filter:focus {
+  background: #fff;
+}
+
+.search {
+  width: 100%;
+  padding: 6px;
+  border-radius: 2px;
+  border: solid 1px #bec4cb;
+}
+
+.my-RFQ-state-filter-button-active {
+  width: 95px;
+  height: 35px;
+  border-radius: 2px;
+  background-color: #f6f7fb;
+  border: solid 1px #bec4cb;
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #919aa3 !important;
+}
+
+.my-RFQ-state-filter-button-inactive {
+  width: 95px;
+  height: 35px;
+  background-color: #ffffff;
+  border: solid 1px #212a37;
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #212a37 !important;
+}
+
+/*----------------------------------------RFQ CARD-----------------------------------*/
+.rfq-card-grid {
+  display: grid;
+  grid-gap: 30px 10px;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  // repeat(auto-fill, minmax(480px, 1fr));
+}
+
+.rfq-card-container {
+  display: flex;
+  flex-direction: column;
+  grid-row-gap: 0.7rem;
+  min-width: 330px;
+  width: auto;
+  background: #fff;
+  border-radius: 4px;
+  padding: 15px 25px;
+  filter: drop-shadow(0px 3px 3px #acacac);
+
+  hr {
+    border-top: 1px solid white;
+  }
+}
+
+.rfq-header-container {
+  grid-area: header;
+  display: grid;
+  align-items: end;
+  grid-template-columns: 1fr 1fr 1fr;
+
+  .rfq-indicators {
+    display: flex;
+    padding: auto;
+    justify-self: flex-start;
+
+    .icon-img img {
+      height: clamp(21px, 10vw, 1.2rem);
+      padding-right: 5px;
+    }
+  }
+
+  .rfq-number {
+    font-size: 18px;
+    cursor: pointer;
+    justify-self: center;
+    white-space: nowrap;
+
+    .rfq-prefix {
+      color: #2e58d6;
+      padding-right: 0.3rem;
+    }
+  }
+
+  .rfq-rating {
+    width: 3.5rem;
+    justify-self: flex-end;
+
+    .fa-thumbs-o-up:before,
+    .fa-thumbs-o-down:before {
+      font-size: 24px;
+    }
+  }
+}
+
+.rfq-info-container {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: auto auto;
+  border: 2px solid #ededed;
+  border-radius: 8px;
+  padding: 20px;
+  font-size: 16px;
+  cursor: pointer;
+
+  .rfq-header-group {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    grid-column-gap: 1rem;
+
+    .rfq-img {
+      img {
+        grid-area: img;
+        width: 100%;
+        max-width: 5rem;
+        position: relative;
+        left: 10px;
+      }
+    }
+
+    .rfq-info-header {
+      display: grid;
+      align-items: center;
+      grid-template-columns: 90%;
+      grid-template-rows: auto auto;
+      grid-template-areas:
+        "title"
+        "totals";
+
+      .rfq-name {
+        grid-area: title;
+
+        h2 {
+          font-size: 1.3rem;
+          width: auto;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .rfq-quantity {
+        grid-area: totals;
+        width: 100%;
+        padding: 8px;
+        display: flex;
+        font-size: clamp(0.7rem, 5vw, 1.1rem);
+        text-wrap: nowrap;
+        white-space: nowrap;
+        border-radius: 8px;
+        grid-column-gap: 0.7rem;
+        border: 1px solid #919aa3;
+        justify-content: space-around;
+
+        sup {
+          vertical-align: -6px;
+          opacity: 0;
+        }
+      }
+    }
+  }
+
+  .rfq-details-container {
+    padding: 5px 24px;
+    margin-top: 1rem;
+    border-radius: 8px;
+    background-color: #f1f2f7;
+
+    .rfq-details {
+      .divider {
+        display: grid;
+        grid-template-rows: auto auto;
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: 5px;
+        grid-template-areas:
+          "label data"
+          "across accross";
+
+        padding: 7px 0;
+        border-bottom: 1px solid #fff;
+
+        &:last-child {
+          border: none;
+        }
+
+        .rfq-detail-label {
+          font-weight: 600;
+
+          sup {
+            vertical-align: -6px;
+          }
+        }
+
+        .rfq-dimensions {
+          display: flex;
+          flex-direction: column;
+
+          .rfq-dimensions-info {
+            display: grid;
+            grid-template-columns: 30px auto;
+            grid-column-gap: 0.3rem;
+
+            .rfq-dimensions-unit {
+              width: auto;
+              max-width: 250px;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
+          }
+
+          .dimensions-na {
+            font-size: 16px;
+          }
+        }
+
+        .rfq-data {
+          width: auto;
+          max-width: 250px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .dimentions-height {
+        height: 6rem;
+      }
+    }
+  }
+}
+
+.rfq-package-container {
+  display: flex;
+  height: 7rem;
+  font-size: 16px;
+  border-radius: 8px;
+  padding: 10px 20px;
+  align-items: center;
+  border: 2px solid #ededed;
+
+  >div {
+    line-height: 1.4;
+  }
+
+  .rfq-growth-number {
+    color: #2e58d6;
+    font-style: italic;
+    margin-right: 3px;
+    font-size: 1.2rem;
+  }
+}
+
+.rfq-company-container {
+  display: grid;
+  height: 5.6rem;
+  padding: 10px 12px;
+  border-radius: 8px;
+  align-items: center;
+  border: 2px solid #ededed;
+  grid-template-columns: 0.3fr 1fr auto;
+  grid-template-areas: "img comp stars";
+
+  @media screen and (max-width: 480px) {
+    grid-template-columns: 0.3fr auto;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "img comp"
+      "stars stars";
+  }
+
+  .img-logo {
+    grid-area: img;
+    clear: both;
+    justify-self: center;
+
+    img {
+      height: 55px;
+      width: 55px;
+    }
+  }
+
+  .company-name {
+    grid-area: comp;
+    top: 5px;
+    padding: 0px;
+    color: #2e58d6;
+    position: relative;
+
+    h4 {
+      width: 138px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.company-stars {
+  grid-area: stars;
+
+  .rfq-stared {
+    text-align: center;
+    position: relative;
+    top: -5px;
+  }
+}
+
+.rfq-btns-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-column-gap: 0.9rem;
+
+  .rfq-card-btn {
+    color: #212A37;
+    font-size: 16px;
+    font-family: Poppins;
+    font-weight: 400;
+    line-height: 24px;
+    width: 100%;
+    padding: 8px 15px;
+    cursor: pointer;
+    text-wrap: nowrap;
+    border-radius: 4px;
+
+    &:hover {
+      transition: 0.2s;
+      color: #ffffff;
+      background-color: #2e58d6;
+    }
+  }
+
+  .rfq-price {
+    font-size: 33px;
+    font-weight: 800;
+  }
+
+  .rfq-btn-view-detail {
+    color: #212A37;
+    font-size: 16px;
+    font-family: Poppins;
+    font-weight: 400;
+    line-height: 24px;
+    width: 100%;
+    padding: 8px 15px;
+    cursor: pointer;
+    text-wrap: nowrap;
+    border-radius: 4px;
+    background-color: #FFF;
+    border: 1px solid #000;
+
+    &:hover {
+      transition: 0.2s;
+      background-color: #f9fafe;
+    }
+  }
+
+  .rfq-btn-view-detail.selected {
+    background-color: #e5eafa;
+  }
+}
+
+/*----------------------------------------RFQ CARD END-----------------------------------*/
+
+
+.quote i {
+  font-size: 12px;
+  color: #f8e71c;
+}
+
+.star i {
+  font-size: 12px;
+  color: #81db6d;
+}
+
+.checkCircleClass {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  font-family: FontAwesome5Free;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #bec4cb;
+}
+
+.RFQs {
+  // width: 61px;
+  // height: 33px;
+  font-family: Poppins;
+  font-size: 24px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+}
+
+.card1 .box .img {
+  width: 100px;
+  height: 100px;
+  background-color: #f6f7fb;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.card1 .box .img img {
+  width: 100px;
+  height: 100px;
+}
+
+.card1 .box h2 {
+  font-size: 16px;
+  font-weight: 400;
+  margin: 9px auto;
+  text-align: center;
+  color: #2e58d6;
+}
+
+.card1 .box h2 span {
+  font-size: 12px;
+  font-weight: 400;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #212a37;
+}
+
+.card1 .box p {
+  color: #222222;
+  font-size: 12px;
+  font-weight: 400;
+  margin-bottom: 1px;
+}
+
+.card1 .bottomaction {
+  height: 40px;
+  width: 100%;
+  border-radius: 3px;
+  background-color: #edeff7;
+}
+
+.card1 .bottomaction ul {
+  margin: 0;
+  padding: 0;
+}
+
+.card1 .bottomaction ul li {
+  list-style: none;
+  float: left;
+}
+
+.borderbottom {
+  border-bottom: 1px solid rgb(163, 163, 163);
+  text-align: left !important;
+}
+
+
+#radioBtn .notActive {
+  color: #4a90e2;
+  padding: 5px 15px 5px 15px;
+  background-color: #fff;
+}
+
+#radioBtn .active {
+  background-color: #bec4cb;
+  color: #fff;
+  box-shadow: none;
+  padding: 5px 15px 5px 15px;
+  z-index: 0;
+}
+
+.paginations {
+  float: right;
+}
+
+.padd-right {
+  padding-right: 62px;
+}
+
+.pagination-summary {
+  height: 15px;
+  border-radius: 2px;
+  background-color: #bec4cb;
+}
+
+.borderbottomCenter {
+  border-bottom: 1px solid rgb(163, 163, 163);
+}
+
+.card1 .bottomaction ul li a {
+  display: block;
+  color: #212a37;
+  margin: 6px 10px;
+  font-size: 20px;
+  transition: 0.5s;
+  text-align: center;
+}
+
+.card1 .bottomaction ul li:hover a {
+  color: #e91e63;
+  transform: rotateY(360deg);
+}
+
+
+/*----------------------------------------card1s classes End-----------------------------------*/
+
+.myRFQ-Group {
+  width: 213px;
+  height: 106px;
+  object-fit: contain;
+}
+
+.myRFQ-noRFQActive-helper-text {
+  height: 29px;
+  font-family: Poppins;
+  font-size: 21px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #222222;
+}
+
+@media screen and (max-width: 767px) {
+  .table-responsive {
+    border: none !important;
+  }
+}
+
+// /*----------------------------------------RightPanel Accordion-------------------------------------*/
+.box-fit {
+  width: 100%;
+  height: 100%;
+}
+
+/***/
+hr {
+  margin: 5px;
+}
+
+.rfq-number {
+  color: #212A37;
+  font-size: 16px;
+  font-family: Poppins;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: break-word
+}
+
+.quote-date {
+  margin-bottom: 25px;
+  margin-left: 0px;
+  margin-right: 0px;
+  font-size: 11px !important;
+  font-weight: 400;
+
+  a {
+    span {
+      color: #919aa3;
+    }
+  }
+}
+
+.quote-date a {
+  font-size: 11px !important;
+}
+
+.quote-date .col-md-6 {
+  padding: 0px !important;
+}
+
+.bottomaction ul {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-submit-rfq-close-1 {
+  height: 45px;
+  border-radius: 2px;
+  background-color: #2e58d6;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+  width: 165px;
+}
+
+/*******************************************************/
+.rfqFilter {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+}
+
+.rfq-name {
+  grid-area: comp;
+  top: 5px;
+  padding-left: 1rem !important;
+  color: #2e58d6;
+  position: relative;
+}
+
+.rfq-row {
+  margin: 10px 0;
+  border: 1px solid #cad3df;
+  border-radius: 4px;
+}
+
+.rfq-top {
+  padding: 24px 16px;
+}
+
+.rfq-top .company-name h6 {
+  font-size: 20px;
+  margin-bottom: 0;
+  color: #2e58d6;
+}
+
+.rfq-top .company-name p {
+  color: #212a37;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.rfq-info p {
+  margin-bottom: 0px;
+}
+
+.rfq-info p strong {
+  padding-right: 5px;
+  color: #212A37;
+  font-size: 16px;
+  font-family: Poppins;
+  font-weight: 700;
+  line-height: 24px;
+  word-wrap: break-word
+}
+
+.rfq-info p span {
+  color: #212A37;
+  font-size: 16px;
+  font-family: Poppins;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: break-word
+}
+
+.rfq-bottom {
+  border-top: 1px solid #e4dfee;
+  background: #F9FAFE;
+  padding: 16px;
+}
+
+.rfq-bottom .btn {
+  padding: 8px 20px;
+}
+
+.rfq-bottom .btn-primary {
+  background-color: #2e58d6;
+  border-color: #2e58d6;
+}
+
+.rfq-bottom .rfq-buyer-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #bec4cb;
+}
+
+.rfq-bottom .rfq-buyer-name {
+  color: #2e58d6;
+}
+
+.rfq-bottom .avatar-name-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #bec4cb;
+  background: #4a5471;
+  color: #ddd;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.rfq-bottom .rfq-star {
+  margin-top: -4px;
+}
+
+.rfq-quote-date {
+  margin-bottom: 5px;
+  font-size: 13px;
+  font-weight: bold;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.quote-date-left {
+  width: 100%;
+  text-align: right;
+}
+
+.quote-date-left-full {
+  width: 100%;
+  text-align: right;
+}
+
+.quote-date-right {
+  width: 100%;
+  text-align: right;
+}
+
+.rfq-quote-date span>span {
+  color: #919aa3;
+}
+
+.fa-size {
+  font-size: 20px;
+  // font-weight: bold;
+  color: #4a90e2;
+}
+
+.site-logo {
+  background-image: url("/assets/mfg_rebrand.svg");
+  width: 47px;
+  height: 47px;
+  background-repeat: no-repeat;
+  background-size: 47px 47px;
+  border-radius: 50%;
+  margin: 15px auto;
+  cursor: pointer;
+}
+
+.box-1 {
+  position: relative;
+  background: #fff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.ribbon {
+  width: 80px;
+  height: 78px;
+  overflow: hidden;
+  position: absolute;
+}
+
+.ribbon::before,
+.ribbon::after {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  display: block;
+  border: 5px solid #2980b9;
+}
+
+.ribbon span {
+  position: absolute;
+  display: block;
+  width: 73px;
+  padding: 5px 0;
+  background-color: #3498db;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  color: #fff;
+  font: 700 9px/1 "Lato", sans-serif;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+/* top left*/
+.ribbon-top-left {
+  top: 0;
+  left: 0;
+}
+
+.ribbon-top-left::before,
+.ribbon-top-left::after {
+  border-top-color: transparent;
+  border-left-color: transparent;
+}
+
+.ribbon-top-left::before {
+  top: 0;
+  right: 0;
+}
+
+.ribbon-top-left::after {
+  bottom: 0;
+  left: 0;
+}
+
+.ribbon-top-left span {
+  right: 26px;
+  top: 10px;
+  transform: rotate(-45deg);
+  z-index: 9;
+}
+
+.img-space {
+  display: flex;
+  justify-content: space-between;
+}
+
+.learn-more {
+  font-size: 14px;
+  // padding-left: 4px;
+  color: #56c23e;
+}
+
+::ng-deep .tooltip-inner {
+  text-align: left;
+}
+
+.unlock-growth {
+  width: 500px;
+  font-weight: 600;
+}
+
+.icon-img img {
+  height: 35px;
+  margin-left: 8px;
+}
+
+.new-drawer-wrapper {
+  background: #fff;
+  padding: 24px;
+  position: fixed;
+  right: 0;
+  max-width: 400px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.35);
+  top: 74px;
+  bottom: 0;
+  z-index: 1;
+}
+
+.upgradeQuoteBtn {
+  padding: 2px 5px !important;
+  border-radius: 2px;
+  border: solid 2px #212a37;
+  color: #212a37;
+  background-color: #fff;
+  cursor: pointer;
+  margin-bottom: 10px;
+  line-height: 30px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.rfq-name-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 220px;
+}
+::ng-deep .tooltip-inner {
+  max-width: fit-content;
+}
+.rfq-btns-container .hide-unhide-btn a {
+  color: #2E58D6;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+.thumsup-icon img {
+  position: relative;
+  top: -2px;
+}
+.hide-unhide-poup .modal-body {
+  padding: 50px 50px 30px 50px;
+}
+.hide-unhide-poup .modal-footer {
+  padding-top: 15px;
+}
+.hide-unhide-poup .btn.button-green {
+  border-radius: 4px;
+  background-color: #2e58d6;
+  font-size: 16px;
+  width: 100%;
+  border: none;
+  padding: 7px 15px;
+  color: #fff;
+  cursor: pointer;
+  margin-right: 15px;
+  line-height: 22px;
+}
+.hide-unhide-poup .btn.button-green:hover {
+  color: #fff;
+}
+.hide-unhide-poup .modal-header {
+  padding: 0;
+  border: 0;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+.hide-unhide-poup button.close {
+  border: 0;
+  margin: 0;
+  background: transparent;
+  float: right;
+  right: 12px;
+  position: relative;
+  top: 11px;
+}
+button.close img {
+  width: 12px;
+}
+.drawer-backdrop:after {
+  background: rgb(0 0 0 / 35%);
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+@media (max-width: 1600px) {
+  .hide-unhide-poup .btn.button-green {
+    font-size: 13px;
+  }
+  .rfq-btns-container .hide-unhide-btn a {
+    font-size: 13px;
+}
+  .rfq-name h6 {
+      font-size: 16px;
+  }
+  .rfq-number {
+      font-size: 13px;
+      line-height: 18px;
+  }
+  .rfq-info p strong {
+      font-size: 13px;
+      line-height: 22px;
+  }
+  .rfq-info p span {
+      font-size: 13px;
+      line-height: 22px;
+  }
+  .icon-img img {
+      height: 26px;
+  }
+  .rfq-left-icon img {
+      height: 60px !important;
+      max-width: 60px;
+  }
+  .rfq-btns-container .rfq-card-btn {
+      font-size: 13px;
+      line-height: 22px;
+      padding: 6px 15px;
+  }
+  .rfq-btns-container .rfq-btn-view-detail {
+      font-size: 13px;
+      line-height: 22px;
+      padding: 6px 15px;
+  }
+  .thumsup-icon img {
+      max-width: 20px;
+  }
+  .rfq-bottom .rfq-buyer-logo {
+      width: 32px;
+      height: 32px;
+  }
+  .rfq-row {
+      margin: 2px 0 10px 0;
+  }
+  .rfq-top {
+      padding: 18px 16px;
+  }
+}
+@media screen and (min-device-width: 320px) and (max-device-width: 480px) {
+  .sideDrawer {
+    position: fixed !important;
+    width: 100% !important;
+    right: 0 !important;
+    overflow-y: auto !important;
+    height: 100% !important;
+    padding: 20px !important;
+    top: 90px;
+  }
+
+  .rfq-package-container {
+    font-size: 14px;
+
+    div {
+      line-height: 1 !important;
+    }
+  }
+
+  .rfq-info-container {
+    .rfq-img {
+      img {
+        width: 5rem !important;
+        height: 5rem !important;
+        left: 0px !important;
+      }
+    }
+
+    .rfq-quantity {
+      font-size: clamp(0.7rem, 5vw, 0.7rem) !important;
+    }
+  }
+
+  @media screen and (max-width: 380px) {
+    .rfq-card-container {
+      min-width: auto;
+      width: 300px !important;
+    }
+  }
+}

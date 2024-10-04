@@ -1,0 +1,850 @@
+<div class="background-white">
+  <div *ngIf="isCompanyFocus()">
+    <div class="row">
+      <div class="col-md-12 rightpanel">
+        <i class="fa fa-times-circle pull-right" (click)="closePartDrawer()" placement="top" container="body"
+          ngbTooltip="Close"></i>
+        <h2 class="panelheading heading-text pb-3">
+        {{ (!(!!iFocusOverViewModel && !!iFocusOverViewModel.industryFocus && (iFocusOverViewModel.industryFocus.length !== 0))
+          && !(!!iFocusOverViewModel && !!iFocusOverViewModel.tolerance && (iFocusOverViewModel.tolerance.length !== 0))
+          && !(!!iMaterialViewModelColl && (iMaterialViewModelColl.length !== 0))) ? 'Add Company Focus' : 'Edit Company Focus' }}
+        </h2>
+      </div>
+    </div>
+    <div>
+      <div class="form-group" *ngIf="industryDiv1">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Industry Focus</label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='selectedIndustry1' name="partQtyUnitId"
+                  (blur)="industry1Focused = true">
+
+                  <option value="0" selected> Select Industry Focus</option>
+                  <option *ngFor="let material  of iIndustryBranchesModelColl" [value]="material.industryBranchesId">
+                    {{ material.industryBranchesNameEn }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <!-- <p style="color: red; float: right" *ngIf="!checkIndustry1Selected()">Please Select Industry.</p> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="!industryDiv2">
+          <div class="col-md-12">
+            <a class="-Add-Another-Catego pointerCursor" (click)="addIndustry2()">+ Add Another Industry </a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="industryDiv2">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Industry Focus </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+
+                <select id="jobPostingId" class="form-control" [(ngModel)]='selectedIndustry2' name="partQtyUnitId"
+                  (blur)="industry2Focused = true">
+                  <option value="0" selected> Select Industry Focus</option>
+                  <option *ngFor="let material  of iIndustryBranchesModelColl" [value]="material.industryBranchesId">
+                    {{ material.industryBranchesNameEn }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <!-- <p style="color: red; float: right" *ngIf="!checkIndustry2Selected()">Please Select Industry.</p> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="!industryDiv3">
+          <div class="col-md-12">
+            <a class="-Add-Another-Catego pointerCursor" (click)="addIndustry3()">+ Add Another Industry </a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="industryDiv3">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Industry Focus </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='selectedIndustry3' name="partQtyUnitId"
+                  (blur)="industry3Focused = true">
+                  <option value="0" selected> Select Industry Focus</option>
+                  <option *ngFor="let material  of iIndustryBranchesModelColl" [value]="material.industryBranchesId">
+                    {{ material.industryBranchesNameEn }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <!-- <p style="color: red; float: right" *ngIf="!checkIndustry3Selected()">Please Select Industry.</p> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="!industryDiv4">
+          <div class="col-md-12">
+            <a class="-Add-Another-Catego pointerCursor" (click)="addIndustry4()">+ Add Another Industry </a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="industryDiv4">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Industry Focus </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='selectedIndustry4' name="partQtyUnitId"
+                  (blur)="industry4Focused = true">
+                  <option value="0" selected> Select Industry Focus</option>
+                  <option *ngFor="let material  of iIndustryBranchesModelColl" [value]="material.industryBranchesId">
+                    {{ material.industryBranchesNameEn }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <!-- <p style="color: red; float: right" *ngIf="!checkIndustry4Selected()">Please Select Industry.</p> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="!industryDiv5">
+          <div class="col-md-12">
+            <a class="-Add-Another-Catego pointerCursor" (click)="addIndustry5()">+ Add Another Industry </a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="industryDiv5">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Industry Focus </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='selectedIndustry5' name="partQtyUnitId"
+                  (blur)="industry5Focused = true">
+                  <option value="0" selected> Select Industry Focus</option>
+                  <option *ngFor="let material  of iIndustryBranchesModelColl" value="{{material.industryBranchesId}}">
+                    {{ material.industryBranchesNameEn }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <!-- <p style="color: red; float: right" *ngIf="!checkIndustry5Selected()">Please Select Industry.</p> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="form-group">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Tolerance </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='tolenrance' name="partQtyUnitId" (blur)="tolenranceFocused = true">
+                  <option value="0" selected> Select Tolerance</option>
+                  <option *ngFor="let tolerance  of iToleranceViewModelColl" value="{{tolerance.id}}">
+                    {{ tolerance.description }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <!-- <p style="color: red; float: right" *ngIf="!checkToleranceSelected()">Please Select Tolenrance.</p> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="form-group" *ngIf="materialDiv1">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Material Category </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='selectedMaterial1' name="partQvbtyUnitId"
+                  (blur)="material1Focused = true" (change)="getChildMaterial1()">
+                  <option value="">
+                    Select Material Category
+                  </option>
+                  <option *ngFor="let material  of iMaterialViewModelColl | groupBy:'parentMaterialName' ">
+                    {{ material.key }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <!-- <p style="color: red; float: right" *ngIf="!checkmaterial1Selected()">Please Select Material.</p> -->
+              </div>
+            </div>
+          </div>
+        </div><br>
+        <div class="row" >
+          <!-- <div class="col-md-6" style="padding: 10px" *ngFor="let child  of iMaterialViewModelForEditColl1">
+            <button [ngClass]="(child.isSelected)?'child-category-active':'child-category-deactive'" (click)="addChildMaterial1(child.childMaterialId)">
+              {{child.childMaterialName}}</button>
+          </div> -->
+          <div  class="col-md-10" *ngIf="iMaterialViewModelForEditColl1.length !== 0">
+           <angular2-multiselect [data]='iMaterialViewModelForEditColl1' [(ngModel)]='selectedMaterial' name="Processdrop"  [settings]='materialsettings'
+          (onDeSelect)="addChildMaterial1()" (onSelect)="addChildMaterial1()" (onSelectAll)="addChildMaterial1()" (onDeSelectAll)="addChildMaterial1()">
+      </angular2-multiselect>
+    </div>
+        </div>
+        <!-- <div class="row" *ngIf="!materialDiv2">
+          <div class="col-md-12">
+            <a class="-Add-Another-Catego pointerCursor" (click)="addMaterial2()">+ Add Another Material Category </a>
+          </div>
+        </div> -->
+      </div>
+      <div class="form-group" *ngIf="materialDiv2">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Material Category </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='selectedMaterial2' name="partQvbtyUnitId"
+                  (blur)="material2Focused = true" (change)="getChildMaterial2()">
+                  <option value="">
+                    Select Material Category
+                  </option>
+                  <option *ngFor="let material  of iMaterialViewModelColl | groupBy:'parentMaterialName' ">
+                    {{ material.key }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-2 remove-padding-right">
+                <a (click)="removeMaterial2()">
+                  <span class="-Add-Another-Catego pointerCursor">Remove</span>
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <p style="color: red; float: right" *ngIf="!checkmaterial2Selected()">Please Select Material.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <!-- <div class="col-md-6" style="padding: 10px" *ngFor="let child  of iMaterialViewModelForEditColl2">
+            <button [ngClass]="(child.isSelected)?'child-category-active':'child-category-deactive'" (click)="addChildMaterial2(child.childMaterialId)">
+              {{child.childMaterialName}}</button>
+          </div> -->
+
+
+        </div>
+        <div class="row" *ngIf="!materialDiv3">
+          <div class="col-md-12">
+            <a class="-Add-Another-Catego pointerCursor" (click)="addMaterial3()">+ Add Another Material Category</a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="materialDiv3">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Material Category </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='selectedMaterial3' name="partQvbtyUnitId"
+                  (blur)="material3Focused = true" (change)="getChildMaterial3()">
+                  <option value="">
+                    Select Material Category
+                  </option>
+                  <option *ngFor="let material  of iMaterialViewModelColl | groupBy:'parentMaterialName' ">
+                    {{ material.key }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-2 remove-padding-right">
+                <a (click)="removeMaterial3()">
+                  <span class="-Add-Another-Catego pointerCursor">Remove</span>
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <p style="color: red; float: right" *ngIf="!checkmaterial3Selected()">Please Select Material.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6" style="padding: 10px" *ngFor="let child  of iMaterialViewModelForEditColl3">
+            <button [ngClass]="(child.isSelected)?'child-category-active':'child-category-deactive'" (click)="addChildMaterial3(child.childMaterialId)">
+              {{child.childMaterialName}}</button>
+          </div>
+        </div>
+        <div class="row" *ngIf="!materialDiv4">
+          <div class="col-md-12">
+            <a class="-Add-Another-Catego pointerCursor" (click)="addMaterial4()">+ Add Another Material Category</a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="materialDiv4">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Material Category </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='selectedMaterial4' name="partQvbtyUnitId"
+                  (blur)="material4Focused = true" (change)="getChildMaterial4()">
+                  <option value="">
+                    Select Material Category
+                  </option>
+                  <option *ngFor="let material  of iMaterialViewModelColl | groupBy:'parentMaterialName' ">
+                    {{ material.key }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-2 remove-padding-right">
+                <a (click)="removeMaterial4()">
+                  <span class="-Add-Another-Catego pointerCursor">Remove</span>
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <p style="color: red; float: right" *ngIf="!checkmaterial4Selected()">Please Select Material.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6" style="padding: 10px" *ngFor="let child  of iMaterialViewModelForEditColl4">
+            <button [ngClass]="(child.isSelected)?'child-category-active':'child-category-deactive'" (click)="addChildMaterial4(child.childMaterialId)">
+              {{child.childMaterialName}}</button>
+          </div>
+        </div>
+        <div class="row" *ngIf="!materialDiv5">
+          <div class="col-md-12">
+            <a class="-Add-Another-Catego pointerCursor" (click)="addMaterial5()">+ Add Another Material Category</a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="materialDiv5">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Material Category </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='selectedMaterial5' name="partQvbtyUnitId"
+                  (blur)="material5Focused = true" (change)="getChildMaterial5()">
+                  <option value="">
+                    Select Material Category
+                  </option>
+                  <option *ngFor="let material  of iMaterialViewModelColl | groupBy:'parentMaterialName' ">
+                    {{ material.key }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-2 remove-padding-right">
+                <a (click)="removeMaterial5()">
+                  <span class="-Add-Another-Catego pointerCursor">Remove</span>
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <p style="color: red; float: right" *ngIf="!checkmaterial5Selected()">Please Select Material.</p>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6" style="padding: 10px" *ngFor="let child  of iMaterialViewModelForEditColl5">
+              <button [ngClass]="(child.isSelected)?'child-category-active':'child-category-deactive'" (click)="addChildMaterial5(child.childMaterialId)">
+                {{child.childMaterialName}}</button>
+            </div>
+          </div>
+          <div class="row" *ngIf="!materialDiv6">
+            <div class="col-md-12">
+              <a class="-Add-Another-Catego pointerCursor" (click)="addMaterial6()">+ Add Another Material Category</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="materialDiv6">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Material Category </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='selectedMaterial6' name="partQvbtyUnitId"
+                  (blur)="material6Focused = true" (change)="getChildMaterial6()">
+                  <option value="">
+                    Select Material Category
+                  </option>
+                  <option *ngFor="let material  of iMaterialViewModelColl | groupBy:'parentMaterialName' ">
+                    {{ material.key }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-2 remove-padding-right">
+                <a (click)="removeMaterial6()">
+                  <span class="-Add-Another-Catego pointerCursor">Remove</span>
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <p style="color: red; float: right" *ngIf="!checkmaterial6Selected()">Please Select Material.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6" style="padding: 10px" *ngFor="let child  of iMaterialViewModelForEditColl6">
+            <button [ngClass]="(child.isSelected)?'child-category-active':'child-category-deactive'" (click)="addChildMaterial6(child.childMaterialId)">
+              {{child.childMaterialName}}</button>
+          </div>
+        </div>
+        <div class="row" *ngIf="!materialDiv7">
+          <div class="col-md-12">
+            <a class="-Add-Another-Catego pointerCursor" (click)="addMaterial7()">+ Add Another Material Category</a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="materialDiv7">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Material Category </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='selectedMaterial7' name="partQvbtyUnitId"
+                  (blur)="material7Focused = true" (change)="getChildMaterial7()">
+                  <option value="">
+                    Select Material Category
+                  </option>
+                  <option *ngFor="let material  of iMaterialViewModelColl | groupBy:'parentMaterialName' ">
+                    {{ material.key }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-2 remove-padding-right">
+                <a (click)="removeMaterial7()">
+                  <span class="-Add-Another-Catego pointerCursor">Remove</span>
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <p style="color: red; float: right" *ngIf="!checkmaterial7Selected()">Please Select Material.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6" style="padding: 10px" *ngFor="let child  of iMaterialViewModelForEditColl7">
+            <button [ngClass]="(child.isSelected)?'child-category-active':'child-category-deactive'" (click)="addChildMaterial7(child.childMaterialId)">
+              {{child.childMaterialName}}</button>
+          </div>
+        </div>
+        <div class="row" *ngIf="!materialDiv8">
+          <div class="col-md-12">
+            <a class="-Add-Another-Catego pointerCursor" (click)="addMaterial8()">+ Add Another Material Category</a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="materialDiv8">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Material Category </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='selectedMaterial8' name="partQvbtyUnitId"
+                  (blur)="material8Focused = true" (change)="getChildMaterial8()">
+                  <option value="">
+                    Select Material Category
+                  </option>
+                  <option *ngFor="let material  of iMaterialViewModelColl | groupBy:'parentMaterialName' ">
+                    {{ material.key }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-2 remove-padding-right">
+                <a (click)="removeMaterial8()">
+                  <span class="-Add-Another-Catego pointerCursor">Remove</span>
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <p style="color: red; float: right" *ngIf="!checkmaterial8Selected()">Please Select Material.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6" style="padding: 10px" *ngFor="let child  of iMaterialViewModelForEditColl8">
+            <button [ngClass]="(child.isSelected)?'child-category-active':'child-category-deactive'" (click)="addChildMaterial8(child.childMaterialId)">
+              {{child.childMaterialName}}</button>
+          </div>
+        </div>
+        <div class="row" *ngIf="!materialDiv9">
+          <div class="col-md-12">
+            <a class="-Add-Another-Catego pointerCursor" (click)="addMaterial9()">+ Add Another Material Category</a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="materialDiv9">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Material Category </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='selectedMaterial9' name="partQvbtyUnitId"
+                  (blur)="material9Focused = true" (change)="getChildMaterial9()">
+                  <option value="">
+                    Select Material Category
+                  </option>
+                  <option *ngFor="let material  of iMaterialViewModelColl | groupBy:'parentMaterialName' ">
+                    {{ material.key }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-2 remove-padding-right">
+                <a (click)="removeMaterial9()">
+                  <span class="-Add-Another-Catego pointerCursor">Remove</span>
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <p style="color: red; float: right" *ngIf="!checkmaterial9Selected()">Please Select Material.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6" style="padding: 10px" *ngFor="let child  of iMaterialViewModelForEditColl9">
+            <button [ngClass]="(child.isSelected)?'child-category-active':'child-category-deactive'" (click)="addChildMaterial9(child.childMaterialId)">
+              {{child.childMaterialName}}</button>
+          </div>
+        </div>
+        <div class="row" *ngIf="!materialDiv10">
+          <div class="col-md-12">
+            <a class="-Add-Another-Catego pointerCursor" (click)="addMaterial10()">+ Add Another Material Category</a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="materialDiv10">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Material Category </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='selectedMaterial10' name="partQvbtyUnitId"
+                  (blur)="material10Focused = true" (change)="getChildMaterial10()">
+                  <option value="">
+                    Select Material Category
+                  </option>
+                  <option *ngFor="let material  of iMaterialViewModelColl | groupBy:'parentMaterialName' ">
+                    {{ material.key }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-2 remove-padding-right">
+                <a (click)="removeMaterial10()">
+                  <span class="-Add-Another-Catego pointerCursor">Remove</span>
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <p style="color: red; float: right" *ngIf="!checkmaterial10Selected()">Please Select Material.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6" style="padding: 10px" *ngFor="let child  of iMaterialViewModelForEditColl10">
+            <button [ngClass]="(child.isSelected)?'child-category-active':'child-category-deactive'" (click)="addChildMaterial10(child.childMaterialId)">
+              {{child.childMaterialName}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row row-padding-top">
+      <div class="col-md-6">
+        <button type="button" class="Rectangle-3" (click)="closePartDrawer(1)">
+          <span class="button-lbl" style="color: #81db6d">Cancel</span>
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" [disabled]="!isFocusPageValid()" [ngClass]="(isFocusPageValid())?'btn Save-Equipment-active':'btn Save-Equipment-Deactive '"
+          (click)="submitFocus()">Save</button>
+      </div>
+    </div>
+
+  </div>
+  <div *ngIf="isCompanyCatagories()">
+      <div class="row row-border-bottom">
+          <div class="col-md-12 rightpanel">
+            <i class="fa fa-times-circle pull-right custom-cursor" (click)="closePartDrawer()" placement="top" container="body"
+              ngbTooltip="Close"></i>
+            <h2 class="panelheading heading-text pb-3">Edit Capabilities</h2>
+          </div>
+        </div>
+    <div *ngIf="!isLoader">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="Select-a-process-cat">
+            Select a process category and then any specific processes you perform.
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="processDiv1">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Process Category </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='parentCertificate1' name="partQtyUnitId"
+                  (change)="getChildProcess1() ">
+                  <option *ngIf="(this.parentCertificate1 === '')"></option>
+                  <option *ngIf="(this.parentCertificate1 !== '')"> {{this.parentCertificate1}}</option>
+                  <option *ngFor="let process  of iCustomProcessViewModelColl | groupBy:'parentDisciplineName'">
+                    {{ process.key }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div *ngIf="checkForProcess1()" class="row">
+              <div class="col-md-12">
+                <!-- <p style="color: red; float: right">Please Select Process.</p> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="!isLoader">
+          <div class="col-md-6" style="padding: 10px" *ngFor="let child  of iCustomProcessViewModelForCapaColl1">
+            <button [ngClass]="(child.isSelected)?'special-certifications-active':'special-certifications-deactive'"
+              class="special-certifications-deactive" (click)="addChildProcess1(child.childDisciplineId)">
+              {{child.childDisciplineName}}</button>
+          </div>
+        </div>
+        <div class="row" *ngIf="!processDiv2">
+          <div class="col-md-12">
+            <a class="-Add-Another-Catego pointerCursor" (click)="addProcess2()">+ Add Another Category</a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="processDiv2">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Process Category </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='parentCertificate2' name="partQtyUnitId"
+                  (change)="getChildProcess2()">
+                  <option *ngIf="(this.parentCertificate2 === '')"></option>
+                  <option *ngIf="(this.parentCertificate2 !== '')"> {{this.parentCertificate2}}</option>
+                  <option *ngFor="let process  of iCustomProcessViewModelColl | groupBy:'parentDisciplineName'">
+                    {{ process.key }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-2 remove-padding-right">
+                <a (click)="removeProcess2()">
+                  <span class="-Add-Another-Catego pointerCursor">Remove</span>
+                </a>
+              </div>
+            </div>
+            <!-- <p style="color: red; float: right" *ngIf="checkForProcess2()">Please Select Process.</p> -->
+          </div>
+        </div>
+        <div style="width: 100%">
+          <table style="width: 100%">
+            <tr>
+              <td style="line-height: 0px;border:0px;height:0px">&nbsp;</td>
+            </tr>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-md-6" style="padding: 10px" *ngFor="let child  of iCustomProcessViewModelForCapaColl2">
+            <button [ngClass]="(child.isSelected)?'special-certifications-active-2':'special-certifications-deactive-2'"
+              (click)="addChildProcess2(child.childDisciplineId)"> {{child.childDisciplineName}}</button>
+          </div>
+        </div>
+        <div class="row" *ngIf="!processDiv3">
+          <div class="col-md-12">
+            <a class="-Add-Another-Catego pointerCursor" (click)="addProcess3()">+ Add Another Category</a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="processDiv3">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Process Category </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='parentCertificate3' name="partQtyUnitId"
+                  (change)="getChildProcess3() ">
+                  <option *ngIf="(this.parentCertificate3 === '')"></option>
+                  <option *ngIf="(this.parentCertificate3 !== '')"> {{this.parentCertificate3}}</option>
+                  <option *ngFor="let process  of iCustomProcessViewModelColl | groupBy:'parentDisciplineName'">
+                    {{ process.key }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-2 remove-padding-right">
+                <a (click)="removeProcess3()">
+                  <span class="-Add-Another-Catego pointerCursor">Remove</span>
+                </a>
+              </div>
+            </div>
+            <!-- <p style="color: red; float: right" *ngIf="checkForProcess3()">Please Select Process.</p> -->
+          </div>
+        </div>
+        <div style="width: 100%">
+          <table style="width: 100%">
+            <tr>
+              <td style="line-height: 0px;border:0px;height:0px">&nbsp;</td>
+            </tr>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-md-6" style="padding: 10px" *ngFor="let child  of iCustomProcessViewModelForCapaColl3">
+            <button [ngClass]="(child.isSelected)?'special-certifications-active':'special-certifications-deactive'"
+              class="special-certifications-deactive" (click)="addChildProcess3(child.childDisciplineId)">
+              {{child.childDisciplineName}}</button>
+          </div>
+        </div>
+        <div class="row" *ngIf="!processDiv4">
+          <div class="col-md-12">
+            <a class="-Add-Another-Catego pointerCursor" (click)="addProcess4()">+ Add Another Category</a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="processDiv4">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Process Category </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='parentCertificate4' name="partQtyUnitId"
+                  (change)="getChildProcess4() ">
+                  <option *ngIf="(this.parentCertificate4 === '')"></option>
+                  <option *ngIf="(this.parentCertificate4 !== '')"> {{this.parentCertificate4}}</option>
+                  <option *ngFor="let process  of iCustomProcessViewModelColl | groupBy:'parentDisciplineName'">
+                    {{ process.key }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-2 remove-padding-right">
+                <a (click)="removeProcess4()">
+                  <span class="-Add-Another-Catego pointerCursor">Remove</span>
+                </a>
+              </div>
+            </div>
+            <!-- <p style="color: red; float: right" *ngIf="checkForProcess4()">Please Select Process.</p> -->
+          </div>
+        </div>
+        <div style="width: 100%">
+          <table style="width: 100%">
+            <tr>
+              <td style="line-height: 0px;border:0px;height:0px">&nbsp;</td>
+            </tr>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-md-6" style="padding: 10px" *ngFor="let child  of iCustomProcessViewModelForCapaColl4">
+            <button [ngClass]="(child.isSelected)?'special-certifications-active':'special-certifications-deactive'"
+              class="special-certifications-deactive" (click)="addChildProcess4(child.childDisciplineId)">
+              {{child.childDisciplineName}}</button>
+          </div>
+        </div>
+        <div class="row" *ngIf="!processDiv5">
+          <div class="col-md-12">
+            <a class="-Add-Another-Catego pointerCursor" (click)="addProcess5()">+ Add Another Category</a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="processDiv5">
+        <div class="col-md-12 inner-div">
+          <div class="margin-top">
+            <label for="partNumber" class="I-am-a-person-that">Process Category </label>
+            <div class="row row-padding-top">
+              <div class="col-md-10">
+                <select id="jobPostingId" class="form-control" [(ngModel)]='parentCertificate5' name="partQtyUnitId"
+                  (change)="getChildProcess5() ">
+                  <option *ngIf="(this.parentCertificate5 === '')"></option>
+                  <option *ngIf="(this.parentCertificate5 !== '')"> {{this.parentCertificate5}}</option>
+                  <option *ngFor="let process  of iCustomProcessViewModelColl | groupBy:'parentDisciplineName'">
+                    {{ process.key }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-2 remove-padding-right">
+                <a (click)="removeProcess5()">
+                  <span class="-Add-Another-Catego pointerCursor">Remove</span>
+                </a>
+              </div>
+            </div>
+            <!-- <p style="color: red; float: right" *ngIf="checkForProcess5()">Please Select Process.</p> -->
+          </div>
+        </div>
+        <div style="width: 100%">
+          <table style="width: 100%">
+            <tr>
+              <td style="line-height: 0px;border:0px;height:0px">&nbsp;</td>
+            </tr>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-md-6" style="padding: 10px" *ngFor="let child  of iCustomProcessViewModelForCapaColl5">
+            <button [ngClass]="(child.isSelected)?'special-certifications-active':'special-certifications-deactive'"
+              class="special-certifications-deactive" (click)="addChildProcess5(child.childDisciplineId)">
+              {{child.childDisciplineName}}</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="row row-padding-top">
+        <div class="col-md-6">
+          <button type="button" class="Rectangle-3" (click)="closePartDrawer(1)">
+            <span class="button-lbl" style="color: #81db6d">Cancel</span>
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" [ngClass]="(checkForProcessValidation() && !isSaveBtnDisabled)?'btn Save-Equipment-active':'btn Save-Equipment-Deactive'"
+            (click)="submitCapabilitis()" [disabled]="!checkForProcessValidation() || isSaveBtnDisabled">Save</button>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isLoader">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+  </div>
+
+</div>

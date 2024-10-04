@@ -1,0 +1,363 @@
+.close {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  right: 0%;
+  padding: 12px 16px;
+  transform: translate(0%, -50%);
+}
+.btn-manu-active{
+  border: 1px solid #222222;
+  background-color: #2E58D6!important;
+  color:#fff;
+}
+.btn-manu-inactive{
+  border: 1px solid #2E58D6;
+  background-color: #fff!important;
+  color:#2E58D6;
+}
+.underline {
+  text-decoration: underline;
+  color: #2E58D6!important;
+  font-size: 14px;
+}
+.term-text{
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f6f7fb;
+}
+.term-text span:nth-child(2) {
+  font-size: 12px;
+}
+.term-text span {
+  color: #2E58D6!important;
+  cursor: pointer;
+}
+.dash {
+  border-radius: 2px;
+  border: dashed 2px #e2e2e5;
+  height: 100px;
+  width: 380px;
+  margin-bottom: 25px;
+  display: flex;
+}
+
+.graycolor {
+  background-color: #e2e2e5;
+  padding: 5px;
+  margin: 5px;
+}
+
+.bluecolor {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #2E58D6;
+}
+
+.Rectangle {
+  width: 380px;
+  height: 35px;
+  border-radius: 2px;
+  border: solid 1px #bec4cb;
+  background-color: #ffffff;
+}
+
+.parent-full {
+  min-width: 100%;
+}
+
+.width-30 {
+  width: 25%;
+}
+
+.width-25 {
+  // width: 20%;
+  // height: 36px;
+  margin-right: 10px;
+  padding: 0 15px;
+}
+
+.width-50 {
+  width: 50%;
+}
+
+.cus-Border {
+  border: 1px solid #a9a7a7 !important;
+}
+
+.custom-a {
+  // font-weight: 700;
+  // font-size: 16px;
+  // color:#919aa3;
+  border: 0;
+  margin-right: 0;
+  color: #737373 !important;
+  font-size: 16px;
+  text-align: center !important;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.active1 {
+  border-bottom:3px solid #2E58D6;
+}
+.active1 .custom-a {
+  color: #2E58D6 !important;
+}
+.custom-a:hover {
+  color:#222!important;
+  // border-bottom: 4px solid #2E58D6;
+}
+.active1:hover {
+  color: #2E58D6 !important;
+}
+.right-padding {
+  padding-right: 15px;
+}
+
+.left-padding {
+  padding-left: 15px;
+}
+
+.radio-align {
+  text-align: left;
+}
+
+.wrt {
+  position: relative;
+}
+
+.border-dotted {
+  background-color: #d6d6d6;
+  padding: 5px;
+}
+
+.icofont.gray {
+  font-style: italic;
+  color: #ccc;
+}
+
+.errorSetting-msg2 {
+  position: absolute;
+  bottom: -11px;
+  left: 0;
+  width: 100%;
+  left: 15px
+}
+
+.error-msg2 {
+  position: absolute;
+  bottom: 11px;
+  top: 32px !important;
+  left: 0;
+  width: 100%;
+  left: 15px;
+}
+
+@media screen and (max-width:576px) {
+  .radio-align {
+    text-align: center;
+  }
+}
+
+.donot-allowed {
+  cursor: not-allowed;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.padding-top-36 {
+  padding-top: 36px
+}
+
+.padding-top-50 {
+  padding-top: 50px
+}
+
+.buyer-active {
+  width: 64px;
+  height: 30px;
+  border-radius: 3px;
+  background-color: #e2e2e2;
+  border: solid 2px #2E58D6;
+  box-shadow: inset 2px 2px 1px #a5a2a2;
+}
+
+.buyer-deactive {
+  width: 64px;
+  height: 30px;
+  border-radius: 3px;
+  background-color: #ffffff;
+  border: solid 2px #2E58D6;
+}
+
+.supplier-active {
+  width: 120px;
+  height: 30px;
+  border-radius: 3px;
+  background-color: #e2e2e2;
+  border: solid 2px #2E58D6;
+  box-shadow: inset 2px 2px 1px #a5a2a2;
+}
+
+.supplier-deactive {
+  width: 120px;
+  height: 30px;
+  border-radius: 3px;
+  background-color: #ffffff;
+  border: solid 2px #2E58D6;
+}
+
+
+.Rectangle-3 {
+  width: 302px;
+  height: 543px;
+  border-radius: 5px;
+  box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+  background-color: #ffffff;
+}
+
+
+.Rectangle-4 {
+  width: 185px;
+  height: 35px;
+  border-radius: 2px;
+  background-color: #ffffff;
+}
+
+.Rectangle-2 {
+  width: 265px;
+  height: 45px;
+  border-radius: 2px;
+  background-color: #2E58D6;
+}
+
+.Rectanglebtn-active {
+  background-color: #2E58D6 !important;
+  color: white !important;
+}
+
+.Rectanglebtn-inactive {
+  background-color: #bec4cb !important;
+  color: white !important;
+  cursor: default !important;
+}
+
+.Rectangle-description {
+  width: 340px;
+  height: 200px;
+  border-radius: 2px;
+  border: solid 1px #2E58D6;
+  background-color: #ffffff;
+}
+
+.dHelper-align {
+  text-align: right;
+}
+
+.description-helper {
+  height: 16px;
+  font-family: Poppins;
+  font-size: 11px;
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #919aa3;
+}
+
+.modal-header {
+  padding-bottom: 5px;
+}
+
+.modal-title {
+  font-size: 21px !important;
+  font-weight: bold !important;
+}
+
+.modal-footer .btn-group button {
+  height: 40px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border: none;
+  border-right: 1px solid #ddd;
+}
+.btn-ignore-rfq {
+  width: 100%;
+  height: 45px;
+  border-radius: 2px;
+  border: solid 2px #2E58D6;
+  background-color:#fff;
+  color:#2E58D6
+}
+.btn-cancel-rfq {
+  width: 100%;
+  height: 45px;
+  border-radius: 2px;
+  background-color: #2E58D6;
+  color:#ffffff;
+}
+.loading {
+  position: fixed;
+  z-index: 999;
+  height: 2em;
+  width: 2em;
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+/* Transparent Overlay */
+.loading:before {
+  content: '';
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+  background-color: #666666;
+}
+.dashboardButton {
+  margin-top: 5px;
+  margin-bottom: 30px;
+}
+.dashboardButton .btn, .timeFormatButton .btn{
+  margin-right: 20px;
+  border-width:2px;
+  border-radius: 3px;
+  padding:5px 15px !important;
+}
+.supplierPreference {
+  margin:20px;
+}
+
+.emailAdd{
+  color: #2E58D6!important;
+  cursor: pointer;
+}
+
+li.width-25 a:first-child {
+  padding-left: 0 !important;
+}
+li.width-25:first-child {
+  padding-left: 0 !important;
+}
+.width-25:hover {
+  border-bottom: 3px solid #2E58D6;
+}
+
+::ng-deep .border-checkbox-section .border-checkbox-group-primary .border-checkbox-label:before{
+  border: 2px solid #2E58D6;
+}
+
+:ng-deep .border-checkbox-section .border-checkbox-group-primary .border-checkbox:checked + .border-checkbox-label:after{
+  border-color: #2E58D6; 
+}

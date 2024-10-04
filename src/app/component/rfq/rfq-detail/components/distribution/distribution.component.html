@@ -1,0 +1,230 @@
+<div class="row" *ngIf="!isRfqAvailable">
+  <div class="col-md-12">
+    <table class="nda-table">
+      <thead>
+        <tr>
+          <td class="message-results"> {{iSupplierDetailsTemp?.length}} results</td>
+          <td class="message-results2">
+            <div *ngIf="selectedRowCount > 1">{{selectedRowCount}} selected</div>
+          </td>
+          <td>
+            <button type="button" class="btn btn-msg" [disabled]="!(selectedRowCount > 1)"
+              (click)="openMessageDrawermultiple('')">Message All</button>
+          </td>
+        </tr>
+      </thead>
+    </table>
+  </div>
+</div>
+<div class="row" style="padding-top:10px">
+  <div class="col-md-9">
+    <app-rfg-insight-filter *ngIf="rfqId != 0" [rfqId]="rfqId" (selectedFilter)="setStatus($event)">
+    </app-rfg-insight-filter>
+  </div>
+  <div class="col-md-3 text-right">
+    <div class="input-container">
+      <i class="fa fa-search icon-search" (click)="filterAll()" placement="top" container="body"
+        ngbTooltip="Search"></i>
+      <input class="search search-text" [(ngModel)]="searchFilterValue" placeholder="Search By CompanyName" type="text"
+        (keypress)="searchByKey($event)" (input)="checkSearch(searchFilterValue)" />
+      <i class="fa fa-times-circle icon" (click)="removeTextValue()" placement="top" container="body"
+        ngbTooltip="Remove Text"></i>
+    </div>
+  </div>
+</div>
+<div *ngIf="!isLoader" style="min-height: 500px;">
+  {{isDistributionMsg() }}
+  <div class="row" >
+    <div class="col-md-12 m-t-10">
+      <div class="row" *ngIf="!isRfqAvailable">
+        <div class="col-md-1 p-l-25">
+          <div class="border-checkbox-section">
+            <div class="border-checkbox-group border-checkbox-group-primary">
+              <input class="border-checkbox" type="checkbox" id="chkbox" [(ngModel)]="selectedAll"
+                (change)="selectAll();">
+              <label class="border-checkbox-label" for="chkbox"
+                style=" margin-bottom: 0px; margin-right: 0px; margin-left: 5px; "></label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <span class="f-12 f-w-600" (click)="sortByType('isManufacturer')">Manufacturer <i
+              [ngClass]="(isManufacturer)?'fa fa-sort-asc':'fa fa-sort-desc'"></i></span>
+        </div>
+        <div class="col-md-2" style="padding: 0px;">
+          <span class="f-12 f-w-600" (click)="sortByType('isManufacturingLocation')">Manufacturing Location <i
+              [ngClass]="(isManufacturingLocation)?'fa fa-sort-asc':'fa fa-sort-desc'"></i></span>
+        </div>
+        <div class="col-md-2">
+          <span class="f-12 f-w-600"> Phone Number</span>
+        </div>
+        <div class="col-md-2">
+          <span class="f-12 f-w-600" (click)="sortByType('isStatus')">Status <i
+              [ngClass]="(isStatus)?'fa fa-sort-asc':'fa fa-sort-desc'"></i></span>
+        </div>
+        <div class="col-md-2">
+          <span class="f-12 f-w-600">Action</span>
+        </div>
+      </div>
+      <div class="row " *ngFor='let supplier of iSupplierDetailsTemp; let i = index'>
+        <div class="col-md-12">
+          <div class="row manu-list">
+            <div class="col-md-1 p-t-10 ">
+              <div class="border-checkbox-section">
+                <div class="border-checkbox-group border-checkbox-group-primary">
+                  <input class="border-checkbox" type="checkbox" id="{{ i }}" [(ngModel)]="supplier.isSelected"
+                    (change)="checkIfAllSelected()">
+                  <label class="border-checkbox-label" for="{{ i }}"></label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3  p-t-10">
+              <h2 class="pointerCursor text-truncate manName"
+                (click)="readMore($event,supplier.companyUrl,supplier.contactId, supplier.profileDetailUrl)">
+                <span placement="top" data-container="body"
+                  ngbTooltip="{{ supplier.companyName}}">{{ supplier.companyName }}</span>
+              </h2>
+              <div class="rfq-star">
+                <span
+                  style="color:#2E58D6;">{{ (supplier.noOfStars)? (supplier.noOfStars | number : '1.0-1'): 'n/a'}}</span>
+                <ng-template #t let-fill="fill">
+                  <span class="star" [class.full]="fill === 100">
+                    <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+                  </span>
+                </ng-template>
+                <ngb-rating [(rate)]="supplier.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+              </div>
+            </div>
+            <div class="col-md-2  p-t-10"
+              (click)="openSidePanel(supplier.contactIdEncrypt, supplier.companyName, supplier.companyName)">
+              <p class="f-w-600"> {{ supplier.manufacturingLocation }}</p>
+            </div>
+            <div class="col-md-2  p-t-10"
+              (click)="openSidePanel(supplier.contactIdEncrypt, supplier.companyName, supplier.companyName)">
+              <p class="f-w-600">{{ supplier.phoneNo}}</p>
+            </div>
+            <div class="col-md-2  p-t-10"
+              (click)="openSidePanel(supplier.contactIdEncrypt, supplier.companyName, supplier.companyName)">
+              <p class="f-w-600"> {{supplier.status}}</p>
+            </div>
+            <div class="col-md-2 editdelete action-box">
+              <a style="float: left" (click)="removeContact(supplier.companyId)">
+                <i class="fa fa-times-circle-o f-16" ngbTooltip="Remove From List"></i>
+              </a>
+              <a>
+                <i class="fa fa-envelope-o f-16" ngbTooltip="Message Manufacturer"
+                  (click)="openMessageDrawer($event, supplier.contactId, rfqId, supplier.companyName,supplier.companyId )"></i>
+              </a>
+              <a *ngIf="supplier.noOfChildContacts >= 1">
+                <i class="f-24" data-container="body" ngbTooltip="Click To Expand" [ngClass]="(showBlock === i+1)?'fa fa-angle-down':'fa fa-angle-right'" (click)="toggle(i+1)"></i>
+              </a>
+              <a *ngIf="supplier.noOfChildContacts == 0" style="cursor: not-allowed;">
+                <i class="fa fa-angle-right f-24" style="cursor: not-allowed;color:#ccc;"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12" style="display: block;padding: 0px 40px;" [style.display]="showBlock === (i+1)? 'block':'none'">
+
+          <app-distribution-thread *ngIf="showBlock === (i+1)" [rfqId]="rfqId" [contactId]="supplier.contactId" [companyId]="supplier.companyId" (profileEvent)="openProfileEvent($event)" (messageEvent)="openMessageDrawerEvent($event)"></app-distribution-thread>
+
+        </div>
+
+      </div>
+
+      <div class="myRFQ-rfq-no-available" *ngIf="isRfqAvailable">
+        <div class="row" style="text-align: center;padding-top:106px">
+          <div class="col-md-12">
+            <div>
+              <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+                assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding-top:34px">
+          <div class="col-md-12">
+            <div class="myRFQ-noRFQActive-helper-text">No Records Found</div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="!isRfqAvailable">
+        <div class="col-md-3">
+          <div class="dataTables_length" id="example_length">
+            <label>Show
+              <select name="example_length" aria-controls="example" class="" [(ngModel)]="pageSize"
+                (change)="filterAll()">
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+              entries</label>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="paginations">
+            <div>
+              <div id="radioBtn" class="btn-group">
+                <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}"
+                  class="btn btn-primary btn-sm notActive" (click)="toFirst()" data-bs-toggle="fun" data-title="Y">
+                  First
+                </a>
+                <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}"
+                  class="btn btn-primary btn-sm notActive" (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                  Previous
+                </a>
+                <a *ngFor="let page of pagesIndex" (click)="setPage(page)"
+                  [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                  data-bs-toggle="fun" data-title="X">
+                  {{page}}
+                </a>
+                <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+                  (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                  Next
+                </a>
+                <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+                  (click)="toLast()" data-bs-toggle="fun" data-title="Y">
+                  Last
+                </a>
+              </div>
+              <input type="hidden" name="fun" id="fun">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="!isRfqAvailable">
+        <div class="col-md-12">
+          <div class="pull-right padd-right">
+            <label class="showreccount"> {{currentIndex }} of {{pageNumber}} </label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isLoader">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div>
+<p-confirmDialog header="Confirmation" icon="" width="629" height="220" #msgDlt>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-ignore-rfq" (click)="msgDlt.reject()">No</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="msgDlt.accept()">Yes</button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>

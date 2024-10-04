@@ -1,0 +1,663 @@
+<div class="row">
+  {{ reloadPageOndrawerClose() }}
+  <div [ngClass]="isSidePanelOpen() ? 'col-md-12' : 'col-md-8'">
+    <div *ngIf="!isSidePanelOpen()">
+      <div class="row cust-padding">
+        <div class="col-md-4 bottom-border">
+          <h2 class="innerpanelheading">Company Description</h2>
+        </div>
+        <div class="col-md-8 bottom-border text-right">
+        </div>
+      </div>
+      <div class="row ">
+        <div class="col-md-12">
+          <button type="button" [ngClass]="iAboutUsModel.description == '' ? 'profile_btn' : 'profile_btn profile_editbtn'" (click)="openSidePanel('companyDescription')">
+            {{ iAboutUsModel.description == '' ? 'Add Description' : 'Edit Description' }}
+          </button>
+        </div>
+        <div class="col-md-12 descP" *ngIf="iAboutUsModel.description !== ''">
+          <p class="description-wraper" [innerHTML]="iAboutUsModel.description | sanitizeNolimit"></p>
+        </div>
+      </div>
+      <div class="row cust-padding">
+        <div class="col-md-12 bottom-border">
+          <h2 class="innerpanelheading">Equipment </h2>
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12" *ngIf="isAdmin">
+              <button type="button" [ngClass]="iAboutUsModel?.equipments.length === 0 ? 'profile_btn' : 'profile_btn profile_editbtn'" (click)="openSidePanel('companyEquipment')">
+                {{ iAboutUsModel?.equipments.length === 0 ? 'Add Equipment' : 'Edit Equipment' }}
+              </button>
+            </div>
+        <div class="col-md-6" *ngFor="let item of iAboutUsModel?.equipments">
+          <div *ngIf="item.isFile == false  || item.isFile == undefined" class="equipment-list text-truncate" [title]="item.equipmentText">{{item.equipmentText}}</div>
+          <div *ngIf="item.isFile == true" style="color: #4a90e2;cursor: pointer;" class="equipment-list text-truncate" [title]="item.equipmentText" (click)="downloadS3File(item.equipmentText, true)">{{getOriginalFileName(item.equipmentText)}}</div>
+        </div>
+      </div>
+      <div class="row cust-padding">
+        <div class="col-md-12 bottom-border">
+          <h2 class="innerpanelheading">Photos</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+            <button type="button"  [ngClass]="iAboutUsModel?.specialFiles?.length === 0 ? 'profile_btn' : 'profile_btn profile_editbtn'" (click)="openSidePanel('companyPhotos')" placement="top" container="body" ngbTooltip="You can add, delete and sort the sequence by index">
+                {{ iAboutUsModel?.specialFiles?.length === 0 ? 'Add Photos' : 'Edit Photos' }}
+            </button>
+        </div>
+      </div>
+
+      <div *ngIf="!(iAboutUsModel?.specialFiles?.length === 0) || !(_3DListArray.length)"
+        style="max-height:500px; overflow-y:hidden; display: -webkit-box;">
+        <div class="col-md-4 thumb" *ngFor="let urls of _3DListArray">
+
+          <a class="thumbnail" href="#" data-image-id="" (click)="openPhoto(urls.company3dtourId, true)" data-bs-toggle="modal" data-title="" data-video="urls._3dTourUrl" data-bs-target="#image-gallery">
+            <div class="tour-model">
+              <iframe [src]=" urls._3dTourUrl | safe" frameborder="0"></iframe>
+              <div> <span >3D</span> </div>
+            </div>
+            <div class="middle">
+              <i class="fa fa-arrows fa-3x" aria-hidden="true"></i>
+              <div class="">View Larger</div>
+            </div>
+          </a>
+          <div style=" text-align: center; margin-bottom: 4px; ">
+            <span style=" background-color: #81db6d; color: #fff; padding: 3px 3px 1px 3px; ">
+                MFG 3D Shopview
+            </span>
+          </div>
+        </div>
+        <div class="col-md-4 thumb" *ngFor="let item of iAboutUsModel.specialFiles">
+
+          <a class="thumbnail" href="#" data-image-id="" (click)="openPhoto(item.fileName, false)" data-bs-toggle="modal"
+            data-title="" data-image="item.fileName" data-bs-target="#image-gallery">
+            <img class="img-thumbnail" [src]="item.fileName" alt="Another alt text" />
+            <div class="middle">
+              <i class="fa fa-arrows fa-3x" aria-hidden="true"></i>
+              <div class="">View Larger</div>
+            </div>
+          </a>
+          <div style="text-align: center;height: 20px; margin-top: 5px;">
+              <span>
+                  {{ (item.fileTitle)? (item.fileTitle | dotLimit:'10') : '' }}
+              </span>
+            </div>
+        </div>
+      </div>
+      <!-- Video section -->
+      <div class="row cust-padding" >
+        <div class="col-md-12 bottom-border">
+          <h2 class="innerpanelheading">Videos</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12" >
+            <button type="button" [ngClass]="!(_videoList?.length) ? 'profile_btn' : 'profile_btn profile_editbtn'" (click)="openSidePanel('companyVideos1')">
+                {{ !(_videoList?.length) ? 'Add Video Link' : 'Edit Video Link' }}
+            </button>
+          <div *ngIf="(_videoList?.length)" style="float:left;">
+            <ul>
+              <li *ngFor="let urls of _videoList" style="word-break: break-word">
+                {{ urls.videoLink }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+       <!-- Video section -->
+      <div class="row cust-padding" *ngIf="isPremium() !== 1">
+        <div class="col-md-12 bottom-border">
+          <h2 class="innerpanelheading"> 3D Virtual Tour</h2>
+        </div>
+        <!-- <div class="col-md-8 bottom-border text-right">
+          <i class="fa fa-pencil-square-o edit-icon" placement="top" container="body" ngbTooltip="Edit"
+            aria-hidden="true" (click)="openSidePanel('companyVideos')"></i>
+        </div> -->
+      </div>
+      <div class="row">
+        <div class="col-md-12" *ngIf="isPremium() !== 1">
+            <button type="button" [ngClass]="!(_3DListArray.length) ? 'profile_btn' : 'profile_btn profile_editbtn'" (click)="openSidePanel('companyVideos')">
+                {{ !(_3DListArray.length) ? 'Add Tour Link' : 'Edit Tour Link' }}
+            </button>
+          <div *ngIf="(_3DListArray.length)" style="float:left;">
+            <ul>
+              <li *ngFor="let urls of _3DListArray" style="word-break: break-word">
+                {{ urls._3dTourUrl }}
+              </li>
+            </ul>
+          </div>
+          <!-- <p *ngIf="!(_3DListArray.length) ">NO URL Found</p> -->
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isSidePanelOpen()">
+      <div class="row cust-padding">
+        <div class="col-md-12 bottom-border">
+          <h2 class="innerpanelheading">Company Description</h2>
+        </div>
+        <!-- <div class="col-md-8 bottom-border text-right">
+          <i class="fa fa-pencil-square-o edit-icon" aria-hidden="true" (click)="openSidePanel('companyDescription')"
+            placement="top" container="body" ngbTooltip="Edit"></i>
+        </div> -->
+      </div>
+      <div class="row ">
+        <div class="col-md-12">
+          <button type="button" [ngClass]="iAboutUsModel.description == '' ? 'profile_btn' : 'profile_btn profile_editbtn'" (click)="openSidePanel('companyDescription')">
+            {{ iAboutUsModel.description == '' ? 'Add Description' : 'Edit Description' }}
+          </button>
+        </div>
+        <div class="col-md-12 descP" *ngIf="iAboutUsModel?.description !== ''">
+          <p class="description-wraper" [innerHTML]="iAboutUsModel.description | sanitizeNolimit"> </p>
+        </div>
+        <!-- <div class="col-md-6" *ngIf="iAboutUsModel?.description == ''">
+          <p>No company description at this time.</p>
+        </div> -->
+      </div>
+
+
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="row cust-padding">
+            <div class="col-md-12 bottom-border">
+              <h2 class="innerpanelheading">Contact</h2>
+            </div>
+            <!-- <div class="col-md-8 bottom-border text-right">
+              <i class="fa fa-pencil-square-o edit-icon" aria-hidden="true" placement="top" container="body"
+                ngbTooltip="Edit"
+                (click)="openSidePanel('contactInformation'); openDemographicsDetail(iAboutUsModel.companyId)"></i>
+            </div> -->
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <button type="button" class="profile_btn profile_editbtn" (click)="openSidePanel('contactInformation'); openDemographicsDetail(iAboutUsModel.companyId)">
+                  Edit Contact
+              </button>
+            </div>
+        </div>
+          <p>
+            <strong>Name :</strong><br />
+            {{ iContactViewModel?.firstName }} {{ iContactViewModel?.lastName }}
+          </p>
+          <p>
+            <strong>Email :</strong><br />{{EmailId}}
+          </p>
+
+          <!-- <p>
+                      <strong>Phone Number :</strong><br />{{ iContactViewModel?.phoneNo }}
+                    </p> -->
+        </div>
+        <div class="col-md-4">
+          <div class="row cust-padding">
+            <div class="col-md-12 bottom-border">
+              <h2 class="innerpanelheading">Demographics</h2>
+            </div>
+            <!-- <div class="col-md-8 bottom-border text-right">
+              <i class="fa fa-pencil-square-o edit-icon" aria-hidden="true" placement="top" container="body"
+                ngbTooltip="Edit"
+                (click)="openSidePanel('companyDemographics'); openDemographicsDetail(iAboutUsModel.companyId)"></i>
+            </div> -->
+          </div>
+          <div class="row cust-padding">
+            <div class="col-md-12" style="padding: 0px;margin-top: -5px;">
+              <button type="button" class="profile_btn profile_editbtn" (click)="openSidePanel('companyDemographics'); openDemographicsDetail(iAboutUsModel.companyId)">
+                  Edit Demographics
+              </button>
+            </div>
+          </div>
+          <div *ngIf="!isDemographics" class="descP">
+            <p class="title-green">
+              <strong>MFG.com Member Since:</strong><br />{{ iAboutUsModel?.createdDate | date: "MM/dd/yy" }}
+            </p>
+            <p>
+              <strong>Company Type:</strong><br />
+              <label
+                *ngIf="iAboutUsModel.supplierType !== null">{{ iAboutUsModel?.supplierType.supplierTypeNameEn }}</label>
+            </p>
+            <p>
+              <strong>Manufacturing Location:</strong><br />
+              <label *ngIf="iAboutUsModel.manufacturingLocation !== null">{{
+              iAboutUsModel?.manufacturingLocation }}</label>
+            </p>
+            <p>
+              <strong># of Employees:</strong><br />{{ iAboutUsModel?.employeeCountRange }}
+            </p>
+            <strong>Languages:</strong><br />
+            <div *ngFor="let language of iAboutUsModel?.languages"> {{ language?.languageName }} </div>
+
+            <p><strong>D-U-N-S Number:</strong><br /> {{ iAboutUsModel?.dunsNumber }} </p>
+            <p class="description-wraper"><strong>Cage Code:</strong><br />{{ iAboutUsModel?.cageCode }}</p>
+            <br />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="row cust-padding">
+            <div class="col-md-12 bottom-border">
+              <h2 class="innerpanelheading">Certifications</h2>
+            </div>
+            <!-- <div class="col-md-8 bottom-border text-right">
+              <i class="fa fa-pencil-square-o edit-icon" aria-hidden="true"
+                (click)="openSidePanel('companyCertifications')" placement="top" container="body" ngbTooltip="Edit"></i>
+            </div> -->
+          </div>
+          <div class="col-md-12" style="padding: 0px;">
+            <button type="button" class="profile_btn" (click)="openSidePanel('companyCertifications')">
+              Add Certifications
+            </button>
+          </div>
+          <div class="col-md-12" *ngIf="certificateViewModelList.length !== 0">
+            <ul>
+              <li *ngFor="let certificate of certificateViewModelList">
+                <p>
+                  <strong class="title-blue pointerCursor" *ngIf="certificate.certificateCode != 'ITAR'" (click)="downloadS3File(certificate.fileName, true)">
+                    {{ certificate.certificateCode }}</strong>
+                  <strong *ngIf="certificate.certificateCode == 'ITAR'" class="title-blue pointerDefault" >
+                      {{ certificate.certificateCode }}</strong><br />
+                  {{ certificate.creationDate | date }}
+                  <span class="activeLink" (click)="removeCertificate(certificate)">Remove</span>
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="row cust-padding">
+        <div class="col-md-12 bottom-border">
+          <h2 class="innerpanelheading">Equipment</h2>
+        </div>
+        <!-- <div class="col-md-8 bottom-border text-right">
+          <i class="fa fa-pencil-square-o edit-icon" aria-hidden="true" placement="top" container="body"
+            ngbTooltip="Edit" (click)="openSidePanel('companyEquipment')"></i>
+        </div> -->
+      </div>
+      <div class="row">
+        <div class="col-md-12" *ngIf="isAdmin">
+          <button type="button" [ngClass]="iAboutUsModel?.equipments?.length === 0 ? 'profile_btn' : 'profile_btn profile_editbtn'" (click)="openSidePanel('companyEquipment')">
+              {{ iAboutUsModel?.equipments?.length === 0 ? 'Add Equipments' : 'Edit Equipments' }}
+          </button>
+        </div>
+        <div class="col-md-6" *ngFor="let item of iAboutUsModel?.equipments">
+          <div *ngIf="item.isFile == false || item.isFile == undefined " class="equipment-list text-truncate" [title]="item.equipmentText">{{item.equipmentText}}</div>
+          <div *ngIf="item.isFile == true" style="color: #4a90e2;cursor: pointer;" class="equipment-list text-truncate" [title]="item.equipmentText" (click)="downloadS3File(item.equipmentText, true)">{{getOriginalFileName(item.equipmentText)}}</div>
+        </div>
+        <!-- <ul
+            class="equipment-list"
+            *ngFor="let item of iAboutUsModel?.equipments"
+          >
+            <li style=" word-break: break-all; ">{{ item.equipmentText }}</li>
+          </ul> -->
+      </div>
+      <div class="row cust-padding">
+        <div class="col-md-12 bottom-border">
+          <h2 class="innerpanelheading">Photos</h2>
+        </div>
+        <!-- <div class="col-md-8 bottom-border text-right">
+          <i class="fa fa-pencil-square-o edit-icon" aria-hidden="true" placement="top" container="body"
+            ngbTooltip="Edit" (click)="openSidePanel('companyPhotos')"></i>
+        </div> -->
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <button type="button" [ngClass]="iAboutUsModel?.specialFiles?.length === 0 ? 'profile_btn' : 'profile_btn profile_editbtn'" (click)="openSidePanel('companyPhotos')">
+              {{ iAboutUsModel?.specialFiles?.length === 0 ? 'Add Photos' : 'Edit Photos' }}
+          </button>
+        </div>
+      </div>
+      <div *ngIf="!(iAboutUsModel?.specialFiles?.length === 0) || !(_3DListArray.length)"
+        style="max-height:500px; overflow-y:hidden; display: -webkit-box;">
+        <div class="col-md-4 thumb" *ngFor="let urls of _3DListArray">
+
+          <a class="thumbnail" href="#" data-image-id="" (click)="openPhoto(urls.company3dtourId, true)" data-bs-toggle="modal" data-title="" data-video="urls._3dTourUrl" data-bs-target="#image-gallery">
+            <div class="tour-model">
+              <iframe [src]=" urls._3dTourUrl | safe" frameborder="0"></iframe>
+              <div> <span >3D</span> </div>
+            </div>
+            <div class="middle">
+              <i class="fa fa-arrows fa-3x" aria-hidden="true"></i>
+              <div class="">View Larger</div>
+            </div>
+          </a>
+          <div style=" text-align: center; margin-bottom: 4px; ">
+            <span style=" background-color: #81db6d; color: #fff; padding: 3px 3px 1px 3px; ">
+                MFG 3D Shopview
+            </span>
+          </div>
+        </div>
+        <div class="col-md-4 thumb" *ngFor="let item of iAboutUsModel.specialFiles">
+
+          <a class="thumbnail" href="#" data-image-id="" (click)="openPhoto(item.fileName, false)" data-bs-toggle="modal"
+            data-title="" data-image="item.fileName" data-bs-target="#image-gallery">
+            <img class="img-thumbnail" [src]="item.fileName" alt="Another alt text" />
+            <div class="middle">
+              <i class="fa fa-arrows fa-3x" aria-hidden="true"></i>
+              <div class="">View Larger</div>
+            </div>
+          </a>
+          <div style="text-align: center;height: 20px; margin-top: 5px;">
+            <span>
+                {{ (item.fileTitle)? (item.fileTitle | dotLimit:'10') : '' }}
+            </span>
+          </div>
+        </div>
+      </div>
+       <!-- Video section -->
+      <div class="row cust-padding" >
+        <div class="col-md-12 bottom-border">
+          <h2 class="innerpanelheading">Videos</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12" >
+          <button type="button" [ngClass]="!(_videoList?.length) ? 'profile_btn' : 'profile_btn profile_editbtn'" (click)="openSidePanel('companyVideos1')">
+              {{ !(_videoList?.length) ? 'Add Video Link' : 'Edit Video Link' }}
+          </button>
+          <div *ngIf="(_videoList?.length)" style="float:left;">
+            <ul>
+              <li *ngFor="let urls of _videoList" style="word-break: break-word">
+                {{ urls.videoLink }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+       <!-- Video section -->
+      <div class="row cust-padding" *ngIf="isPremium() !== 1">
+        <div class="col-md-12 bottom-border">
+          <h2 class="innerpanelheading">3D Virtual Tour</h2>
+        </div>
+        <!-- <div class="col-md-8 bottom-border text-right">
+          <i class="fa fa-pencil-square-o edit-icon" placement="top" container="body" ngbTooltip="Edit"
+            aria-hidden="true" (click)="openSidePanel('companyVideos')"></i>
+        </div> -->
+      </div>
+      <div class="row">
+        <div class="col-md-12" *ngIf="isPremium() !== 1">
+          <button type="button" [ngClass]="!(_3DListArray.length) ? 'profile_btn' : 'profile_btn profile_editbtn'" (click)="openSidePanel('companyVideos')">
+              {{ !(_3DListArray.length) ? 'Add Tour Link' : 'Edit Tour Link' }}
+          </button>
+          <div *ngIf="(_3DListArray.length)" style="float:left;">
+            <ul>
+              <li *ngFor="let urls of _3DListArray" style="word-break: break-word">
+                {{ urls._3dTourUrl }}
+              </li>
+            </ul>
+          </div>
+          <!-- <p *ngIf="!(_3DListArray.length) ">NO URL Found</p> -->
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="image-gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true"  data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog modal-lg ">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="image-gallery-title"></h4>
+            <button type="button" class="close"  (click)="stopVideo()"  data-bs-dismiss="modal">
+              <span aria-hidden="true" style="color: #4a90e2;">×</span><span class="sr-only">Close</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div *ngIf="isVideo">
+                <iframe [src]=" currentPhoto | safe" frameborder="0" style="width: 100%;height: 400px;" allowfullscreen ></iframe>
+            </div>
+            <!--Video -->
+            <!-- <div *ngIf="! isVideo" >
+                <img  id="image-gallery-image" class="img-responsive img-thumbnail-1 col-md-12 Bitmap img-responsive" [src]="currentPhoto" />
+                <button style="background: none; border: none; color: #4a90e2; font-size: 34px; cursor: pointer;" class="carousel-control-prev slider" *ngIf="checkForFirstImage()" (click)="goToPrev()">
+                  <i class="icofont icofont-rounded-left"></i>
+                </button>
+                <button style="background: none; border: none; color: #4a90e2; font-size: 34px; cursor: pointer; " class="carousel-control-next slider" *ngIf="checkForLastImage()" (click)="goToNext()">
+                  <i class="icofont icofont-rounded-right"></i>
+                </button>
+            </div> -->
+            <div *ngIf="! isVideo" style="text-align: center;">
+              <button *ngIf="!checkForFirstImage()" style="width: 20px; visibility: hidden;"></button>
+              <button
+              style="background: none; border: none; color: #4a90e2; font-size: 40px; cursor: pointer;font-weight: bold"
+              class="fa fa-angle-left" *ngIf="checkForFirstImage()"  (click)="goToPrev()">
+              </button>
+              <img id="image-gallery-image"
+              class="img-responsive img-thumbnail-1 col-md-12 Bitmap img-responsive"
+              [src]="currentPhoto" />
+              <button
+              style="background: none; border: none; color: #4a90e2; font-size: 40px; cursor: pointer;font-weight: bold "
+             class="fa fa-angle-right" *ngIf="checkForLastImage()" (click)="goToNext()">
+              </button>
+              <button *ngIf="!checkForLastImage()" style="width: 20px; visibility: hidden;"></button>
+          </div>
+          </div>
+          <div class="modal-footer">
+            <p>
+              <strong style="word-break:break-all">{{currentPhotoTitle  }}</strong><br />
+              <span style="word-break:break-all">
+                {{ currentPhotoCaption }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4" *ngIf="!isSidePanelOpen()">
+
+    <div class="row cust-padding">
+      <div class="col-md-12 bottom-border">
+        <h2 class="innerpanelheading">Contact</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <button type="button" class="profile_btn profile_editbtn" (click)="openSidePanel('contactInformation')">
+            Edit Contact
+        </button>
+      </div>
+      <div class="col-md-12">
+        <p>
+          <strong>Name :</strong><br />
+          {{ iContactViewModel?.firstName }} {{ iContactViewModel?.lastName }}
+        </p>
+        <p><strong>Email :</strong><br />{{EmailId}}</p>
+
+
+        <!-- <p><strong>Phone Number :</strong><br />{{
+                iContactViewModel?.phoneNo
+                }}
+              </p> -->
+      </div>
+    </div>
+
+
+
+    <div class="row cust-padding">
+      <div class="col-md-12 bottom-border">
+        <h2 class="innerpanelheading">Demographics</h2>
+      </div>
+      <!-- <div class="col-md-8 bottom-border text-right">
+        <i class="fa fa-pencil-square-o edit-icon" aria-hidden="true" placement="top" container="body" ngbTooltip="Edit"
+          (click)="openSidePanel('companyDemographics')"></i>
+      </div> -->
+    </div>
+    <div class="row cust-padding">
+      <div class="col-md-12" style="padding: 0px;margin-top: -5px;">
+        <button type="button" class="profile_btn profile_editbtn" (click)="openSidePanel('companyDemographics')">
+            Edit Demographics
+        </button>
+      </div>
+    </div>
+    <div class="row cust-padding" *ngIf="!isDemographics">
+      <div class="col-md-12" class="descP">
+        <p class="title-green">
+          <strong>MFG.com Member Since:</strong><br />{{
+            iAboutUsModel?.createdDate | date: "MM/dd/yy"
+          }}
+        </p>
+        <p>
+          <strong>Company Type:</strong><br />
+          {{ iAboutUsModel?.supplierType?.supplierTypeNameEn }}
+        </p>
+        <p>
+          <strong>Manufacturing Location:</strong><br />
+          {{ iAboutUsModel?.manufacturingLocation}}
+        </p>
+        <p>
+          <strong># of Employees:</strong><br />{{
+            iAboutUsModel?.employeeCountRange
+          }}
+        </p>
+        <strong>Languages:</strong><br />
+        <div *ngFor="let language of iAboutUsModel?.languages">
+          {{ language?.languageName }}
+        </div>
+
+        <p class="break">
+          <strong>D-U-N-S Number:</strong><br />
+          {{ iAboutUsModel?.dunsNumber}}
+        </p>
+        <p class="description-wraper"><strong>Cage Code:</strong><br />{{ iAboutUsModel?.cageCode }}</p>
+        <br />
+      </div>
+    </div>
+    <div class="row cust-padding">
+      <div class="col-md-12 bottom-border">
+        <h2 class="innerpanelheading">Certifications</h2>
+      </div>
+      <!-- <div class="col-md-8 bottom-border text-right">
+        <i class="fa fa-pencil-square-o edit-icon" aria-hidden="true" placement="top" container="body" ngbTooltip="Edit"
+          (click)="openSidePanel('companyCertifications')"></i>
+      </div> -->
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+          <button type="button" class="profile_btn" (click)="openSidePanel('companyCertifications')">
+            Add Certifications
+          </button>
+      </div>
+      <div class="col-md-12" *ngIf="certificateViewModelList?.length !== 0">
+        <ul>
+          <li *ngFor="let certificate of certificateViewModelList">
+            <p>
+                <strong class="title-blue pointerCursor" *ngIf="certificate.certificateCode != 'ITAR'" (click)="downloadS3File(certificate.fileName, true)">
+                    {{ certificate.certificateCode }}</strong>
+                  <strong *ngIf="certificate.certificateCode == 'ITAR'" class="title-blue pointerDefault" >
+                      {{ certificate.certificateCode }}</strong><br />
+              {{ certificate.creationDate | date }}
+              <span class="activeLink" (click)="removeCertificate(certificate)">Remove</span>
+            </p>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div><br><br>
+
+<!--
+<b>Price Award Pattern</b><br><br>
+<div class="row" *ngIf="dataSource.data.length && !ispriceLoader">
+
+    <div class="col-md-12">
+<fusioncharts
+    [id]="id"
+    [width]="width"
+    [height]="height"
+    [type]="type"
+    [dataFormat]="dataFormat"
+    [dataSource]="dataSource">
+</fusioncharts>
+</div>
+</div> <div *ngIf="ispriceLoader" class="col-md-12" style="text-align:center;">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div><br>
+
+
+<div class="row" style="text-align: center">
+    <div class="col-md-6">
+      <div class="btn-group">
+        <button type="button" (click)="GetPriceAwardPattern(90)"
+          [ngClass]="(activePriceStatusFilterBtn == 90)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+          90 Days</button>
+        <button type="button" (click)="GetPriceAwardPattern(180)"
+        [ngClass]="(activePriceStatusFilterBtn == 180)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+          180 Days</button>
+        <button type="button" (click)="GetPriceAwardPattern(0)"
+        [ngClass]="(activePriceStatusFilterBtn == 0)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+          Max</button>
+      </div>
+    </div>
+    </div><br><br>
+
+
+
+
+  <b>Geographic Award Pattern</b><br><br>
+  <div class="row" *ngIf="pieChartData[0].data.length && !isLoader">
+     <div class="col-md-06">
+    <canvas
+        baseChart
+        class="chart"
+        [chartType]="'pie'"
+        [datasets]="pieChartData"
+        [labels]="pieChartLabels"
+        [options]="pieChartOptions"
+        [legend]="true"
+        [colors]="pieChartColor"> -->
+
+<!-- > [colors]="pieChartColor" -->
+<!-- </canvas>
+  </div>
+  </div>
+  <div *ngIf="isLoader" class="col-md-12" style="text-align:center;">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div><br><br>
+  <div class="row" style="text-align: center">
+    <div class="col-md-6">
+      <div class="btn-group">
+        <button type="button" (click)="getRFQCountGeographicLocation(90)"
+          [ngClass]="(activeStatusFilterBtn == 90)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+          90 Days</button>
+        <button type="button" (click)="getRFQCountGeographicLocation(180)"
+        [ngClass]="(activeStatusFilterBtn == 180)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+          180 Days</button>
+        <button type="button" (click)="getRFQCountGeographicLocation(0)"
+        [ngClass]="(activeStatusFilterBtn == 0)? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+          Max</button>
+      </div>
+    </div>
+    </div><br><br> -->
+<div>
+
+  <!-- <iframe width="420" height="315"
+        src="https://www.youtube.com/embed/tgbNymZ7vqY">
+
+        </iframe> -->
+
+  <!-- <video width="320" height="240" controls>
+          <source src="https://s3.us-east-2.amazonaws.com/mfg.mp2020/2018-07-30+18.00+MFG+Sprint+Planning+Meeting+Every+other+Monday+8_30+to+10+AM+EST.mp4" type="video/mp4">
+
+          <source src="https://s3.us-east-2.amazonaws.com/mfg.mp2020/2018-07-30+18.00+MFG+Sprint+Planning+Meeting+Every+other+Monday+8_30+to+10+AM+EST.mp4" type="video/ogg">
+
+        Your browser does not support the video tag.
+
+        </video> -->
+
+</div>

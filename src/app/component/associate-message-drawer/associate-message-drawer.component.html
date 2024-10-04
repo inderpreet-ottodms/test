@@ -1,0 +1,232 @@
+<div class="bg-white rounded shadow p-20">
+    <div class="row">
+        <div class="col-md-12">
+            <i
+                class="fa fa-times-circle pull-right color-blue f-18 cursor-pointer"
+                (click)="closePartDrawer()"></i>
+            <h2 class="f-16 color-gray f-w-600">Create New Message</h2>
+        </div>
+        <hr>
+        <div class="col-md-12">
+            <br>
+            <form
+                [formGroup]="messageForm"
+                (ngSubmit)="onMessageSend()">
+                <div
+                class="form-group" *ngIf="rfqId == 0"
+                >
+                <label class="f-w-600"  *ngIf="userType ==='Buyer'">Select Manufacturers</label>
+                <label class="f-w-600"  *ngIf="userType ==='Supplier'">Select Buyer</label>
+                <angular2-multiselect
+                    [data]='buyerManufacList'
+                    [(ngModel)]='selectedManufac'
+                    name="contactName"
+                    [settings]='buyerManufacSettings'
+                    (onDeSelect)="onBuyerManufacDeSelect($event)"
+                    (onSelect)="onBuyerManufacSelect($event)"
+                    (onDeSelectAll)="onDeSelectAll($event)"
+                    formControlName="contactId">
+                </angular2-multiselect>
+                <div class="error-msg"  *ngIf="userType ==='Buyer'">
+                    <app-field-error-display
+                        [displayError]="isFieldValid('contactId')"
+                        errorMsg="Please Select Manufacturers">
+                    </app-field-error-display>
+                </div>
+                <div class="error-msg"  *ngIf="userType ==='Supplier'">
+                    <app-field-error-display
+                        [displayError]="isFieldValid('contactId')"
+                        errorMsg="Please Select Buyer">
+                    </app-field-error-display>
+                </div>
+                </div>
+                <div
+                    class="form-group"
+                    *ngIf="rfqId == 0">
+                    <label class="f-w-600">Associate to RFQ</label>
+                    <label class="All-Required pull-right">(Optional)</label>
+                    <angular2-multiselect
+                        [data]='RfqList'
+                        [(ngModel)]='selectedItems'
+                        name="rfqname"
+                        [settings]='rfqSettings'
+                        (onDeSelect)="onRfqDeSelect($event)"
+                        (onSelect)="onRfqSelect($event)"
+                        formControlName="rfqId">
+                    </angular2-multiselect>
+                    <div class="error-msg">
+                        <app-field-error-display
+                            [displayError]="isFieldValid('rfqId')"
+                            errorMsg="Please Select RFQ">
+                        </app-field-error-display>
+                    </div>
+                    <div class="error-msg" *ngIf="isBuyerSelected">
+                        You don't have any associated RFQs with this buyer.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label style="font-weight: bold;">Subject</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        placeholder="Subject"
+                        formControlName="subject">
+                    <div class="error-msg">
+                        <app-field-error-display
+                            [displayError]="isFieldValid('subject')"
+                            errorMsg="Enter Subject">
+                        </app-field-error-display>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label style="font-weight: bold;">Message</label>
+                    <p-editor
+                        name="sdsd"
+                        formControlName="message"
+                        [style]="{'height':'160px'}"
+                        (onTextChange)="changeText($event)">
+                        <p-header>
+                            <span class="ql-formats">
+                                <select class="ql-size">
+                                    <option value="2em">Heading</option>
+                                    <option value="1.5em">Subheading</option>
+                                    <option
+                                        value="0.5em"
+                                        selected>
+                                        Normal
+                                    </option>
+                                </select>
+                            </span>
+                            <span class="ql-formats">
+                                <button
+                                    class="ql-bold"
+                                    aria-label="Bold"></button>
+                                <button
+                                    class="ql-italic"
+                                    aria-label="Italic"></button>
+                                <button
+                                    class="ql-underline"
+                                    aria-label="Underline"></button>
+                                <button
+                                    class="ql-strike"
+                                    aria-label="Strike"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <select
+                                    class="ql-color"
+                                    tabindex="-1"></select>
+                                <select
+                                    class="ql-background"
+                                    tabindex="-1"></select>
+                            </span>
+                            <span class="ql-formats">
+                                <button
+                                    class="ql-list"
+                                    value="ordered"
+                                    aria-label="Ordered List"
+                                    tabindex="-1"></button>
+                                <button
+                                    class="ql-list"
+                                    value="bullet"
+                                    aria-label="Unordered List"
+                                    tabindex="-1"></button>
+                                <select
+                                    class="ql-align"
+                                    tabindex="-1">
+                                    <option
+                                        selected
+                                        tabindex="-1"></option>
+                                    <option
+                                        value="center"
+                                        tabindex="-1"></option>
+                                    <option
+                                        value="right"
+                                        tabindex="-1"></option>
+                                    <option
+                                        value="justify"
+                                        tabindex="-1"></option>
+                                </select>
+                            </span>
+                        </p-header>
+                    </p-editor>
+                    <div class="text-right">
+                        <span class="color-light-gray f-12">1000 characters</span>
+                    </div>
+                    <div class="error-msg">
+                        <app-field-error-display
+                            [displayError]="isFieldValid('message')"
+                            errorMsg="Enter Message">
+                        </app-field-error-display>
+                        <span class="f-12 color-red">{{errorDisMsg}}</span>
+                    </div>
+                </div>
+                <div
+                    class="form-group"
+                    *ngIf="createNewRFQMessagesViewModel.messageFileNames.length !== 0">
+                    <div
+                        class="row"
+                        *ngFor=" let file of createNewRFQMessagesViewModel.messageFileNames ;let i=index;">
+                        <div class="col-md-8 text-wrap">
+                            <span class="color-gray f-14 ">{{ getOriginalPartName(file) }}</span>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <span
+                                class="color-blue f-12 f-w-600 cursor-pointer"
+                                (click)="removeSavedAttachFile(file,i)">
+                                Remove
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group text-right">
+                    <input
+                        type="file"
+                        #messageAttachment
+                        class="d-none"
+                        ng2FileSelect
+                        [uploader]="attachFilesUploader"
+                        multiple
+                        (change)="onFileSelect($event)">
+                    <span
+                        (click)="messageAttachment.click()"
+                        class="cursor-pointer color-blue">
+                        Attach file(s)
+                    </span>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button
+                            type="button"
+                            class="btn button-green-border"
+                            (click)="closePartDrawer()">
+                            Cancel
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button
+                            type="submit"
+                            [disabled]="messageForm.invalid || this.errorDisMsg != ''"
+                            class="btn button-green">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div
+    class="loading"
+    *ngIf="isLoader">
+    <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+    </div>
+</div>

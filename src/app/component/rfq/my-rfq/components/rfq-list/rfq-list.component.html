@@ -1,0 +1,861 @@
+<p-confirmDialog header="Confirmation" icon="" width="629" height="220" #cd>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6">
+        <button type="button" class="btn button-green-border btn-width" (click)="cd.reject()">
+          No
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn button-green btn-width" label="Yes" (click)="cd.accept()">
+          Move to Draft
+        </button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>
+
+<div class="p-20">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="btn-group">
+        <button type="button" (click)="setStatusFilter('All')" [ngClass]="
+            activeStatusFilterBtn == 'All'
+              ? 'btn my-RFQ-state-filter-button-active'
+              : 'btn my-RFQ-state-filter-button-inactive'
+          ">
+          All
+        </button>
+        <button type="button" (click)="setStatusFilter('Direct')" style="padding: 8px" [ngClass]="
+            activeStatusFilterBtn == 'Direct'
+              ? 'btn my-RFQ-state-filter-button-active'
+              : 'btn my-RFQ-state-filter-button-inactive'
+          ">
+          Direct RFQs
+        </button>
+        <button type="button" (click)="setStatusFilter('Deleted')" [ngClass]="
+            activeStatusFilterBtn == 'Deleted'
+              ? 'btn my-RFQ-state-filter-button-active'
+              : 'btn my-RFQ-state-filter-button-inactive'
+          ">
+          Deleted
+        </button>
+        <button type="button" (click)="setStatusFilter('Archived')" [ngClass]="
+            activeStatusFilterBtn == 'Archived'
+              ? 'btn my-RFQ-state-filter-button-active'
+              : 'btn my-RFQ-state-filter-button-inactive'
+          ">
+          Archive
+        </button>
+      </div>
+    </div>
+    <div class="col-md-4 text-right">
+
+      <button *ngIf="activeStatusFilterBtn !== 'Archived'" type="button" class="btn btn-green-border" data-bs-target="#archiveConfirmModel" data-bs-toggle="modal"  [disabled]= "!isArchiveSelected">
+
+        Archive RFQ
+      </button>
+      <button *ngIf="activeStatusFilterBtn === 'Archived'" type="button" class="btn btn-green-border" data-bs-target="#unarchiveConfirmModel" data-bs-toggle="modal"  [disabled]= "!isArchiveSelected">
+        Unarchive RFQ
+      </button>
+      <i
+        [ngClass]="
+          isTilesView
+            ? 'ti-layout-grid2 my-RFQ-list-view active'
+            : 'ti-layout-grid2 my-RFQ-list-view '
+        " (click)="openTilesView()"></i>
+      <i [ngClass]="
+          isGridView
+            ? 'ti-list my-RFQ-list-view active'
+            : 'ti-list my-RFQ-list-view'
+        " (click)="openGridView()"></i>
+    </div>
+  </div>
+
+  <div class="row p-t-10">
+    <div class="col-md-3 col-sm-3">
+      <select *ngIf="
+          activeStatusFilterBtn === 'All' ||
+          activeStatusFilterBtn === 'Archived'
+        " class="filter" [(ngModel)]="stateFilterValue" (change)="setStatus()">
+        <option value="1">All Status</option>
+        <option value="3">Quoting</option>
+        <option value="6">Awarded</option>
+        <option value="2">Pending Approval</option>
+        <option value="5">Closed</option>
+        <option value="noquotes">RFQs with no Quotes</option>
+        <option value="withquotes">RFQs with Quotes</option>
+        <option value="7">RFQs to be Awarded</option>
+      </select>
+      <select *ngIf="activeStatusFilterBtn === 'Direct'" class="filter" [(ngModel)]="stateFilterValue"
+        (change)="setStatus()">
+        <option value="1">All Status</option>
+        <option value="3">Quoting</option>
+        <option value="6">Awarded</option>
+        <option value="noquotes">RFQs with no Quotes</option>
+        <option value="withquotes">RFQs with Quotes</option>
+      </select>
+      <select *ngIf="activeStatusFilterBtn === 'Deleted'" class="filter" [(ngModel)]="stateFilterValue"
+        (change)="setStatus()" disabled>
+        <option value="1">All Status</option>
+      </select>
+    </div>
+    <div class="col-md-3 col-sm-3">
+      <select class="recent" [(ngModel)]="sortFilterValue" (change)="setStatus()">
+        <option value="Recent">Recent</option>
+        <option value="Oldest">Oldest</option>
+        <option value="A-Z">A - Z</option>
+        <option value="Z-A">Z - A</option>
+      </select>
+    </div>
+    <div class="col-md-3 col-sm-3">
+      <select class="recent" [(ngModel)]="iBuyerFilteredRfqViewModel.territoryId" (change)="setStatus()">
+        <option [value]="0">All locations</option>
+        <option *ngFor="let loc of ibuyerLocationColl" [value]="loc.territoryClassificationId">
+          {{ loc.territoryClassificationName }}
+        </option>
+      </select>
+    </div>
+    <div class="col-md-3 col-sm-3 col-xs-12 pull-right">
+      <div class="input-container">
+        <i class="fa fa-search icon-search" (click)="setStatus()" placement="top" container="body"
+          ngbTooltip="Search"></i>
+        <input class="search search-text" [(ngModel)]="searchFilterValue" placeholder="Search" type="text"
+          (keypress)="searchByKey($event)" (input)="checkSearch(searchFilterValue)" />
+        <i class="fa fa-times-circle icon cursor-pointer" (click)="removeTextValue()" placement="top" container="body"
+          ngbTooltip="Remove Text"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="isTilesView == true">
+    <div class="col-md-12">
+      <div class="row">
+        <br />
+        <div [ngClass]="isSidePanel() ? 'col-md-6' : 'col-md-3'" *ngFor="let rfq of iRFQViewModelColl; let i = index"
+          id="{{ rfq.rfqId }}">
+          <div class="card" [ngClass]="rfq.rfqId === currentRfq() ? 'activePart' : ''">
+            <div class="box-1" *ngIf="rfq.isMfgCommunityRfq == true">
+              <div class="ribbon ribbon-top-left"><span>Directory</span></div>
+            </div>
+            <div class="box cursor-pointer">
+              <div class="row m-b-15" style="padding: 2px 10px">
+                <div class="quote-date-right">
+                  <span  class="icon-img" *ngIf="rfq.withOrderManagement"><img src="assets/images/Badge.png"  [ngbTooltip]="orderManagement" style="float: left;"></span>
+                  <div *ngIf="rfq.rfqStatusId !== 2 && rfq.rfqStatusId !== 3 && activeStatusFilterBtn !== 'Archived'"
+                    class="border-checkbox-section pull-right">
+                    <div class="border-checkbox-group border-checkbox-group-primary">
+                      <input class="border-checkbox" type="checkbox" id="{{ rfq.rfqId + '_' + i }}"
+                        [checked]="rfq.isSelected" (change)="selectRfqToArchive(1)" [(ngModel)]="rfq.isSelected"
+                        [disabled]="rfq.rfqStatusId == 13"
+                      />
+                      <label
+                        class="border-checkbox-label m-0"
+                        for="{{ rfq.rfqId + '_' + i }}"
+                      ></label>
+                    </div>
+                  </div>
+                  <div *ngIf="activeStatusFilterBtn === 'Archived'"
+                    class="border-checkbox-section pull-right">
+                    <div class="border-checkbox-group border-checkbox-group-primary">
+                      <input class="border-checkbox" type="checkbox" id="{{ rfq.rfqId + '_' + i }}"
+                        [checked]="rfq.isSelected" (change)="selectRfqToArchive(1)" [(ngModel)]="rfq.isSelected"
+                        [disabled]="rfq.rfqStatusId == 13"
+                      />
+                      <label
+                        class="border-checkbox-label m-0"
+                        for="{{ rfq.rfqId + '_' + i }}"
+                      ></label>
+                    </div>
+                  </div>
+
+
+                </div>
+                <ng-template #htmlContent>
+                  <div>
+                    Date Created
+                    {{ utcDate(rfq.rfqCreatedOn) | date: "MM/dd/yyyy" }}
+                  </div>
+                  <div *ngIf="
+                      rfq.rfqReleaseDate != '' &&
+                      rfq.rfqReleaseDate != null &&
+                      rfq.rfqReleaseDate != undefined
+                    ">
+                    Release Date
+                    {{ (rfq.rfqReleaseDate != null && rfq.rfqReleaseDate !='' ) ? (utcDate(rfq.rfqReleaseDate) | date: "MM/dd/yyyy") : 'N/A' }}
+                  </div>
+                </ng-template>
+                <div class="quote-date-left" placement="top" data-container="body" >
+                  
+                  <ng-template #orderManagement>
+                    <div>
+                      <span class="unlock-growth">This RFQ requires Order Management on MFG.</span> 
+                    </div>
+                  </ng-template>
+                  <span class="color-light-gray" [ngbTooltip]="htmlContent">Close Date</span>:
+                  {{ (rfq.quotesNeededBy) ? (utcDate(rfq.quotesNeededBy) | date: "MM/dd/yyyy") : 'N/A' }}
+                </div>
+                <div class="quote-date-right" *ngIf="rfq.rfqQuoteCount != '' && rfq.rfqQuoteCount != null">
+                  <span class="f-w-600"># of Quotes:({{ rfq.rfqQuoteCount }})</span>
+                </div>
+                <div class="quote-date-right" *ngIf="rfq.rfqQuoteCount == '' || rfq.rfqQuoteCount == null">
+                  <span class="f-w-600">&nbsp;</span>
+                </div>
+                <div *ngIf="(activeStatusFilterBtn !=='Archived' && (rfq.rfqStatusId == 2 || rfq.rfqStatusId == 3))">
+                  <label>&nbsp;</label>
+                </div>
+              </div>
+              <div [ngClass]="isSidePanel() ? 'imgRes ' : 'img '" (click)="openPartDetails(rfq.rfqId)">
+                <img *ngIf="
+                    (!rfq.rfqThumbnail || rfq.rfqThumbnail === '') &&
+                    !rfq.isMfgCommunityRfq
+                  " src="assets/supplier/comming-soon.png" class="resimg" />
+                <img *ngIf="
+                    (!rfq.rfqThumbnail || rfq.rfqThumbnail === '') &&
+                    rfq.isMfgCommunityRfq
+                  " src="assets/directrfq.png" class="resimg" />
+                <img *ngIf="!(!rfq.rfqThumbnail || rfq.rfqThumbnail === '')" [src]="rfq.rfqThumbnail"
+                  class="box-fit resimg" />
+              </div>
+              <h2 class="cursor-pointer text-truncate" placement="top" data-container="body"
+                ngbTooltip="View RFQ Details" (click)="detailRfq(rfq.rfqId)">
+                {{ rfq.rfqName }}
+                <br />
+                <span class="f-12 color-light-gray">RFQ #{{ rfq.rfqId }} </span>
+              </h2>
+              <p class="text-truncate f-12 f-w-600 m-b-0">
+                <span class="color-light-gray" placement="top" data-container="body"
+                  ngbTooltip="{{ rfq.manufacturingLocation }}">{{ rfq.manufacturingLocation }}</span>
+              </p>
+              <p class="f-12 f-w-600 m-b-0">{{ rfq.partCategoryName }}</p>
+              <p class="f-12 f-w-600 m-b-0" *ngIf="
+                  rfq.rfqStatusId !== 19 &&
+                  rfq.rfqStatus.includes('to be Awarded') == false
+                ">
+                {{ rfq.rfqStatus }}
+              </p>
+              <p class="color-red f-12 f-w-600 m-b-0" *ngIf="
+                  rfq.rfqStatusId == 5 &&
+                  rfq.rfqStatus.includes('to be Awarded') == true
+                ">
+                {{ rfq.rfqStatus }}
+              </p>
+            </div>
+            <div class="bottomaction" style="padding: 10px 15px">
+              <div
+                class="d-flex justify-content-between"
+                *ngIf="rfq.rfqStatusId === 13"
+              >
+                <a
+                  (click)="
+                    cloneModel(
+                      rfq.rfqId,
+                      rfq.manufacturingLocationId,
+                      rfq.deliveryDate
+                    )
+                  ">
+                  <i class="fa fa-clone cursor-pointer color-blue f-18" style = "color:#2E58D6"
+                  placement="top" container="body"
+                    ngbTooltip="Clone RFQ"></i>
+                </a>
+              </div>
+              <div
+                class="d-flex justify-content-between"
+                *ngIf="activeStatusFilterBtn === 'Archived'"
+              >
+                <a
+                  (click)="
+                    cloneModel(
+                      rfq.rfqId,
+                      rfq.manufacturingLocationId,
+                      rfq.deliveryDate
+                    )
+                  "
+                >
+                  <i
+                    class="fa fa-clone cursor-pointer color-blue f-18" style = "color:#2E58D6"
+                    placement="top"
+                    container="body"
+                    ngbTooltip="Clone RFQ"
+                  ></i>
+                </a>
+                <a data-bs-target="#unarchiveConfirmModel" data-bs-toggle="modal" (click)="setRfqDetail(rfq.rfqId, rfq.rfqName)">
+                  <i
+                    class="fa fa-archive cursor-pointer color-blue f-18" 
+                    placement="top"
+                    style = "color:#2E58D6"
+                    container="body"
+                    ngbTooltip="Unarchive RFQ"
+                  ></i>
+                </a>
+              </div>
+              <div
+                class="d-flex justify-content-between"
+                *ngIf="rfq.rfqStatusId !== 13 && activeStatusFilterBtn !== 'Archived'"
+              >
+                <a
+                  *ngIf="
+                    rfq.rfqStatusId === 3 &&
+                    rfq.rfqStatusId !== 13 &&
+                    rfq.isEditEnable
+                  " data-bs-target="#editConfirmModel" data-bs-toggle="modal" (click)="
+                    setRfqDetail(rfq.rfqId, rfq.rfqName, rfq.rfqStatusId)
+                  ">
+                  <i class="fa fa-edit cursor-pointer f-18 color-blue colorBlue" placement="top" container="body"
+                    ngbTooltip="Edit RFQ"></i>
+                </a>
+                <a *ngIf="
+                    rfq.rfqStatusId !== 3 &&
+                    rfq.rfqStatusId !== 13 &&
+                    rfq.isEditEnable
+                  " (click)="redirectToEditRfq(rfq)">
+                  <i class="fa fa-edit cursor-pointer f-18 color-blue colorBlue" placement="top" container="body"
+                    ngbTooltip="Edit RFQ"></i>
+                </a>
+                <a *ngIf="!rfq.isEditEnable">
+                  <i class="fa fa-edit cursor-pointer f-18 color-blue colorBlue" style="cursor: not-allowed" placement="top"
+                    container="body" ngbTooltip="Edit RFQ"></i>
+                </a>
+                <a (click)="
+                    cloneModel(
+                      rfq.rfqId,
+                      rfq.manufacturingLocationId,
+                      rfq.deliveryDate
+                    )
+                  ">
+                  <i class="fa fa-clone cursor-pointer color-blue f-18 colorBlue" placement="top" container="body"
+                    ngbTooltip="Clone RFQ"></i>
+                </a>
+                <a *ngIf="
+                    rfq.rfqStatusId !== 13 &&
+                    rfq.rfqStatusId !== 5 &&
+                    rfq.isEditEnable
+                  " (click)="cancelRfq(rfq.rfqId)">
+                  <i class="fa fa-times-circle cursor-pointer f-18 color-blue colorBlue" placement="top" container="body"
+                    ngbTooltip="Move to Draft"></i>
+                </a>
+                <a *ngIf="rfq.rfqStatusId == 5 || rfq.isEditEnable == false" style="cursor: not-allowed">
+                  <i class="fa fa-times-circle f-18 color-blue colorBlue" style="cursor: not-allowed" placement="top"
+                    container="body" ngbTooltip="Move to Draft"></i>
+                </a>
+                <a *ngIf="rfq.rfqStatusId !== 3 && rfq.rfqStatusId !== 2" data-bs-target="#archiveConfirmModel"
+                  data-bs-toggle="modal" (click)="setRfqDetail(rfq.rfqId, rfq.rfqName)">
+                  <i class="fa fa-archive cursor-pointer color-blue f-18" placement="top" container="body"
+                    ngbTooltip="Archive RFQ"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="isGridView == true">
+    <div class="col-md-12">
+      <div class="background-white">
+        <div class="row">
+          <br />
+          <div class="col-md-12">
+            <div class="row m-l-5 m-r-5 m-t-5 m-b-5">
+              <div class="col-md-1">
+                <div class="border-checkbox-section">
+                  <div
+                    class="border-checkbox-group border-checkbox-group-primary"
+                  >
+                    <input
+                      class="border-checkbox"
+                      type="checkbox"
+                      id="selectAll"
+                      (change)="selectRfqToArchive(0)"
+                      [(ngModel)]="selectedAll"
+                      [disabled]="activeStatusFilterBtn === 'Deleted' "
+                    />
+                    <label
+                      class="border-checkbox-label m-0"
+                      for="selectAll"
+                    ></label>
+                    <!-- <div class="border-checkbox-group border-checkbox-group-primary">
+                    <input class="border-checkbox" type="checkbox" id="selectAll" (change)="selectRfqToArchive(0)"
+                      [(ngModel)]="selectedAll" [disabled]="activeStatusFilterBtn === 'Deleted' " />
+                    <label class="border-checkbox-label m-0" for="selectAll"></label>
+                  </div> -->
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2 f-12 f-w-600" style="padding: 2px">Name</div>
+              <div class="col-md-1 f-12 f-w-600" style="padding: 2px">
+                Process
+              </div>
+              <div class="col-md-1 f-12 f-w-600" style="padding: 2px">
+                Location
+              </div>
+              <div class="col-md-1 f-12 f-w-600" style="padding: 2px">
+                Date Created
+              </div>
+              <div class="col-md-1 f-12 f-w-600" style="padding: 2px">
+                Release Date
+              </div>
+              <div class="col-md-1 f-12 f-w-600" style="padding: 2px">
+                Close Date
+              </div>
+              <div class="col-md-1 f-12 f-w-600" style="padding: 2px">
+                Status
+              </div>
+              <div class="col-md-1"></div>
+              <div class="col-md-2"></div>
+            </div>
+            <div class="row list-box" *ngFor="let rfq of iRFQViewModelColl"
+              [ngClass]="rfq.rfqId === currentRfqId ? 'activePart' : ''" id="{{ rfq.rfqId }}">
+              <div class="box-1" *ngIf="rfq.isMfgCommunityRfq == true">
+                <div class="ribbon ribbon-top-left"><span>Directory</span></div>
+              </div>
+              <div class="col-md-1 d-flex align-items-center cursor-pointer">
+                <span  class="icon-img"><img src="assets/images/Badge.png" [ngbTooltip]="orderManagement"  style="float: left;"></span>
+                <div class="border-checkbox-section" *ngIf="rfq.rfqStatusId !== 2 && rfq.rfqStatusId !== 3 && activeStatusFilterBtn !== 'Archived'">
+                  <div class="border-checkbox-group border-checkbox-group-primary">
+                    <input class="border-checkbox" type="checkbox" id="{{ rfq.rfqId + '_' + i }}"
+                      [checked]="rfq.isSelected" (change)="selectRfqToArchive(1)" [(ngModel)]="rfq.isSelected"
+                      [disabled]="rfq.rfqStatusId == 13"
+                    />
+                    <label
+                      class="border-checkbox-label m-0"
+                      for="{{ rfq.rfqId + '_' + i }}"
+                    ></label>
+                  </div>
+                </div>
+                <div class="border-checkbox-section" *ngIf="activeStatusFilterBtn === 'Archived'">
+                  <div class="border-checkbox-group border-checkbox-group-primary">
+                    <input class="border-checkbox" type="checkbox" id="{{ rfq.rfqId + '_' + i }}"
+                      [checked]="rfq.isSelected" (change)="selectRfqToArchive(1)" [(ngModel)]="rfq.isSelected"
+                      [disabled]="rfq.rfqStatusId == 13"
+                    />
+                    <label
+                      class="border-checkbox-label m-0"
+                      for="{{ rfq.rfqId + '_' + i }}"
+                    ></label>
+                  </div>
+                </div>
+              </div>
+              <ng-template #orderManagement> 
+                <div>
+                   <span class="unlock">This RFQ requires Order Management on MFG.</span>
+                </div>
+              </ng-template>
+              <div class="col-md-2 sub-header p-0">
+                <div>
+                  <app-rfq-image (click)="openPartDetails(rfq.rfqId)" style="
+                      width: 80px;
+                      height: 80px;
+                      flex-shrink: 0;
+                      cursor: pointer;
+                    " [rfqId]="rfq.rfqId" [userType]="'buyer'" [isMfgCommunityRfq]="rfq.isMfgCommunityRfq">
+                  </app-rfq-image>
+                  <div (click)="detailRfq(rfq.rfqId)" style="cursor: pointer" class="m-l-10 text-truncate">
+                    <span style="color: #2E58D6" class="f-16 f-w-600" placement="top" data-container="body"
+                      ngbTooltip="{{ rfq.rfqName }}">{{ rfq.rfqName }}</span>
+                    <br />
+                    <span style="color: #919aa3" class="f-12 f-w-600">RFQ #{{ rfq.rfqId }}</span><br />
+                    <span style="color: #222222" class="f-12 f-w-600">
+                      {{
+                        rfq.rfqQuoteCount != "" && rfq.rfqQuoteCount != null
+                          ? "# of Quotes:(" + rfq.rfqQuoteCount + ")"
+                          : "&nbsp;"
+                      }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-1 d-flex align-items-center f-12 f-w-600 color-gray cursor-pointer p-2"
+                (click)="openPartDetails(rfq.rfqId)">
+                <span placement="top" data-container="body"
+                  ngbTooltip="{{ rfq.partCategoryName }}">{{ rfq.partCategoryName }}</span>
+              </div>
+              <div class="col-md-1 d-flex align-items-center f-12 f-w-600 color-gray cursor-pointer p-2"
+                (click)="openPartDetails(rfq.rfqId)">
+                <span placement="top" data-container="body"
+                  ngbTooltip="{{ rfq.manufacturingLocation }}">{{ rfq.manufacturingLocation }}</span>
+              </div>
+              <div class="col-md-1 d-flex align-items-center f-12 f-w-600 color-gray cursor-pointer p-2"
+                (click)="openPartDetails(rfq.rfqId)">
+                <span placement="top" data-container="body"
+                  ngbTooltip="{{ rfq.rfqCreatedOn | date: 'MM/dd/yyyy' }}">{{ utcDate(rfq.rfqCreatedOn) | date: "MM/dd/yyyy" }}</span>
+              </div>
+              <div class="col-md-1 d-flex align-items-center f-12 f-w-600 color-gray cursor-pointer p-2"
+                (click)="openPartDetails(rfq.rfqId)">
+                <ng-template #htmlContent>
+                  <div>
+                    {{
+                      rfq.rfqReleaseDate !== "" && rfq.rfqReleaseDate !== null
+                        ? (utcDate(rfq.rfqReleaseDate) | date: "MM/dd/yyyy")
+                        : ""
+                    }}
+                  </div>
+                </ng-template>
+                <span placement="top" data-container="body" [ngbTooltip]="htmlContent">{{
+                    rfq.rfqReleaseDate !== "" && rfq.rfqReleaseDate !== null
+                      ? (utcDate(rfq.rfqReleaseDate) | date: "MM/dd/yyyy")
+                      : "N/A"
+                  }}</span>
+              </div>
+              <div class="col-md-1 d-flex align-items-center f-12 f-w-600 color-gray cursor-pointer p-2"
+                (click)="openPartDetails(rfq.rfqId)">
+                <span placement="top" data-container="body"
+                  ngbTooltip="{{ rfq.quotesNeededBy | date: 'MM/dd/yyyy' }}">{{  (rfq.quotesNeededBy != null && rfq.quotesNeededBy != '')?(utcDate(rfq.quotesNeededBy) | date: "MM/dd/yyyy"):'N/A' }}</span>
+              </div>
+              <div class="col-md-1 d-flex align-items-center f-12 f-w-600 color-gray cursor-pointer p-2"
+                (click)="openPartDetails(rfq.rfqId)">
+                <span [style.color]="
+                    rfq.rfqStatusId == 5 &&
+                    rfq.rfqStatus.includes('to be Awarded') == true
+                      ? 'red'
+                      : '#222222'
+                  " placement="top" data-container="body" ngbTooltip="{{ rfq.rfqStatus }}">{{ rfq.rfqStatus }}</span>
+              </div>
+              <div class="col-md-1 d-flex justify-content-center align-items-center p-2"
+                (click)="openPartDetails(rfq.rfqId)">
+                <a *ngIf="rfq.rfqStatusId == 14" class="pull-right">
+                  <i class="fa fa-flag color-yellow f-16" aria-hidden="true"></i>
+                </a>
+                <a *ngIf="rfq.rfqStatusId == 3" class="pull-right">
+                  <i class="fa fa-quote-right color-yellow f-16"></i>
+                </a>
+                <a *ngIf="rfq.rfqStatusId == 2" class="pull-right">
+                  <i class="fa fa-hourglass color-yellow f-16"></i>
+                </a>
+                <a *ngIf="rfq.rfqStatusId == 1" class="pull-right">
+                  <i class="fa fa-star-half-o color-yellow f-16" aria-hidden="true"></i>
+                </a>
+                <a *ngIf="rfq.rfqStatusId == 13" class="pull-right">
+                  <i class="fa fa-trash color-red f-16 cursor-pointer" aria-hidden="true"></i>
+                </a>
+                <span *ngIf="
+                    rfq.rfqStatusId == 9 ||
+                    rfq.rfqStatusId == 5 ||
+                    rfq.rfqStatusId == 17 ||
+                    rfq.rfqStatusId == 16 ||
+                    rfq.rfqStatusId == 18
+                  ">&nbsp;</span>
+                <div *ngIf="rfq.rfqStatusId == 6">
+                  <ng-template #tipContent>
+                    <div *ngFor="let item of rfq.awardedPartQtyList; let i = index">
+                      <div *ngIf="i < 5">
+                        Part {{ item.partName }}, ( Qty {{ item.partQty }} ) -
+                        {{ item.supplierName }}
+                      </div>
+                    </div>
+                    <div *ngIf="rfq.awardedPartQtyList.length > 5"
+                      style="color: #2E58D6; cursor: pointer; text-align: right" (click)="redirectToAwad(rfq)">
+                      See more
+                    </div>
+                  </ng-template>
+                  <a class="pull-right"><i container="body" triggers="click" (click)="$event.stopPropagation()"
+                      placement="auto" [ngbTooltip]="tipContent" class="fa fa-trophy" aria-hidden="true"></i></a>
+                </div>
+              </div>
+              <div class="col-md-2 bg-light-blue d-flex align-items-center justify-content-between p-2">
+                <ng-container *ngIf="rfq.rfqStatusId !== 13 && activeStatusFilterBtn !== 'Archived'">
+                  <div *ngIf="
+                      rfq.rfqStatusId === 3 &&
+                      rfq.rfqStatusId !== 13 &&
+                      rfq.isEditEnable
+                    ">
+                    <a data-bs-target="#editConfirmModel" data-bs-toggle="modal" (click)="
+                        setRfqDetail(rfq.rfqId, rfq.rfqName, rfq.rfqStatusId)
+                      ">
+                      <i class="fa fa-edit color-blue f-18 cursor-pointer" placement="top" container="body"
+                        ngbTooltip="Edit RFQ"></i>
+                    </a>
+                  </div>
+                  <div *ngIf="
+                      rfq.rfqStatusId !== 3 &&
+                      rfq.rfqStatusId !== 13 &&
+                      rfq.isEditEnable
+                    " (click)="editRfq(rfq)">
+                    <i class="fa fa-edit color-blue f-18 cursor-pointer" placement="top" container="body"
+                      ngbTooltip="Edit RFQ"></i>
+                  </div>
+
+                  <div class="" *ngIf="!rfq.isEditEnable">
+                    <i class="fa fa-edit color-blue f-18" style="cursor: not-allowed" placement="top" container="body"
+                      ngbTooltip="Edit RFQ"></i>
+                  </div>
+
+                  <div (click)="
+                      cloneModel(
+                        rfq.rfqId,
+                        rfq.manufacturingLocationId,
+                        rfq.deliveryDate
+                      )
+                    ">
+                    <i class="fa fa-clone color-blue f-18 cursor-pointer" placement="top" container="body"
+                      ngbTooltip="Clone RFQ"></i>
+                  </div>
+                  <ng-container [ngSwitch]="true">
+                    <div (click)="cancelRfq(rfq.rfqId)" class="editdelete"
+                      *ngIf="rfq.rfqStatusId !== 5 && rfq.isEditEnable">
+                      <i class="fa fa-times-circle color-blue f-18 cursor-pointer" placement="top" container="body"
+                        ngbTooltip="Move to Draft"></i>
+                    </div>
+                    <div style="cursor: not-allowed" *ngIf="rfq.rfqStatusId == 5 || rfq.isEditEnable == false">
+                      <i class="fa fa-times-circle color-blue f-18" style="cursor: not-allowed" placement="top"
+                        container="body" ngbTooltip="Move to Draft"></i>
+                    </div>
+                  </ng-container>
+                  <a *ngIf="rfq.rfqStatusId !== 3 && rfq.rfqStatusId !== 2" data-bs-target="#archiveConfirmModel"
+                    data-bs-toggle="modal" (click)="setRfqDetail(rfq.rfqId, rfq.rfqName)">
+                    <i class="fa fa-archive cursor-pointer color-blue f-18" placement="top" container="body"
+                      ngbTooltip="Archive RFQ"></i>
+                  </a>
+                </ng-container>
+                <ng-container *ngIf="rfq.rfqStatusId === 13">
+                  <div (click)="
+                      cloneModel(
+                        rfq.rfqId,
+                        rfq.manufacturingLocationId,
+                        rfq.deliveryDate
+                      )
+                    ">
+                    <i class="fa fa-clone color-blue f-18 cursor-pointer" placement="top" container="body"
+                      ngbTooltip="Clone RFQ"></i>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="activeStatusFilterBtn === 'Archived'">
+                  <div
+                    (click)="
+                      cloneModel(
+                        rfq.rfqId,
+                        rfq.manufacturingLocationId,
+                        rfq.deliveryDate
+                      )
+                    "
+                  >
+                    <i
+                      class="fa fa-clone color-blue f-18 cursor-pointer"
+                      placement="top"
+                      container="body"
+                      ngbTooltip="Clone RFQ"
+                    ></i>
+                  </div>
+                  <a data-bs-target="#unarchiveConfirmModel" data-bs-toggle="modal" (click)="setRfqDetail(rfq.rfqId, rfq.rfqName)">
+                    <i
+                      class="fa fa-archive cursor-pointer color-blue f-18"
+                      placement="top"
+                      container="body"
+                      ngbTooltip="Unarchive RFQ"
+                    ></i>
+                  </a>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isLoader">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>
+
+  <div class="myRFQ-rfq-no-available" *ngIf="isRfqAvailable">
+    <div class="row" style="text-align: center; padding-top: 106px">
+      <div class="col-md-12">
+        <div>
+          <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x, assets/rfq/no-rfq@3x.png 3x"
+            class="myRFQ-Group" />
+        </div>
+      </div>
+    </div>
+    <div class="row p-t-35">
+      <div class="col-md-12">
+        <div class="f-22 f-w-600 text-center color-gray">
+          You don't have any RFQ related to search criteria.
+        </div>
+      </div>
+    </div>
+    <div class="row p-t-10">
+      <div class="col-md-12">
+        <div class="f-14 text-center color-gray">
+          Please create an RFQ or check for ones Draft RFQs.
+        </div>
+      </div>
+    </div>
+    <div class="row m-b-40 m-t-10">
+      <div class="col-md-4 offset-2">
+        <button type="button" [routerLink]="['/rfq/draftrfqs/']" class="btn button-green-border">
+          Draft RFQs
+        </button>
+      </div>
+      <div class="col-md-4">
+        <button type="button" 
+        (click)="redirectToCreateRfqPage()"
+        class="btn button-green">
+          Create an RFQ
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="!isRfqAvailable">
+    <div class="col-md-4">
+      <div class="dataTables_length" id="example_length">
+        <label>Show
+          <select name="example_length" aria-controls="example" class="" [(ngModel)]="pageSize" (change)="filterAll()">
+            <option value="24">24</option>
+            <option value="48">48</option>
+            <option value="96">96</option>
+          </select>
+          entries</label>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="paginations">
+        <div>
+          <div id="radioBtn" class="btn-group">
+            <a [ngClass]="{ disabled: currentIndex == 1 || pageNumber == 0 }" class="btn btn-primary btn-sm notActive"
+              (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+              Previous
+            </a>
+            <a *ngFor="let page of pagesIndex" (click)="setPage(page)" [ngClass]="
+                currentIndex == page
+                  ? 'btn btn-primary btn-sm active'
+                  : 'btn btn-primary btn-sm notActive'
+              " data-bs-toggle="fun" data-title="X">
+              {{ page }}
+            </a>
+            <a [ngClass]="{ disabled: currentIndex == pageNumber }" class="btn btn-primary btn-sm notActive"
+              (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+              Next
+            </a>
+          </div>
+          <input type="hidden" name="fun" id="fun" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="!isRfqAvailable">
+    <div class="col-md-12">
+      <div class="pull-right padd-right" style="padding-right: 62px">
+        <label class="showreccount">
+          {{ currentIndex }} of {{ pageNumber }}
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="editConfirmModel" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Confirmation</h4>
+        <button type="button" class="color-blue close" data-bs-dismiss="modal">
+          <i class="fa fa-times-circle" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="modal-body" class="text-left">
+        <p class="f-14; m-t-20; f-w-100 p-10">
+          This RFQ is currently open for quoting. Editing the RFQ will cause any current quotes to be retracted. Do
+          you
+          wish to continue?
+        </p>
+      </div>
+      <div class="row modal-footer1" style="padding: 10px">
+        <div class="col-md-6">
+          <button type="button" class="btn button-green-border" data-bs-dismiss="modal">
+            No
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn button-green" data-bs-dismiss="modal" (click)="editRfq()">
+            Yes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="archiveConfirmModel" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Archive</h4>
+        <button type="button" class="color-blue close" data-bs-dismiss="modal">
+          <i class="fa fa-times-circle" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="modal-body" class="text-left">
+        <p class="f-14; m-t-20; f-w-100 p-10">
+          Are you sure you want to archive this RFQ?
+          <!--<br /> You will not be able to edit this RFQ once it is archived-->
+          <!-- Are you sure you want to archive this RFQ? <br />This RFQ will be moved to Archive RFQs. Would you like to archive this RFQ? -->
+        </p>
+      </div>
+      <div class="row modal-footer1" style="padding: 10px">
+        <div class="col-md-6">
+          <button type="button" class="btn button-green-border" data-bs-dismiss="modal">
+            No
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn button-green" data-bs-dismiss="modal" (click)="setArchive()">
+            Yes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="unarchiveConfirmModel" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Unarchive</h4>
+        <button type="button" class="color-blue close" data-bs-dismiss="modal">
+          <i class="fa fa-times-circle" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="modal-body" class="text-left">
+        <p class="f-14; m-t-20; f-w-100 p-10">
+          Are you sure you want to unarchive this RFQ? 
+          <!--<br /> You will not be able to edit this RFQ once it is archived-->
+          <!-- Are you sure you want to archive this RFQ? <br />This RFQ will be moved to Archive RFQs. Would you like to archive this RFQ? -->
+        </p>
+      </div>
+      <div class="row modal-footer1" style="padding: 10px">
+        <div class="col-md-6">
+          <button
+            type="button"
+            class="btn button-green-border"
+            data-bs-dismiss="modal"
+          >
+            No
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button
+            type="button"
+            class="btn button-green"
+            data-bs-dismiss="modal"
+            (click)="setArchive(0)"
+          >
+            Yes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="isCloneModel">
+  <app-clone-rfq [id]="cloneRfqId"></app-clone-rfq>
+</div>

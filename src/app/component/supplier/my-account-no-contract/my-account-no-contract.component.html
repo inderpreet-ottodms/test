@@ -1,0 +1,191 @@
+<div class="container">
+  <div class="page-header">
+    <div class="row">
+      <div class="col-md-8 billing-header">
+        <h4>Billing</h4>
+      </div>
+    </div>
+  </div>
+  <div class="row shadow rounded bg-white p-10">
+    <div class="col-sm-12 col-md-12 col-lg-12 ">
+      <div class="background-white">
+        <div class="tabbable-panel">
+          <div class="tabbable-line-detail">
+            <ul class="nav nav-tabs ">
+              <li [ngClass]="isSubscription?'active':''" class="licus-detail" (click)="onsubscription()">
+                SUBSCRIPTION
+              </li>
+              <li *ngIf="userDetailsLocation == 'US'" [ngClass]="isTransaction?'active':''" class="licus-detail" (click)="ontransaction();verifyStripe()">
+                TRANSACTIONS
+              </li>
+              <li [ngClass]="isIntegration?'active':''" class="licus-detail" (click)="onintegration()">
+                INTEGRATIONS
+              </li> 
+              </ul>
+              <div class="tab-content">
+              <div  *ngIf="isSubscription" [ngClass]="isSubscription?'active':''" class="tab-pane">  
+                <section class="p-t-10">
+                  <div class="container">
+                    <div class="page-header">
+                      <div class="row">
+                        <div class="col-md-8">
+                          <h4>My Account</h4>
+                        </div>
+                        <div class="col-md-4 text-right m-b-10">
+                        </div>
+                      </div>
+                
+                    </div>
+                    <div class="row shadow rounded bg-white p-10">
+                      <div class="col-sm-12 col-md-12 col-lg-12 ">
+                        <!-- <div class="panel"> -->
+                          <app-account-plan-detail></app-account-plan-detail>
+                        <div class="row main-box">
+                
+                          <div class="col-md-6" style=" padding: 15px 45px; ">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <!-- <app-account-plan-detail></app-account-plan-detail> -->
+                              </div>
+                              <div class="col-md-12 m-t-30">
+                                <app-account-payment-details></app-account-payment-details>
+                              </div>
+                            </div>
+                
+                          </div>
+                          <div class="col-md-6" style=" padding: 15px 45px; ">
+                            <app-account-invoice-history></app-account-invoice-history>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                
+                </section>
+                
+                <div *ngIf="isLoader" class="loading">
+                  <div class="loader animation-start">
+                    <span class="circle delay-1 size-2"></span>
+                    <span class="circle delay-2 size-4"></span>
+                    <span class="circle delay-3 size-6"></span>
+                    <span class="circle delay-4 size-7"></span>
+                    <span class="circle delay-5 size-7"></span>
+                    <span class="circle delay-6 size-6"></span>
+                    <span class="circle delay-7 size-4"></span>
+                    <span class="circle delay-8 size-2"></span>
+                  </div>
+                </div>
+                
+                
+                
+                </div>
+                <div *ngIf="isTransaction" [ngClass]="isTransaction?'active':''" class="tab-pane" >
+                  <div>
+                    <div class="stripe-header">
+                        <div>
+                            <div style="font-size: 24px;
+                            font-weight: 800;
+                            margin-bottom: 12px;
+                         ">
+                              stripe
+                            </div>
+                            <div style="font-size: 12px;">MFG has partnered with <span style="color: #4A90E2;">Stripe</span> to give manufacturers the ability to collect payments for their orders online. By creating a Stripe account with MFG,<br>
+                              manufacturers will be able to issue invoices and collect payment directly for the RFQs they're awarded.
+                            </div>
+                        </div>
+                        <div style="display: flex;">
+                            <div style="margin-left:15px">
+                                <div class="container-progress">
+                                  <div>
+                                        <div>
+                                            <ul class="progressbar" style=" margin: 0 0 -8px -15px;display: flex;
+                                            align-content: space-around;
+                                            flex-direction: column;">
+                                              <li
+                                                class="actived"
+                                                [class.navi]=""
+                                              >
+                                              </li>
+                                              <li
+                                                [class.actived]=""
+                                                [class.navi]=""
+                                              >
+                                              </li>
+                                            </ul>
+                                        </div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div style="margin-left: 21px;">
+                                <div class="button-stripe">
+                                  <div class="button-stripe-text">
+                                    Verify with Stripe
+                                  </div>
+                                  
+                                </div>
+                                <div class="connect-text">
+                                  Connect with Bank Account<img style="padding-left: 4px;"  src="assets/images/VectorImg.png" />
+                                </div>
+                          </div>
+                      </div>
+                        <div class="learn-terms">
+                          <div class="lear-more">Learn More</div>
+                          <div class="terms">Terms & Conditions</div>               
+                      </div>
+                  </div>
+                </div>
+                 </div>
+                 <!-- <div *ngIf="isIntegration" [ngClass]="isIntegration?'active':''" class="tab-pane" >   
+                  <div class="integration-header">
+                     <div class="books-header">
+                          <div>
+                            <img  src="assets/images/quickbooksImg.png" />
+                          </div>
+                          <div class="quickbook-content">
+                            MFG has partnered with <span style="color: #4A90E2;">Quickbooks Online</span> to 
+                            give manufacturers the ability to push invoices and contacts to their account.
+                          </div>
+                          <div class="quickbook-btn">
+                              <div class="quickbook-text">
+                                Connect with Quickbooks Online
+                              </div>
+                          </div>
+                          <div class="learn-more">Learn More</div>
+                     </div>
+                      <div class="books-header">
+                        <div>
+                          <img  src="assets/images/netsuiteImg.png" />
+                        </div>
+                        <div class="quickbook-content">
+                          MFG has partnered with <span style="color:#4A90E2;">Netsuite</span> to give manufacturers the ability to collect payments for their orders online.    </div>
+                        <div class="quickbook-btn" style="width: 190px;margin-left: 45px;">
+                            <div class="quickbook-text">
+                              Connect with Netsuite
+                            </div>
+                        </div>
+                        <div class="learn-more">Learn More</div>
+                      </div>
+                      <div class="books-header">
+                        <div>
+                          <img  src="assets/images/sageImg.png" />
+                        </div>
+                        <div class="quickbook-content">
+                          MFG has partnered with <span style="color: #4A90E2;">Sage</span> to give manufacturers the ability to collect payments for their orders online.   </div>
+                        <div class="quickbook-btn" style="width: 190px;margin-left: 45px;">
+                            <div class="quickbook-text">
+                              Connect with Sage
+                            </div>
+                        </div>
+                        <div class="learn-more">Learn More</div>
+                      </div>
+                  </div>
+                              
+                 </div> -->
+              </div>
+           
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

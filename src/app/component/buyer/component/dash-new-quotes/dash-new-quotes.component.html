@@ -1,0 +1,127 @@
+<div  *ngIf="!isLoader" [ngClass]="(!isLoader)?'':'loader-height'">
+    <div class="row" *ngIf="(iBuyerQuotesListColl.length != 0)">
+      <div class="col-md-12">
+        <div class="background-white">
+          <div class="row top-row ">
+            <div class="col-md-3">
+                Showing 10 latest
+            </div>
+            <!-- <div class="col-md-9" style="text-align: right"  [routerLink]="['/rfq/newqoutes']">
+              <a class="View-All-Liked-RFQs">View All New Quotes</a>
+            </div> -->
+          </div>
+          <div class="row">
+            <br>
+            <div class="col-md-12">
+              <div class="table-responsive min-height">
+                <table class="table table-hover rfqtable">
+                  <thead>
+                    <tr>
+                      <th>RFQ Name</th>
+                      <th>Manufacturer</th>
+                      <th>Contact Name</th>
+                      <th class="" (click)="sortMessage('Date')">Date
+                        <i [ngClass]="(toggle1)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                      </th>
+                      <th class="" (click)="sortMessage('Qty1')">Qty 1
+                        <i [ngClass]="(toggle2)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                      </th>
+                      <th class="" (click)="sortMessage('Qty2')">Qty 2
+                        <i [ngClass]="(toggle3)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                      </th>
+                      <th class="" (click)="sortMessage('Qty3')">Qty 3
+                        <i [ngClass]="(toggle4)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                      </th>
+                      <th class="" (click)="sortMessage('Status')">Status
+                        <i [ngClass]="(toggle5)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                      </th>
+
+                      <th colspan="2">Actions</th>
+                      <!-- <th></th> -->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor='let rfq of iBuyerQuotesListColl'>
+                      <td class="rfqtd tdborderleft" (click)="detailRfq(rfq.rfqId)" placement="top" data-container="body" > <div ngbTooltip="{{ rfq.rfqName}}">  {{rfq.rfqName | dotLimit:'15'}}</div>
+                        <span>RFQ #{{rfq.rfqId}}</span>
+                      </td>
+                      <td class="rfqtd" placement="top" data-container="body" (click)="openSidePanel(rfq.contactIdEncrypt,rfq.contactName , rfq.companyName)">   <div ngbTooltip="{{ rfq.companyName}}"> {{rfq.companyName | dotLimit:'15'}}</div>   
+                        <!-- <span class="Net-Promotor-Scor">
+                          <span [ngClass]="rfq.npsScore | npsState">{{rfq.npsScore | Na }}</span> Net Promotor Score
+                      </span> -->
+                      </td>
+                      <td class="rfqtd" (click)="openSidePanel(rfq.contactIdEncrypt,rfq.contactName, rfq.companyName)">
+                        <div ngbTooltip="{{ rfq.contactName}}">{{rfq.contactName | dotLimit:'15'}} </div></td>
+                      <td>{{rfq.quoteDate | date: 'MM/dd/yyyy'}}</td>
+                      <td class="custtd">{{ (rfq.qty1) ? '$'  : '' }}{{rfq.qty1}} </td>
+                      <td class="custtd">{{ (rfq.qty2) ? '$'  : '' }}{{rfq.qty2}} </td>
+                      <td class="custtd">{{ (rfq.qty3) ? '$'  : '' }}{{rfq.qty3}} </td>
+                      <td class="custtd"> {{ (rfq.isViewed && rfq.isReviewed) ? 'Reviewed'  : (rfq.isViewed && !rfq.isReviewed)?'Viewed':'Not Reviewed' }}
+                      </td>
+                      <td class="tdbackgorungcolor" (click)="detailRfqquote(rfq.rfqId)">
+                        <i class="fa fa-eye icon-first" aria-hidden="true" ngbTooltip="Detail RFQ"></i>
+                      </td>
+                      <td class="tdborderright tdbackgorungcolor" (click)="openMessageDrawer($event, rfq.contactId, rfq.rfqId, rfq.contactName)">
+                        <i class="fa fa-envelope-o icon-second" aria-hidden="true" ngbTooltip="Message Manufacturer"></i>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="(iBuyerQuotesListColl.length !== 0)">
+    <div class="col-md-3">
+    </div>
+   <div class="col-md-9" style="text-align: right"  [routerLink]="['/rfq/myqoutes']">
+      <a class="View-All-Liked-RFQs">View All New Quotes</a>
+    </div>
+  </div>
+    <div class="myRFQ-rfq-no-available" *ngIf="isRfqAvailable">
+      <div class="row" style="text-align: center;padding-top:60px">
+        <div class="col-md-12">
+          <div>
+            <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+          assets/rfq/no-rfq@3x.png 3x"
+              class="myRFQ-Group">
+          </div>
+        </div>
+      </div>
+      <div class="row" style="padding-top:34px">
+        <div class="col-md-12">
+          <div class="myRFQ-noRFQActive-helper-text">You don't have any New Quotes.</div>
+        </div>
+      </div>
+      <div class="row" style="padding-top:10px">
+        <div class="col-md-12">
+          <div class="myRFQ-noRFQActive-helper-sub-text">Press Create an RFQ to get quotes from manufacturers on any of your parts.</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12" style="text-align:center">
+          <button type="submit" (click)="redirectToCreateRfqPage()" class="btn Save-Rfq-button-active">
+            <span class="button-lbl pointerCursor"> Create an RFQ </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isLoader">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>
+
+  <div *ngIf="isModelShow()">
+    <app-rating-model></app-rating-model>
+    </div>

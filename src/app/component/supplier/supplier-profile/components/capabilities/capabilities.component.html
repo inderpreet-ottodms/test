@@ -1,0 +1,250 @@
+<div class="row">
+  {{ reloadPageOndrawerClose() }}
+  <div [ngClass]="(isSidePanelOpen())?'col-md-12':'col-md-8'">
+    <div class="row cust-padding">
+      <div class="col-md-12 bottom-border">
+        <h2 class="innerpanelheading">Categories</h2>
+      </div>
+      <!-- <div class="col-md-8 bottom-border text-right">
+        <i class="fa fa-pencil-square-o edit-icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#myModal"  (click)="onProcess()" data-bs-toggle="modal"
+           placement="top" container="body" ngbTooltip="Edit"></i>
+      </div> -->
+    </div>
+    <div class="row" *ngIf="!isLoader">
+      <div class="col-md-12">
+        <button type="button"
+          [ngClass]="iCustomProcessViewModelColl?.length === 0 ? 'profile_btn' : 'profile_btn profile_editbtn'"
+          data-bs-toggle="modal" data-bs-target="#myModal" (click)="onProcess()">
+          {{ iCustomProcessViewModelColl?.length === 0 ? 'Add Capabilities' : 'Edit Capabilities' }}
+        </button>
+      </div>
+      <div class="col-md-12" *ngIf="iCustomProcessViewModelColl?.length !== 0">
+        <div class="m-b-15" *ngFor="let version of iCustomProcessViewModelColl  | groupBy:'parentDisciplineName'">
+
+
+          <div class="row cust-padding">
+            <div class="col-md-12">
+              <h2 class="innerpanelheading">{{version.key}}</h2>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6" *ngFor="let versiondetails of version.value">
+              <div *ngIf="versiondetails.childDisciplineName !== null && versiondetails.childDisciplineName !== ''"
+                class="equipment-list m-l-25"> <i class="fa fa-circle" aria-hidden="true"
+                  style="font-size: 7px; top: -3px;  position: relative;"></i>
+                &nbsp;&nbsp;&nbsp;{{versiondetails.childDisciplineName}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="isLoader">
+      <div class="col-md-12">
+        <div class="loader animation-start">
+          <span class="circle delay-1 size-2"></span>
+          <span class="circle delay-2 size-4"></span>
+          <span class="circle delay-3 size-6"></span>
+          <span class="circle delay-4 size-7"></span>
+          <span class="circle delay-5 size-7"></span>
+          <span class="circle delay-6 size-6"></span>
+          <span class="circle delay-7 size-4"></span>
+          <span class="circle delay-8 size-2"></span>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="isSidePanelOpen()">
+      <div class="col-md-12">
+        <div class="row cust-padding">
+          <div class="col-md-12 bottom-border">
+            <h2 class="innerpanelheading">Focus Overview</h2>
+          </div>
+        </div>
+        <div class="row cust-padding">
+          <div class="col-md-12" style="padding: 0px;margin-top:-5px;">
+            <p *ngIf="!(!!iFocusOverViewModel && iFocusOverViewModel?.industryFocusList!=undefined && iFocusOverViewModel?.industryFocusList!=null && iFocusOverViewModel?.industryFocusList.length!=0)
+              && !(!!iFocusOverViewModel && !!iFocusOverViewModel.tolerance && (iFocusOverViewModel.tolerance.length !== 0))
+              && !(!!iMaterialViewModelColl && (iMaterialViewModelColl.length !== 0))">
+              <button type="button" class="profile_btn" (click)="openSidePanel('companyFocus')">
+                Add Focus
+              </button>
+            </p>
+            <p *ngIf="(!!iFocusOverViewModel && iFocusOverViewModel?.industryFocusList!=undefined && iFocusOverViewModel?.industryFocusList!=null && iFocusOverViewModel?.industryFocusList.length!=0)
+            || (!!iFocusOverViewModel && !!iFocusOverViewModel.tolerance && (iFocusOverViewModel.tolerance.length !== 0))
+            || (!!iMaterialViewModelColl && (iMaterialViewModelColl.length !== 0))">
+              <button type="button" class="profile_btn profile_editbtn" (click)="openSidePanel('companyFocus')">
+                Edit Focus
+              </button>
+            </p>
+          </div>
+        </div>
+        <p>
+          <strong>Industry Focus:</strong>
+        </p>
+        <!-- <p *ngFor="let industry of iFocusOverViewModel?.industryFocus | slice:0:5">{{industry}}</p> -->
+        <ul
+          *ngIf="!!iFocusOverViewModel && iFocusOverViewModel?.industryFocusList!=undefined && iFocusOverViewModel?.industryFocusList!=null && iFocusOverViewModel?.industryFocusList.length!=0"
+          class="equipment-list" style="list-style-type:disc;padding-left: 20px">
+          <li *ngFor="let industry of iFocusOverViewModel?.industryFocusList | slice:0:10">
+            {{industry.industryFocus}}
+          </li>
+        </ul>
+        <p
+          *ngIf="iFocusOverViewModel?.industryFocusList==undefined || iFocusOverViewModel?.industryFocusList==null || iFocusOverViewModel?.industryFocusList.length==0">
+          <span>None Selected</span>
+        </p><br>
+        <p>
+          <strong>Tolerance:</strong><br>{{(!!iFocusOverViewModel && !!iFocusOverViewModel.tolerance && (iFocusOverViewModel.tolerance.length !== 0))?iFocusOverViewModel?.tolerance:'None Selected'}}
+        </p>
+        <p>
+          <strong>Material Specialties:</strong>
+        </p>
+        <ul *ngIf="!!iMaterialViewModelColl && (iMaterialViewModelColl.length !== 0 && iMaterialViewModelColl !=null)"
+          class="equipment-list" style="list-style-type:disc;padding-left: 20px">
+          <li *ngFor="let Material of iMaterialViewModelColl | slice:0:10">
+            {{Material.childMaterialName}}
+          </li>
+        </ul>
+        <p
+          *ngIf=" iMaterialViewModelColl == undefined|| iMaterialViewModelColl.length == 0 || iMaterialViewModelColl == null">
+          <span>None Selected</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!isSidePanelOpen()" class="col-md-4">
+    <div class="row cust-padding">
+      <div class="col-md-12 bottom-border">
+        <h2 class="innerpanelheading">Focus Overview</h2>
+      </div>
+      <!-- <div class="col-md-6 bottom-border text-right">
+        <i class="fa fa-pencil-square-o edit-icon" aria-hidden="true" (click)="openSidePanel('companyFocus')"
+          placement="top" container="body" ngbTooltip="Edit"></i>
+      </div> -->
+    </div>
+    <div class="row cust-padding">
+      <div class="col-md-12" style="padding: 0px;margin-top:-5px;">
+        <p *ngIf="!(!!iFocusOverViewModel && iFocusOverViewModel?.industryFocusList!=undefined && iFocusOverViewModel?.industryFocusList!=null && iFocusOverViewModel?.industryFocusList.length!=0)
+          && !(!!iFocusOverViewModel && !!iFocusOverViewModel.tolerance && (iFocusOverViewModel.tolerance.length !== 0))
+          && !(!!iMaterialViewModelColl && (iMaterialViewModelColl.length !== 0))">
+          <button type="button" class="profile_btn" (click)="openSidePanel('companyFocus')">
+            Add Focus
+          </button>
+        </p>
+        <p *ngIf="(!!iFocusOverViewModel && iFocusOverViewModel?.industryFocusList!=undefined && iFocusOverViewModel?.industryFocusList!=null && iFocusOverViewModel?.industryFocusList.length!=0)
+        || (!!iFocusOverViewModel && !!iFocusOverViewModel.tolerance && (iFocusOverViewModel.tolerance.length !== 0))
+        || (!!iMaterialViewModelColl && (iMaterialViewModelColl.length !== 0))">
+          <button type="button" class="profile_btn profile_editbtn" (click)="openSidePanel('companyFocus')">
+            Edit Focus
+          </button>
+        </p>
+      </div>
+    </div>
+    <p>
+      <strong>Industry Focus:</strong>
+    </p>
+    <!-- <p *ngFor="let industry of iFocusOverViewModel?.industryFocus | slice:0:5">{{industry}}</p> -->
+    <ul
+      *ngIf="!!iFocusOverViewModel && iFocusOverViewModel?.industryFocusList!=undefined && iFocusOverViewModel?.industryFocusList!=null && iFocusOverViewModel?.industryFocusList.length!=0"
+      class="equipment-list" style="list-style-type:disc;padding-left: 20px">
+      <li *ngFor="let industry of iFocusOverViewModel?.industryFocusList | slice:0:10">
+        {{industry.industryFocus}}
+      </li>
+    </ul>
+    <p
+      *ngIf="iFocusOverViewModel?.industryFocusList==undefined || iFocusOverViewModel?.industryFocusList==null || iFocusOverViewModel?.industryFocusList.length==0">
+      <span>None Selected</span>
+    </p><br>
+    <p>
+      <strong>Tolerance:</strong><br>{{(!!iFocusOverViewModel && !!iFocusOverViewModel.tolerance && (iFocusOverViewModel.tolerance.length !== 0))?iFocusOverViewModel?.tolerance:'None Selected'}}
+    </p>
+    <p>
+      <strong>Material Specialties:</strong>
+    </p>
+    <ul *ngIf="!!iMaterialViewModelColl && (iMaterialViewModelColl.length !== 0 && iMaterialViewModelColl !=null)"
+      class="equipment-list" style="list-style-type:disc;padding-left: 20px">
+      <li *ngFor="let Material of iMaterialViewModelColl | slice:0:10">
+        {{Material.childMaterialName}}
+      </li>
+    </ul>
+    <p
+      *ngIf=" iMaterialViewModelColl == undefined|| iMaterialViewModelColl.length == 0 || iMaterialViewModelColl == null">
+      <span>None Selected</span>
+    </p>
+  </div>
+</div>
+
+<div id="myModal" class="modal fade" role="dialog" *ngIf="isProcess">
+  <div class="modal-dialog custom-model modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-9 Select-the-processes">
+            Select the Categories to include
+          </div>
+          <div class="col-md-2 Deselect-All" (click)="processDeSelectAll()">
+            Deselect All
+          </div>
+          <div class="col-md-1">
+            <button type="button" class="close" aria-label="Close" style="margin-top:0px;" data-bs-dismiss="modal">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6" style="max-width: 45% !important; ">
+            <div class="Rectangle-indi manufac_scroll" style="padding:5px">
+              <div
+                *ngFor="let singlePart of iCustomProcessViewModelOriColl | groupBy:'parentDisciplineName';let iPart = index;">
+                <ul>
+                  <!-- [class.active]="selectedProcess(singlePart.key)" -->
+                  <li class="Main-Topic" [class.active]="(getChildProcess(singlePart.key).length ==
+                   getSelectedChildProcess(singlePart.key).length)"
+                    *ngIf="singlePart.key !== 'Let MFG.com Pick the Best Category'"
+                    (click)="processAddAllToSelection(singlePart.key)">{{singlePart.key}}</li>
+                  <li class="Subtopic-1-Subtopic" *ngFor="let child of getChildProcess(singlePart.key)"
+                    (click)="processAddToSelection(child.childDisciplineId)">
+                    <label
+                      [class.active]="selectedProcess(singlePart.key) && selectedChildProcess(child.childDisciplineId)"
+                      *ngIf="child.childDisciplineName !== 'Let MFG.com Pick the Best Category'">
+                      {{child.childDisciplineName}}</label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-1" style="padding-top: 97px">
+            <i class="fa fa-exchange" aria-hidden="true"></i>
+          </div>
+          <div class="col-md-5">
+            <div class="Rectangle-indi manufac_scroll" style="padding:5px">
+              <div *ngFor="let singlePart of selectedProcessParent">
+                <ul>
+                  <li class="Main-Topic" (click)="processRemoveALLFromSelection(singlePart.key)">{{singlePart.key }}
+                  </li>
+                  <li class="Subtopic-1-Subtopic" *ngFor="let child of getSelectedChildProcess(singlePart.key)"
+                    (click)="processRemoveFromSelection(child.schildDisciplineId)">
+                    {{child.schildDisciplineName}}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer footer-modal" style="justify-content:center">
+        <div class="row row-padding-top">
+          <div class="col-md-6">
+            <button type="button" class="btn Save-Equipment-cancel" data-bs-dismiss="modal">
+              Cancel </button>
+          </div>
+          <div class="col-md-6">
+            <button type="button" [disabled]="disabledCapabilityBtn()" class="btn Save-Equipment-active"
+              (click)="submitCapabilitis()" data-bs-dismiss="modal">Save</button>
+          </div>
+        </div>
+        <!-- <button type="button"  class="award-enable" data-bs-dismiss="modal">Cancel  </button>
+          <button type="button"  class="award-enable" data-bs-dismiss="modal">Save  </button> -->
+      </div>
+    </div>
+  </div>
+</div>

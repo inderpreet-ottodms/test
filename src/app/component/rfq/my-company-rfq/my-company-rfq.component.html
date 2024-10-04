@@ -1,0 +1,348 @@
+<div class="" style="padding: 10px;">
+  <div class="row">
+    <div [ngClass]="(isSidePanel())?'col-md-8 col-9':'col-md-12 col-12'">
+      <app-rfq-warning-banner></app-rfq-warning-banner>
+      <div>
+
+        <div class="row myRFQ-custom-row-left-padding m-b-10">
+          <div class="col-md-5 myRFQ-Header">My Company RFQs</div>
+          <div class="col-md-7 comp-rfq-btns" style="text-align:end">
+            <button type="button" class="btn btn-create m-r-30" [routerLink]="['/rfq/draftrfqs']">
+              Draft RFQs
+            </button>
+            <button type="button" class="btn btn-create" 
+           (click)="redirectToCreateRfqPage()"
+            >
+              Create an RFQ
+            </button>
+          </div>
+        </div>
+        <div class="">
+          <div class="main-section" >
+            <div class="row myRFQ-custom-row-left-padding ">
+              <div class="col-md-12 ">
+                <div class="p-15">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="btn-group">
+                        <button type="button" (click)="setStatusFilter('All')"
+                          [ngClass]="(activeStatusFilterBtn == 'All')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+                          All</button>
+                        <button type="button" (click)="setStatusFilter('Active')"
+                          [ngClass]="(activeStatusFilterBtn == 'Active')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+                          Active</button>
+                        <button type="button" (click)="setStatusFilter('Archived')"
+                          [ngClass]="(activeStatusFilterBtn == 'Archived')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+                          Deleted</button>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="row" style="padding-top:10px">
+                    <div class="col-md-3 col-sm-3">
+                      <select *ngIf="activeStatusFilterBtn === 'All'" class="filter" [(ngModel)]="stateFilterValue"
+                        (change)="setStatus()">
+                        <option value="1">All Status</option>
+                        <option value="3">Quoting</option>
+                        <option value="6">Awarded</option>
+                        <option value="2">Pending Approval</option>
+                        <option value="5">Closed</option>
+                        <option value="noquotes"> RFQs with no Quotes</option>
+                        <option value="withquotes"> RFQs with Quotes</option>
+                      </select>
+                      <select *ngIf="activeStatusFilterBtn === 'Active'" class="filter" [(ngModel)]="stateFilterValue"
+                        (change)="setStatus()">
+                        <option value="1">All Status</option>
+                        <option value="3">Quoting</option>
+                        <option value="6">Awarded</option>
+                        <option value="noquotes"> RFQs with no Quotes</option>
+                        <option value="withquotes"> RFQs with Quotes</option>
+                      </select>
+                      <select *ngIf="activeStatusFilterBtn === 'Archived'" class="filter" [(ngModel)]="stateFilterValue"
+                        (change)="setStatus()" disabled>
+                        <option value="1">All Status</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3 col-sm-3">
+                      <select class="recent" [(ngModel)]="sortFilterValue" (change)="setStatus()">
+                        <option value="Recent">Recent</option>
+                        <option value="Oldest">Oldest</option>
+                        <option value="A-Z">A - Z</option>
+                        <option value="Z-A">Z - A</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3 col-sm-3">
+                      <select class="recent" [(ngModel)]="buyerFilterValue" (change)="setStatus()">
+                        <option value="null">All Users</option>
+                        <option *ngFor="let buyer of buyerList" [value]="buyer.buyerContactId">{{buyer.buyerFirstName}}
+                          {{buyer.buyerLastName}}</option>
+
+                      </select>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-12 pull-right">
+                      <div class="input-container">
+                        <i class="fa fa-search icon-search" (click)="setStatus()" placement="top" container="body"
+                          ngbTooltip="Search"></i>
+                        <input class="search search-text" [(ngModel)]="searchFilterValue" placeholder="Search"
+                          type="text" (keypress)="searchByKey($event)" (input)="checkSearch(searchFilterValue)" />
+                        <i class="fa fa-times-circle icon" (click)="removeTextValue()" placement="top" container="body"
+                          ngbTooltip="Remove Text"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="isRfqAvailable">
+                  <div class="row" style="text-align: center;padding-top:106px">
+                    <div class="col-md-12">
+                      <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x, assets/rfq/no-rfq@3x.png 3x"
+                        class="myRFQ-Group">
+                      <p class="p-t-35 f-20 f-w-600">You don’t have any RFQs active at this time.</p>
+                      <p>Please create an RFQ or check for ones Draft Rfqs.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="p-10" *ngIf="!isRfqAvailable">
+                  <div class="row m-0">
+                    <div class="col-md-2 p-l-10 p-r-5">
+                      <span class="f-12 f-w-600 ">Name</span>
+                      <i class="pointer" (click)="toggleColumn('rfq_name')"
+                        [ngClass]="(toggleRFQName)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </div>
+                    <div class="col-md-2 p-r-5 p-l-5">
+                      <span class="f-12 f-w-600 ">Process</span>
+                      <i class="pointer" (click)="toggleColumn('rfq_process')"
+                        [ngClass]="(toggleRFQProcess)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </div>
+                    <div class="col-md-2 p-r-5 p-l-5">
+                      <span class="f-12 f-w-600">Location</span>
+                      <i class="pointer" (click)="toggleColumn('rfq_location')"
+                        [ngClass]="(toggleRFQLocation)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </div>
+                    <div class="col-md-2 p-r-5 p-l-5">
+                      <span class="f-12 f-w-600">Buyer Name</span>
+                      <i class="pointer" (click)="toggleColumn('buyer_name')"
+                        [ngClass]="(toggleBuyerName)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </div>
+                    <div class="col-md-1 p-r-5 p-l-5">
+                      <span class="f-12 f-w-600">Date Created</span>
+                      <i class="pointer" (click)="toggleColumn('rfq_created_date')"
+                        [ngClass]="(toggleRFQCreateDate)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </div>
+                    <div class="col-md-1 p-r-5 p-l-5">
+                      <span class="f-12 f-w-600">Close Date</span>
+                      <i class="pointer" (click)="toggleColumn('rfq_close_date')"
+                        [ngClass]="(toggleRFQCloseDate)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </div>
+                    <div class="col-md-1 v">
+                      <span class="f-12 f-w-600">Status</span>
+                      <i class="pointer" (click)="toggleColumn('rfq_status')"
+                        [ngClass]="(toggleRFQStatus)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </div>
+                    <!-- <div class="col-md-1 p-r-5 p-l-5">
+                    </div> -->
+                    <div class="col-md-1 p-r-5 p-l-5">
+                      <span class="f-12 f-w-600">Action</span>
+                    </div>
+                  </div>
+                  <div class="row lead-info" *ngFor="let list of iFilteredRFQViewModel" id={{list.rfqId}}
+                    [ngClass]="(list.rfqId === currentRfq())?'actievPart':''">
+                    <div class="box-1" *ngIf="list.isCommunityRfq == true">
+                      <div class="ribbon ribbon-top-left"><span>Directory</span></div>
+                    </div>
+                    <div class="col-md-2 p-t-20 p-b-20 p-r-5 p-l-10 display-flex">
+                      <span  class="icon-img" *ngIf="list.withOrderManagement"><img src="assets/images/Badge.png" [ngbTooltip]="orderManagement" style="float: left;"></span>
+                      <ng-template #orderManagement>
+                        <div>
+                          <span class="unlock-growth">This RFQ requires Order Management on MFG.</span> 
+                        </div>
+                      </ng-template>
+                      <div class="img pointer" (click)="openPartDetails(list.rfqId)" *ngIf="!list.isCommunityRfq">
+                        <img [src]="list.rfqThumbnail" onError="this.src='assets/supplier/comming-soon.png'">
+                      </div>
+                      <div class="img pointer" (click)="openPartDetails(list.rfqId)" *ngIf="list.isCommunityRfq">
+                        <img [src]="list.rfqThumbnail" onError="this.src='assets/directrfq.png'">
+                      </div>
+
+                      <div class="text-wrap pointer" style="margin-left: 10px;" (click)="detailRfq(list.rfqId)">
+                        <span class="color-blue f-16 f-w-600 text-wrap colorBlue" placement="top" container="body"
+                          ngbTooltip="View RFQ Details">{{list.rfqName}}</span>
+                        <br>
+                        <span class="color-gray f-12 f-w-600">RFQ {{list.rfqId}}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-2 p-t-20 p-b-20 p-r-5 p-l-5 display-flex vertical-center pointer"
+                      (click)="openPartDetails(list.rfqId)">
+                      <span class="text-wrap" placement="top" container="body"
+                        ngbTooltip="{{list.process}}">{{list.process}}</span>
+                    </div>
+                    <div class="col-md-2 p-t-20 p-b-20 p-r-5 p-l-5 display-flex vertical-center pointer"
+                      (click)="openPartDetails(list.rfqId)">
+                      <span class="text-wrap" placement="top" container="body"
+                        ngbTooltip="{{list.rfqPrefLocation}}">{{list.rfqPrefLocation}}</span>
+
+                    </div>
+                    <div class="col-md-2 p-t-20 p-b-20 p-r-5 p-l-5 display-flex vertical-center pointer"
+                      (click)="openPartDetails(list.rfqId)">
+                      <span class="text-wrap" placement="top" container="body"
+                        ngbTooltip="{{list.buyer}}">{{list.buyer}}</span>
+
+                    </div>
+                    <div class="col-md-1 p-t-20 p-b-20 p-r-5 p-l-5 display-flex vertical-center pointer"
+                      (click)="openPartDetails(list.rfqId)">
+                      <span class="text-wrap" placement="top" container="body"
+                        ngbTooltip="{{list.rfqCreatedOn | date: 'MM/dd/yyyy'}}">{{list.rfqCreatedOn | date: 'MM/dd/yyyy'}}</span>
+
+                    </div>
+                    <div class="col-md-1 p-t-20 p-b-20 p-r-5 p-l-5 display-flex vertical-center pointer"
+                      (click)="openPartDetails(list.rfqId)">
+                      <span class="text-wrap" placement="top" container="body"
+                        ngbTooltip="{{list.quotesNeededBy | date: 'MM/dd/yyyy'}}">{{list.quotesNeededBy | date: 'MM/dd/yyyy'}}</span>
+
+                    </div>
+                    <div class="col-md-1 p-t-20 p-b-20 p-r-5 p-l-5 display-flex vertical-center pointer"
+                      (click)="openPartDetails(list.rfqId)">
+                      <span class="text-wrap" placement="top" container="body"
+                        ngbTooltip="{{list.rfqStatus}}">{{list.rfqStatus}}</span>
+
+                    </div>
+                    <!-- <div class="col-md-1 p-t-20 p-b-20 display-flex vertical-center">
+                      <i class="fa fa-hourglass"></i>
+                    </div> -->
+                    <div class="col-md-1 p-t-20 p-b-20 p-r-5 p-l-5 action bg-gray display-flex vertical-center"
+                      [class.horizontal-center]="activeStatusFilterBtn == 'Archived'"
+                      [class.space-between]="activeStatusFilterBtn != 'Archived'">
+                      <i *ngIf="activeStatusFilterBtn != 'Archived' && list.isEditEnable" class="fa fa-edit"
+                        placement="top" container="body" ngbTooltip="Edit RFQ"
+                        (click)="redirectToEditRfq(list)"></i>
+                      <i *ngIf="activeStatusFilterBtn != 'Archived' && !list.isEditEnable" style="cursor: not-allowed;"
+                        class="fa fa-edit" placement="top" container="body" ngbTooltip="Edit RFQ"></i>
+                      <i class="fa fa-clone" placement="top" container="body" ngbTooltip="Clone RFQ"
+                        (click)="cloneModel(list.rfqId,list.rfqStatusId,list.quotesNeededBy)"></i>
+                      <i *ngIf="activeStatusFilterBtn != 'Archived' && list.isEditEnable" class="fa fa-times-circle"
+                        placement="top" container="body" ngbTooltip="Move to Draft" (click)="cancelRfq(list.rfqId)"></i>
+                      <i *ngIf="activeStatusFilterBtn != 'Archived' && !list.isEditEnable" style="cursor: not-allowed;"
+                        class="fa fa-times-circle" placement="top" container="body" ngbTooltip="Move to Draft"></i>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <!-- ------------------------- Pagination start----------------------- -->
+
+
+
+            <div class="row" style="margin-top: 20px;padding:10px" *ngIf="!isRfqAvailable">
+              <div class="col-md-3">
+                <div class="dataTables_length" id="example_length">
+                  <label>Show
+                    <select name="example_length" aria-controls="example" class="" [(ngModel)]="pageSize"
+                      (change)="filterAll()">
+                      <option value="24">24</option>
+                      <option value="48">48</option>
+                      <option value="96">96</option>
+                    </select>
+                    entries</label>
+                </div>
+              </div>
+              <div class="col-md-9" *ngIf="!isLoader">
+                <div class="paginations" style="float: right;">
+                  <div>
+                    <div id="radioBtn" class="btn-group">
+                      <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}"
+                        class="btn btn-primary btn-sm notActive" (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                        Previous
+                      </a>
+                      <a *ngFor="let page of pagesIndex" (click)="setPage(page)"
+                        [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                        data-bs-toggle="fun" data-title="X">
+                        {{page}}
+                      </a>
+                      <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+                        (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                        Next
+                      </a>
+                    </div>
+                    <input type="hidden" name="fun" id="fun">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12" *ngIf="!isRfqAvailable">
+                <div class="pull-right padd-right" style="padding-right:62px;">
+                  <label class="showreccount"> {{currentIndex }} of {{pageNumber}} </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ------------------------- Pagination end----------------------- -->
+      </div>
+    </div>
+    <div *ngIf="isSidePanel()" class="col-md-4 col-4 sideDrawer Drawer-Shadow">
+      <app-rfq-detail-sidepanel [rfqId]="currentRfqId" (drawer_OnClose)="drawerClose($event)">
+      </app-rfq-detail-sidepanel>
+    </div>
+  </div>
+
+</div>
+<div class="modal fade" id="editConfirmModel" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Confirmation</h4>
+        <button type="button" style="color: #2E58D6;" class="close" data-bs-dismiss="modal">
+          <i class="fa fa-times-circle" aria-hidden="true"></i></button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <p style="font-size: 14px; margin-top: 20px; font-weight: normal;">This RFQ is currently open for quoting.v
+          Editing the RFQ will cause any current quotes to be retracted. Do you wish to continue?' </p>
+      </div>
+      <div class="row modal-footer1" style="padding: 10px">
+        <div class="col-md-6">
+          <button type="button" class="btn nobtn" data-bs-dismiss="modal">No</button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-edit-confirm" data-bs-dismiss="modal"
+            (click)="editRfq()">Yes</button>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf=isCloneModel>
+  <app-clone-rfq [id]="cloneRfqId">
+  </app-clone-rfq>
+</div>
+<p-confirmDialog header="Confirmation" icon="" width="629" height="220" #cd>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6">
+        <button type="button" class="btn my-RFQ-btn-ignore-rfq" style="width: 95%;" (click)="cd.reject()">No</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn my-RFQ-btn-cancel-rfq" style="width: 95%;" label="Yes" (click)="cd.accept()"> Move to
+          Draft</button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>
+
+<div class="loading" *ngIf="isLoader">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div>

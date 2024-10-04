@@ -1,0 +1,277 @@
+<ng-template #contentNew let-d="dismiss" data-backdrop="static" data-keyboard="false">
+  <div class="modal-header">
+    <h4 class="modal-title">Get Started Today! </h4>
+    <button type="button" class="close" data-bs-dismiss="modal" (click)="d('notNow');closeUpgradeModal()"><i
+        class="fa fa-times-circle" aria-hidden="true" style="color: #4a90e2;"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="loading" *ngIf="isLoader">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+    <div class="graphic-header">
+      <!-- *ngIf="quoteRFQ && !isCustomer"
+      *ngIf="!quoteRFQ && !isCustomer" -->
+      <span>Generate Leads, Find Jobs, and Grow Revenue Faster with MFG</span>
+    </div>
+    <!-- *ngIf="!isCustomer" -->
+    <div class="subject-section" style="text-align: left!important;">
+      <div class="subject-text">
+        <b>You’re currently set up under a free account.</b> Upgrade now to access the world's most valuable tools for
+        growing your manufacturing business.
+      </div>
+      <div class="subject-value row">
+        <div class="col-md-6">
+          <div class="d-flex m-b-10">
+            <span class="m-r-5"><i class="fa fa-check-square color-blue f-14" aria-hidden="true"></i></span> <span> View
+              and Quote
+              Live
+              RFQs
+              Matched to Your
+              Capabilities </span>
+          </div>
+          <div class="d-flex">
+            <span class="m-r-5"><i class="fa fa-check-square color-blue f-14 " aria-hidden="true"></i></span> <span>
+              Attract Buyers with
+              an RFQ-Enabled
+              Manufacturer Profile </span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex m-b-10">
+            <span class="m-r-5"><i class="fa fa-check-square color-blue f-14 " aria-hidden="true"></i></span> <span>
+              Receive Buyer
+              Leads
+              Delivered to Your
+              Inbox </span>
+          </div>
+          <div class="d-flex">
+            <span class="m-r-5"><i class="fa fa-check-square color-blue f-14 " aria-hidden="true"></i></span> <span>Find
+              and Connect
+              with Qualified
+              Buyers </span>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="text-center payText">
+      Premium Access For Less Than $20 Per Lead
+    </div> -->
+  </div>
+  <div class="modal-footer-section m-t-10">
+    <div class="row">
+      <div class="col-md-6 btn-cancel-section" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal" (click)="d('notNow');closeUpgradeModal();">Not
+          Now</button>
+      </div>
+      <div class="col-md-6 btn-upgrade-section">
+        <button type="button" (click)="upgradeAccount()" class="btn btn-upgrade" data-bs-dismiss="modal"> Upgrade
+          Now</button>
+      </div>
+    </div>
+  </div>
+
+
+</ng-template>
+
+
+<!-- Unlock more rfq modal -->
+
+<ng-template #contentUnlockModel let-d="dismiss" data-backdrop="static" data-keyboard="false">
+  <div class="modal-header">
+    <h4 class="modal-title">Get Premium Today! </h4>
+    <button type="button" class="close" data-bs-dismiss="modal" (click)="d('notNow');closeUpgradeModal()"><i
+        class="fa fa-times-circle" aria-hidden="true" style="color: #4a90e2;"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="loading" *ngIf="isLoader">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+    <div class="graphic-header">
+     
+      <span>Get More Leads, Find Jobs, and Grow Revenue with Premium</span>
+    </div>
+ 
+    <div class="subject-section" style="text-align: left!important;">
+      <div class="subject-text">
+        <b>You’re currently subscribed to the Growth package. Upgrade to the Premium package to access the world's most valuable tools for
+        growing your manufacturing business.</b> 
+      </div>
+      <div class="subject-value row">
+        <div class="col-md-6">
+          <div class="d-flex m-b-10">
+            <span class="m-r-5"><i class="fa fa-check-square color-blue f-14" aria-hidden="true"></i></span> <span>
+              Unlimited access to RFQs, Leads, and Quotes in your chosen capabilities
+            </span>
+          </div>
+          <div class="d-flex">
+            <span class="m-r-5"><i class="fa fa-check-square color-blue f-14 " aria-hidden="true"></i></span> <span>
+              Access to multiple capabilities
+            </span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex m-b-10">
+            <span class="m-r-5"><i class="fa fa-check-square color-blue f-14 " aria-hidden="true"></i></span> <span>
+             5 contacts per week matching your chosen capabilities
+            </span>
+          </div>
+          <div class="d-flex">
+            <span class="m-r-5"><i class="fa fa-check-square color-blue f-14 " aria-hidden="true"></i></span> <span>
+             Premium Priority Search Placement
+            </span>
+
+          </div>
+        </div>
+      </div>
+    </div>
+   
+  </div>
+  <div class="modal-footer-section m-t-10">
+    <div class="row">
+      <div class="col-md-6 btn-cancel-section" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal" (click)="d('notNow');closeUpgradeModal();">Not
+          Now</button>
+      </div>
+      <div class="col-md-6 btn-upgrade-section">
+        <button type="button" (click)="upgradeAccount()" class="btn btn-upgrade" data-bs-dismiss="modal">Upgrade
+          Now</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- old model -->
+
+
+<ng-template #content let-d="dismiss" data-backdrop="static" data-keyboard="false">
+  <div class="modal-header">
+    <h4 class="modal-title">Upgrade Your Account</h4>
+    <button type="button" class="close" data-bs-dismiss="modal" (click)="d('notNow');closeUpgradeModal()"><i
+        class="fa fa-times-circle" aria-hidden="true" style="color: #4a90e2;"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="loading" *ngIf="isLoader">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+    <div class="graphic-header">
+      <!-- *ngIf="quoteRFQ && !isCustomer"
+      *ngIf="!quoteRFQ && !isCustomer" -->
+      <span *ngIf="quoteRFQ && !isCustomer">Access Live RFQs and Fill Open Capacity</span>
+      <span *ngIf="!quoteRFQ && !isCustomer">Win New Customers and Generate Leads</span>
+    </div>
+    <div class="subject-section m-t-20" style="text-align: left!important;" *ngIf="isCustomer">
+      <div class="subject-value">
+        <ul>
+          <li class="m-b-10" style="font-size: 15px;"> Thank you for wanting to upgrade your account to find new
+            customer leads and build relationships. We are currently verifying your company information.
+            Please check back in 3 hours and you will be able to upgrade your account.</li>
+          <li style="font-size: 15px;">Select Contact Sales to get immediate attention.</li>
+        </ul>
+
+      </div>
+    </div>
+    <!-- *ngIf="!isCustomer" -->
+    <div class="subject-section" style="text-align: left!important;" *ngIf="!isCustomer">
+      <div class="subject-text">
+        You’re currently set up under a free account. Upgrading now will unlock a new set of features and functionality.
+      </div>
+      <div class="subject-value row">
+        <div class="col-md-6">
+          <ul>
+            <li>View and Quote Live RFQs</li>
+            <li>Enhanced Directory Listing with Visitor Analytics</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <ul>
+            <li>Access to Buyer Contact Information</li>
+            <li>Buyer Leads Delivered to Your Inbox</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="row" *ngIf="isCustomer">
+    <div class="col-md-12" (click)="openContactModal()">
+      <span style="text-decoration: underline;color:#4a90e2">Contact Sales</span>
+    </div>
+  </div> -->
+  <div class="modal-footer-section" *ngIf="!isCustomer">
+    <div class="row">
+      <div class="col-md-6 btn-cancel-section" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal" (click)="d('notNow');closeUpgradeModal();">Not
+          Now</button>
+      </div>
+      <div class="col-md-6 btn-upgrade-section">
+        <!-- (click)="upgradeAccount()" -->
+        <button type="button" (click)="upgradeAccount()" class="btn btn-upgrade" data-bs-dismiss="modal">Upgrade
+          Now</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer-section" *ngIf="isCustomer">
+    <div class="row">
+      <div class="col-md-6 btn-cancel-section" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal"
+          (click)="d('notNow');closeUpgradeModal();">Cancel</button>
+      </div>
+      <div class="col-md-6 btn-upgrade-section">
+        <button type="button" class="btn btn-upgrade" data-bs-dismiss="modal" (click)="openContactModal()">Contact Sales
+        </button>
+      </div>
+    </div>
+  </div>
+
+</ng-template>
+<!-- <p-dialog header="Upgrade Account" [(visible)]="isAccountUpgradereqSent" [modal]="true" [responsive]="true"
+  [width]="600" [autoZIndex]="false" [style]="{'z-index': 10001}" (onHide)="closeAccountUpgradePopUp()"
+  styleClass="upgrade-modal">
+
+</p-dialog> -->
+<ng-template #upgradeAccountModel let-d="dismiss" data-backdrop="static" data-keyboard="false">
+  <div class="modal-header">
+    <h4 class="modal-title">Upgrade Account</h4>
+    <button type="button" class="close" data-bs-dismiss="modal" (click)="d('notNow');closeAccountUpgradePopUp()"><i
+        class="fa fa-times-circle" aria-hidden="true" style="color: #4a90e2;"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12 text-left">
+        <span class="show-success">{{accountUpgradeMessage}}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 button-margin">
+        <button type="button" class="okay-button" (click)="closeAccountUpgradePopUp()">OK</button>
+      </div>
+    </div>
+  </div>
+</ng-template>

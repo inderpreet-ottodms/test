@@ -1,0 +1,483 @@
+  <p-confirmDialog header="Confirmation" icon="" width="629" height="220" #cd>
+    <p-footer>
+      <div class="row">
+        <div class="col-md-6">
+          <button type="button" class="btn btn-ignore-rfq" (click)="cd.reject()">No</button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="cd.accept()"> Move to Draft</button>
+        </div>
+      </div>
+    </p-footer>
+  </p-confirmDialog>
+  <div *ngIf="loader">
+      <div class="loader animation-start">
+          <span class="circle delay-1 size-2"></span>
+          <span class="circle delay-2 size-4"></span>
+          <span class="circle delay-3 size-6"></span>
+          <span class="circle delay-4 size-7"></span>
+          <span class="circle delay-5 size-7"></span>
+          <span class="circle delay-6 size-6"></span>
+          <span class="circle delay-7 size-4"></span>
+          <span class="circle delay-8 size-2"></span>
+        </div>
+  </div>
+  <div *ngIf="!loader">
+
+
+<h2 class="innerpanelheading">Parts</h2>
+<div class="panel-group" id="accordion">
+  <div class="row" *ngIf="isFileDownloaded !== 0">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>
+  <div class="panel panel-default" *ngFor='let part of iReviewPartsViewModelColl; let i = index'>
+    <div class="panel-heading">
+      <div class="row">
+        <div class="col-md-11 expand-icon-div" (click)="showHideRFQPartDetails(part.partId, i)">
+          <h4 class="panel-title">
+            <a style="float: left;cursor: default !important"  placement="top" data-container="body" ngbTooltip="{{ file | originalShortName : 100}}">
+              {{ part?.partName | titlecase }}<br>
+              <span># {{ part?.partNumber | titlecase }}</span>
+            </a>
+            <a style="padding-top: 10px" class="attachment pull-right" placement="auto" [ngbPopover]="reviewpopAttachment"
+              container="body" #q1="ngbPopover" (document:click)="q1.close()" (click)="$event.stopPropagation()">
+              <!-- *ngIf="(part?.partsFiles?.length > 0)"  -->
+              <img src='assets/attachment.svg' class="img-attachment">
+              <!-- *ngIf="(part?.partsFiles?.length > 0)" -->
+              <span class="attachement-count-text" >({{part?.partsFiles?.length + 1}})</span>
+            </a>
+            <ng-template #reviewpopAttachment>
+              <div class="review-pop-partfiles pop-over-height">
+                <div class="text-right" *ngIf='!!part.partsFiles && (part.partsFiles.length !== 0 && part.partsFiles.length >= 1)'>
+                  <label class="part-attachment-name active pointerCursor text-right" (click)="downloadAllFiles(part.partsFiles, true,part.rfqPartFile)">
+                    Download All
+                  </label>
+                </div>
+                <div class="text-truncate">
+                  <div class="row">
+                    <div class="col-md-12 text-truncate">
+                      <label class="part-attachment-name downloadLink" (click)="downloadS3File(part.rfqPartFile, true)" title="Download - {{part.rfqPartFile | originalName }}">
+                        {{part.rfqPartFile | originalShortName : 20}}</label>
+                    </div>
+                    <!-- <div class="col-md-5 text-center" *ngIf='!!part.partsFiles && (part.partsFiles.length !== 0 && part.partsFiles.length >= 1)'>
+                      <label class="part-attachment-name downloadLink" (click)="downloadAllFiles(part.partsFiles, true,part.rfqPartFile)">
+                        Download All</label>
+                    </div> -->
+                  </div>
+                </div>
+                <div *ngFor='let file of part?.partsFiles' class="text-truncate">
+                  <label class="part-attachment-name downloadLink" (click)="downloadS3File(file, true)" title="Download - {{file | originalName }}">
+                    {{file | originalShortName : 20}}</label>
+                </div>
+              </div>
+            </ng-template>
+          </h4>
+        </div>
+        <div class="col-md-1 expand-icon-div" (click)="showHideRFQPartDetails(part.partId, i)">
+          <i *ngIf="part.result" class="fa fa-angle-down icon-third"></i>
+          <i *ngIf="!part.result" data-container="body" ngbTooltip="Expand Part Details" class="fa fa-angle-right icon-third"></i>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="part.result">
+      <div class="panel-body tablebg-color p-l-10">
+            <div class="row" *ngIf="!isRFQForm2Enabled || irfqViewModel.rfqFormVersion<rfqFormLatestVersion">
+                <div  class="col-md-4 colmdheading p-b-20" style="width: 250px;">New or Existing Part?</div>
+                <div class="col-md-4" > {{ (part.isExistingPart == false)?'New Part' : (part.isExistingPart == true)? 'Existing Part': 'N/a' }} </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-4 colmdheading" style="width: 30%;">1st Quantity</div>
+              <div class="col-md-4 colmdheading" style="width: 30%;" *ngIf="(part?.rfqPartQuantityList.length > 1)">2nd Quantity</div>
+              <div class="col-md-4 colmdheading" style="width: 30%;" *ngIf="(part?.rfqPartQuantityList.length > 2)">3rd Quantity</div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 p-b-20"> {{getQuantityByLeval(part.partId,0)}}</div>
+              <div class="col-md-4 p-b-20" *ngIf="(part?.rfqPartQuantityList.length > 1)">{{getQuantityByLeval(part.partId,1)}}</div>
+              <div class="col-md-4 p-b-20" *ngIf="(part?.rfqPartQuantityList.length > 2)">{{getQuantityByLeval(part.partId,2)}}</div>
+            </div>
+
+        <div class="row">
+
+
+              <div class="col-md-4 colmdheading p-b-20">Quantity Unit</div>
+              <div class="col-md-8 "> {{ part?.partQtyUnitName | titlecase }}</div>
+
+              <!-- <div class="col-md-4 colmdheading p-b-20">Delivery Date</div>
+              <div class="col-md-8">{{ part?.deliveryDate | date : "MM/dd/yyyy" }}</div> -->
+
+              <div class="col-md-4 colmdheading p-b-20">Manufacturing Process</div>
+              <div class="col-md-8">{{ (part?.parentCategoryName) ?  ( part?.parentCategoryName | titlecase) : 'N/A' }}</div>
+
+                <div class="col-md-4 colmdheading p-b-20">Manufacturing Technique</div>
+                <div class="col-md-8">{{ (part?.childCategoryName) ?  ( part?.childCategoryName | titlecase) : 'N/A' }}</div>
+
+              <div class="col-md-4 colmdheading p-b-20">Material</div>
+              <div class="col-md-8">{{ part?.materialName | titlecase }} </div>
+
+              <div class="col-md-4 colmdheading p-b-20">Post-Prod. Process</div>
+              <div class="col-md-8"> {{ (part?.postProductionProcessName) ? ( part?.postProductionProcessName | titlecase) : 'N/A' }}</div>
+
+
+              <div class="col-md-4 colmdheading p-b-20" >Part Specification</div>
+              <div class="col-md-8 p-b-10" style="cursor: pointer !important ;word-break: break-all ;padding-bottom: 5px;
+              padding-right: 20px;"  title="{{ (part?.customPartDescription) ? ( part?.customPartDescription | titlecase ) : 'N/A' }}">
+                {{ (part?.customPartDescription) ? ( part?.customPartDescription | titlecase ) : 'N/A' }}
+              </div>
+               <!-- <td *ngIf="part.customPartDescription === ''"> N/A</td>
+          <td  style="cursor: pointer !important" *ngIf="part.customPartDescription !== ''" title="{{ (part?.customPartDescription) ? ( part?.customPartDescription | titlecase ) : 'N/A' }}" [innerHTML]="part.customPartDescription | sanitizeHtmlLimt"> </td> -->
+
+              <div class="col-md-4 colmdheading p-b-20">Part Information for Manufacturing</div>
+              <div  class="col-md-8" style="cursor: pointer !important ;word-break: break-all ;padding-bottom: 5px;
+              padding-right: 20px;" title="{{ (part?.partDescription) ? (part?.partDescription ) : 'N/A' }}">
+                {{ (part?.partDescription) ? (part?.partDescription  ) : 'N/A' }}
+              </div>
+              <!-- <td *ngIf="part.partDescription === ''"> N/A</td>
+          <td *ngIf="part.partDescription !== ''" [innerHTML]="part.partDescription + '<br>'+ part.customPartDescription | sanitizeHtmlLimt"> </td> -->
+
+            <div class="row"  *ngFor="let questions of part.rfqPartDrawerQuestionAnswerResponseList">
+              <div class="col-md-4 colmdheading p-b-20">{{questions.question}}</div>
+              <div class="col-md-8">
+                {{ (questions.answer) ? (questions.answer ) : 'N/A' }}
+              </div>
+
+            </div>
+            <!-- <tr>
+                <th>Quote Reference Number</th>
+                <td>{{ (part?.quoteReferenceNumber) ? (part?.quoteReferenceNumber) : 'N/A' }}</td>
+              </tr>
+              <tr>
+                  <th>Comment</th>
+                  <td style="word-break: break-word;">{{ (part?.messageDesc) ? (part?.messageDesc) : 'N/A' }}</td>
+              </tr> -->
+
+            </div>
+        <div class="border-top full-width">
+          <div class="row" *ngIf='!!part.partsFiles  && (part.partsFiles.length !== 0 && part.partsFiles.length >= 1)'>
+            <div class="col-md-12 text-truncate">
+              <label style="float: right" class="filename-text text-left pl-4 downloadLink" (click)="downloadAllFiles(part.partsFiles, true, part.rfqPartFile )">
+                Download All</label>
+            </div>
+          </div>
+          <div >
+            <div class="row">
+              <div class="col-md-10 text-truncate">
+                <div class="filename-text text-left pl-4 text-truncate downloadLink" title="{{ part.rfqPartFile | originalName }}"
+                  (click)="downloadS3File(part.rfqPartFile, false)"> {{ part.rfqPartFile | originalShortName }} </div>
+              </div>
+              <div class="col-md-2">
+                <a (click)="downloadS3File(part.rfqPartFile, true)">
+                  <div class="re-remove-text text-right Remove-Copy downloadLink">Download </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div *ngFor='let file of part?.partsFiles'>
+            <div class="row">
+              <div class="col-md-10">
+                <div class="filename-text text-left pl-4 text-truncate downloadLink" title="{{ file | originalName }}"
+                  (click)="downloadS3File(file, false)"> {{ file | originalShortName }} </div>
+              </div>
+              <div class="col-md-2">
+                <a (click)="downloadS3File(file, true)">
+                  <div class="re-remove-text text-right Remove-Copy downloadLink">Download </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+<br>
+<h2 class="innerpanelheading">RFQ Details</h2>
+<p>
+  <strong>OVERVIEW</strong>
+</p>
+<table class="table table-striped tablebg">
+  <tbody>
+      <tr>
+          <th>What is your purpose for this RFQ?</th>
+          <td>{{ getRfqPurposeName() }}</td>
+
+        </tr>
+        <tr>
+          <tr *ngIf="irfqViewModel?.isForBenchmarking">
+            <th>Benchmarking reason</th>
+            <td>{{irfqViewModel?.rfqPurposeOtherComment?
+              irfqViewModel?.rfqPurposeOtherComment
+                : irfqViewModel?.benchmarkingReason
+            }} </td>
+          </tr>
+    
+    <tr>
+      <th>Are any special certifications needed to make these parts?</th>
+      <td>{{ (irfqViewModel?.isSpecialCertificationsByManufacturer) ? 'Yes' : 'No' }}</td>
+
+    </tr>
+    <tr *ngIf="irfqViewModel?.isSpecialCertificationsByManufacturer">
+      <th>Certifications</th>
+      <td>
+        <div class="sub-section-static-text text-left">
+          <div class="row">
+            <div class="col-md-12" *ngFor="let cer of irfqViewModel.certificateList;  let i= index ">
+              ({{i+1}}) {{cer.certificateCode}} <span>&nbsp;</span>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th>Do you have any special instructions for the manufacturer?</th>
+      <td>
+        <p class="sub-section-static-text text-left" style="margin-bottom:5px;">{{ (irfqViewModel?.isSpecialInstructionToManufacturer) ?
+          'Yes' : 'No' }}</p>
+        <p class="sub-section-static-text text-left" style="margin-bottom:5px; white-space: initial" *ngIf="(irfqViewModel?.isSpecialInstructionToManufacturer)">{{ irfqViewModel?.specialInstructionToManufacturer }}</p>
+      </td>
+    </tr>
+    <tr *ngIf="!isRFQForm2Enabled">
+      <th>Order of Importance</th>
+      <td>{{ importanceOrder }}</td>
+    </tr>
+    <tr>
+      <th>Quotes Needed By</th>
+      <td *ngIf="irfqViewModel?.quotesNeededBy !=null"> {{ irfqViewModel?.quotesNeededBy | date : "MM/dd/yyyy" }}</td>
+    </tr>
+    <tr>
+      <th>Award Date</th>
+      <td *ngIf="irfqViewModel?.awardDate !=null">{{ irfqViewModel?.awardDate | date : "MM/dd/yyyy" }}</td>
+    </tr>
+    <tr>
+      <th>Delivery Date</th>
+      <td *ngIf="irfqViewModel?.deliveryDate !=null">{{ irfqViewModel?.deliveryDate | date : "MM/dd/yyyy" }}</td>
+    </tr>
+    <tr>
+      <th>Manufacturing Location</th>
+      <td>{{preferredMfgLocText }}</td>
+    </tr>
+    <tr>
+      <th>Do you want to allow partial quoting? </th>
+      <td>{{ (irfqViewModel?.isPartialQuotingAllowed) ? 'Yes' : 'No' }}</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+
+<p>
+  <strong>SHIPPING</strong>
+</p>
+<table class="table table-striped tablebg">
+  <tbody>
+    <tr>
+      <th>Who pays for shipping? </th>
+      <td>{{ (whoPaysForShippingText) ? (whoPaysForShippingText | titlecase) : 'N/A' }}</td>
+    </tr>
+    <tr>
+      <th>Ship To</th>
+      <td>{{ shippingAddress?.siteLabel }} <span *ngIf="shippingAddress?.siteLabel">, </span>
+        <div [innerHTML] = "getAddressFormat(shippingAddress)"></div>
+        <!-- {{ shippingAddress?.streetAddress }} <span *ngIf="shippingAddress?.deptAddress">, </span> {{ shippingAddress?.deptAddress }},<br>
+        {{ shippingAddress?.city }} <span *ngIf="shippingAddress?.state">,</span> {{ shippingAddress?.state }}
+        <br> {{ shippingAddress?.country }} &nbsp;{{ shippingAddress?.postalCode }} -->
+       </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<p>
+  <strong>Payment Terms</strong>
+</p>
+<table class="table table-striped tablebg">
+  <tbody>
+    <tr>
+      <th>What’s your preferred payment terms? </th>
+      <td *ngIf="irfqViewModel.payment_term_id == 1">Net 15  </td>
+      <td *ngIf="irfqViewModel.payment_term_id == 2">Net 30  </td>
+      <td *ngIf="irfqViewModel.payment_term_id == 3">Net 45  </td>
+      <td *ngIf="irfqViewModel.payment_term_id == 4">Net 60  </td>
+      <td *ngIf="irfqViewModel.payment_term_id == null">NA </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+
+<p>
+  <strong>MANUFACTURERS</strong>
+</p>
+<table class="table table-striped tablebg">
+  <tbody>
+    <tr>
+      <th>Who do you want to quote the RFQ?</th>
+      <td>{{ (irfqViewModel?.isRegisterSupplierQuoteTheRfq) ? 'All Registered Manufacturers' : 'Let Me Choose' }}</td>
+    </tr>
+    <tr>
+      <div *ngIf="irfqViewModel?.isRegisterSupplierQuoteTheRfq == false">
+        <div class="col-md-10 p-0">
+          <div class="col-md-12 text-left pt-3 pl-3 pb-4 manu-tab-text"> Individual </div>
+          <div class="Rectangle-indi manufac_scroll ml-3" style="padding:5px">
+            <div class="review-indi-tab" *ngFor="let item of manufactureList?.individualList let i =index" style="width:97%">
+              <div class="row" style="padding:3px">
+                <div class="col-md-12">
+                  <div class="Manufacturer-Name-He text-left pl-1">
+                    {{ item?.companyName | titlecase }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 text-left" *ngIf="manufactureList?.individualList?.length == 0 || !manufactureList">
+              <span class="no-groups-added-text"> No individuals added</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-10 p-0">
+          <div class="col-md-12 text-left pt-3 pl-3 pb-4 manu-tab-text"> Groups </div>
+          <div class="Rectangle-indi manufac_scroll ml-3" style="padding:5px">
+            <div class="review-indi-tab" *ngFor="let item of manufactureList?.groupList let i =index" style="width:97%">
+              <div class="row" style="padding:3px">
+                <div class="col-md-12">
+                  <div class="Manufacturer-Name-He text-left pl-1">
+                    {{ item?.booksName | titlecase }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 text-left" *ngIf="manufactureList?.groupList?.length == 0 || !manufactureList">
+              <span class="no-groups-added-text"> No groups added</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </tr>
+  </tbody>
+</table>
+<br>
+
+<p>
+  <strong>NDA</strong>
+</p>
+<table class="table table-striped tablebg">
+  <tbody>
+    <tr>
+      <th>Preferred NDA Type</th>
+      <td>{{prefNDATypeText}}</td>
+    </tr>
+    <tr *ngIf="prefNDATypeText !== 'No NDA Needed'">
+      <th>NDA Verbiage</th>
+      <td *ngIf="isStandardNda"> {{ isStandardNda ? 'MFG.com’s Standard NDA' : 'Custom NDA' }}</td>
+      <td *ngIf="!isStandardNda">
+        <div class="row">
+          <div class="col-md-9 filename-text text-left pt-2 pl-3 bg-row-light"  placement="top" data-container="body" ngbTooltip="{{ customNDAFile | originalShortName : 200}}"> {{ customNDAFile | originalShortName : 50}}
+            <a (click)="downloadS3File(customNDAFile, false)">
+              <span class="re-remove-text text-right pull-right pr-3" style="padding-left: 201px;">View</span></a>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<p>
+    <strong>Communication Method</strong>
+  </p>
+
+    <table class="table table-striped tablebg">
+        <tbody>
+          <tr>
+            <th>Preferred Method of Communication</th>
+            <td>{{ (irfqViewModel.prefRfqCommunicationMethod)?preferredCommunicationArray[irfqViewModel.prefRfqCommunicationMethod]:'Call or Email' }}</td>
+          </tr>
+        </tbody>
+        </table>
+  <br>
+  <p>
+  <strong>NON-PART ATTACHMENTS</strong>
+</p>
+<div class="col-md-12 text-left" *ngIf="irfqViewModel?.rfqGeneralAttachmentsList?.length > 0">
+  <div class="attachemet-indi manufac_scroll">
+    <div class="row pt-2  mb-2" *ngIf='irfqViewModel.rfqGeneralAttachmentsList.length > 1'>
+      <div class="col-md-12 pb-2 bg-row-light text-right">
+        <div class="filename-text text-right">
+          <a class="active downloadLink text-right" (click)="downloadAllFiles(irfqViewModel.rfqGeneralAttachmentsList, true,'')">
+            <div style="color: #4a90e2;" class="filename-text text-right">Download All</div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div *ngFor='let file of irfqViewModel?.rfqGeneralAttachmentsList; let i = index'>
+      <div class="row pt-2 mb-2">
+        <!-- <div class="pb-2 bg-row-light" [ngClass]="((i === 0) && (irfqViewModel.rfqGeneralAttachmentsList.length > 1))?'col-md-10':'col-md-12'"> -->
+        <div class="pb-2 bg-row-light col-md-12">
+          <div class="filename-text text-left text-truncate">
+            <a (click)="downloadS3File(file, true)" class="downloadLink text-truncate" title="Download - {{file | originalName }}">
+              <div class="filename-text downloadLink">{{file | originalName }} </div>
+            </a>
+          </div>
+        </div>
+        <!-- <div class="col-md-2 pb-2 bg-row-light" *ngIf='(i === 0) && (irfqViewModel.rfqGeneralAttachmentsList.length > 1)'>
+          <div class="filename-text text-right">
+            <a class="downloadLink" (click)="downloadAllFiles(irfqViewModel.rfqGeneralAttachmentsList, true,'')">
+              <div class="filename-text downloadLink">Download All</div>
+            </a>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-md-12 text-left" *ngIf="irfqViewModel?.rfqGeneralAttachmentsList?.length == 0">
+  <span class="no-groups-added-text"> No attachments</span>
+</div>
+<div class="dropimagebuttons">
+  <button type="button" [ngClass]="(isSidePanelOpen())?'small-button-res':'small-button'" (click)="cloneModel(irfqViewModel.rfqId)">Clone
+    RFQ</button>
+  <button type="button" [ngClass]="(irfqViewModel.isEditEnable  == false)?'small-button-res notAllowed': 'small-button-res'" [disabled]="!irfqViewModel.isEditEnable" [ngClass]="(isSidePanelOpen())?'small-button-res':'small-button'" (click)="cancelRfq(irfqViewModel.rfqId)">Move to Draft
+    </button>
+  <button type="button"  [ngClass]="(irfqViewModel.isEditEnable  == false)?'small-button-res notAllowed': 'small-button-res'" [disabled]="!irfqViewModel.isEditEnable"  *ngIf="irfqViewModel?.rfqStatusId === 3"   data-bs-target="#editConfirmModel1" data-bs-toggle="modal" [ngClass]="(isSidePanelOpen())?'small-button-res':'small-button'"  (click)="setRfqDetail(irfqViewModel.rfqId, irfqViewModel.rfqName ,irfqViewModel?.rfqStatusId)">Edit
+    RFQ</button>
+    <button type="button"   [ngClass]="(irfqViewModel.isEditEnable  == false)?'small-button-res notAllowed': 'small-button-res'" [disabled]="!irfqViewModel.isEditEnable" *ngIf="irfqViewModel?.rfqStatusId !== 3"  [ngClass]="(isSidePanelOpen())?'small-button-res':'small-button'" (click)="redirectToEditRfq()">Edit
+      RFQ</button>
+  <button type="button" [ngClass]="(isSidePanelOpen())?'small-button-res':'small-button'" (click)="openSidePanel()">Transfer
+    User</button>
+</div>
+</div>
+<div class="modal fade" id="editConfirmModel1" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Confirmation</h4>
+        <button type="button" style="color: #4a90e2;"class="close" data-bs-dismiss="modal"><i class="fa fa-times-circle" aria-hidden="true"></i></button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <p style="font-size: 14px; margin-top: 20px; font-weight: normal;">This RFQ is currently open for quoting. Editing the RFQ will cause any current quotes to be retracted. Do you wish to continue?' </p>
+      </div>
+      <div class="row modal-footer1" style="padding: 10px">
+        <div class="col-md-6">
+            <button type="button" class="btn nobtn" data-bs-dismiss="modal">No</button>
+        </div>
+        <div class="col-md-6">
+            <button type="button" class="btn btn-edit-confirm" data-bs-dismiss="modal" (click)="redirectToEditRfq()">Yes</button>
+          </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf=isCloneModel>
+    <app-clone-rfq [id]="cloneRfqId"></app-clone-rfq>
+    </div>

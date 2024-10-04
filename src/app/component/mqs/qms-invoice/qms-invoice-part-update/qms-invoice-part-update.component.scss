@@ -1,0 +1,93 @@
+.input-group
+{
+    margin: 0px!important;
+}
+.input-group > .input-group-append > .input-group-text
+{
+    background-color: transparent;
+    border: 1px 1px 0px 1px;
+    border-color: silver;
+    color: black;
+    padding-top: 0px;
+    cursor: pointer!important;
+    margin: 0px!important;
+}
+.label-add-more
+{
+    font-size: 9pt;
+    color: #4a90e2;
+    font-weight: normal!important;
+    text-shadow: 0px 0px 0px black;
+    cursor: pointer;
+}
+.label-add-more-remove
+{
+    font-size: 9pt;
+    color: #4a90e2;
+    font-weight: normal!important;
+    text-shadow: 0px 0px 0px black;
+    cursor: pointer;
+    color: red;
+}
+.label-title
+{
+    color: #222;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+.mandetory-field
+{
+    color: red!important;
+    font-size: 12px;
+    font-weight: bold;
+}
+.subtotal-display-container
+{
+    font-size: 10pt;
+    float: left;
+    text-align: right;
+    // padding-right: 56px;
+    border-top: 1px dashed silver;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-weight: bold;
+    background-color: #F7F3F2;
+}
+
+.unit-price-container
+{
+    float: left;
+}
+.price-container
+{
+    float: left;
+    margin-top: -20px;
+}
+
+/* Absolute Center Spinner */
+.loading {
+  position: fixed;
+  z-index: 999;
+  height: 2em;
+  width: 2em;
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+/* Transparent Overlay */
+.loading:before {
+  content: '';
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+  background-color: #666666;
+}

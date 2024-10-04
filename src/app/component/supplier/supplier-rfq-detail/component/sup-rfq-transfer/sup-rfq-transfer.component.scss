@@ -1,0 +1,203 @@
+.background-white{
+	background:#FFF;
+	padding: 19px;
+	border-radius:5px;
+	margin-bottom:19px;
+	border-radius: 5px;
+	box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+}
+.rightpanel i{
+	color:#4a90e2;
+	font-size: 19px;
+}
+.panelheading{
+	font-size: 16px;
+	font-weight: bold;
+	color: #222;
+	margin-top:2px !important;
+	line-height:22px;
+}
+.panelheading span{
+	font-size: 12px;
+	font-weight: bold;
+	color: #919aa3;
+}
+hr{
+	border: solid 1px #e2e2e5 !important;
+	float: left !important;
+	width: 100% !important;
+	margin-top:11px !important;
+	margin-bottom:5px !important;
+}
+.innerpanelheading{
+	font-size: 16px;
+	font-weight: bold;
+	color: #222;
+	width:100%;
+	border-bottom: solid 1px #e2e2e5 !important;
+	padding-bottom:5px;
+	margin-bottom:19px;
+}
+.subinnerpanelheading{
+	font-size: 14px;
+	font-weight: bold;
+	color: #222222;
+	text-transform:uppercase;
+}
+
+.rightcancelbutton{
+	border-radius: 2px;
+	background-color: #FFF;
+	font-size: 16px;
+	width: 129px;
+	border:  solid 2px #81db6d;
+	margin:16px 6px 6px 6px;
+	text-align:center;
+	transition:0.3s;
+	font-weight: bold;
+	padding:9px;
+	color:#81db6d;
+}
+.rightcancelbutton:hover{
+	border-radius: 2px;
+	background-color: #FFF;
+	font-size: 16px;
+	width: 129px;
+	border:  solid 2px #bec4cb;
+	margin:16px 6px 6px 6px;
+	text-align:center;
+	transition:0.3s;
+	font-weight: bold;
+	padding:9px;
+	color:#bec4cb;
+}
+.rightaddsubmit{
+	border-radius: 2px;
+	background-color: #81db6d;
+	font-size: 16px;
+	width: 129px;
+	margin:16px 6px 6px 6px;
+	text-align:center;
+	font-weight: bold;
+	transition:0.3s;
+	border:none;
+	padding:11px;
+  color:#FFF;
+  cursor: pointer;
+}
+.rightaddsubmit:hover{
+	border-radius: 2px;
+	background-color: #81db6d;
+	transition:0.3s;
+	font-size: 16px;
+	width: 129px;
+	margin:16px 6px 6px 6px;
+	text-align:center;
+	font-weight: bold;
+	padding:11px;
+  color:#FFF;
+  cursor: pointer;
+}
+.rightaddsubmit-enable{
+	border-radius: 2px;
+	background-color: #81db6d;
+	transition:0.3s;
+	font-size: 16px;
+	width: 129px;
+	margin:16px 6px 6px 6px;
+	text-align:center;
+	font-weight: bold;
+	padding:11px;
+  color:#FFF;
+  cursor: pointer;
+  border:none;
+}
+.rightaddsubmit-disable{
+	border-radius: 2px;
+	background-color: #bec4cb;
+	font-size: 16px;
+	width: 129px;
+	margin:16px 6px 6px 6px;
+	text-align:center;
+	font-weight: bold;
+	transition:0.3s;
+	border:none;
+	padding:11px;
+  color:#FFF;
+}
+.rightaddwithoutsubmit{
+	border-radius: 2px;
+	background-color: #bec4cb;
+	font-size: 16px;
+	width: 140px;
+	margin:16px 6px 6px 6px;
+	text-align:center;
+	font-weight: bold;
+	transition:0.3s;
+	border:none;
+	padding:11px;
+	color:#FFF;
+}
+/*.rightaddwithoutsubmit:hover{
+	border-radius: 2px;
+	background-color: #bec4cb;
+	transition:0.3s;
+	font-size: 16px;
+	width: 129px;
+	margin:16px 6px 6px 6px;
+	text-align:center;
+	font-weight: bold;
+	padding:9px;
+	color:#FFF;
+}*/
+
+.Label-class {
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+}
+.Label-focus {
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #4a90e2;
+}
+.Label-focus-red {
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #da2020;
+}
+.txtcolorRed{
+	color:#da2020;
+}
+.borderRedColor{
+	border: 1px solid  #da2020;
+
+}
+.borderBlackColor{
+	border: 1px solid #cccccc;
+}
+.Rectangle-5 {
+  width: 309px;
+  height: 40px;
+  text-align: left;
+  padding: 10px;
+  background-color: #f6f7fb;
+}
+mousePointer:hover{
+  cursor: pointer;
+ }

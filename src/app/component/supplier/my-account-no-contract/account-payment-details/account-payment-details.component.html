@@ -1,0 +1,32 @@
+<div *ngIf="isLoader" class="loading">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div>
+
+<ng-template #content let-d="dismiss" data-backdrop="static" data-keyboard="false">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">New Payment Method</h4>
+
+  </div>
+  <div style="text-indent: 10px;">
+    <span>
+      Updating your payment method will overwrite your current settings.
+    </span>
+  </div>
+  <div class="modal-body" style="text-align: left!important;">
+
+    <app-payment-card-info [isUpdate]=true [(CustomerInfoOnCard)]="billingAddress"
+      [customerId]="billingInfoViewModel.customer" [cardId]="billingInfoViewModel.id"
+      (updatePaymentChangeEventHandler)="closeErrorCSVModel($event)"></app-payment-card-info>
+  </div>
+
+
+</ng-template>

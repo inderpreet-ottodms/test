@@ -1,0 +1,220 @@
+*{
+  font-family: Poppins;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+.p-dialog .p-dialog-header {
+  padding: 0;
+}
+.lead-head{
+  margin-top: 15px;
+  font-size: 24px;
+  margin-left: 5px;
+  font-weight: bold;
+}
+.lead-subhead{
+  font-size: 12px;
+  font-weight: bold;
+  color: #222222;
+}
+.lead-body{
+  border-radius: 5px;
+  box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65);
+  background-color: #ffffff;
+  padding: 15px;
+  min-height: 520px;
+}
+.lead-info{
+    border-radius: 5px;
+    box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+    background-color: #ffffff;
+    margin: 0;
+    padding: 20px 10px;
+    margin-top: 10px;
+}
+.lead-name{
+  color:#2E58D6;
+  word-break: break-all;
+  cursor: pointer;
+}
+#radioBtn .notActive{
+  color: #2E58D6;
+  padding: 5px 15px 5px 15px;
+  background-color: #fff;
+}
+#radioBtn .active{
+  background-color: #bec4cb;
+  color: #FFF;
+  box-shadow: none;
+  padding: 5px 15px 5px 15px;
+}
+.paginations{
+  float:right;
+}
+.padd-right {
+  padding-right:  62px;
+}
+.pagination-summary {
+  height: 15px;
+  border-radius: 2px;
+  background-color: #bec4cb;
+
+}
+.myRFQ-rfq-no-available {
+  height: 423px;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+.myRFQ-Group {
+  width: 213px;
+  height: 106px;
+  object-fit: contain;
+}
+.myRFQ-noRFQActive-helper-text {
+  height: 29px;
+  font-size: 21px;
+  font-weight: bold;
+  text-align: center;
+  color: #222222;
+}
+.btn-submit-rfq-close-1 {
+  height: 45px;
+  border-radius: 2px;
+  background-color: #81db6d;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: #ffffff;
+  cursor: pointer !important;
+}
+.upgrade{
+  text-align: center;
+  padding: 8px 10px;
+  margin: -15px;
+}
+.upgrade .btn, .upgradeModelFooter .btn{
+  color: #fff;
+  background-color: #81db6d;
+  padding: 5px 15px;
+  word-break: break-all;
+  white-space: normal;
+}
+.upgradeModelFooter{
+  text-align: center;
+  margin: 10px 0px;
+}
+.fa{
+  font-family: FontAwesome;
+}
+.cancleButton {
+  border-radius: 2px;
+  background-color: #FFF;
+  font-size: 16px;
+  border:  solid 2px #212A37;
+  text-align:center;
+  transition:0.3s;
+  font-weight: bold;
+  padding:9px;
+  color:#212A37;
+}
+.Rectanglebtn-active {
+  background-color: #2E58D6 !important;
+  color: white !important;
+}
+.clear {
+  font-size: 17px;
+  color: #2E58D6;
+  text-align: right;
+  margin: 0;
+  cursor: pointer;
+}
+.lead-box{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-right: 25px;
+  border-bottom: 3px solid #fff;
+  cursor: pointer;
+  opacity: 0.5;
+  margin-bottom: 15px;
+}
+.lead-icon{
+  width: 35px;
+  height: 35px;
+  background-color: #000;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+// .lead-box {
+//   text-align: center;
+//   padding: 8px 3px;
+//   background-color: #f6f7fb;
+//   border-radius: 5px;
+//   border: 1px solid #bec4cb;
+//   /* margin-left: 20px; */
+//   width: 85px;
+//   margin-right: 10px;
+//   cursor: pointer;
+//   margin-bottom: 5px;
+// }
+// .lead-box h5 {
+//   color:#2E58D6
+// }
+.lead-box span {
+  color:#222222;
+  font-size: 13px;
+}
+.lead-box.active{
+  opacity: 1!important;
+  border-bottom-color: #2E58D6!important;
+}
+// .lead-box.active,  .lead-box.active h5, .lead-box.active span {
+//   background-color: #2E58D6!important;
+//   color: #fff!important;
+// }
+.no-available ~ .lead-box {
+  color:#919aa3;
+  background-color: #f6f7fb!important;
+}
+.lead-box-gray {
+  text-align: center;
+  padding: 8px;
+  background-color: #f6f7fb;
+  border-radius: 5px;
+  color:#919aa3;
+  border: 1px solid #bec4cb;
+  /* margin-left: 20px; */
+  width: 80px;
+  margin-right: 10px;
+}
+.gray-box{
+  padding: 10px;
+  border: 1px solid #2E58D6;
+  opacity: 0.7;
+  background-color: #f6f7fb;
+}
+.unread-badge{
+  background-color: #2E58D6;
+  color: #fff!important;
+  padding: 2px 2px;
+  position: absolute;
+  right: -12px;
+  top: -8px;
+  font-size: 10px!important;
+  min-width: 20px;
+}
+::ng-deep .p-datepicker table td {
+  padding: 0 !important;
+}
+::ng-deep .p-dialog .p-dialog-header{
+  padding: 0 0 0 1rem !important;
+}
+::ng-deep .p-dialog-content{
+  padding: 0 1rem !important;
+}

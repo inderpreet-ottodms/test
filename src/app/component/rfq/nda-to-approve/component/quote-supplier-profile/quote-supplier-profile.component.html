@@ -1,0 +1,196 @@
+<div class="background-white">
+  {{ checkPartChange () }}
+  {{isminiDrawerData()}}
+  <div class="row" *ngIf="!isApi">
+    <div class="col-md-12 ">
+      <!-- <i class="fa fa-times-circle pull-right" (click)="closeSupplierProfileDrawer()"></i> -->
+      <img class="Close-3 pull-right" src="assets/rfq/close-3.svg" (click)="closeSupplierProfileDrawer()"
+        placement="top" container="body" ngbTooltip="Close Drawer">
+      <!-- <div class="mainheading">{{ iContactViewModel?.company?.name }} </div> -->
+      <div class="mainheading">{{ iContactViewModel?.firstName + ' ' + iContactViewModel?.lastName}}
+        <!-- <div class="main_border"></div> -->
+      </div>
+      <div class="col-md-12 " style="padding: 0px;">
+        <!-- <label [ngClass]="iContactViewModel.npsScore | npsState">
+          {{ ((iContactViewModel?.npsScore !== null) && (iContactViewModel?.npsScore !== '')) ?iContactViewModel?.npsScore : 'N/A' }}
+        </label>
+        <label class="-Net-Promotor-Scor"> Net Promotor Score</label> -->
+        <div class="rfq-star">
+          <!-- <span style="color:#4a90e2;">{{ (iContactViewModel.noOfStars)? (iContactViewModel.noOfStars | number : '1.0-1'): '0'}}</span> -->
+          <span
+            style="color:#4a90e2;">{{ (iContactViewModel.noOfStars)? (iContactViewModel.noOfStars | number : '1.0-1'): 'n/a'}}</span>
+          <ng-template #t let-fill="fill">
+            <span class="star" [class.full]="fill === 100">
+              <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+            </span>
+          </ng-template>
+          <ngb-rating [(rate)]="iContactViewModel.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+        </div>
+        <div class="title-blue" style="cursor: pointer; font-size: 14px; margin-bottom: 10px" (click)="readMore();">
+          <strong> View Full Profile</strong>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <!-- [disabled]="!isAddratingDisabled" -->
+            <button class="small-button btn" type="button" [disabled]="!isAddratingDisabled"
+              (click)="showRatingModel()">
+              Add your rating
+            </button>
+
+          </div>
+          <div class="col-md-6">
+            <!-- <button *ngIf="!iAboutUsModel.isFollowing" class="small-button btn" type="button"
+              (click)="setFollow(iAboutUsModel.companyId)">
+              Follow Supplier
+            </button>
+            <button *ngIf="iAboutUsModel.isFollowing" class="small-button btn" type="button"
+              (click)="unFollow(iAboutUsModel.companyId)">
+              UnFollow Supplier
+            </button> -->
+            <button *ngIf="!iContactViewModel.isLike" class="small-button btn" type="button"
+            (click)="likeSupplier(iContactViewModel.companyId)">
+            Like Supplier 
+          </button>
+          <button *ngIf="iContactViewModel.isLike" class="small-button btn" type="button"
+            (click)="unLikeSupplier(iContactViewModel.companyId)">
+            Unlike Supplier
+          </button>
+          </div>
+
+
+        </div>
+        <div class="block_border"></div>
+      </div>
+      <div class="col-md-12 rightpanel">
+        <!-- <div *ngIf=" ! contactlogo " style="height: 60px;width: 60px;margin: auto;border: 1px solid #bec4cb;border-radius: 50%;display: inline-block;text-align: center;">
+            <img (click)="showBuyerProfile(rfq.contactIdEncrypt, rfq.rfqId)" style="height: 40px;width: 40px;background-color: #fff;margin-top: 7px;" src="'assets/company/avatar-manu-basic.svg'" onError="this.src='assets/company/avatar-manu-basic.svg'">
+          </div> -->
+        <div class="row">
+          <div class="col-md-3">
+            <img class="contact_logo img-circle" [src]="contactlogo" alt="contact Logo"
+              onError="this.src='assets/company/avatar-manu-basic-circle.svg'" style="border: 1px solid #bec4cb;" />
+          </div>
+          <div class="col-md-9">
+            <div class="title-green">
+              <div class="mainheading" style="color: #000000; margin-bottom: 8px"> {{iContactViewModel?.company?.name}}
+              </div>
+              <strong>MFG.com Member Since:</strong><br />{{ iAboutUsModel?.createdDate | date: "MM/dd/yyyy" }}
+            </div>
+          </div>
+        </div>
+
+        <!-- <img class="contact_logo img-circle" [src]="contactlogo" alt="contact Logo" onError="this.src='assets/company/avatar-manu-basic.svg'" /> -->
+
+        <!-- <button  class="Rectangle-4" type="button"  style="cursor: pointer;margin-top: 10px">
+        <span class="button-lbl" (click)="readMore();" >View Full Profile</span>
+      </button> -->
+
+        <div class="msg_block"
+          (click)="openMessageDrawer($event, iContactViewModel.contactId, currentRfqid, currentContactName)">
+          <i class="fa fa-envelope-o"></i><a>Message Manufacturer</a>
+        </div>
+        <div class="msg_block" *ngIf="iAboutUsModel.companyId !=null && iAboutUsModel.companyId !=0">
+          <app-userblacklist [companyId]="iAboutUsModel.companyId" [blackList]="iAboutUsModel.isBlackListed">
+          </app-userblacklist>
+        </div>
+        <!-- <div class="block_border"></div> -->
+      </div>
+      <div class="block_border"></div>
+      <div class="col-md-12 rightpanel">
+        <div class="mainheading"> Demographics </div>
+        <div *ngIf="iAboutUsModel?.createdDate !== null">
+          <div class="sub_heading">
+            <strong>Company Type:</strong><br />
+            <label
+              *ngIf="iAboutUsModel.supplierType !== null">{{ iAboutUsModel?.supplierType.supplierTypeNameEn }}</label>
+          </div>
+          <div class="sub_heading">
+            <strong> Manufacturing Location:</strong><br />
+            <label
+              *ngIf="iAboutUsModel.manufacturingLocation !== null">{{ iAboutUsModel?.manufacturingLocation }}</label>
+          </div>
+          <div class="sub_heading">
+            <strong># of Employees:</strong><br />{{ iAboutUsModel?.employeeCountRange }}
+          </div>
+          <div class="sub_heading"><strong>Languages:</strong><br />
+            <div *ngIf="iAboutUsModel?.languages?.length === 0"> N/A </div>
+            <div *ngFor="let language of iAboutUsModel?.languages"> {{ language?.languageName }} </div>
+          </div>
+          <div class="sub_heading text-truncate" [title]="iAboutUsModel?.dunsNumber"><strong>D-U-N-S
+              Numbersssssssssss:</strong><br /> {{ iAboutUsModel.dunsNumber }} </div>
+              
+          <div class="sub_heading text-truncate" [title]="iAboutUsModel?.cageCode"><strong>Cage
+              Code:</strong><br />{{ iAboutUsModel.cageCode }}</div>
+          <!-- <div class="sub_heading text-truncate"><strong>Manufacturing Location:</strong><br />{{ iAboutUsModel?.manufacturingLocation }}</div> -->
+        </div>
+        <div *ngIf="iAboutUsModel?.createdDate == null">
+          <p>No demographics at this time.</p>
+        </div>
+        <div class="block_border"></div>
+      </div>
+      <div class="col-md-12 rightpanel">
+        <div class="mainheading"> Company Description </div>
+        <div class="company_desc descP" *ngIf="iAboutUsModel.description !== ''">
+          <p class="description-wraper" [innerHTML]="iAboutUsModel.description | sanitizeNolimit"></p>
+          <!-- | slice: 0:2000  -->
+          <a (click)="readMore()" style="font-size: 14px">View Profile</a>
+        </div>
+        <div class="company_desc" *ngIf="iAboutUsModel.description == ''">
+          <p>No company description at this time.</p>
+          <a (click)="readMore()" style="font-size: 14px">View Profile</a>
+        </div>
+        <div class="block_border"></div>
+      </div>
+      <div class="col-md-12 rightpanel">
+        <div class="mainheading"> Equipment </div>
+        <div class="equipment-list" *ngIf="iAboutUsModel?.equipments?.length !== 0">
+          <ul *ngFor="let item of iAboutUsModel?.equipments">
+            <li style=" word-break: break-all; ">{{ item.equipmentText }}</li>
+          </ul>
+        </div>
+        <div *ngIf="iAboutUsModel?.equipments?.length === 0" style="padding-top: 12px;">
+          <p>No equipment at this time.</p>
+        </div>
+        <div class="block_border"></div>
+      </div>
+      <div class="col-md-12 rightpanel">
+        <div class="mainheading"> Certifications </div>
+        <div class="certificate_list" *ngIf="certificateViewModelList?.length !== 0">
+          <ul>
+            <li *ngFor="let certificate of certificateViewModelList">
+              <p>
+                <strong class="title-blue"> {{ certificate.certificateCode }}</strong><br />
+                {{ certificate.creationDate | date :  "MM/dd/yyyy" }}
+              </p>
+            </li>
+          </ul>
+        </div>
+        <div class="certificate_list" *ngIf="certificateViewModelList?.length === 0">
+          <p>No certifications at this time.</p>
+        </div>
+        <!-- <div class="block_border"></div> -->
+      </div>
+      <div>
+        <!-- <div >
+            <button *ngIf="!iAboutUsModel.isFollowing" class="Rectangle-3" type="button">
+              <span class="button-lbl" (click)="setFollow(iAboutUsModel.companyId)">Follow</span>
+            </button>
+            <button *ngIf="iAboutUsModel.isFollowing" class="Rectangle-3" type="button">
+                <span class="button-lbl" (click)="unFollow(iAboutUsModel.companyId)">UnFollow</span>
+              </button>
+          </div> -->
+      </div>
+    </div>
+    <div *ngIf="isApi">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+  </div>

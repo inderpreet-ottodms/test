@@ -1,0 +1,177 @@
+<div class="tab-pane" id="nda">
+  <section>
+    <div class="input-group">
+      <div id="radioBtn" class="btn-group">
+        <a class="btn btn-primary btn-sm " [ngClass]="(tabBtnStatus=='All')? 'active':'notActive'" (click)="sortedManifacturerList('All')"
+          data-bs-toggle="fun" data-title="Y">NDA’s to approve</a>
+        <a class="btn btn-primary btn-sm " [ngClass]="(tabBtnStatus=='Standard')? 'active':'notActive'" (click)="sortedManifacturerList('Standard')"
+          data-bs-toggle="fun" data-title="X">Standard NDA</a>
+        <a class="btn btn-primary btn-sm " [ngClass]="(tabBtnStatus=='Custom')? 'active':'notActive'" (click)="sortedManifacturerList('Custom')"
+          data-bs-toggle="fun" data-title="X">Custom NDA</a>
+        <a class="btn btn-primary btn-sm " [ngClass]="(tabBtnStatus=='Declined')? 'active':'notActive'" (click)="sortedManifacturerList('Declined')"
+          data-bs-toggle="fun" data-title="N">Declined</a>
+      </div>
+      <input type="hidden" name="fun" id="fun">
+    </div>
+    <br>
+    {{reloadMessages()}}
+    <div class="table-responsive"  *ngIf="!iManifacturerAvailable">
+      <div class="tbl-header fixed-header">
+        <table class="nda-table">
+          <thead>
+            <tr>
+              <td class="nda-results">{{ totalRecordCount }} Results</td>
+              <td class="custom-color nda-results2"> <span *ngIf="(selectedRowCountTxt !== '0' && selectedRowCountTxt !== '' && selectedRowCountTxt !== '1')">{{ selectedRowCountTxt }}</span></td>
+              <td *ngIf="(activeTopBtns)" (click)="openSidePanel('')"> <i class="fa fa-comment" [ngClass]="(activeTopBtns)? 'iconEnabled mousePointer' :'iconDisabled'" container="body" ngbTooltip="Message Manufacturers" ></i></td>
+              <td *ngIf="(activeTopBtns)"><i class="fa fa-thumbs-up" [ngClass]="(activeTopBtns)? 'iconEnabled mousePointer' :'iconDisabled'" container="body"  ngbTooltip="Approve" (click)="approveDeclineAction('ACCEPTED',0,true)"></i></td>
+              <td *ngIf="(activeTopBtns)"><i class="fa fa-thumbs-down" [ngClass]="(activeTopBtns)? 'iconEnabled mousePointer' :'iconDisabled'" container="body" ngbTooltip="Decline" (click)="approveDeclineAction('DECLINED',0,true)"></i></td>
+              <td *ngIf="(!activeTopBtns)"> <i class="fa fa-comment" [ngClass]="(activeTopBtns)? 'iconEnabled mousePointer' :'iconDisabled'" container="body" ngbTooltip="Message Manufacturers" ></i></td>
+              <td *ngIf="(!activeTopBtns)"><i class="fa fa-thumbs-up" [ngClass]="(activeTopBtns)? 'iconEnabled mousePointer' :'iconDisabled'" container="body"  ngbTooltip="Approve" ></i></td>
+              <td *ngIf="(!activeTopBtns)"><i class="fa fa-thumbs-down" [ngClass]="(activeTopBtns)? 'iconEnabled mousePointer' :'iconDisabled'" container="body" ngbTooltip="Decline" ></i></td>
+            </tr>
+          </thead>
+        </table>
+        <table class="table table-hover rfqtable">
+          <thead>
+            <tr>
+              <th class="nda-checkboxth"><input type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();"></th>
+              <th class="ManufacturerWidth" (click)="sortOnContactName()">Manufacturer <i [ngClass]="(toggleManufacturer)?'fa fa-sort-asc':'fa fa-sort-desc'" style="font-size:14px;"></i></th>
+              <th class="ContactWidth">Contact</th>
+              <th class="statusWidth">Phone</th>
+              <th class="label-blue statusWidth">Status</th>
+             <th colspan="3">Actions</th>
+            </tr>
+          </thead>
+        </table>
+        {{IsNpsdataback()}}
+        <div class="tbl-content">
+          <table class="table table-hover rfqtable">
+            <tbody>
+              <tr *ngFor="let manifacturerList of items; let i = index">
+                <td class="nda-checkbox">
+                  <input type="checkbox" [(ngModel)]="manifacturerList.selected" (change)="checkIfAllSelected()"></td>
+                <td style="white-space: initial !important;cursor:pointer" placement="top" data-container="body" class="rfqtd nda-manufacturer ManufacturerWidth"
+                  (click)="openMenufacturerDrawer(manifacturerList.contactIdEncrypt,manifacturerList.contactName,manifacturerList.companyName)">  <div ngbTooltip="{{  manifacturerList.companyName}}"> {{ manifacturerList.companyName | dotLimit:'20' }} </div>  <br>
+                  <div class="rfq-star">
+                      <!-- <span style="color:#4a90e2;font-size: 14px;">{{ (manifacturerList.noOfStars)? (manifacturerList.noOfStars| number : '1.0-1'): '0'}}</span> -->
+                      <span style="color:#4a90e2;font-size: 14px;">{{ (manifacturerList.noOfStars)? (manifacturerList.noOfStars | number : '1.0-1'): 'n/a'}}</span>
+                      <ng-template #t let-fill="fill">
+                      <span class="star" [class.full]="fill === 100">
+                        <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+                      </span>
+                    </ng-template>
+                    <ngb-rating [(rate)]="manifacturerList.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+                  </div>
+                  <!-- <span class="Net-Promotor-Scor">
+                    <span [ngClass]="manifacturerList.npsScore | npsState" style="color: white !important"> {{ ((manifacturerList?.npsScore !== null) && (manifacturerList?.npsScore !== '')) ? manifacturerList?.npsScore : 'N/A' }}</span> Net Promotor Score </span> -->
+                </td>
+                <td class="nda-status ContactWidth custom-color"  placement="top" data-container="body">
+                  <div ngbTooltip="{{  manifacturerList.contactName}}"> {{ manifacturerList.contactName | dotLimit:'20' }} </div> </td>
+                <td class="nda-status NoWidth custom-color"> {{ ( manifacturerList.telephone ==='' || manifacturerList.telephone === null)?'123-456-2150': manifacturerList.telephone|phone}}</td>
+                <!-- <td class="custom-color"> {{ manifacturerList.messageStatusToken | Na }}</td> -->
+                <td class="custom-color" *ngIf="manifacturerList.messageStatusToken == 'Viewed'"></td>
+                <td class="custom-color" *ngIf="manifacturerList.messageStatusToken !== 'Viewed' && manifacturerList.messageStatusToken !== 'ACCEPTED'"> {{ manifacturerList.messageStatusToken | Na }}</td>
+                <td class="custom-color" style="text-align: center;" *ngIf="manifacturerList.messageStatusToken === 'ACCEPTED'">Approved</td>
+
+                <td class="editdelete" *ngIf="!isMessageRfqPanel() || (selectedRFQMsgId !== i)" (click)="openSidePanel(manifacturerList.contactId, manifacturerList.contactName, manifacturerList.rfqId,  i)"><i class="fa fa-comment-o mousePointer" ngbTooltip="Message Manufacturer"></i></td>
+                <td class="editdelete" *ngIf="(isMessageRfqPanel() && (selectedRFQMsgId === i))"  (click)="openSidePanel(manifacturerList.contactId, manifacturerList.contactName, manifacturerList.rfqId, i)"><i class="fa fa-comment mousePointer" ngbTooltip="Message Manufacturer"></i></td>
+
+                <!-- <td class="editdelete" *ngIf="manifacturerList.messageStatusToken === 'ACCEPTED'"><i class="fa fa-thumbs-up mousePointer" ngbTooltip="Approve" style="cursor:default;"></i></td>
+                <td class="editdelete" *ngIf="manifacturerList.messageStatusToken !== 'ACCEPTED'"><i class="fa fa-thumbs-o-up mousePointer" ngbTooltip="Approve" (click)="approveDeclineAction('ACCEPTED',manifacturerList.contactId,false)"></i></td>
+                <td class="editdelete" *ngIf="manifacturerList.messageStatusToken === 'DECLINED'"><i class="fa fa-thumbs-down mousePointer" ngbTooltip="Decline" style="cursor:default;"></i></td>
+                <td class="editdelete" *ngIf="manifacturerList.messageStatusToken !== 'DECLINED'"><i class="fa fa-thumbs-o-down mousePointer" ngbTooltip="Decline" (click)="approveDeclineAction('DECLINED',manifacturerList.contactId,false)"></i></td> -->
+
+                 <!-- for all tab -->
+                 <td class="editdelete" *ngIf="tabBtnStatus === 'All' && manifacturerList.messageStatusToken === 'ACCEPTED'"><i class="fa fa-thumbs-up mousePointer" ngbTooltip="Approve" style="cursor:default;">6</i></td>
+                 <td class="editdelete" *ngIf="tabBtnStatus === 'All'  && manifacturerList.messageStatusToken !== 'ACCEPTED'"><i class="fa fa-thumbs-o-up mousePointer" ngbTooltip="Approve" (click)="approveDeclineAction('ACCEPTED',manifacturerList.contactId,manifacturerList.rfqId,false)"></i></td>
+                 <td class="editdelete" *ngIf="tabBtnStatus === 'All' && manifacturerList.messageStatusToken !== 'DECLINED'"><i class="fa fa-thumbs-o-down mousePointer" ngbTooltip="Decline" (click)="approveDeclineAction('DECLINED',manifacturerList.contactId,manifacturerList.rfqId,false)"></i></td>
+                 <!-- <td class="editdelete" *ngIf="tabBtnStatus === 'All' && manifacturerList.messageStatusToken !== 'DECLINED'"><i class="fa fa-thumbs-down mousePointer" ngbTooltip="Decline" style="cursor:default;"></i></td> -->
+
+
+                 <!-- for Standard tab -->
+                 <td class="editdelete"  disabled *ngIf="tabBtnStatus === 'Standard' && manifacturerList.prefNDAType ==='1'"></td>
+                 <td class="editdelete"  disabled *ngIf="tabBtnStatus === 'Standard' && manifacturerList.prefNDAType ==='1'"></td>
+                 <td class="editdelete"           *ngIf="tabBtnStatus === 'Standard' && manifacturerList.prefNDAType !=='1' && manifacturerList.messageStatusToken === 'ACCEPTED'"><i class="fa fa-thumbs-up mousePointer" ngbTooltip="Approve"></i></td>
+                 <td class="editdelete"           *ngIf="tabBtnStatus === 'Standard' && manifacturerList.prefNDAType !=='1' && manifacturerList.messageStatusToken !== 'ACCEPTED'"><i class="fa fa-thumbs-o-up mousePointer" ngbTooltip="Approve" (click)="approveDeclineAction('ACCEPTED',manifacturerList.contactId,manifacturerList.rfqId,false)"></i></td>
+                 <td class="editdelete" *ngIf="tabBtnStatus === 'Standard' && manifacturerList.prefNDAType !=='1'"><i class="fa fa-thumbs-o-down mousePointer" ngbTooltip="Decline" (click)="approveDeclineAction('DECLINED',manifacturerList.contactId,manifacturerList.rfqId,false)"></i></td>
+
+
+                 <!-- <td class="editdelete" *ngIf="tabBtnStatus === 'Standard' && manifacturerList.prefNDAType !=='1' && manifacturerList.messageStatusToken === 'ACCEPTED'"><i class="fa fa-thumbs-up mousePointer" ngbTooltip="Approve"></i>11</td>
+                 <td class="editdelete" *ngIf="tabBtnStatus === 'Standard' && manifacturerList.prefNDAType ==='1' && manifacturerList.messageStatusToken === 'ACCEPTED'"><i class="fa fa-thumbs-up mousePointer" ngbTooltip="Approve"></i>1</td>
+                 <td class="editdelete" *ngIf="tabBtnStatus === 'Standard' && manifacturerList.prefNDAType !=='1' && manifacturerList.messageStatusToken !== 'ACCEPTED'"><i class="fa fa-thumbs-o-up mousePointer" ngbTooltip="Approve" (click)="approveDeclineAction('ACCEPTED',manifacturerList.contactId,manifacturerList.rfqId,false)">2</i></td>
+                 <td class="editdelete"  disabled *ngIf="tabBtnStatus === 'Standard' && manifacturerList.prefNDAType ==='1'"></td>
+                 <td class="editdelete" *ngIf="tabBtnStatus === 'Standard' && manifacturerList.prefNDAType !=='1'"><i class="fa fa-thumbs-o-down mousePointer" ngbTooltip="Decline" (click)="approveDeclineAction('DECLINED',manifacturerList.contactId,manifacturerList.rfqId,false)">3</i></td>
+                 <td class="editdelete"  disabled *ngIf="tabBtnStatus === 'Standard' && manifacturerList.prefNDAType ==='1'">4</td>
+                 <td class="editdelete"  disabled *ngIf="tabBtnStatus === 'Standard' && manifacturerList.prefNDAType ==='1'">5</td> -->
+
+                <!-- for Custom tab -->
+
+                 <!-- for Standard tab -->
+                 <td class="editdelete"  disabled *ngIf="tabBtnStatus === 'Custom' && manifacturerList.prefNDAType ==='1'"></td>
+                 <td class="editdelete"  disabled *ngIf="tabBtnStatus === 'Custom' && manifacturerList.prefNDAType ==='1'"></td>
+                 <td class="editdelete"           *ngIf="tabBtnStatus === 'Custom' && manifacturerList.prefNDAType !=='1' && manifacturerList.messageStatusToken === 'ACCEPTED'"><i class="fa fa-thumbs-up mousePointer" ngbTooltip="Approve"></i></td>
+                 <td class="editdelete"           *ngIf="tabBtnStatus === 'Custom' && manifacturerList.prefNDAType !=='1' && manifacturerList.messageStatusToken !== 'ACCEPTED'"><i class="fa fa-thumbs-o-up mousePointer" ngbTooltip="Approve" (click)="approveDeclineAction('ACCEPTED',manifacturerList.contactId,manifacturerList.rfqId,false)"></i></td>
+                 <td class="editdelete" *ngIf="tabBtnStatus === 'Custom' && manifacturerList.prefNDAType !=='1'"><i class="fa fa-thumbs-o-down mousePointer" ngbTooltip="Decline" (click)="approveDeclineAction('DECLINED',manifacturerList.contactId,manifacturerList.rfqId,false)"></i></td>
+
+
+                <!-- <td class="editdelete" *ngIf="tabBtnStatus === 'Standard' && manifacturerList.prefNDAType !=='1' && manifacturerList.messageStatusToken === 'ACCEPTED'"><i class="fa fa-thumbs-up mousePointer" ngbTooltip="Approve"></i></td>
+                <td class="editdelete" *ngIf="tabBtnStatus === 'Custom' && manifacturerList.prefNDAType !=='1' && manifacturerList.messageStatusToken === 'ACCEPTED'"><i class="fa fa-thumbs-up mousePointer" ngbTooltip="Approve"></i>11</td>
+                <td class="editdelete" *ngIf="tabBtnStatus === 'Custom' && manifacturerList.prefNDAType ==='1' && manifacturerList.messageStatusToken === 'ACCEPTED'"><i class="fa fa-thumbs-up mousePointer" ngbTooltip="Approve"></i>1</td>
+                <td class="editdelete" *ngIf="tabBtnStatus === 'Custom' && manifacturerList.prefNDAType !=='1' && manifacturerList.messageStatusToken !== 'ACCEPTED'"><i class="fa fa-thumbs-o-up mousePointer" ngbTooltip="Approve" (click)="approveDeclineAction('ACCEPTED',manifacturerList.contactId,manifacturerList.rfqId,false)">2</i></td>
+                <td class="editdelete"  disabled *ngIf="tabBtnStatus === 'Standard' && manifacturerList.prefNDAType ==='1'"></td>
+                <td class="editdelete" *ngIf="tabBtnStatus === 'Custom' && manifacturerList.prefNDAType !=='1'"><i class="fa fa-thumbs-o-down mousePointer" ngbTooltip="Decline" (click)="approveDeclineAction('DECLINED',manifacturerList.contactId,manifacturerList.rfqId,false)">3</i></td>
+                <td class="editdelete"  disabled *ngIf="tabBtnStatus === 'Custom' && manifacturerList.prefNDAType ==='1'">4</td>
+                <td class="editdelete"  disabled *ngIf="tabBtnStatus === 'Custom' && manifacturerList.prefNDAType ==='1'">5</td> -->
+
+
+                <!-- for Decline tab -->
+                 <td class="editdelete" *ngIf="tabBtnStatus === 'Declined' && manifacturerList.prefNDAType !=='1'"><i class="fa fa-thumbs-o-up mousePointer" ngbTooltip="Approve" (click)="approveDeclineAction('ACCEPTED',manifacturerList.contactId,manifacturerList.rfqId,false)"></i></td>
+                 <td class="editdelete"  disabled *ngIf="tabBtnStatus === 'Declined' && manifacturerList.prefNDAType ==='1'"></td>
+                 <td class="editdelete" *ngIf="tabBtnStatus === 'Declined' && manifacturerList.prefNDAType !=='1'"><i class="fa fa-thumbs-down mousePointer" ngbTooltip="Decline"></i></td>
+                 <td class="editdelete"  disabled *ngIf="tabBtnStatus === 'Declined' && manifacturerList.prefNDAType ==='1'"></td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <br>
+  <div class="paginations" *ngIf="!iManifacturerAvailable">
+      <div class="input-group">
+        <div id="radioBtn" class="btn-group">
+          <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" class="btn btn-primary btn-sm notActive" (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+          Previous
+          </a>
+          <a *ngFor="let page of pagesIndex" (click)="setPage(page)"  [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'" data-bs-toggle="fun" data-title="X" >
+                  {{page}}
+           </a>
+          <a [ngClass]="(currentIndex == pageNumber || pageNumber == 0)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'" (click)="nextPage()"  data-bs-toggle="fun" data-title="N"  >
+           Next
+          </a>
+        </div>
+        <input type="hidden" name="fun" id="fun">
+      </div>
+    </div>
+    <br>
+</div>
+<div class="myRFQ-rfq-no-available" *ngIf="iManifacturerAvailable">
+  <div class="row" style="text-align: center;padding-top:60px">
+    <div class="col-md-12">
+      <div>
+        <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+      assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+      </div>
+    </div>
+  </div>
+  <div class="row" style="padding-top:34px">
+    <div class="col-md-12">
+      <div class="myRFQ-noRFQActive-helper-text">You don’t have any NDAs at this time.</div>
+    </div>
+  </div>
+
+
+</div>
+

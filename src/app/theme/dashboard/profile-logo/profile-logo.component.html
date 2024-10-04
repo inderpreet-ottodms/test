@@ -1,0 +1,131 @@
+<ng-template #content let-d="dismiss"
+ data-backdrop="static" data-keyboard="false">
+  <div>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Update Your Profile</h4>
+      <button type="button" class="btn close" aria-label="Close" (click)="d('notNow');closeModel(1)">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 text-left">
+          <span>Add your company's logo, company description and business address to help buyers understand your business and find you in online search results.</span>
+
+        </div>
+      </div>
+      <div class="row m-t-15 text-left">
+        <div class="col-md-4">
+              <h6>Profile Logo &nbsp;&nbsp;&nbsp;&nbsp;<span class="f-12 color-light-gray f-w-400">Optional</span></h6>
+          
+          <div class="logo" ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" [uploader]="uploader"
+            *ngIf="!profileModel.companyProfileLogoUrl">
+            <div>
+              <img src="assets/supplier/logoUploadGuide.png"
+                srcset="assets/supplier/logoUploadGuide@2x.png 2x, assets/supplier/logoUploadGuide@3x.png 3x"
+                class="upload-logo-guide-margin">
+            </div>
+            <div>
+              <span>
+                Drag & drop a logo for your profile picture. (150x150)
+              </span>
+            </div>
+
+          </div>
+          <div class="logo-filled" ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" [uploader]="uploader"
+            *ngIf="profileModel.companyProfileLogoUrl">
+            <img [src]="profileModel.companyProfileLogoUrl" class="upload-logo">
+          </div>
+          <div><span class="f-12 error-text">{{errorLogoMsg}}</span></div>
+          <div>
+            <span>Drag & Drop or <label class="m-b-0 f-14">
+                <input type="file" #file style="display: none;" (change)="onChange(file.files, 1)" />
+                <a class="browse-text f-14">browse your files</a>
+              </label> to add or edit. PNG or JPG files only.</span>
+          </div>
+        </div>
+
+        <form class="col-sm-8" #f="ngForm">
+          <div class="row">
+            <div class="col-sm-6 form-group">
+              <label for="address">Address</label>
+              <input class="form-control" id="address" name="address" [(ngModel)]="address" required
+                placeholder="Address">
+            </div>
+            <div class="col-sm-6 text-right">
+              <label for="address2" class=""><span class="f-12 color-light-gray">Required</span></label>
+              <input class="form-control" id="address2" name="address2" [(ngModel)]="address2" placeholder="Address 2">
+            </div>
+            <div class="col-sm-6 form-group">
+              <label for="country">Country</label>
+              <select class="form-control" name="country" id="country" [(ngModel)]="selectedCountryId"
+                (change)="getStateList(selectedCountryId)">
+                <option value="0">Select Country</option>
+                <option [value]="country.countryId" *ngFor="let country of countryList">
+                  {{country.countryName}}
+                </option>
+              </select>
+            </div>
+            <div class="col-sm-6 form-group">
+              <label for="state">{{selectedCountryId == 57?'State/Province':'State'}}</label>
+              <select class="form-control" name="state" id="state" [(ngModel)]='selectedStateId'>
+                <option *ngIf="selectedCountryId == 57" value="0">Select {{selectedCountryId == 57?'State/Province':'State'}}</option>
+                <option [value]="state.regionId" *ngFor="let state of stateList">
+                  {{state.regionName}}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-sm-6 form-group">
+              <label for="city">City</label>
+              <input class="form-control" name="city" id="city" placeholder="City" [(ngModel)]="city">
+            </div>
+
+            <div class="col-sm-6 form-group">
+              <label for="zip">Postal Code</label>
+              <input class="form-control" name="zip" id="zip" placeholder="Postal Code" [(ngModel)]="zip">
+            </div>
+          </div>
+
+        </form><!-- Address Form -->
+        <div class="col-md-12">
+          <div class="row m-t-15 text-left">
+            <div class="col-md-10">
+              <h6>Company Description</h6>
+            </div>
+            <div class="col-md-2 text-right">
+            <span class="f-12 color-light-gray">Required</span>
+            </div>
+            <div class="col-md-12">
+              <p-editor name="sdsd" [style]="{'height':'120px'}" (onTextChange)="changeText($event)"
+                [(ngModel)]="profileModel.companyDescription">
+                <p-header>
+                  <span class="ql-formats">
+                    <button class="ql-list" value="bullet"></button>
+                  </span>
+                </p-header>
+              </p-editor>
+            </div>
+            <div class="col-md-6">
+              <span class="f-12 error-text">{{errorDisMsg}}</span>
+            </div>
+            <div class="col-md-6 text-right">
+              <span class="description-helper">4000 characters</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="full-page-overlay" *ngIf="showPageDataLoding">
+        <div class="rfqLoader"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-cancel btn-width" (click)="closeModel(1)">I’ll Do This
+        Later</button>
+      <button type="button" class="btn btn-save btn-width-close" (click)="closeModel(2)"
+        [disabled]="isValidated()">Save</button>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,92 @@
+
+.background-white{
+	background:#FFF;
+  padding: 19px;
+  padding-bottom: 0px;
+	border-radius:5px;
+	margin-bottom:19px;
+	border-radius: 5px;
+	box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+}
+
+.rightpanel i {
+    color: #4a90e2;
+    font-size: 19px;
+  }
+
+  .panelheading {
+    font-size: 16px;
+    font-weight: bold;
+    color: #222;
+    margin-top: 2px !important;
+  }
+  .panelheading span {
+    font-size: 12px;
+    font-weight: bold;
+    color: #919aa3;
+  }
+  .icon{
+      margin-right: 20px;
+  }
+
+  .Email {
+    height: 17px;
+    font-family: Poppins;
+    font-size: 12px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #222222;
+  }
+
+.Save-Equipment-active {
+  width: -webkit-fill-available;
+  height: 35px;
+  border-radius: 2px;
+  padding: 0px !important;
+  background-color: #2E58D6;
+  color:white;
+  cursor: pointer;
+}
+.row-border-bottom {
+  border-bottom: 2px solid #e0dfdf;
+}
+.row-padding-top {
+  display: flex;
+  column-gap: 1rem;
+  padding: 15px;
+}
+.Rectangle-3{
+  width: -webkit-fill-available;
+  height: 35px;
+  border-radius: 2px;
+  border: solid 2px #212A37;
+  background-color: white;
+  color: #212A37;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+}
+.Save-Equipment-Deactive {
+  width: -webkit-fill-available;
+  height: 35px;
+  padding: 0px !important;
+ font-family: Poppins;
+ font-size: 16px;
+ font-weight: 600;
+ font-style: normal;
+ font-stretch: normal;
+ line-height: normal;
+ letter-spacing: normal;
+ text-align: center;
+ color: #ffffff;
+ border-radius: 2px;
+ background-color: #bec4cb;
+ cursor: default
+}

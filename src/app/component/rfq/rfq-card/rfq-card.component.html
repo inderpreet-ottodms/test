@@ -1,0 +1,91 @@
+  <div *ngIf="openRfqInfo==null" class="card-container preloader">
+    <span>Loading...</span>
+  </div>
+  <div *ngIf="openRfqInfo!=null"  [ngClass]="openRfqInfo.isCapabilitiesMatched
+                  ? 'card-container cursor-pointer'
+                  : 'card-container'">
+      <div class="col-sm-12 col-lg-12 col-md-12">
+        <span style="color: #919aa3">Quote by : </span>
+        <span *ngIf="!checkForDay(openRfqInfo.closeOn)" style="color:#000;">
+          {{ utcDate(openRfqInfo.closeOn) | date: 'MM/dd/yyyy'}}</span>
+      </div>
+      <div class="box">
+          <img class="img-circle img"
+                src="{{openRfqInfo.imageUrl}}"
+                (click)="openRFQSidePanel()">
+
+          <h2 data-container="body" class="text-wrap" placement="top"
+              ngbTooltip="{{openRfqInfo.rfqName}}"
+              (click)="openRFQDetail()">
+              {{openRfqInfo.rfqName}}<br>
+              <span>RFQ #{{openRfqInfo.rfqid}} - {{openRfqInfo.noOfParts}} Parts </span>
+              </h2>
+
+      </div>
+      <!-- <hr>
+      <p  container="body" placement="top" [ngClass]="openRfqInfo.isRegionMatched ? 'region-matched' : 'region-not-matched'" >
+        <i class="fa fa-map-marker"></i> Rigion name 
+      </p> -->
+      <hr>
+      <p  container="body" placement="top"
+          (click)="openRFQSidePanel()"
+          ngbTooltip="Qty:1 - {{openRfqInfo.qty001}} | Qty:2 - {{openRfqInfo.qty002}} | Qty:3 - {{openRfqInfo.qty003}}">{{openRfqInfo.unit}} </p>
+      <hr>
+      <p  container="body" placement="top"
+          (click)="openRFQSidePanel()">{{openRfqInfo.material}} </p>
+      <hr>
+      <!-- <p  container="body" placement="top" 
+          (click)="openRFQSidePanel()">
+        <span>{{openRfqInfo.process}}</span>
+      </p> -->
+      <!-- <p  container="body" placement="top">
+        <span [ngClass]="!openRfqInfo.isCapabilitiesMatched
+        ? 'capabilities-not-matched'
+        : 'capabilities-matched'">{{openRfqInfo.process}}</span> </p> -->
+        <p  container="body" placement="top">{{openRfqInfo.process}}</p>
+      <hr>
+      <p  container="body" placement="top"
+          (click)="openRFQSidePanel()">{{openRfqInfo.postProcess || 'N/A' }} </p>
+
+      <div class="bottom">
+          <ul>
+              <li class="ng-star-inserted">
+                <a>
+                  <i aria-hidden="true" [ngClass]="openRfqInfo.isLike==null || !openRfqInfo.isLike
+                                                  ? 'fa fa-thumbs-o-up' : 'fa fa-thumbs-up'"
+                                                  container="body"
+                                                  ngbTooltip="{{(openRfqInfo.isLike==null || !openRfqInfo.isLike) ? 'Like RFQ' : 'Remove your like'}}" placement="top"
+                                                  (click)="likeThisRFQ($event)"></i>
+                </a>
+              </li>
+              <!-- <li class="ng-star-inserted" *ngIf="openRfqInfo.brief!=null">
+                <a>
+                  <i aria-hidden="true"
+                    class="fa fa-info-circle" container="body" placement="top"
+                    ngbTooltip="{{openRfqInfo.brief}}" ></i>
+                </a>
+              </li> -->
+
+              <li *ngIf="openRfqInfo.brief"><a><i placement="top" [ngbPopover]="popAttachment"
+                container="body" #q="ngbPopover" (document:click)="q.close()"
+                (click)="$event.stopPropagation()" class="fa fa-info-circle" aria-hidden="true"></i></a>
+          </li>
+          <ng-template #popAttachment>
+            <p *ngIf="openRfqInfo.brief">{{openRfqInfo.brief}} … <br> <span
+                style="color:#4a90e2;cursor: pointer;" (click)="goToRfqDdetails(openRfqInfo.rfqid)">Read more</span>
+            </p>
+            <!-- <p *ngIf="!rfq.specialInstructions"><b>There Is No Special Instruction</b></p> -->
+          </ng-template>
+              <li class="pull-right ng-star-inserted">
+                <a>
+                  <i aria-hidden="true" [ngClass]="openRfqInfo.isLike || openRfqInfo.isLike==null
+                                                  ? 'fa fa-thumbs-o-down' : 'fa fa-thumbs-down'"
+                                                  container="body"
+                                                  ngbTooltip="{{(openRfqInfo.isLike || openRfqInfo.isLike==null) ? 'Dislike RFQ' : 'Remove your dislike'}}"
+                                                  placement="top"
+                                                  (click)="dislikeThisRFQ($event)"></i>
+                </a>
+              </li>
+            </ul>
+      </div>
+  </div>

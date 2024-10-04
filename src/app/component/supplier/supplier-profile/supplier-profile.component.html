@@ -1,0 +1,239 @@
+<section>
+  <div class="row">
+    <div [ngClass]="isSidePanel() ? 'col-md-8' : 'col-md-12'">
+      {{ isHeaderUpdated() }}
+      <div class="row" style="padding-bottom: 0px">
+        <div class="col-md-12 back_dashboard">
+          <!-- need to load admin component for one mobile view hamberger isue so made redirecting path as full '' instead of only loading dashboard/buyer/default  -->
+          <!-- <button [routerLink]="['/dashboard/supplier/ecommerce/']">
+            Back to Dashboard
+          </button> -->
+          <button [routerLink]="['']">
+            Back to Dashboard
+          </button>
+        </div>
+        <div class="col-md-12">
+          <div class="suppliers-header" style="margin-top: 15px">
+            <div *ngIf="hederPath" class="tinted-image" [ngStyle]="{
+                background: hederPath ? 'url(' + hederPath + '), #00447c' : ''
+              }"></div>
+            <div *ngIf="hederPath == ''" class="tinted-image1"></div>
+          </div>
+        </div>
+        <div class="col-md-7" style="display: flex">
+          <div class="supplier-logo-size">
+            <img [src]="supplierLogoPath" style="
+                width: 100%;
+                height: auto;
+                border-radius: 5px;
+              " onError="this.src='assets/company/avatar-manu-basic.svg';" />
+          </div>
+
+          <div class="profile-banner">
+            <button type="button" class="profile_btn" style="margin: 9px 0px 5px" (click)="openSidePanel('headerEdit')">
+              Edit
+            </button>
+            <h4 style="word-break: break-all">
+              {{ iContactViewModel?.company?.name }}
+            </h4>
+            <div class="rfq-star">
+              <span style="color: #212A37; font-size: 16px">{{
+                iContactViewModel.noOfStars
+                  ? (iContactViewModel.noOfStars | number: "1.0-1")
+                  : "n/a"
+              }}</span>
+              <ng-template #t let-fill="fill">
+                <span class="star" [class.full]="fill === 100">
+                  <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+                </span>
+              </ng-template>
+
+              <ngb-rating [(rate)]="iContactViewModel.noOfStars" [starTemplate]="t" [readonly]="true" max="5">
+              </ngb-rating>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-5" style="text-align: right; padding: 20px">
+          <!-- <button type="button" class="btn publicViewButton" (click)="publicView()"
+            [disabled]="iContactViewModel?.isTestAccount">
+            Public View
+          </button> -->
+
+          <button type="button" *ngIf="!publishBtn.isSubmittedForPublish && !publishBtn.isAbleToViewPublicProfile &&
+            !publishBtn.isProfileApprovedByVision" class="btn publicViewButton" (click)="publishProfileModel()"
+            [disabled]="(!publishBtn.isProfileComplete)?true:false">
+            Publish Public Profile
+          </button>
+
+          <button type="button" *ngIf="publishBtn.isProfileComplete && publishBtn.isSubmittedForPublish &&
+            publishBtn.isAbleToViewPublicProfile" class="btn publicViewButton" (click)="publicView()"
+            [disabled]="(!publishBtn?.isProfileApprovedByVision)?true:false">
+            View Public Profile
+          </button>
+        </div>
+      </div>
+      <div class="background-white">
+        {{ openEditHeaderWarning() }}
+        <div class="tabbable-panel">
+          <div class="tabbable-line-sup-pro">
+            <ul class="nav nav-tabs">
+              <li [ngClass]="isAboutUsActive ? 'active liwidth' : 'liwidth'" (click)="openAboutUs()">
+                <a href="Javascript:void(0);" >ABOUT US</a>
+              </li>
+              <li [ngClass]="isCabalitiesActive ? 'active liwidth' : 'liwidth'" (click)="openCapabilities()">
+                <a #capabilityTab href="Javascript:void(0);" >CAPABILITIES</a>
+              </li>
+              <li [ngClass]="isContactUsActive ? 'active liwidth' : 'liwidth'" (click)="openContactUs()">
+                <a href="Javascript:void(0);" >CONTACT US</a>
+              </li>
+              <li [ngClass]="isRatingActive ? 'active liwidth' : 'liwidth'" (click)="openRatings()">
+                <a href="Javascript:void(0);" >RATINGS</a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane" [ngClass]="isAboutUsActive ? 'active' : ''" id="aboutus">
+                <app-about-us (profileChanges)="openSynModal($event)"></app-about-us>
+              </div>
+              <div class="tab-pane" id="capabilities" [ngClass]="isCabalitiesActive ? 'active' : ''">
+                <app-capabilities (profileChanges)="openSynModal($event);getSupplierPublishProfileStatus()">
+                </app-capabilities>
+              </div>
+              <div class="tab-pane" id="contactus" [ngClass]="isContactUsActive ? 'active' : ''">
+                <app-contact-us *ngIf="proceedToLoadMap"></app-contact-us>
+              </div>
+              <div class="tab-pane" id="ratings" [ngClass]="isRatingActive ? 'active' : ''">
+                <app-raitings [isRatingActive]="isRatingActive"></app-raitings>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4" *ngIf="isSidePanel()" appAutoScroll class="wrapper">
+      <div *ngIf="isAboutUsEdit()">
+        <app-edit-about-us (profileChanges)="openSynModal($event);getSupplierPublishProfileStatus()">
+        </app-edit-about-us>
+      </div>
+      <div *ngIf="isContactUsEdit()">
+        <app-edit-contact-us (profileChanges)="openSynModal($event);getSupplierPublishProfileStatus()">
+        </app-edit-contact-us>
+      </div>
+      <div *ngIf="isCapabilitiesEdit()">
+        <app-edit-capabilities (profileChanges)="openSynModal($event);getSupplierPublishProfileStatus()">
+        </app-edit-capabilities>
+      </div>
+      <div *ngIf="isRatingReply()">
+        <app-rating-reply (profileChanges)="openSynModal($event)"></app-rating-reply>
+      </div>
+      <div *ngIf="isHeaderEdit()">
+        <app-edit-header (profileChanges)="openSynModal($event);getSupplierPublishProfileStatus()"></app-edit-header>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="custom-confirmation" *ngIf="isCencel">
+  <p-confirmDialog header="Confirmation" icon="" width="629" height="220" #cd>
+    <p-footer>
+      <div class="row">
+        <div class="col-md-6">
+          <button type="button" class="btn btn-ignore-rfq" (click)="cd.reject()">
+            No
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="cd.accept()">
+            Yes
+          </button>
+        </div>
+      </div>
+    </p-footer>
+  </p-confirmDialog>
+</div>
+<div class="modal fade" id="telModel" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Contact Us</h4>
+        <button type="button" class="close" data-bs-dismiss="modal">
+          <i class="fa fa-times-circle" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="modal-body" style="text-align: center; margin: 15px 0px">
+        <span *ngIf="iContactViewModel?.isDialFriendly" class="icon-size"><i class="fa fa-phone fa-flip-horizontal"
+            placement="top" container="body" ngbTooltip="Contact Us"></i>&nbsp;</span>
+        <p style="font-size: 20px; margin-top: 20px; display: inline">
+          {{ iContactViewModel?.phoneNo }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ open3DDeleteWarning() }}
+<div class="custom-confirmation" *ngIf="is3DDelete">
+  <p-confirmDialog header="Confirmation" icon="" width="629" height="220" #cd>
+    <p-footer>
+      <div class="row">
+        <div class="col-md-6">
+          <button type="button" class="btn btn-ignore-rfq" (click)="cd.reject()">
+            No
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="cd.accept()">
+            Yes
+          </button>
+        </div>
+      </div>
+    </p-footer>
+  </p-confirmDialog>
+</div>
+
+{{ open3DDeleteWarning1() }}
+<div class="custom-confirmation" *ngIf="is3DDelete1">
+  <p-confirmDialog header="Confirmation" icon="" width="629" height="220" #cd>
+    <p-footer>
+      <div class="row">
+        <div class="col-md-6">
+          <button type="button" class="btn btn-ignore-rfq" (click)="cd.reject()">
+            No
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="cd.accept()">
+            Yes
+          </button>
+        </div>
+      </div>
+    </p-footer>
+  </p-confirmDialog>
+</div>
+<ng-template #synModal let-d="dismiss" data-backdrop="static" data-keyboard="false">
+  <div class="modal-header border-0">
+    <h4 class="modal-title"></h4>
+    <button type="button" class="close" data-bs-dismiss="modal" (click)="d('notNow');closeUpgradeModal()"><i
+        class="fa fa-times-circle" aria-hidden="true" style="color: #2E58D6;"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="graphic-header">
+      <span>Thanks! Please allow up to 5 minutes for your profile updates to be approved and published to the
+        Manufacturing Directory</span>
+    </div>
+  </div>
+  <div class="modal-footer-section m-t-10 m-b-10">
+    <div class="row">
+      <div class="col-md-12 text-center" data-bs-dismiss="modal">
+        <button type="button" style="width: 95px;" class="btn button-green" data-bs-dismiss="modal"
+          (click)="d('notNow');">Got It!</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<app-publish-decision-model *ngIf="showPublishModel" (openNoPublishEvent)="showNoPublishModelChange($event)">
+</app-publish-decision-model>
+<app-not-publish-decision-model *ngIf="showNoPublishModel" (openPublishEvent)="showPublishModelChange($event)">
+</app-not-publish-decision-model>

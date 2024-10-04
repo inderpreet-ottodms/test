@@ -1,0 +1,104 @@
+<div class="row part-invoice">
+  <div class="col-md-1">
+    <div class="border-checkbox-section ">
+      <div class="border-checkbox-group border-checkbox-group-primary">
+        <input class="border-checkbox" type="checkbox" [id]="partInfo.qmsQuotePartId" [(ngModel)]="isPartChecked"
+          (change)="isCheckedPart()" [disabled]="invoiceQunatityForm.invalid">
+        <label class="border-checkbox-label" [for]="partInfo.qmsQuotePartId"></label>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <h6>{{partInfo.partName}}#{{partInfo.qmsQuotePartId}}</h6>
+    <span>{{partInfo.partNumber}}</span>
+  </div>
+  
+  <div class="col-md-8">
+    <form [formGroup]="invoiceQunatityForm">
+      <div formArrayName="items" *ngFor="let item of invoiceQunatityForm.get('items')['controls']; let i = index;">
+        <div class="row" [formGroupName]="i">
+          <div class="col-md-3">
+            <div class="from-group">
+              <label><span class="color-red">*</span>&nbsp;Selected Quantity</label>
+              <select class="form-control" formControlName="quantity" (change)="enabledFreetype(item ,i)">
+                <option value="" selected>Select Quantity</option>
+                <option class="form-control" [value]='data.qmsQuotePartQtyId' *ngFor="let data of qmsQuotePartQuantity">
+                  {{data.partQty }} {{data.partQtyUnit}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3 qty-other">
+            <div class="border-checkbox-section">
+              <div class="border-checkbox-group border-checkbox-group-primary">
+                <input class="border-checkbox" (change)="setValidator(item)" [name]="i" type="checkbox"
+                  [id]="i + partInfo.qmsQuotePartId + partInfo.partNumber + partInfo.uniqueId" formControlName="otherQtyCheck">
+                <label class="border-checkbox-label" [for]="i + partInfo.qmsQuotePartId + partInfo.partNumber + partInfo.uniqueId">Other Qty</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="from-group">
+              <label><span class="color-red">*</span>&nbsp;Fee Type</label>
+              <select class="form-control" formControlName="freeType" (change)="enabledUnitPrice(item)">
+                <option value="" selected>Select Fee Type</option>
+                <option value="1"> Price per unit</option>
+                <option [value]='data.qmsFeeTypeId' class="form-control" *ngFor="let data of iFeetypeList">
+                  {{data.feeType}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="from-group">
+              <label><span class="color-red">*</span>&nbsp;Unit Price</label>
+              <input class="form-control" (focus)="calculateSubTotal(item)" (change)="calculateSubTotal(item)" (keyup)="calculateSubTotal(item)"
+                [readonly]="item.get('freeType').value == 0" appDecimal formControlName="unitPrice" type="text" name=""
+                id="">
+            </div>
+          </div>
+
+          <div class="col-md-6 m-t-10">
+            <div class="row" *ngIf="item.get('otherQtyCheck').value == true">
+              <div class="col-md-6">
+                  <label><span class="color-red">*</span>&nbsp;Other Quantity</label>
+                <input class="form-control" (focus)="calculateSubTotal(item)" (change)="calculateSubTotal(item)" (keyup)="calculateSubTotal(item)"
+                  formControlName="customQty" type="text" name="customQty" [id]="i + partInfo.partNumber ">
+                  <div class="color-red" *ngIf=" (item.get('customQty').dirty || item.get('customQty').touched) && item.get('customQty').invalid">
+                    <span *ngIf=" item.get('customQty').hasError('required') ">
+                      Please enter Other Quantity.
+                    </span>
+                    <span *ngIf="item.get('customQty').hasError('pattern')">
+                      Only Numeric.
+                    </span>
+                    <span *ngIf="item.get('customQty').hasError('min')">
+                      Quantity should be grater then zero.
+                    </span>
+                  </div>
+                </div>
+              <div class="col-md-6">
+                  <label></label>
+                <input class="form-control" disabled  formControlName="customQtyUnit"  type="text" name="customQtyUnit" [id]="i + partInfo.partNumber">
+              </div>
+
+            </div>
+
+            <p class="color-blue" *ngIf="i > 0" (click)="removeItem(i)">Remove line item</p>
+          </div>
+
+        </div>
+      </div>
+    </form>
+    <div class="row">
+      <div class="col-md-6 m-t-10" *ngIf="invoiceQunatityForm.get('items')['controls'].length  !== qmsQuotePartQuantity.length">
+        <span class="color-blue" (click)="addItem()">Add line item</span>
+      </div>
+      <div class="col-md-6 text-right m-t-10" [ngClass]="(invoiceQunatityForm.get('items')['controls'].length  == qmsQuotePartQuantity.length)?'offset-6':''">
+        <div>
+          <!-- <span>Subtotal</span>&nbsp; <span class="f-w-900 pointer">${{subTotal}}</span> -->
+          <span>Subtotal</span>&nbsp; <span class="f-w-900 pointer">${{partInfo.totalAmount| number: '1.1-4'}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

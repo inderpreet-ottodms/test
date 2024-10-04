@@ -1,0 +1,386 @@
+<div class="container background-white">
+  <div class="row" style="border-bottom:1px solid gray">
+    <div class="col-md-2 Comparison topRow-padd-top">
+      Comparison
+    </div>
+    <div class="col-md-2 Show-Results-for topRow-padd-top">
+      Show Results for
+    </div>
+    <div class="col-md-2 col-sm-2 topRow-padd-top-drop">
+      <select class="filter" [(ngModel)]="selectedQuantity" (change)="changeQuantity()">
+        <option value="1">Quantity 1</option>
+        <option value="2">Quantity 2</option>
+        <option value="3">Quantity 3</option>
+      </select>
+    </div>
+    <div class="col-md-5 col-sm-2 topRow-padd-top-drop  text-align-right">
+        <!-- <button type="button" (click)="awardActual()"
+        [ngClass]="!isAwartdBtnStatus()? 'top-main-btn-award-active' : 'top-main-btn-award-deactive'"
+        [disabled]="isAwartdBtnStatus()"
+           > Award</button> -->
+      <!-- <button type="button" class="top-main-btn-award-active"  >Award</button> -->
+    </div>
+    <div class="col-md-1" style="text-align: right !important;padding: 0px !important">
+      <button type="button" class="closeBtn"  (click)="goBack()" >
+        <i class="fa fa-times" aria-hidden="true"></i><br>
+        Close</button>
+    </div>
+  </div>
+  <div class="row border-bottom">
+    <div class="col-md-2 border-right">
+      <div class="row">
+        <div class="col-md-12">
+          <span style="color: white">.</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <p class="Manufacturer">Manufacturer</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 border-right" style="width:293.5% !important" *ngFor="let manu of this.contactNames; let i =index">
+      <div class="row padd-top-award-button">
+        <!-- <div class="col-md-6 padd-left-btn">
+          <div class="dropimagebuttons">
+            <button type="submit" class="btn-declined-deactive" (click)="declineAllByManufracture(manu)">Decline</button>
+          </div>
+        </div> -->
+        <div class="col-md-12 padd-right-btn">
+          <div class="dropimagebuttons">
+            <label style="color:white">sadas</label>
+            <!-- <button type="submit" class="top-btn-award-active" (click)="awardAllByManufracture(manu)">Award All</button> -->
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 Manufacturer-Name">
+          <p> {{manu.CompanyName}}</p>
+          <p>{{manu.contactName}}</p>
+        </div>
+      </div>
+      <div class="row padd-bottom-man-score">
+        <div class="col-md-12" style="text-align: center">
+          <!-- <label class="Rectangle-2-Copy">{{contactNPSScore[i] | Na }}</label>
+          Net Promotor Score -->
+          <div class="rating-star">
+            <!-- <span style="color:#4a90e2;font-size: 14px;">{{ (contactNPSScore[i])? contactNPSScore[i] : 0 }}</span> -->
+            <span style="color:#4a90e2;font-size: 14px;">{{ (contactNPSScore[i])? (contactNPSScore[i] | number : '1.0-1') : 'n/a' }}</span>
+            <ng-template #t let-fill="fill">
+              <span class="star" [class.full]="fill === 100">
+                <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+              </span>
+            </ng-template>
+
+            <ngb-rating [(rate)]="contactNPSScore[i]" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="isLoader">
+    <div class="col-md-12" style="text-align: center">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!isLoader">
+    <div class="row border-bottom" *ngFor="let part of iPartsViewModelColl;  let i =index ">
+      <!-- Part Name Div -->
+      <div class="col-md-2 border-right">
+        <div class="row">
+          <div class="col-md-12">
+            <p class="Part-Name-Here">{{part.partName}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 expand-icon-div" (click)="showHideRFQPartDetails(part.partId) ">
+            <i *ngIf="!part.result" class="fa fa-angle-down"></i>
+            <i *ngIf="part.result" class="fa fa-angle-right"></i>
+          </div>
+          <div class="col-md-9" *ngIf="!part.result">
+            <div class="row">
+              <div class="col-md-12  Price-1">
+                Price per unit
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 Price-1">
+                Tooling
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 Price-1">
+                Miscellaneous
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 Price-1">
+                Shipping
+              </div>
+            </div>
+            <div class="row" style="padding-top: 5px;border-top: 1px thin gray">
+              <div class="col-md-12 Subtotal">
+                Subtotal
+              </div>
+            </div>
+          </div>
+          <div class="col-md-9" *ngIf="part.result">
+            <div class="row" style="padding-top: 5px;border-top: 1px thin gray">
+              <div class="col-md-12 Subtotal">
+                Subtotal
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Part Name Div End -->
+      <!-- manufracture 1 Quote Div -->
+      <div class="col-md-3 border-right pad-top-1st" style="width:293.5% !important" *ngFor="let partQuote of filterQuotes1(part.rfqPartId,contactIds[0])">
+        <div *ngIf="partQuote.perUnitPrice == 0" style="padding-top:70px">
+          NO Quotes for this quantity available
+        </div>
+        <div *ngIf="partQuote.perUnitPrice != 0">
+
+          <div class="row">
+
+            <!-- <div class="col-md-6 padd-left-btn">
+                <div class="dropimagebuttons">
+                  <button type="submit" class="btn-declined-deactive"  (click)="declineSingle(part.rfqPartId,contactIds[0])"  *ngIf="partQuote.isAwrded === null || partQuote.isAwrded === true">Decline</button>
+                  <button type="submit" class="btn-declined-active"  (click)="declineSingle(part.rfqPartId,contactIds[0])" *ngIf="partQuote.isAwrded === false">Decline</button>
+                </div>
+              </div> -->
+            <div class="col-md-8 text-align-right">
+              <div class="">
+                  <label style="color:white">sadas</label>
+                  <!-- <button type="submit" [ngClass]="(isAwardedByOtherManu(partQuote.rfqPartId) || isLocallyAwarded(partQuote.rfqPartId) ?'award-disable award-width':'award-width award-enable')"
+                  (click)="awardSingle(part.rfqPartId,contactIds[1],contactNames[1], partQuote.rfqQuoteItemsId)" *ngIf="!partQuote.isAwrded" [disabled]="isAwardedByOtherManu(partQuote.rfqPartId) || isLocallyAwarded(partQuote.rfqPartId)">
+                  Award  -{{partQuote.rfqQuoteItemsId}}</button> -->
+                <!-- <button type="submit" [ngClass]="(isAwardedByOtherManu(partQuote.rfqPartId)?'btn-award-deactive-awarded':'btn-award-deactive')"
+                  (click)="awardSingle(part.rfqPartId,contactIds[0])" *ngIf="!partQuote.isAwrded" [disabled]="isAwardedByOtherManu(partQuote.rfqPartId)">
+                  Award </button> -->
+                <button type="submit" class="btn-award-deactive"
+                  *ngIf="partQuote.isAwrded">
+                  <img src="assets/rfq/award.svg" class="Close-3">
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="!part.result">
+            <div class="col-md-8 Price-1 text-align-right">
+              {{partQuote.perUnitPrice| number: '1.1-4' }}
+            </div>
+          </div>
+          <div class="row" *ngIf="!part.result">
+            <div class="col-md-8 Price-1 text-align-right">
+              {{partQuote.toolingAmount| number: '1.1-4' }}
+            </div>
+          </div>
+          <div class="row" *ngIf="!part.result">
+            <div class="col-md-8 Price-1 text-align-right">
+              {{partQuote.miscellaneousAmount| number: '1.1-4' }}
+            </div>
+          </div>
+          <div class="row" *ngIf="!part.result">
+            <div class="col-md-8 Price-1 text-align-right">
+              {{partQuote.shippingAmount| number: '1.1-4' }}
+            </div>
+          </div>
+          <div class="row" *ngIf="!part.result" style="padding-top: 5px;border-top: 1px thin gray">
+            <div class="col-md-8 Price-1 text-align-right">
+              <label class="total-lable">$ {{(partQuote.perUnitPrice * partQuote.awardedQty) +
+                partQuote.toolingAmount + partQuote.miscellaneousAmount + partQuote.shippingAmount| number: '1.1-4'}}</label>
+            </div>
+          </div>
+          <div class="row" *ngIf="part.result" style="padding-top: 5px;border-top: 1px thin gray">
+            <div class="col-md-8 Price-1 text-align-right">
+              <label class="total-lable-up">$ {{(partQuote.perUnitPrice * partQuote.awardedQty) +partQuote.toolingAmount +
+                partQuote.miscellaneousAmount + partQuote.shippingAmount| number: '1.1-4'}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- manufracture 1 Quote Div -->
+
+      <!-- manufracture 2 Quote Div -->
+      <div class="col-md-3 border-right pad-top-1st" *ngFor="let partQuote of filterQuotes2(part.rfqPartId,contactIds[1])">
+        <div *ngIf="partQuote.perUnitPrice == 0" style="padding-top:70px">
+          NO Quotes for this quantity available
+        </div>
+        <div *ngIf="partQuote.perUnitPrice !== 0">
+          <div class="row">
+            <!-- <div class="col-md-6 padd-left-btn">
+                        <div class="dropimagebuttons">
+                          <button type="submit" class="btn-declined-deactive"  (click)="declineSingle(part.rfqPartId,contactIds[1])"  *ngIf="partQuote.isAwrded === null || partQuote.isAwrded === true">Decline</button>
+                          <button type="submit" class="btn-declined-active"  (click)="declineSingle(part.rfqPartId,contactIds[1])" *ngIf="partQuote.isAwrded === false">Decline</button>
+                        </div>
+                      </div> -->
+            <div class="col-md-8 text-align-right">
+              <div class="">
+                  <label style="color:white">sadas</label>
+                <!-- <button type="submit" [ngClass]="(isAwardedByOtherManu(partQuote.rfqPartId) || isLocallyAwarded(partQuote.rfqPartId) ?'award-disable award-width':'award-width award-enable')"
+                  (click)="awardSingle(part.rfqPartId,contactIds[2],contactNames[1], partQuote.rfqQuoteItemsId)" *ngIf="!partQuote.isAwrded" [disabled]="isAwardedByOtherManu(partQuote.rfqPartId) || isLocallyAwarded(partQuote.rfqPartId)">
+                  Award  -{{partQuote.rfqQuoteItemsId}}</button> -->
+                <!-- <button type="submit" class="btn-award-deactive" (click)="awardSingle(part.rfqPartId,contactIds[1])" *ngIf="!partQuote.isAwrded"> Award </button> -->
+                <button type="submit" class="btn-award-deactive"
+                  *ngIf="partQuote.isAwrded">
+                  <img src="assets/rfq/award.svg" class="Close-3">
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="!part.result">
+            <div class="col-md-8 Price-1 text-align-right">
+              {{partQuote.perUnitPrice | number: '1.1-4'}}
+            </div>
+          </div>
+          <div class="row" *ngIf="!part.result">
+            <div class="col-md-8 Price-1 text-align-right">
+              {{partQuote.toolingAmount| number: '1.1-4' }}
+            </div>
+          </div>
+          <div class="row" *ngIf="!part.result">
+            <div class="col-md-8 Price-1 text-align-right">
+              {{partQuote.miscellaneousAmount| number: '1.1-4' }}
+            </div>
+          </div>
+          <div class="row" *ngIf="!part.result">
+            <div class="col-md-8 Price-1 text-align-right">
+              {{partQuote.shippingAmount| number: '1.1-4' }}
+            </div>
+          </div>
+          <div class="row" *ngIf="!part.result" style="padding-top: 5px;border-top: 1px thin gray">
+            <div class="col-md-8 Price-1 text-align-right">
+              <label class="total-lable">$ {{(partQuote.perUnitPrice * partQuote.awardedQty) +
+                partQuote.toolingAmount + partQuote.miscellaneousAmount + partQuote.shippingAmount| number: '1.1-4'}}</label>
+            </div>
+          </div>
+          <div class="row" *ngIf="part.result" style="padding-top: 5px;border-top: 1px thin gray">
+            <div class="col-md-8 Price-1 text-align-right">
+              <label class="total-lable-up">${{(partQuote.perUnitPrice * partQuote.awardedQty) + partQuote.toolingAmount +
+                partQuote.miscellaneousAmount + partQuote.shippingAmount| number: '1.1-4'}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- manufracture 2 Quote Div -->
+
+      <!-- manufracture 3 Quote Div -->
+      <div class="col-md-3 pad-top-1st border-right" *ngFor="let partQuote of filterQuotes3(part.rfqPartId,contactIds[2])">
+        <div *ngIf="partQuote.perUnitPrice == 0" style="padding-top:70px">
+          NO Quotes for this quantity available
+        </div>
+        <div *ngIf="partQuote.perUnitPrice != 0">
+          <div class="row">
+            <!-- <div class="col-md-6 padd-left-btn">
+                        <div class="dropimagebuttons">
+                          <button type="submit" class="btn-declined-deactive"  (click)="declineSingle(part.rfqPartId,contactIds[2])"  *ngIf="partQuote.isAwrded === null || partQuote.isAwrded === true">Decline</button>
+                          <button type="submit" class="btn-declined-active"  (click)="declineSingle(part.rfqPartId,contactIds[2])" *ngIf="partQuote.isAwrded === false">Decline</button>
+                        </div>
+                      </div> -->
+            <div class="col-md-8 text-align-right">
+              <div class=" ">
+                  <label style="color:white">sadas</label>
+                  <!-- <button type="submit" [ngClass]="(isAwardedByOtherManu(partQuote.rfqPartId) || isLocallyAwarded(partQuote.rfqPartId) ?'award-disable award-width':'award-width award-enable')"
+                  (click)="awardSingle(part.rfqPartId,contactIds[2],contactNames[1], partQuote.rfqQuoteItemsId)" *ngIf="!partQuote.isAwrded" [disabled]="isAwardedByOtherManu(partQuote.rfqPartId) || isLocallyAwarded(partQuote.rfqPartId)">
+                  Award -{{partQuote.rfqQuoteItemsId}} </button> -->
+                <!-- <button type="submit" [ngClass]="(isAwardedByOtherManu(partQuote.rfqPartId)?'btn-award-deactive-awarded':'btn-award-deactive')"
+                  (click)="awardSingle(part.rfqPartId,contactIds[2])" *ngIf="!partQuote.isAwrded" [disabled]="isAwardedByOtherManu(partQuote.rfqPartId)">
+                  Award </button> -->
+                <!-- <button type="submit" class="btn-award-deactive" (click)="awardSingle(part.rfqPartId,contactIds[2])" *ngIf="!partQuote.isAwrded"> Award </button> -->
+                <button type="submit" class="btn-award-deactive"
+                  *ngIf="partQuote.isAwrded">
+                  <img src="assets/rfq/award.svg" class="Close-3">
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="!part.result">
+            <div class="col-md-8 Price-1 text-align-right">
+              {{partQuote.perUnitPrice | number: '1.1-4'}}
+            </div>
+          </div>
+          <div class="row" *ngIf="!part.result">
+            <div class="col-md-8 Price-1 text-align-right">
+              {{partQuote.toolingAmount| number: '1.1-4' }}
+            </div>
+          </div>
+          <div class="row" *ngIf="!part.result">
+            <div class="col-md-8 Price-1 text-align-right">
+              {{partQuote.miscellaneousAmount| number: '1.1-4' }}
+            </div>
+          </div>
+          <div class="row" *ngIf="!part.result">
+            <div class="col-md-8 Price-1 text-align-right">
+              {{partQuote.shippingAmount| number: '1.1-4' }}
+            </div>
+          </div>
+          <div class="row" *ngIf="!part.result" style="padding-top: 5px;border-top: 1px thin gray">
+            <div class="col-md-8 Price-1 text-align-right">
+              <label class="total-lable">$  {{(partQuote.perUnitPrice * partQuote.awardedQty) +
+                partQuote.toolingAmount + partQuote.miscellaneousAmount + partQuote.shippingAmount| number: '1.1-4'}}</label>
+            </div>
+          </div>
+          <div class="row" *ngIf="part.result" style="padding-top: 5px;border-top: 1px thin gray">
+            <div class="col-md-8 Price-1 text-align-right">
+              <label class="total-lable-up"> ${{(partQuote.perUnitPrice * partQuote.awardedQty) + partQuote.toolingAmount +
+                partQuote.miscellaneousAmount + partQuote.shippingAmount| number: '1.1-4'}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- manufracture 3 Quote Div -->
+    </div>
+  </div>
+
+
+  <div class="row border-bottom">
+    <div class="col-md-2 border-right">
+      <div class="row">
+        <div class="col-md-12">
+          <p class="Manufacturer-Name">Total</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 border-right" *ngFor="let manu of this.contactNames; let i =index">
+      <div class="row">
+        <div class="col-md-8 total text-align-right" *ngIf="i === 0">
+          $ {{totalPart1Quote| number: '1.1-4'}}
+        </div>
+        <div class="col-md-8 total text-align-right" *ngIf="i === 1">
+          $ {{totalPart2Quote| number: '1.1-4'}}
+        </div>
+        <div class="col-md-8 total text-align-right" *ngIf="i === 2">
+          $ {{totalPart3Quote| number: '1.1-4'}}
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-md-3 border-right">
+      <div class="row">
+        <div class="col-md-12 total padd-right-btn-total">
+          $ {{totalPart2Quote}}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="row">
+        <div class="col-md-12 total padd-right-btn-total">
+          $ {{totalPart3Quote}}
+        </div>
+      </div>
+    </div> -->
+  </div>
+  <!-- <div class="row" style="padding-top:15px;padding-bottom:15px;text-align: right;">
+    <div class="col-md-12">
+      <button type="button" class="btn-done" (click)="goBack()">Done</button>
+    </div>
+  </div> -->
+</div>

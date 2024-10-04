@@ -1,0 +1,154 @@
+<div class="qms-section">
+  <div class="row">
+    <div class="col-md-12 msg-results-section">
+      <div class="row">
+        <div class="col-md-8 message-results"> {{items?.length}} results</div>
+        <div class="col-md-2 message-results"><span *ngIf="selectedRowCount > 1">{{selectedRowCount}} selected</span></div>
+        <div class="col-md-2"><i class="fa fa-trash iconQms"
+            [ngClass]="(selectedRowCount > 1)? 'iconEnabled' :'iconDisabled'" (click)="deleteMultipleMessage()"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-md-6">
+        <div class="btn-group filter-btn">
+          <button type="button" (click)="setStatusFilter('all')"
+            [ngClass]="(activeStatusFilterBtn == 'all')? 'btn filterbtn-active': 'btn filterbtn-inactive'">
+            All</button>
+          <button type="button" (click)="setStatusFilter('read')"
+            [ngClass]="(activeStatusFilterBtn == 'read')? 'btn filterbtn-active': 'btn filterbtn-inactive'">
+            Read</button>
+          <button type="button" (click)="setStatusFilter('unread')"
+            [ngClass]="(activeStatusFilterBtn == 'unread')? 'btn filterbtn-active': 'btn filterbtn-inactive'">
+            Unread</button>
+        </div>
+      </div>
+      <div class="col-md-6">
+            <button class="btn btn-manu-active pull-right" (click)="openSendMsgDrawer()">Create New Message</button>
+      </div>
+    </div>
+
+  <br>
+    {{getReadMessages()}}
+  <div class="row" *ngIf="isMesssageAvailable">
+
+    <div class="col-12">
+      <div class="row">
+        <div class="col-md-3 lead-subhead lead-padding">
+          <input class="msg_chkbox" type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();">
+          <span>To</span>
+        </div>
+        <div class="col-md-5 lead-subhead"><span>Subject</span></div>
+        <div class="col-md-2 lead-subhead"><span>Date</span>
+        </div>
+        <div class="col-md-2 lead-subhead actionTitle"><span class="lead-name">Actions</span></div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isLoader">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>
+  <div class="row noteData" *ngIf="isMesssageAvailable">
+    <div class="col-md-12">
+      <div class="row lead-info" *ngFor="let message of items"
+        [ngClass]="(message.emailRead == true)?'readBg topTd':'unreadBg topTd'">
+        <div class="col-md-3 note-value p-l-10 p-t-20 p-b-20 text-wrap contactName firstRecord"
+          [ngClass]="(message.emailRead == true)?'readFont':'unreadFont'">
+          <input class="msg_chkbox" type="checkbox" [(ngModel)]="message.isSelected" (change)="checkIfAllSelected()">
+          <span placement="top" data-container="body" ngbTooltip="{{message.toContName}}">
+            {{message.toContName ? (message.toContName | dotLimit:'30') : 'N/A'}}</span>
+        </div>
+        <div class="col-md-5 note-value p-t-20 p-b-20 text-wrap"
+          [ngClass]="(message.emailRead == true)?'readFontColor':'unreadFontColor'">
+          <span>{{message.emailSubject ? (message.emailSubject | dotLimit:'30') : 'N/A'}}</span> - <span
+            class="">{{message.emailBody ? (message.emailBody | dotLimit:'30') : 'N/A' }}</span>
+        </div>
+        <div class="col-md-2 note-value p-t-20 p-b-20 text-wrap">
+          <span [ngClass]="(message.emailRead == true)?'readFontColor':'unreadFontColor'" placement="top"
+            data-container="body"
+            ngbTooltip="{{message.emailDate | date :  'MMM-dd-yyyy'}}">{{message.emailDate ? (message.emailDate | date: 'MMM-dd-yyyy') : 'N/A' }}</span>
+        </div>
+        <div class="col-md-2 note-value actiondiv lastRecord">
+          <span class="iconQms">
+            <i class="fa fa-envelope pointer-cursor" (click)="viewMessage(message.qmsEmailMessageId)" placement="top"
+              container="body" ngbTooltip="View Message"></i>
+          </span>
+          <span class="iconQms">
+            <i class="fa fa-trash pointer-cursor" (click)="deleteMessage(message.qmsEmailMessageId)" placement="top"
+              container="body" ngbTooltip="Delete Message 333"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="myRFQ-rfq-no-available" *ngIf="!isMesssageAvailable">
+    <div class="row noImage-padding">
+      <div class="col-md-12">
+        <div>
+          <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+                assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+        </div>
+      </div>
+    </div>
+    <div class="row noMsg-text">
+      <div class="col-md-12">
+        <div class="myRFQ-noRFQActive-helper-text">No Messages found at this time.</div>
+      </div>
+    </div>
+  </div>
+  <!-- ------------------------- Pagination start----------------------- -->
+  <div class="row" style="margin-top: 20px;" *ngIf="isMesssageAvailable">
+    <div class="col-md-12" *ngIf="!isLoader">
+      <div class="paginations">
+        <div>
+          <div id="radioBtn" class="btn-group">
+            <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" class="btn btn-primary btn-sm notActive"
+              (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+              Previous
+            </a>
+            <a *ngFor="let page of pagesIndex" (click)="setPage(page)"
+              [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+              data-bs-toggle="fun" data-title="X">
+              {{page}}
+            </a>
+            <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+              (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+              Next
+            </a>
+          </div>
+          <input type="hidden" name="fun" id="fun">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" *ngIf="isMesssageAvailable">
+      <div class="pull-right padd-right">
+        <label class="showreccount"> {{currentIndex }} of {{pageNumber}} </label>
+      </div>
+    </div>
+  </div>
+  <!-- ------------------------- Pagination end----------------------- -->
+</div>
+<p-confirmDialog header="Confirmation" icon="" width="629" height="220" #msgDlt>
+  <p-footer>
+    <div class="row qms-section">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-ignore-rfq" (click)="msgDlt.reject()">Cancel</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="msgDlt.accept()"> Yes</button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>

@@ -1,0 +1,42 @@
+
+  <div class="row">
+    <div [ngClass]="(isSidePanel())?'col-md-8 col-9':'col-md-12 col-12'">
+      <app-rfq-warning-banner></app-rfq-warning-banner>
+      <div class="background-white">
+        <div class="row myRFQ-custom-row-left-padding">
+          <div class="col-md-6 myRFQ-Header">RFQs Marked for Quoting</div>
+          <div class="col-md-6" style="text-align:end">
+            <button type="button" [ngClass]="'myRFQ-rfq-inProgress-btn pointerCursor'"
+              [routerLink]="['/rfq/draftrfqs']" >
+              <span class="myRFQ-rfq-inProgress-btn-text">Draft RFQs</span>
+            </button>
+            <button type="button" class="myRFQ-create-Rfq-btn pointerCursor" 
+            (click)="redirectToCreateRfqPage()">
+              <span class="myRFQ-create-Rfq-btn-text">Create an RFQ</span>
+            </button>
+          </div>
+        </div>
+        <div class="row myRFQ-custom-row-left-padding">
+          <div class="col-md-12">
+            <div class="myRFQ-rfq-main-div">
+              <app-rfq-quoting-list></app-rfq-quoting-list>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 pull-left">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isSidePanel()" class="col-md-4 col-4 sideDrawer Drawer-Shadow" >
+      <app-rfq-detail-sidepanel [rfqId]="getCurrentRfqId()" (drawer_OnClose)="drawerClose($event)"></app-rfq-detail-sidepanel>
+    </div>
+  </div>
+  <div class="row" style="bottom: 0px;width: 101%">
+      <div class="col-md-12" style="text-align:-webkit-right;padding:0px">
+        <div class="Site-Background-Copy" >
+          <!-- <p class="Copyright-2018-MFG">Copyright © 2018 MFG.com, Inc. All Rights Reserved.</p> -->
+        </div>
+      </div>
+</div>

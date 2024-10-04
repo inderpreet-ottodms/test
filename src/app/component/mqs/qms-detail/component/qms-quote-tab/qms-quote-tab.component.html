@@ -1,0 +1,315 @@
+<div *ngIf="isloader" class="loader animation-start">
+  <span class="circle delay-1 size-2"></span>
+  <span class="circle delay-2 size-4"></span>
+  <span class="circle delay-3 size-6"></span>
+  <span class="circle delay-4 size-7"></span>
+  <span class="circle delay-5 size-7"></span>
+  <span class="circle delay-6 size-6"></span>
+  <span class="circle delay-7 size-4"></span>
+  <span class="circle delay-8 size-2"></span>
+</div>
+
+<div *ngIf="!isloader" class="row m-t-25 m-l-5 m-r-5 m-b-30">
+  <div class="col-md-12">
+    <span class="f-16 f-w-900">Parts</span>
+  </div>
+  <hr>
+  <div class="col-md-12">
+    <span>All prices are quoted in USD</span>
+  </div>
+
+  <br>
+  <div class="col-md-12" *ngIf=" IQmsPartQuantityListColl.length ">
+    <div class="row m-10 p-10 qms-part"
+      *ngFor="let item of IQmsPartQuantityListColl | groupBy:'qmsQuotePartId' ; let i = index  ">
+      <!-- {{ item | json }} -->
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-2 text-wrap">
+            <span class="f-14 f-w-900 text-wrap" placement="top" data-container="body"
+              ngbTooltip="{{item.value[0].partName}}">{{ item.value[0].partName }}</span> <br />
+            <span>{{ item.value[0].partNo }}</span>
+          </div>
+
+          <div class="col-md-2 text-wrap">
+            <label class="f-14 f-w-900">Process</label>
+          </div>
+
+          <div class="col-md-6 text-wrap">
+            <span class="f-14 f-w-900 text-wrap" placement="top" data-container="body"
+              ngbTooltip="{{item.value[0].process}}">{{ item.value[0].process | Na }}</span> <br />
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-2 text-wrap">
+        <!-- <span class="f-14 f-w-900 text-wrap" placement="top" data-container="body"
+          ngbTooltip="{{item.value[0].partName}}">{{ item.value[0].partName }}</span> <br />
+        <span>{{ item.value[0].partNo }}</span> -->
+      </div>
+      <div class="col-md-2" *ngIf="!item.value[0].toShow">
+        <div>&nbsp;</div>
+        <span class="f-14 f-w-900">Subtotals</span>
+      </div>
+      <!-- {{ item | json }} -->
+      <div class="" style="display: flex;" [ngClass]="(item.value[0].toShow) ? 'col-md-6 offset-2' : 'col-md-6'">
+        <div class="text-wrap" style="width: 19%;" *ngFor="let partQty of item.value; ">
+          <span placement="top" data-container="body" ngbTooltip="{{partQty.partqty}} {{ partQty.partQtyUnit}}">
+            {{ partQty.partqty }} {{ partQty.partQtyUnit}}</span> <br />
+          <span class="f-w-900" *ngIf="!item.value[0].toShow">$ {{ (getFeetypeTotal( partQty.qtylevel , item.key)) ? (getFeetypeTotal( partQty.qtylevel , item.key)) :getShowZero() }}</span>
+        </div>
+      </div>
+
+      <div class="col-md-2 text-right active">
+          <select class="form-control status-drop-down"  [(ngModel)]="item.value[0].qmsPartStatusId"  [disabled]="isLoader"
+                  (change)="changeQmsPartStatus(item.key,$event)">
+                  <option [value]="data.qmsStatusId" *ngFor="let data of  partStatusList">{{data.description}}</option>
+                </select>
+
+        <!-- <button *ngIf="item.value[0].isAccepted === null" class="btn btn-accept m-r-5" (click)="acceptPartQMS( item.value[0].qmsQuotePartId, true )">Accepted</button>
+        <button *ngIf="item.value[0].isAccepted === true" class="btn btn-accepted m-r-5" (click)="acceptPartQMS( item.value[0].qmsQuotePartId, false )">Accepted</button>
+        <button *ngIf="item.value[0].isAccepted === false" class="btn btn-decline m-r-5" (click)="acceptPartQMS( item.value[0].qmsQuotePartId, true )">Accepted</button> -->
+        <span class="collapsed" data-bs-toggle="collapse" [attr.data-target]="'#' + i" (click)="getStatus(item.value[0].qmsQuotePartId)"></span>
+      </div>
+      <div class="col-md-12 m-5 collapse" [attr.id]="i">
+        <div class="row" *ngFor="let feetye of item.value[0].qmsQuotePartQuantityFeeTypeList |groupBy:'feeTypeId'">
+          <div class="col-md-2 offset-2"><span> {{feetye.value[0].feeType}}</span></div>
+          <div class="col-md-6 p-l-10" style="display: flex;">
+            <div style="width: 19%;">
+              <span>{{(getFeeTypeCost(0, feetye.value)) ? '$' + getFeeTypeCost(0, feetye.value): getShowZero()}}</span>
+
+            </div>
+
+            <div style="width: 19%;">
+              <span>{{(getFeeTypeCost(1, feetye.value)) ? '$' + getFeeTypeCost(1, feetye.value): getShowZero()}}</span>
+            </div>
+            <div style="width: 19%;">
+
+              <span>{{(getFeeTypeCost(2, feetye.value)) ? '$' + getFeeTypeCost(2, feetye.value):getShowZero() }}</span>
+            </div>
+            <div style="width: 19%;">
+              <span>{{(getFeeTypeCost(3 ,feetye.value)) ? '$' + getFeeTypeCost(3, feetye.value):getShowZero() }}</span>
+            </div>
+            <div style="width: 19%;">
+              <span>{{(getFeeTypeCost(4, feetye.value)) ? '$' + getFeeTypeCost(4, feetye.value):getShowZero() }}</span>
+            </div>
+
+          </div>
+        </div>
+        <div class="row" *ngIf="item.value[0].toShow">
+          <div class="col-md-2 offset-2">
+            <span class="f-14 f-w-900">Subtotals</span>
+          </div>
+          <!-- {{ item | json }} -->
+          <div class="col-md-6  p-l-10" style="display: flex;">
+            <div class="text-wrap" style="width: 19%;" *ngFor="let partQty of item.value; ">
+              <span class="f-w-900">${{ (getFeetypeTotal( partQty.qtylevel , item.key)) ? (getFeetypeTotal( partQty.qtylevel , item.key)) :getShowZero() }}</span>
+            </div>
+          </div>
+        </div>
+
+<div  style="border-top: 1px solid #e2e2e5;" *ngIf="item.value[0].qmsSpecialFeesListViewModel != undefined  && item.value[0].qmsSpecialFeesListViewModel.length != 0">
+
+
+  <div class="row">
+    <div class="col-md-2 f-14 f-w-900"><span> Special Fee</span></div>
+    <div class="col-md-6 p-l-10" style="display: flex;">
+      <div  class="f-14 f-w-900" style="width: 19%;">
+        <span></span>
+
+      </div>
+
+      <div style="width: 19%;">
+        <span></span>
+      </div>
+      <div style="width: 19%;">
+
+        <span></span>
+      </div>
+      <div style="width: 19%;">
+        <span></span>
+      </div>
+      <div style="width: 19%;">
+        <span></span>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+  <div class="row"  *ngFor="let fee of item.value[0].qmsSpecialFeesListViewModel ; let i=index">
+          <div class="col-md-2 offset-2"><span> {{fee.feeType}}</span></div>
+          <div class="col-md-6 p-l-10" style="display: flex;">
+            <div style="width: 19%;">
+              <span>${{getspecailValue(fee.value)}}</span>
+
+            </div>
+
+            <div style="width: 19%;">
+              <span></span>
+            </div>
+            <div style="width: 19%;">
+
+              <span></span>
+            </div>
+            <div style="width: 19%;">
+              <span></span>
+            </div>
+            <div style="width: 19%;">
+              <span></span>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-2 offset-2 f-14 f-w-900"><span> SubTotal</span></div>
+          <div class="col-md-6 p-l-10" style="display: flex;">
+            <div  class="f-14 f-w-900" style="width: 19%;">
+              <span>${{getspecailValue(item.value[0].subSpecialTotal)}}</span>
+
+            </div>
+
+            <div style="width: 19%;">
+              <span></span>
+            </div>
+            <div style="width: 19%;">
+
+              <span></span>
+            </div>
+            <div style="width: 19%;">
+              <span></span>
+            </div>
+            <div style="width: 19%;">
+              <span></span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+        <!-- <div class="row">
+          <div class="col-md-2 offset-2"><span>Tooling</span></div>
+          <div class="col-md-6 p-l-10" style="display: flex;">
+              <div style="width: 19%;" *ngFor="let partQty of item.value">
+                  <span>{{ (partQty.toolingamount)? ('$ ' + partQty.toolingamount): '$ 0.0' }}</span>
+              </div>
+          </div>
+        </div> -->
+        <!-- <div class="row">
+            <div class="col-md-2 offset-2"><span>Miscellaneous</span></div>
+            <div class="col-md-6 p-l-10" style="display: flex;">
+                <div style="width: 19%;" *ngFor="let partQty of item.value">
+                    <span>{{ (partQty.miscellaneousamount)? ('$ ' + partQty.miscellaneousamount): '$ 0.0' }}</span>
+                </div>
+            </div>
+          </div> -->
+      </div>
+
+    </div>
+
+    <div class="col-md-12">
+      <div class="row m-10 p-10">
+        <div class="col-md-2">
+          <span class="f-14 f-w-900">All Parts</span>
+        </div>
+        <div class="col-md-2">
+          <span class="f-14 f-w-900">Total</span>
+        </div>
+        <div class="col-md-6 p-l-10 f-w-900" style="display: flex;">
+          <div style="width: 19%;" *ngFor="let partTotalQty of totalQtyArray">
+            <span>$ {{ getDecimalTotal(partTotalQty)}}</span>
+          </div>
+        </div>
+        <div class="col-md-2 text-right">
+          <!-- <button class="btn btn-accept">Accept All</button> -->
+          <!-- <button class="btn btn-accept" (click)="acceptPartQMS( item, true ,true )" *ngIf="acceptAllStatus">Accept All</button>
+              <button class="btn btn-decline" (click)="acceptPartQMS( item, false ,true )" *ngIf="!acceptAllStatus">Decline All</button> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="col-md-12 qms-part" *ngIf="QmsSpecialFeesListViewModel != undefined  && QmsSpecialFeesListViewModel.length != 0">
+
+<div class="row m-b-10">
+  <div class="col-md-2">
+    <span class="f-14 f-w-900">Special Fee</span>
+  </div>
+</div> -->
+<!-- <div class="row" *ngFor="let fee of QmsSpecialFeesListViewModel ; let i=index">
+  <div class="col-md-3">
+    <span>{{fee.feeType}}</span>
+  </div>
+  <div class="col-md-2">
+    <span>${{fee.value}}</span>
+  </div>
+</div>
+<div class="row m-t-5">
+  <div class="col-md-3 f-14 f-w-900">
+    <span>SubTotal</span>
+  </div>
+  <div class="col-md-2 f-14 f-w-900">
+    <span>${{feeTotal}}</span>
+  </div>
+</div>
+    </div> -->
+    <div class="col-md-12 m-t-10">
+      <span class="f-16 f-w-900">Quote Details</span>
+    </div>
+    <hr>
+
+    <div class="col-md-12">
+      <span class="f-14 f-w-900 text-uppercase">Payment</span>
+      <div class="row m-5 p-10 bg-gray">
+        <div class="col-md-3"><span class="f-14 f-w-900">Payment Terms</span></div>
+        <div class="col-md-9"><span>{{ iQuotesViewModel.paymentTerms   }}</span></div>
+      </div>
+
+      <div class="row m-5 p-10">
+        <div class="col-md-3"><span class="f-14 f-w-900"> Quote Valid Until </span></div>
+        <div class="col-md-9"><span>{{ iQuotesViewModel.quoteValidUntil | date: 'MM/dd/yyyy' }}</span></div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <span class="f-14 f-w-900 text-uppercase">Shipping</span>
+      <div class="row m-5 p-10 bg-gray">
+        <div class="col-md-3"><span class="f-14 f-w-900">Shipping Method</span></div>
+        <div class="col-md-9"><span>{{ iQuotesViewModel.shippingMethod }}</span></div>
+      </div>
+      <!-- <div class="row m-5 p-10">
+        <div class="col-md-3"><span class="f-14 f-w-900"> Estimated Delivery Date </span></div>
+        <div class="col-md-9"><span>{{ iQuotesViewModel.estimatedDeliveryDate | date: 'MM/dd/yyyy' }}</span></div>
+      </div> -->
+      <div class="row m-5 p-10 ">
+          <div class="col-md-3"><span class="f-14 f-w-900"> Who pays for shipping?</span></div>
+          <div class="col-md-9"><span>{{ whoPaysForShippingText | Na}}</span></div>
+        </div>
+      <div class="row m-5 p-10 bg-gray">
+          <div class="col-md-3"><span class="f-14 f-w-900"> Lead Time </span></div>
+          <div class="col-md-9">
+            <div *ngIf="iQuotesViewModel.qmsQuoteLeadTimeAddList === undefined || iQuotesViewModel.qmsQuoteLeadTimeAddList === null">Na</div>
+            <div *ngFor="let leadTime of iQuotesViewModel.qmsQuoteLeadTimeAddList">
+              <span>{{ leadTime.leadTimeName }}</span> - <span>{{ leadTime.leadTimeValue }}</span> <span>{{ leadTime.leadTimeRange }}</span>
+            </div></div>
+        </div>
+    </div>
+    <div class="col-md-12">
+      <span class="f-14 f-w-900 text-uppercase">Contact</span>
+      <div class="row m-5 p-10 bg-gray">
+        <div class="col-md-3"><span class="f-14 f-w-900">Company Name</span></div>
+        <div class="col-md-9 text-wrap"><span placement="top" data-container="body"
+            ngbTooltip="{{ iReviewQuoteBasicInfoViewModel.customer }}">{{ iReviewQuoteBasicInfoViewModel.customer }}</span>
+        </div>
+      </div>
+      <div class="row m-5 p-10">
+        <div class="col-md-3"><span class="f-14 f-w-900"> Customer Name </span></div>
+        <div class="col-md-9 text-wrap"><span placement="top" data-container="body"
+            ngbTooltip="{{ iReviewQuoteBasicInfoViewModel.contactName }}">{{ iReviewQuoteBasicInfoViewModel.contactName }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

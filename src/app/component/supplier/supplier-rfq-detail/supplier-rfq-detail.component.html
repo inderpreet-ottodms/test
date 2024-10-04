@@ -1,0 +1,735 @@
+<section>
+  <div class="no-pad-left-right">
+    <div class="row" *ngIf="!isBuyerCommpleteProfile()">
+      <div [ngClass]="(isSidePanel())?'col-md-8 col-9':'col-md-12'">
+        <div class="row">
+          <div class="col-md-12 breadcumb-box">
+            <div class="breadcumb-text">
+              <span class="Selectable"></span><span class="current-page"> {{currentRfqName| dotLimit:'40'}}
+                {{getNdaMesssage()}}</span>
+            </div>
+          </div>
+        </div>
+        <br>
+
+        <div class="flex-container m-b-25">
+          <div class="flex-box">
+            <app-rfq-image [rfqId]="rfqId" [userType]="'supplier'" *ngIf="rfqId != null && rfqId != undefined"
+              [isMfgCommunityRfq]="irfqViewModel.isCommunityRfq"></app-rfq-image>
+          </div>
+          <div style="flex-grow: 2">
+            <div class="row myHeader">
+
+
+
+              <div class="col-md-12">
+                <div class="row cuHeightRfqName">
+                  <div class="col-md-9 RFQ-Name-Goes-Here">
+                    <div class="row">
+                      <div class="col-md-12" style="padding:0px !important;">
+                        <div [class.col-md-10]="isPremium()" [class.col-md-8]="!isPremium()"
+                          style="float:left;word-break: break-all;">
+                          <span placement="top" data-container="body" ngbTooltip="{{currentRfqName}}"
+                            style="word-break: break-all;">{{ currentRfqName }}</span>
+                        </div>
+                        <div class="col-md-4" style="float:right;" *ngIf="!isPremium() && this.userDetailsLocation !='Asia'">
+                          <!-- <app-upgrade-account-btn [quoteRFQ]=true [RfqId]="currentRfqId"></app-upgrade-account-btn> -->
+                     <button (click)="setRecommnededForYouBanner()" [routerLink]="['/packages']" class="upgradeQuoteBtn">Upgrade to Quote</button>
+                        </div>
+                        <div class="col-md-4" style="float:right;" *ngIf="!isPremium() && this.userDetailsLocation =='Asia'">
+                          <app-upgrade-account-btn [quoteRFQ]=true [RfqId]="currentRfqId"></app-upgrade-account-btn>
+                     <!-- <button (click)="setRecommnededForYouBanner()" [routerLink]="['/packages']" class="upgradeQuoteBtn">Upgrade to Quote</button> -->
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3 floatRight">
+                    <button type="button" class="btn btn-sm btn-submit-rfq-close-1 RenctangleYes-2-1"
+                      (click)="navigateBack()">Go Back </button>
+                  </div>
+                </div>
+                <div class="row cuHeight">
+                  <div class="col-md-12">
+                    <div class="otherRfqDetails"><label class="cuWidth"> RFQ :</label>
+                      <label class="normalFont">{{currentRfqId}}</label>
+                    </div>
+                  </div>
+                </div>
+              
+                <div class="row cuHeight">
+                  <div class="col-md-4">
+                    <div class="otherRfqDetails"><label class="cuWidth">Created :</label>
+                      <label class="normalFont">{{currentRfqDate | date: 'MM/dd/y' }}</label>
+                    </div>
+                  </div>
+                  <div class="col-md-8"
+                    *ngIf="(currentRfqStatusId !== '1' && currentRfqStatusId !== '2' && currentRfqStatusId !== '11' && currentRfqStatusId !== '13')">
+                    <ul class="circle-icons">
+                      <li class="pdf-icon "
+                        *ngIf="isFileDownloadable"
+                        (click)="downloadAllFiles()">
+                        <a><i class="fa fa-download Selectable" aria-hidden="true" placement="top" container="body"
+                            ngbTooltip="Download All RFQ Files"></i></a>
+                      </li>
+
+                     <li class="pdf-icon" *ngIf="!isFileDownloadable">
+                        <a disabled><i class="fa fa-file-pdf-o" style="color:gray;cursor: none;" aria-hidden="true" placement="top" container="body"
+                            ngbTooltip="Save to PDF"></i></a>
+                      </li>
+                      <li class="pdf-icon"
+                        *ngIf="isFileDownloadable">
+                        <a *ngIf="isRfqTabOpen" style="cursor: pointer;" (click)="callPdf()">
+                          <i class="fa fa-file-pdf-o Selectable" aria-hidden="true" placement="top" container="body"
+                            ngbTooltip="Save to PDF "></i></a>
+                       </li>
+                     
+                      <li *ngIf="!isRfqLike">
+                        <a (click)="likeRfq()">
+                          <i class="fa fa-thumbs-o-up" aria-hidden="true" placement="top" container="body"
+                            ngbTooltip="Like RFQ"></i>
+                        </a>
+                      </li>
+                      <li *ngIf="isRfqLike">
+                        <a (click)="removelikeRfq()">
+                          <i class="fa fa-thumbs-up" aria-hidden="true" placement="top" container="body"
+                            ngbTooltip="Remove Like RFQ"></i>
+                        </a>
+                      </li>
+                      <li class="pull-right" *ngIf="isRfqDislike">
+                        <a (click)="removeDisLikeRfq()">
+                          <i class="fa fa-thumbs-down" aria-hidden="true" placement="top" container="body"
+                            ngbTooltip="Remove Dislike RFQ"></i>
+                        </a>
+                      </li>
+                      <li class="pull-right" *ngIf="!isRfqDislike">
+                        <a (click)="disLikeRfq()">
+                          <i class="fa fa-thumbs-o-down" aria-hidden="true" placement="top" container="body"
+                            ngbTooltip="Dislike RFQ"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="row cuHeight2">
+                  <div class="col-md-5">
+                    <div class="otherRfqDetails">
+                      <label class="cuWidth" style="margin-bottom: 0px;">Status :</label>
+                      <span class="normalFont" *ngIf="(currentRfqStatusId == '1' )">Draft</span>
+                      <span class="normalFont" *ngIf="(currentRfqStatusId == '2' )">Pending Approval</span>
+                      <span class="normalFont" *ngIf="(currentRfqStatusId == '3' )">Quoting</span>
+                      <span class="normalFont" *ngIf="(currentRfqStatusId == '5' )">Closed</span>
+                      <span class="normalFont" *ngIf="(currentRfqStatusId == '6' )">Awarded</span>
+                      <span class="normalFont" *ngIf="(currentRfqStatusId == '14')">In-Complete</span>
+                      <span class="normalFont" *ngIf="(currentRfqStatusId == '9' )">Award Declined</span>
+                      <span class="normalFont" *ngIf="(currentRfqStatusId == '13' )">Deleted</span>
+                      <span class="normalFont" *ngIf="(currentRfqStatusId == '16' )">Awarded</span>
+                      <span class="normalFont" *ngIf="(currentRfqStatusId == '20' )">Awarded</span>
+                      <span class="normalFont" *ngIf="(currentRfqStatusId == '17' )">Awarded</span>
+                      <span class="normalFont" *ngIf="(currentRfqStatusId == '18' )">Not Awarded</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+        {{isFromFakeButton()}}
+        {{isReqFromNotification()}}
+        <div>
+          <div *ngIf="isPdfAPi">
+            <div class="loader animation-start">
+              <span class="circle delay-1 size-2"></span>
+              <span class="circle delay-2 size-4"></span>
+              <span class="circle delay-3 size-6"></span>
+              <span class="circle delay-4 size-7"></span>
+              <span class="circle delay-5 size-7"></span>
+              <span class="circle delay-6 size-6"></span>
+              <span class="circle delay-7 size-4"></span>
+              <span class="circle delay-8 size-2"></span>
+            </div>
+          </div>
+        </div>
+      
+        <div class="background-white"
+          *ngIf="(currentRfqStatusId != '1' && currentRfqStatusId != '2' && currentRfqStatusId != '11' && currentRfqStatusId != '13')">
+          <div class="tabbable-panel">
+            <div class="tabbable-line-2">
+              <ul class="nav nav-tabs" *ngIf="!isPartAwarded">
+                <li
+                  [ngClass]="isRfqTabOpen? ((showShopIQ)? 'licus-2 active': 'licus-2-3 active'): ((showShopIQ)? 'licus-2': 'licus-2-3')"
+                  (click)="onRfq()">
+                  <a [ngClass]="(isSidePanel())?'res-padding-a ':''" class="liacus" href="Javascript:void(0);"
+                    data-bs-toggle="tab">RFQ</a>
+                </li>
+                
+                <li *ngIf="(IsFileProcessedByReshape && ((RfqNdaStatus == 'ACCEPTED' && RfqPreferdNdaType == 2)||RfqPreferdNdaType == 1)) && (irfqViewModel.rfqAccess == true || paidUser) && showRfqDetailFileTab"
+                [ngClass]="isFileTabOpen? ((showShopIQ)? 'licus-2 active': 'licus-2-3 active'): ((showShopIQ)? 'licus-2': 'licus-2-3')"
+                (click)="onFiles()">
+                <a [ngClass]="(isSidePanel())?'res-padding-a ':''" class="liacus" href="Javascript:void(0);"
+                  data-bs-toggle="tab">Files &nbsp;</a>
+                  <span class="New">
+                    New!
+                  </span>
+              </li>
+                <li #quotesTab
+                  [ngClass]="isRfqQuotesTabOpen?((showShopIQ)? 'licus-2 active': 'licus-2-3 active'): ((showShopIQ)? 'licus-2': 'licus-2-3')"
+                  (click)="onQuotes()">
+                  <a [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" class="liacus"
+                    data-bs-toggle="tab">Quotes</a>
+                </li>   
+                <li *ngIf="withOrderManagement && isQuoteSubmitted" #quotesTab
+                [ngClass]="isRfqOrderTabOpen?((showShopIQ)? 'licus-2-shopIQ active': 'licus-2 active'): ((showShopIQ)? 'licus-2-shopIQ': 'licus-2')"
+                (click)="onOrder()">               
+                <a [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" class="liacus"
+                  data-bs-toggle="tab">Order</a>
+                </li>
+                <li *ngIf="invoiceCreated && awarded && isSupplierIdMatched" #quotesTab
+                [ngClass]="isRfqOrderTabOpen?((showShopIQ)? 'licus-2-shopIQ active': 'licus-2 active'): ((showShopIQ)? 'licus-2-shopIQ': 'licus-2')"
+                (click)="onInvoices()">               
+                <a [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" class="liacus"
+                  data-bs-toggle="tab">Invoices</a>
+                </li>
+                <li
+                  [ngClass]="isRfqMessageTabOpen?((showShopIQ)? 'licus-2 active': 'licus-2-3 active'): ((showShopIQ)? 'licus-2': 'licus-2-3')"
+                  (click)="onMessages()">
+                  <a [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" class="liacus"
+                    data-bs-toggle="tab">Messages</a>
+                </li>
+                <li *ngIf="showShopIQ" [ngClass]="isRfqShopIQTabOpen?'active':''" (click)="onShopIQ()" class="licus-2">
+                  <a [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" data-bs-toggle="tab">Shop IQ</a>
+                </li>
+                <li
+                  *ngIf ="showHistoryTab" [ngClass]="isRfqRevisionTabOpen?((showShopIQ)? 'licus-2 active': 'licus-2-3 active'): ((showShopIQ)? 'licus-2': 'licus-2-3')"
+                  (click)="onRevisions()">
+                  <a [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" data-bs-toggle="tab">History</a>
+                </li>
+              </ul>
+              <ul class="nav nav-tabs" *ngIf="isPartAwarded">
+                <li
+                  [ngClass]="isRfqTabOpen? ((showShopIQ)? 'licus-2-shopIQ active': 'licus-2 active'): ((showShopIQ)? 'licus-2-shopIQ': 'licus-2')"
+                  (click)="onRfq()">
+                  <a [ngClass]="(isSidePanel())?'res-padding-a ':''" class="liacus" href="Javascript:void(0);"
+                    data-bs-toggle="tab">RFQ</a>
+                </li>
+                <li *ngIf="(paidUser && IsFileProcessedByReshape && ((RfqNdaStatus == 'ACCEPTED' && RfqPreferdNdaType == 2)||RfqPreferdNdaType == 1) && showRfqDetailFileTab)"
+                [ngClass]="isFileTabOpen? ((showShopIQ)? 'licus-2 active': 'licus-2-3 active'): ((showShopIQ)? 'licus-2': 'licus-2-3')"
+                (click)="onFiles()">
+                <a [ngClass]="(isSidePanel())?'res-padding-a ':''" class="liacus" href="#files"
+                  data-bs-toggle="tab">Files &nbsp;</a>   
+                  <span class="New">
+                    New!
+                  </span>
+                </li>
+                <li #quotesTab
+                  [ngClass]="isRfqQuotesTabOpen?((showShopIQ)? 'licus-2-shopIQ active': 'licus-2 active'): ((showShopIQ)? 'licus-2-shopIQ': 'licus-2')"
+                  (click)="onQuotes()">
+                  <a [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" class="liacus"
+                    data-bs-toggle="tab">Quotes</a>
+                </li>
+
+                <li *ngIf="withOrderManagement && isQuoteSubmitted" #quotesTab
+                  [ngClass]="isRfqOrderTabOpen?((showShopIQ)? 'licus-2-shopIQ active': 'licus-2 active'): ((showShopIQ)? 'licus-2-shopIQ': 'licus-2')"
+                  (click)="onOrder()">
+                  
+                  <a [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" class="liacus"
+                    data-bs-toggle="tab">Order</a>
+                </li>
+
+                <li *ngIf="invoiceCreated && awarded && isSupplierIdMatched" #quotesTab
+                  [ngClass]="isRfqOrderTabOpen?((showShopIQ)? 'licus-2-shopIQ active': 'licus-2 active'): ((showShopIQ)? 'licus-2-shopIQ': 'licus-2')"
+                  (click)="onInvoices()">
+                  
+                  <a [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" class="liacus"
+                    data-bs-toggle="tab">Invoices</a>
+                </li>
+
+                <li *ngIf="!withOrderManagement" #quotesTab
+                  [ngClass]="isRfqAwardTabOpen?((showShopIQ)? 'licus-2-shopIQ active': 'licus-2 active'): ((showShopIQ)? 'licus-2-shopIQ': 'licus-2')"
+                  (click)="onAward()">
+                  <a [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" class="liacus"
+                    data-bs-toggle="tab">Awarded</a>
+                </li>
+                <li
+                  [ngClass]="isRfqMessageTabOpen?((showShopIQ)? 'licus-2-shopIQ active': 'licus-2 active'): ((showShopIQ)? 'licus-2-shopIQ': 'licus-2')"
+                  (click)="onMessages()">
+                  <a [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" class="liacus"
+                    data-bs-toggle="tab">Messages</a>
+                </li>
+                <li *ngIf="showShopIQ" [ngClass]="isRfqShopIQTabOpen?'active':''" (click)="onShopIQ()"
+                  class="licus-2-shopIQ">
+                  <a [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" data-bs-toggle="tab">Shop IQ</a>
+                </li>
+                <li
+                  [ngClass]="isRfqRevisionTabOpen?((showShopIQ)? 'licus-2-shopIQ active': 'licus-2 active'): ((showShopIQ)? 'licus-2-shopIQ': 'licus-2')"
+                  (click)="onRevisions()">
+                  <a [ngClass]="(isSidePanel())?'res-padding-a ':''" href="Javascript:void(0);" data-bs-toggle="tab">Revisions</a>
+                </li>
+              </ul>
+              <div class="tab-content">
+                <div *ngIf="isRfqTabOpen" [ngClass]="(isSidePanel())?'right-left-padding-res':'right-left-padding'">
+                  <app-sup-rfq-detail (changeTab)="onQuotes()" [rfqId]="rfqId" [rfqGuid]="rfqGuid"></app-sup-rfq-detail>
+                </div>
+                <!-- <div *ngIf="isRfqTabOpen" [ngClass]="(isSidePanel())?'right-left-padding-res':'right-left-padding'">
+                  <app-sup-files (changeTab)="onFiles()" [rfqId]="rfqId" [rfqGuid]="rfqGuid"> <app-sup-files>
+                </div> -->
+
+                <div *ngIf="isFileTabOpen" [ngClass]="(isSidePanel())?'right-left-padding-res':'right-left-padding'">
+                  <app-sup-files (changeTab)="onFiles()"></app-sup-files>
+                </div>
+
+
+                <div *ngIf="isRfqQuotesTabOpen" [ngClass]="(isSidePanel())?'right-left-padding-res':'p-r-20 p-l-20'">
+                  <app-sup-rfq-quotes [rfqId]="rfqId"></app-sup-rfq-quotes>
+                </div>
+
+                <!-- <div *ngIf="isRfqOrderTabOpen"
+                [ngClass]="(isSidePanel())?'right-left-padding-res':'right-left-padding'">
+                <app-rfq-order-managment [rfqId]="rfqId"></app-rfq-order-managment>
+              </div> -->
+
+
+                <div *ngIf="isRfqAwardTabOpen"
+                  [ngClass]="(isSidePanel())?'right-left-padding-res':'right-left-padding'">
+                  <app-sup-awarded [rfqId]="rfqId"></app-sup-awarded>
+                </div>
+                <div *ngIf="isRfqMessageTabOpen"
+                  [ngClass]="(isSidePanel())?'right-left-padding-res':'right-left-padding'">
+                  <app-sup-rfq-messages [rfqId]="rfqId"></app-sup-rfq-messages>
+                </div>
+                <div *ngIf="isRfqOrderTabOpen"
+                  >
+                  <div class="cus-alert-danger1">
+                    <p style="font-size: 12px;margin-left: 5px;"><img src="assets/images/iIcon.png" style="margin: -3px 10px 0 0">If the buyer awards your quote, you will see order details here.</p>
+                    <div class="col-md-12 close-warn">
+                      <img src="assets/images/closeIcon.png" />
+                      <span class="label-warn">Got it. Don’t show again.</span>
+                    </div>
+                  </div>
+                  <div style="display: flex;">
+                 <div style="background-color: #ebecf0;width: 70%;">
+                  
+                  <div class="col-md-12">
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                      "
+                    >
+                      <p class="order-Id">Order 1234</p>
+                      <div
+                        class="col-md-10"
+                        style="
+                          display: flex;
+                          justify-content: flex-end;
+                          position: relative;
+                          left: 21px;top:10px;
+                        "
+                      >
+                      <div >
+                        <button class="decline-message" style="font-size: 12px;"> Decline Order</button>
+                      </div>
+                      <div> 
+                        <button class="order-message" style="font-size: 12px;" >Message Buyer</button>
+                        </div>  
+                        <div >
+                          <button  [disabled]="disableBtn"  class="edit-order" style="font-size: 12px;" >
+                            Review Purchase Order
+                          </button>
+                        </div>
+                    
+                      </div>
+                    </div>
+                  </div>
+                    <div *ngIf="!awarded">
+                    <div class="col-md-12">
+                      <div class="order-detail">
+                        <h4 style="font-size: 16px;">Order Details</h4>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="status-order">
+                        <span style="font-size: 12px;"
+                          >Status:<span class="PO-status" style="font-size: 12px;">Pending</span></span
+                        >
+                        <p style="font-size: 12px;">
+                          Manufacturer:<a  class="manu-name" style="font-size: 12px;">Acme Buyer
+                           </a
+                          >
+                        </p>
+                        <p style="font-size: 12px;">
+                          Preferred Payment Terms:<span style="font-family: 600;" style="font-size: 12px;">Net 30</span>
+                        </p>
+                        <p style="font-size: 12px;">
+                          RFQ:<a class="rfq-ID" style="font-size: 12px;">1187265</a>
+                        </p>
+                        <p style="font-size: 12px;">
+                          Quote:<a class="rfq-ID" style="font-size: 12px;">1234</a>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="order-detail">
+                        <h4 class="parts-block" >Parts</h4>
+                      </div>
+                      <div class="status-price col-md-12">
+                        <p class="col-md-1" style="padding: 0px" style="font-size: 12px;">Part</p>
+                        <p class="col-md-2">Status</p>
+                        <p class="col-md-2" style="text-align: center" style="font-size: 12px;">Quantity</p>
+                        <p
+                          class="col-md-2"
+                          [ngClass]="poFileUrl ? 'text-align-end' : 'text-align-center'" style="font-size: 12px;"
+                        >
+                          Price (/unit)
+                        </p>
+                        <p
+                          class="col-md-2"
+                          [ngClass]="poFileUrl ? 'text-align-end' : 'text-align-center'" style="font-size: 12px;"
+                        >
+                          Price (total)
+                        </p>
+                        <p class="col-md-2" style="text-align: end" style="font-size: 12px;">Actions</p>
+                      </div>
+                      <div class="order-block">
+                        <div class="row">
+                          <div class="col-md-12" style="height: 100%">
+                            <div class="status-unit">
+                              <div style="padding: 0px;word-break: break-all;font-weight: 600;font-size: 12px;">
+                                Acme 
+                              </div>
+                              <div class="status col-md-3">
+                                <div class="status-content">
+                                  <img src="assets/images/ellipse.png" />
+                                  <p style="padding-top: 17px;font-size: 12px;">
+                                    In Production
+                                  </p>
+                                </div>
+                                <div style="margin: 2px 0 0 8px;min-width: 54px;font-size: 12px;">
+                                  <a class="manu-name">
+                                    View All</a
+                                  >
+                                </div>
+                              </div>
+                              <div class="col-md-2" style="font-size: 12px;">
+                                100
+                              </div>
+                              <div class="col-md-2" style="font-size: 12px;">
+                               $1.78
+                              </div>
+                              
+                              <div class="col-md-2" style="font-size: 12px;" >
+                                $178.00
+                              </div>
+                              <div style="text-align: end;">
+                                <i
+                                class="fa fa-chevron-up"
+                                aria-hidden="true"
+                                
+                              ></i>
+                              <span style="color: #2E58D6;pointer-events: none;font-size: 12px;">
+                                Hide Details
+                              </span>
+                              </div>
+                            
+                            </div>
+                            <ng-container>
+                              <div class="bg-white shadow-sm p-3 hide-content">
+                                <p class="p-details">Details</p>
+                                <div class="block-content">
+                                  <div>
+                          
+                                    <p class="detail-content">
+                                      New or Existing Part ?:
+                                      <span class="detail-info">
+                                        New
+                                      </span>
+                                    </p>
+                                    <p class="detail-content">
+                                      Awarded Quantity:
+                                      <span class="detail-info">
+                                        100
+                                      </span>
+                                    </p>
+                                    <p class="detail-content">
+                                      Quantity Unit:<span class="detail-info">
+                                        Sets
+                                      </span>
+                                    </p>
+                                  </div>
+                                  <div>
+                                  
+                                    <p class="detail-content">
+                                      Manufacturing Process:
+                                      <span class="detail-info">
+                                        3D Printing</span>
+                                    </p>
+                                    <p class="detail-content">
+                                      Manufacturing Technique:
+                                      <span class="detail-info">
+                                        DLMS
+                                      </span>
+                                    </p>
+                                    <p class="detail-content">
+                                      Material:
+                                      <span class="detail-info">
+                                        ABS-Like
+                                      </span>
+                                    </p>
+                                  </div>
+                                  <div >
+                              
+                                    <p class="detail-content">
+                                      Post-Prod. Process:
+                                      <span class="detail-info">
+                                        None
+                                      </span>
+                                    </p>
+                                    <p
+                                      class="detail-content"
+                                      title=""
+                                      readonly="true"
+                                    >
+                                      Part Specification:
+                                      <span class="detail-info">N/A</span>
+                                    </p>
+                                    <p class="detail-content">
+                                      Part information for Manufacturing:
+                                      <span class="detail-info">
+                                        N/A
+                                      </span>
+                                     
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </ng-container>
+                            <div class="status-unit" style="margin-top: 20px;">
+                              <div style="padding: 0px;word-break: break-all;font-weight: 600;font-size: 12px;">
+                                Acme
+                              </div>
+                              <div class="status col-md-3">
+                                <div class="status-content">
+                                  <img src="assets/images/ellipse.png" />
+                                  <p style="padding-top: 17px;font-size: 12px;">
+                                    In Production
+                                  </p>
+                                </div>
+                                <div style="margin: 2px 0 0 8px;min-width: 54px;font-size: 12px;">
+                                  <a class="manu-name">
+                                    View All</a
+                                  >
+                                </div>
+                              </div>
+                              <div class="col-md-2" style="font-size: 12px;">
+                                250
+                              </div>
+                              <div class="col-md-2" style="font-size: 12px;">
+                               $1.85
+                              </div>
+                              
+                              <div class="col-md-2" style="font-size: 12px;" >
+                                $462.50
+                              </div>
+                              <div style="text-align: end;">
+                                <i
+                                class="fa fa-chevron-down"
+                                aria-hidden="true"
+                                
+                              ></i>
+                              <span style="color: #2E58D6;pointer-events: none;font-size: 12px;" >
+                                Show Details
+                              </span>
+                              </div>
+                              
+                            </div> 
+                          </div>
+                        </div>
+                      </div>
+                      <div style="position: absolute;bottom: 0;right: 0"><img src="assets/images/sample.png" /></div>
+                    </div>
+                  </div>
+                  
+                </div>
+                <div style="display: flex;width: 30%;font-size:12px;flex-wrap: wrap;align-content: center;justify-content: space-around;">
+                <div>
+                  <div style="font-size: 20px;margin-bottom: 10px;font-weight: 600;">Order Management</div>
+                  <div>Order Management is a set of new features<br>
+                    that adds a <b>purchase order</b> and <b>part</b><br>
+                    <b>statuses</b> requirement to your RFQ.
+                  </div>
+                </div>
+                </div>
+               </div>
+                </div>
+                <div *ngIf="isRfqShopIQTabOpen"
+                  [ngClass]="(isSidePanel())?'right-left-padding-res':'right-left-padding'">
+                  <app-sup-rfq-shopiq [rfqId]="rfqId"></app-sup-rfq-shopiq>
+                </div>
+                <div *ngIf="isRfqRevisionTabOpen"
+                  [ngClass]="(isSidePanel())?'right-left-padding-res':'right-left-padding'">
+                  <app-sup-rfq-revision [rfqId]="rfqId"></app-sup-rfq-revision>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="background-white"
+          *ngIf="(currentRfqStatusId == '1' || currentRfqStatusId == '2' || currentRfqStatusId == '11' || currentRfqStatusId == '13')">
+
+          <div class="row" style="text-align: center;padding-top:106px">
+            <div class="col-md-12 m-b-45">
+              <div>
+                <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+                assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+              </div>
+              <h5>
+                <!-- We're sorry, the RFQ you are trying to view is under review to be released. Please try again later. -->
+                We're sorry, the RFQ you are trying to view is in 'Draft' status. Please try again later.
+              </h5>
+            </div>
+          </div>
+        </div>
+        <div class="scroll-top-wrapper ">
+          <span class="scroll-top-inner">
+            <i class="fa fa-arrow-up"></i>
+          </span>
+        </div>
+      </div>
+      <div *ngIf="isSidePanel()" class="col-md-4 sideDrawer Drawer-Shadow">
+        <div *ngIf="isTransferRfqPanel()">
+          <app-sup-rfq-transfer></app-sup-rfq-transfer>
+        </div>
+        <div *ngIf="isQuotesPanel()">
+          <app-partial-quoting [rfqId]="rfqId" [quotesNeededBy]="irfqViewModel.quotesNeededBy"></app-partial-quoting>
+        </div>
+        <div *ngIf="isMessagePanel()">
+          <app-message-send-drawer></app-message-send-drawer>
+        </div>
+        <div *ngIf="isMessageThreadPanel()">
+          <app-message-thread></app-message-thread>
+        </div>
+        <div *ngIf="isBuyerMiniProfile()">
+          <app-mini-buyer-profile></app-mini-buyer-profile>
+        </div>
+        <div *ngIf="isBuyerMessage()">
+          <app-message-buyer [rfqId]="rfqId"></app-message-buyer>
+        </div>
+        <div *ngIf="isAssociateMessageDrawer()">
+          <app-associate-message-drawer [associateRfqId]="associateRfqId"></app-associate-message-drawer>
+        </div>
+        <div *ngIf="isRfqDrawer()" class="background-white-1">
+          <app-supplier-rfq-detail-sidepanel [rfqId]="getCurrentRfqId()" (drawer_OnClose)="drawerClose($event)">
+          </app-supplier-rfq-detail-sidepanel>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isBuyerCommpleteProfile()">
+      <div class="row">
+        <div class="col-md-10">
+
+        </div>
+        <div class="col-md-2 floatRight">
+          <button type="button" class="btn btn-submit-rfq-close-1 RectangleYes-2-1" (click)="goBack()">Go Back to
+            RFQ</button>
+        </div>
+      </div>
+      <div>
+        <app-buyer-view-profile></app-buyer-view-profile>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- NDA level 1 Model -->
+
+<p-dialog header="NDA Agreement" class="mx-3"
+  *ngIf="(showNDAModal && currentRfqStatusId !== '2' && currentRfqStatusId !== '11' && currentRfqStatusId !== '13')" [closable]="false"
+  [(visible)]="showNDAModal" [modal]="true" [responsive]="true" [width]="629" [height]="500"
+  [minWidth]="200" [minY]="70" [maximizable]="true" [baseZIndex]="10000">
+
+  <div class="row">
+    <div class="col-md-12">
+      <p>
+        <span>Do you agree to the Buyer's NDA agreement?</span>
+      </p>
+    </div>
+  </div>
+  <div class="Rectangle-4-Copy">
+    <div class="col-md-9 st-Level-NDA-Agreem" style="padding-top: 17px">
+      {{ rfqStatusString }}
+    </div>
+    <div *ngIf="!isCustomNDA" class="col-md-3" (click)="onClickNda()" style="text-align:right;padding-top: 17px">
+      <button type="button" class="btn btn-nda-status">Read NDA</button>
+    </div>
+    <div class="col-md-3" style="padding-top: 17px" *ngIf="isCustomNDA">
+      <a (click)="downloadS3File(ndaFileName, true)">
+        <div class="btn btn-nda-status">Download</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="row" style="background-color: #f6f7fb;" *ngIf="isndaContent">
+    <div class="col-md-12">
+      <p [innerHTML]="ndaContent | sanitizeNolimit"></p>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <p class="NOTE-Not-agreeing-w">
+      <span>NOTE: </span>
+      <span><ng-container *ngIf="showNDA2Modal"><br/>1)</ng-container>Not agreeing with NDA means you will not be able to view their drawings.</span>
+    </p>
+    <p class="NOTE-Not-agreeing-w" *ngIf="showNDA2Modal">
+      <span>2) If accepted, this 2nd level NDA requires the buyer's manual approval before you can view the files and
+        quote. </span>
+    </p>
+
+  </div>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <button type="button" style="width: -webkit-fill-available;" class="btn btn-ignore-rfq-clone RectangleNo-2"
+          (click)="ndaRejected()">NO</button>
+      </div>
+
+      <div class="col-md-6">
+        <button type="button" style="width: -webkit-fill-available;" class="btn btn-submit-rfq-close RectangleYes-2"
+          label="Yes" (click)="ndaAccepet()"><i class="fa fa-spinner fa-spin" *ngIf="isNDAbutton"></i>Accept</button>
+      </div>
+    </div>
+  </p-footer>
+</p-dialog>
+<!-- NDA level 1&2 Custom Modal -->
+
+<p-confirmDialog header="Confirmation" icon="" width="629" height="220" #cd>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-ignore-rfq" (click)="cd.reject()">No</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="cd.accept()">Yes</button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>
+
+
+<div *ngIf="isModelShow()">
+  <app-rating-model></app-rating-model>
+</div>
+{{checkAccountUpgradeReqSent()}}
+<app-upgrade-account *ngIf="showUpgradeAccountModal && !isDetailPage" [quoteRFQ]=false [RfqId]="currentRfqId"
+  (modalCloseEvent)="closeModal($event)"></app-upgrade-account>
+<app-upgrade-account *ngIf="showUpgradeAccountModal && isDetailPage" [quoteRFQ]=true [RfqId]="currentRfqId"
+  (modalCloseEvent)="closeModal($event)"></app-upgrade-account>
+
+<div *ngIf="isRfqQuotePdf">
+  <app-rfq-quote-pdf [rfqId]="rfqId" (isPdfDownload)="isPdfDownload($event)"></app-rfq-quote-pdf>
+</div>
+<div class="full-page-overlay filter" *ngIf="showLoader">
+  <div class="rfqLoader"></div>
+</div>
+

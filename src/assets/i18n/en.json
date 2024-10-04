@@ -1,0 +1,11 @@
+{
+  "Title": "Good Morning",
+  "CreateAccount": "Create Account",
+  "RememberMe":"Remember me",
+  "Startpage": {
+      "TranslationSections": "Hello World"
+  },
+   "Aboutpage": {
+      "TranslationSections": "We are letsboot"
+  }
+}

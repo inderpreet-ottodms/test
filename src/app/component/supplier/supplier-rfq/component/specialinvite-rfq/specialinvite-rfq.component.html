@@ -1,0 +1,161 @@
+<div class="row top-row " *ngIf="!isRfqAvailable">
+  <div class="col-md-3">
+    Showing 10 latest
+  </div>
+  <div class="col-md-9" style="text-align: right">
+    <a class="View-All-Liked-RFQs" [routerLink]="['/supplier/specialInviteRfq/']">View All Special Invites</a>
+  </div>
+</div>
+<div *ngIf="isLoader == false">
+  <div class="row" *ngIf="!isRfqAvailable">
+    <div class="col-md-12">
+      <div class="background-white">
+        <div class="row">
+          <br>
+          <div class="col-md-12">
+            <div class="table-responsive">
+              <table class="table table-hover rfqtable">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th class="" (click)="sortMessage('Quantity')">Quantity
+                      <i [ngClass]="(toggle5)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </th>
+                    <th class="" (click)="sortMessage('Material')">Material
+                      <i [ngClass]="(toggle)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </th>
+                    <th class="" (click)="sortMessage('Process')">Process
+                      <i [ngClass]="(toggle3)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </th>
+                    <th class="" (click)="sortMessage('Buyer')">Buyer
+                      <i [ngClass]="(toggle2)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </th>
+                    <th class="" (click)="sortMessage('Closes')">Closes
+                      <i [ngClass]="(toggle4)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                    </th>
+
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor='let rfq of iRFQViewModelColl'>
+                    <td class="tdborderleft">
+                      <div class="box-1" *ngIf="rfq.isMfgCommunityRfq == true">
+                        <div class="ribbon ribbon-top-left"><span>Directory</span></div>
+                      </div>
+                      <img src="assets/supplier/3-d-turbine-3-d-auto-cad-drawing.png"
+                      srcset="assets/supplier/3-d-turbine-3-d-auto-cad-drawing@2x.png 2x, assets/supplier/3-d-turbine-3-d-auto-cad-drawing@3x.png 3x"
+                      *ngIf="(!rfq.rfqThumbnail || rfq.rfqThumbnail === '') && !rfq.isMfgCommunityRfq" class="d-Turbine-3D-AutoCAD-Drawing" >
+
+                      <img src="assets/directrfq.png" style="border-radius: 50%;
+                      border: 1px solid #bec4cb"
+                      srcset="assets/directrfq@2x.png 2x, assets/directrfq@3x.png 3x"
+                      *ngIf="(!rfq.rfqThumbnail || rfq.rfqThumbnail === '') && rfq.isMfgCommunityRfq" class="d-Turbine-3D-AutoCAD-Drawing">
+                      <div *ngIf="!(!rfq.rfqThumbnail || rfq.rfqThumbnail === '')" class="d-Turbine-3D-AutoCAD-Drawing">
+                        <img [src]="getLoadableImg(rfq.rfqThumbnail)" class="img-circle box-fit">
+                      </div>
+                    </td>
+                    <td class="rfqtd " (click)="detailRfq(rfq.rfqId)" placement="top" data-container="body"
+                      > <div ngbTooltip="{{ rfq.rfqName}}"> {{rfq.rfqName | dotLimit:'15'}} </div> 
+                      <span>RFQ #{{rfq.rfqId}}</span>
+                    </td>
+                    <td>{{rfq.partQty}} {{rfq.partQtyUnit}}</td>
+                    <td class="custtd">{{rfq.partsMaterialName}} </td>
+                    <td class="custtd">{{rfq.partCategoryName}} </td>
+                    <td class="custtd">
+                      <!-- <span [ngClass]=" rfq.npsScore | npsState"> {{ ((rfq?.npsScore !== null) && (rfq?.npsScore !== '')) ? rfq?.npsScore : 'N/A' }}</span>  -->
+                      {{rfq.companyName}} </td>
+                    <td class="custtd">{{rfq.quotesNeededBy | date: 'MM/dd/yyyy'}} </td>
+                    <td class="tdbackgorungcolor" *ngIf="!rfq.isRfqLike">
+                      <a (click)="likeRfq(rfq.rfqId, rfq.isRfqLike, rfq.isRfqDisLike)">
+                        <i class="fa fa-thumbs-o-up" aria-hidden="true" ngbTooltip="Like RFQ"></i>
+                      </a>
+                    </td>
+                    <td class="tdbackgorungcolor" *ngIf="rfq.isRfqLike">
+                      <a (click)="removelikeRfq(rfq.rfqId, rfq.isRfqLike, rfq.isRfqDisLike)">
+                        <i class="fa fa-thumbs-up" aria-hidden="true" ngbTooltip="Remove Like RFQ"></i>
+                      </a>
+                    </td>
+                    <td class="tdbackgorungcolor" *ngIf="rfq.isRfqDisLike">
+                      <a (click)="removeDisLikeRfq(rfq.rfqId, rfq.isRfqLike, rfq.isRfqDisLike)">
+                        <i class="fa fa-thumbs-down" aria-hidden="true" ngbTooltip="Remove Dislike RFQ"></i>
+                      </a>
+                    </td>
+                    <td class="tdbackgorungcolor" *ngIf="!rfq.isRfqDisLike">
+                      <a (click)="disLikeRfq(rfq.rfqId, rfq.isRfqLike, rfq.isRfqDisLike)">
+                        <i class="fa fa-thumbs-o-down" aria-hidden="true" ngbTooltip="Dislike RFQ"></i>
+                      </a>
+                    </td>
+                    <!-- <td class="tdbackgorungcolor"  *ngIf="rfq.isRfqLike">
+                              <img src="assets/rfq/invalid-name.png" srcset="assets/rfq/invalid-name@2x.png 2x, assets/rfq/invalid-name3x.png 3x"
+                              class="checkCircleClass pull-right">
+                             </td>
+                             <td class="tdbackgorungcolor"  *ngIf="!rfq.isRfqLike">
+                                <img src="assets/rfq/thumbs-up.png" srcset="assets/rfq/thumbs-up@2x.png 2x, assets/rfq/thumbs-up@3x.png 3x"
+                            class="checkCircleClass pull-right"  (click)="likeRfq(rfq.rfqId)">
+                               </td>
+                               <td class="rfqtd tdborderright tdbackgorungcolor">
+                                  <img src="assets/rfq/thumbs-down.png" srcset="assets/rfq/thumbs-down@2x.png 2x, assets/rfq/thumbs-down@3x.png 3x"
+                                  class="checkCircleClass pull-right" (click)="disLikeRfq(rfq.rfqId)">
+                             </td> -->
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="!isRfqAvailable">
+    <div class="col-md-3">
+
+    </div>
+    <div class="col-md-9" style="text-align: right">
+      <a class="View-All-Liked-RFQs" [routerLink]="['/supplier/specialInviteRfq/']">View All Special Invites</a>
+    </div>
+  </div>
+</div>
+
+<div class="myRFQ-rfq-no-available" *ngIf="isRfqAvailable">
+  <div class="row">
+    <div class="col-md-12 m-t-20 m-b-10">
+      <span class="gray-text f-16">After you receive an invite to quote an RFQ, they’ll show up here.</span>
+    </div>
+  </div>
+
+
+  <div class="row dump-text">
+    <div class="col-md-1">
+      <img src="assets/supplier/3-d-turbine-3-d-auto-cad-drawing.png"
+        srcset="assets/supplier/3-d-turbine-3-d-auto-cad-drawing@2x.png 2x, assets/supplier/3-d-turbine-3-d-auto-cad-drawing@3x.png 3x"
+        class="d-Turbine-3D-AutoCAD-Drawing">
+    </div>
+    <div class="col-md-2">RFQ Name Goes Here<br>
+      <span>RFQ #</span></div>
+    <div class="col">Units</div>
+    <div class="col">Material here</div>
+    <div class="col">Process here</div>
+    <div class="col">Process here</div>
+    <div class="col">
+      <i aria-hidden="true" class="fa fa-thumbs-up"></i>
+      <i aria-hidden="true" class="fa fa-thumbs-o-down"></i>
+    </div>
+  </div>
+
+
+</div>
+<div *ngIf="isLoader">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div>

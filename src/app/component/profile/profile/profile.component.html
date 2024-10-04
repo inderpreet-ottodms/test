@@ -1,0 +1,152 @@
+<section>
+  <div class="row">
+    <div [ngClass]="(isSidePanel())?'col-md-8 test':'col-md-12 col-12'">
+      <app-rfq-warning-banner></app-rfq-warning-banner>
+      {{reloadPageOnContactdrawerClose()}}
+      {{isHeaderUpdated()}} {{openEditHeaderWarning()}}
+      <!-- <div class="row" style="padding-bottom: 40px">
+        <div class="col-md-12">
+          <div class="suppliers-header">
+
+            <div class="tinted-image1"></div>
+            <div class="text-left col-md-6">
+              <img [src]="supplierLogoPath" class="img-circle supplier-logo-size" onError="this.src='assets/noimage.jpg'">
+              <h4 style=" word-break: break-all; ">{{iContactViewModel?.company?.name}}</h4>{{isHeaderUpdated()}} {{openEditHeaderWarning()}}
+              <p class="nda-manufacturer supplier-logo"><span><span [ngClass]="iContactViewModel?.npsScore | npsState"> {{ ((iContactViewModel?.npsScore !== null) && (iContactViewModel?.npsScore !== '')) ? iContactViewModel?.npsScore : 'N/A' }}</span> Net Promotor Score</span></p>
+            </div>
+            <div class="text-right">
+              <h4>{{iContactViewModel?.phoneNo}}</h4>
+              <ul class="circle-icons" (click)="openHeader()">
+                <li><a><i class="fa fa-edit"></i></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      {{isHeaderUpdated()}}
+      <div class="row" style="padding-bottom:0px">
+          <div class="col-md-12 back_dashboard" >
+            <!-- need to load admin component for one mobile view hamberger isue so made redirecting path as full '' instead of only loading dashboard/buyer/default  -->
+              <button (click)="isreloadDashboardComp()">Back to Dashboard</button>
+              <!-- <button [routerLink]="['/dashboard/buyer/default/']">Back to Dashboard</button> -->
+          </div>
+            <!-- <div class="col-md-2" style="text-align:right;padding: 20px;position: relative;top: -80px;right: 15px;">
+               <div>
+                  <ul class="circle-icons" (click)="openHeader()">
+                      <li><a placement="top" container="body" ="Edit"><i class="fa fa-edit"></i></a></li>
+                    </ul>
+               </div>
+            </div> -->
+      </div>
+     
+      <div class="row mx-1">   
+          <div [ngClass]="(isSidePanel())?'col-md-12':'col-md-8'">
+            <div class="row">
+              <div class="col-md-2 supplier-logo-size">
+                <img [src]="supplierLogoPath" style="width: 120px !important;
+                          height: 120px !important;border-radius:50%;margin-top: 22px; "
+                  onError="this.src='assets/company/avatar-manu-basic.svg';">
+              </div>
+              <div class="col-md-7">
+                <h4 style="word-break: break-all">{{iContactViewModel?.company?.name ? iContactViewModel?.company?.name : 'Company Name'}}</h4>
+                <div class="company-type">
+                  <i class="fa fa-industry" style="color:#4a90e2;" aria-hidden="true"></i>
+                  <h6 style="word-break: break-all" class="f-w-normal">{{iContactViewModel?.company?.supplierType ? iContactViewModel?.company?.supplierType : 'Company Type'}}</h6>
+                  <i class="fa fa-users m-l-10" style="color:#4a90e2;" aria-hidden="true"></i>
+                  <h6 style="word-break: break-all" class="f-w-normal">{{iContactViewModel?.phoneNo ? iContactViewModel?.phoneNo : '#'}}</h6>
+                </div>
+                <p class="nda-manufacturer supplier-logo" style="font-weight:bold;">
+                  <span>5.00 ({{ (iContactViewModel.noOfStars)? (iContactViewModel.noOfStars | number : '1.0-1'): 'n/a'}})</span>
+                  <ng-template #t let-fill="fill">
+                    <span class="star" [class.full]="fill === 100">
+                      <span class="fill-star" [style.width.%]="fill">&#9733;</span>&#9733;
+                    </span>
+                  </ng-template>
+                  <ngb-rating [(rate)]="iContactViewModel.noOfStars" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+                  &nbsp;&nbsp;&nbsp;
+                </p>
+              </div>
+              <div class="col-md-2 profile-edit-btn">
+                <button type="button" class="profile_btn" style="margin: 9px 0px 5px;" (click)="openHeader()">
+                  Edit
+                </button>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div>
+        <!-- <div class="tabbable-panel">
+          <div class="tabbable-line-buyer-profile">
+
+            <ul class="nav nav-tabs">
+                <li [ngClass]="isAboutUsActive?'active cusWidth':'cusWidth'"><a href="#aboutus" data-bs-toggle="tab" (click)="openAboutUs()">About Us</a></li>
+               <li [ngClass]="isProfileActive?'active cusWidth':'cusWidth'"   (click)="openProfile()"><a href="#profile" data-bs-toggle="tab">Contact Information</a></li>
+               <li [ngClass]="isContactUsActive?'active cusWidth':'cusWidth'"  (click)="openContactUs()" ><a href="#contactus" data-bs-toggle="tab">Contact Us</a></li>
+               <li [ngClass]="isRatingActive?'active cusWidth':'cusWidth'"  (click)="openRatings()"><a href="#raiting" data-bs-toggle="tab">Ratings</a></li>
+
+            </ul>
+
+            <div class="tab-content">
+               <div class="tab-pane" [ngClass]="isAboutUsActive?'active':''" id="aboutus" *ngIf="isAboutUsActive">
+               <app-buyer-about-us></app-buyer-about-us>
+              </div>
+              <div class="tab-pane" id="contactus" *ngIf="isContactUsActive">
+               <app-buyer-contact-us></app-buyer-contact-us>
+              </div>
+              <div class="tab-pane" id="profile" *ngIf="isProfileActive" >
+                <app-buyer-profile></app-buyer-profile>
+              </div>
+
+              <div class="tab-pane"   [ngClass]="isRatingActive?'active':''" id="raiting" *ngIf="isRatingActive">
+                <app-buyer-raiting [isRatingActive]="isRatingActive"></app-buyer-raiting>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <app-buyer-about-us></app-buyer-about-us>
+      </div>
+    </div>
+    <div class="profile-edit-container" *ngIf="isSidePanel()">
+      <div *ngIf="isProfileEditActive()">
+        <app-edit-buyer-profile></app-edit-buyer-profile>
+      </div>
+      <div *ngIf="isEditMailing()">
+        <app-edit-buyer-mailing></app-edit-buyer-mailing>
+      </div>
+      <div *ngIf="isEditShipping()">
+        <app-edit-buyer-shipping></app-edit-buyer-shipping>
+      </div>
+
+      <div *ngIf="isEditBuyerContactUs()">
+        <app-edit-buyer-contact-us></app-edit-buyer-contact-us>
+      </div>
+      <div *ngIf="isEditBuyerAboutUs()">
+        <app-edit-buyer-about-us></app-edit-buyer-about-us>
+      </div>
+
+      <div *ngIf="isRatingReply()">
+      <app-buyer-raiting-reply></app-buyer-raiting-reply>
+      </div>
+      <div *ngIf="isHeaderEdit()">
+        <app-edit-header></app-edit-header>
+      </div>
+      <div *ngIf="isEditPersonalInformation()">
+        <app-edit-buyer-personal-information></app-edit-buyer-personal-information>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="custom-confirmation" *ngIf="isCencel">
+<p-confirmDialog header="Confirmation" icon="" width="629" height="220" #cd>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6">
+        <button type="button" style="width:284px ;" class="btn btn-ignore-rfq" (click)="cd.reject()">No</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" style="width:284px ;"class="btn btn-cancel-rfq" label="Yes" (click)="cd.accept()"> Yes</button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>
+</div>

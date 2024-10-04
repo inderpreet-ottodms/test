@@ -1,0 +1,67 @@
+
+  <div class="row" *ngIf="!isBuyerCommpleteProfile()">
+    <div [ngClass]="(isSidePanel())?'col-md-8 col-9':'col-md-12 col-12'">
+      <div class="">
+
+        <div class="row myRFQ-custom-row-left-padding">
+          <div class="col-md-12 myRFQ-Header">
+              <app-pagetitle-quotebtn pageTitle="MFG Contacts"></app-pagetitle-quotebtn>
+          </div>
+          <!-- <div class="col-md-7" style="text-align:end">
+            <button type="button" class="myRFQ-create-Rfq-btn pointerCursor" [routerLink]="['/rfq/editrfq']">
+              <span class="myRFQ-create-Rfq-btn-text">Create an RFQ</span>
+            </button>
+          </div> -->
+        </div>
+
+        <div class="row myRFQ-custom-row-left-padding">
+          <div class="col-md-12">
+            <!-- ------------------Empty box start-------------------- -->
+
+             <!-- ------------------Empty box end-------------------- -->
+            <div class="myRFQ-rfq-main-div" *ngIf="!isRfqAvailable">
+              <app-follwed-buyer-contact-list></app-follwed-buyer-contact-list>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-8 pull-left">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isSidePanel()" class="col-md-4 sideDrawer Drawer-Shadow" >
+        <div *ngIf="isBuyerprofileDrawer()">
+          <app-mini-buyer-profile></app-mini-buyer-profile>
+        </div>
+        <div *ngIf="isMessageDrawer()">
+          <app-message-send-drawer></app-message-send-drawer>
+        </div>
+    </div>
+  </div>
+  <div *ngIf="isBuyerCommpleteProfile()">
+    <div class="row">
+        <div class="col-md-10">
+
+        </div>
+      <div class="col-md-2 floatRight">
+          <button type="button" class="btn btn-submit-rfq-close-1 RectangleYes-2-1" (click)="goBack()">Go Back</button>
+      </div>
+    </div>
+    <div>
+      <app-buyer-view-profile></app-buyer-view-profile>
+    </div>
+
+  </div>
+  <!-- -------------------- footer ---------------------- -->
+  <div class="row" style="bottom: 0px;width: 101%">
+    <div class="col-md-12" style="text-align:-webkit-right;padding:0px">
+      <div class="Site-Background-Copy" >
+        <!-- <p class="Copyright-2018-MFG">Copyright © 2018 MFG.com, Inc. All Rights Reserved.</p> -->
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isModelShow()">
+    <app-rating-model></app-rating-model>
+    </div>

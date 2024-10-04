@@ -1,0 +1,60 @@
+.bg-white{
+    background-color: #fff;
+    padding: 5pxl
+}
+.color-blue{
+    color:#4a90e2;
+    cursor: pointer;
+}
+.color-red{
+  color:red;
+}
+label{
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+.m-5 {
+    margin: 5px!important;
+}
+.w-p-100{
+    width: 100%;
+}
+.btn-green-border{
+    background-color:#fff;
+    color:#56c23e;
+    border: 1px solid #56c23e;
+}
+.btn-green{
+    background-color:#56c23e;
+    color:#fff;
+    border: 1px solid #56c23e;
+}
+.has-danger{
+    color:#d9534f;
+}
+
+.part-invoice
+{
+    border: 1px solid #e2e2e5;
+    padding: 5px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    width: 100%;
+    margin-left: 17px;
+}
+
+.background-white {
+    background: #FFF;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 19px 5px 19px 10px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    -webkit-box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+    box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+  }
+  .helpertext{
+    font-size: 11px;
+    margin-left: 5px;
+    color: #919aa3;
+  }

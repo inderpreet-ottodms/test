@@ -1,0 +1,55 @@
+<ng-template
+  #publishModal
+  let-d="dismiss"
+  data-backdrop="static"
+  data-keyboard="false"
+>
+  <div class="modal-header border-0 p-b-0 p-t-10 p-r-10 p-l-10">
+    <h4 class="modal-title"></h4>
+    <button
+      type="button"
+      class="close btn"
+      data-bs-dismiss="modal"
+      (click)="d('notNow');openNoPublishModel(false);"
+    >
+      <i class="fa fa-times-circle color-blue" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="modal-body p-t-0 text-center">
+    <div>
+      <img src="assets/publishProfile/blueRightTick.png" />
+    </div>
+    <div>
+      <span class="f-22 f-w-600">Great Job!</span>
+    </div>
+    <div class="graphic-header">
+      <span
+        >You’re profile has come a long way! If you’re ready to go public, you can submit it to the Manufacturer Directory</span
+      >
+    </div>
+  </div>
+  <div class="modal-footer-section m-t-10 m-b-10">
+    <div class="row p-10">
+      <div class="col-md-6" data-bs-dismiss="modal">
+        <button
+          type="button"
+          class="btn button-green-border"
+          data-bs-dismiss="modal"
+          (click)="openNoPublishModel(true);d('notNow');"
+        >
+          Not Now
+        </button>
+      </div>
+      <div class="col-md-6" data-bs-dismiss="modal">
+        <button
+          type="button"
+          class="btn button-green"
+          data-bs-dismiss="modal"
+          (click)="d('notNow');redirect()"
+        >
+          Submit for Publishing
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

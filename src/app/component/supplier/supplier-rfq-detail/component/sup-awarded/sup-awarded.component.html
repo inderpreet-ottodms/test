@@ -1,0 +1,113 @@
+<div class="background-white" style="padding-top: 10px;min-height: 500px">
+  <div class="row" style="padding-bottom: 10px;">
+    <div class="col-md-3 part-label">
+      Part Name
+    </div>
+    <div class="col-md-2 part-label">
+      Date
+    </div>
+    <div class="col-md-2 part-label">
+      Qty
+    </div>
+    <div class="col-md-4 part-label">
+      Message
+    </div>
+    <div class="col-md-1 part-label" *ngIf="isPremium()">
+      Actions
+    </div>
+  </div>
+  <div class="row part-awared" style="border: 1px solid #e2e2e5;margin-bottom: 10px;" *ngFor="let part of ipartAwared; let i = index">
+      <div class="col-md-3">
+        <label class="part-name">{{ part.partName }}</label>
+        <br>
+        <span class="part-rfq">RFQ #{{ part.partNumber }}</span>
+
+      </div>
+      <div class="col-md-2 part-date" style="padding: 14px">
+          {{ utcDate(part.awardedDate) |  date: 'MM/dd/yyyy'}}
+      </div>
+      <div class="col-md-2" style="padding: 10px">
+           {{ part.awardedQty}} {{ part.awardedQtyUnit }}
+              <br>
+              <span>${{ part.totalPrice }}</span>
+
+      </div>
+      <div class="col-md-3" style="padding: 14px" >
+        <span placement="top" data-container="body" ngbTooltip="{{ part.messageDesc }}">{{ part.messageDesc | dotLimit:'19' }}</span>
+
+      </div>
+      <div class="col-md-1" style="padding-top: 10px;">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-circle fa-stack-2x" style="color:#81db6d;"></i>
+          <i class="fa fa-trophy fa-stack-1x fa-inverse"></i>
+        </span>
+      </div>
+      <div class="col-md-1 tdbackgorungcolor" style="padding: 20px 3%;">
+        <div class="row" *ngIf="isPremium()">
+          <div class="col-md-12">
+              <a (click)="openSidePanel1($event, part.buyerContactId, part.buyerContactName)">
+                  <i class="fa fa-envelope-o icon-color" aria-hidden="true" ngbTooltip="Message"></i>
+                </a>
+          </div>
+          <!-- <div class="col-md-6">
+              <i class="fa fa-angle-right icon-color"></i> -->
+              <!-- <i *ngIf="!part.result" class="fa fa-angle-right"></i> -->
+          <!-- </div> -->
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- <div class="row">
+    <div class="col-md-12">
+      <div class="table-responsive" style="width: 100%">
+        <table class="table table-hover rfqtable">
+          <thead>
+            <tr>
+              <th>Part Name</th>
+              <th>Date</th>
+              <th class="">Qty
+
+              </th>
+              <th class="">Message
+
+              </th>
+              <th class="">Actions
+
+              </th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="rfqtd " (click)="detailRfq(rfq.rfqId)">Part Name Here
+                <br>
+                <span>RFQ #2222</span>
+              </td>
+              <td>MM/DD/YYYY</td>
+              <td class="rfqtd " (click)="detailRfq(rfq.rfqId)">7 pieces
+                <br>
+                <span>$35.00</span>
+              </td>
+              <td class="custtd">{{rfq.partsMaterialName}} </td>
+              <td class="tdbackgorungcolor">
+                <a>
+                  <i class="fa fa-envelope-o" aria-hidden="true" ngbTooltip="Like RFQ"></i>
+                </a>
+                <div>
+                  <i class="fa fa-angle-right"></i>
+
+                </div>
+              </td>
+              <td class="tdbackgorungcolor">
+                <div class="col-md-1 expand-icon-div">
+                  <i class="fa fa-angle-right"></i>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div> -->

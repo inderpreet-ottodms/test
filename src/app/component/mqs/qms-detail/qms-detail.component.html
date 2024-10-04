@@ -1,0 +1,166 @@
+<div class="row breadcrumb-box m-b-10">
+  <div class="col-md-3"style="padding-left:30px">
+    <span class="quote-link" [routerLink]="['/qms/myquotes']">My Quotes</span><span class="current-page"
+      placement="top" data-container="body"> / {{iQuotesViewModel.qmsQuoteName | dotLimit:'20'}} </span>
+  </div>
+  <!-- <div class="col-md-9 p-b-5 Create-New-RFQ" style="color: #4099ff;">
+    Welcome to LiveQuote BETA! Use it for free until 4/30/20.
+  </div> -->
+</div>
+
+<div class="row">
+  <div class="" [ngClass]="(isSidePanel())?'col-md-8':'col-md-12'" style="padding-left: 10px;">
+
+
+    <div>
+
+      <div class="row m-t-30">
+        <div class="col-8" style="padding-left: 30px;">
+          <h4 ><span placement="top" data-container="body" ngbTooltip="{{iQuotesViewModel.qmsQuoteName}}">{{iQuotesViewModel.qmsQuoteName}}</span></h4>
+          <div class="row m-b-5">
+            <div class="col-md-12">
+                <label class="f-w-900 m-b-0">LiveQuote #:</label> <span>{{iQuotesViewModel.quoteId }}</span>
+            </div>
+          </div>
+          <div class="row m-b-5">
+              <div class="col-md-12">
+                  <label class="f-w-900 m-b-0">Created:</label> <span>{{ iQuotesViewModel.createdDate |  date :  "MM/dd/yyyy" }}</span>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-md-12 statusDrop">
+                  <label class="f-w-900 m-b-0 m-r-5">Status:</label>
+                  <select class="form-control statusDropwidth"  [(ngModel)]="iQuotesViewModel.emailStatusId" [disabled]="isLoader"
+                  (change)="changeQmsStatus($event)">
+                  <option [value]="data.qmsEmailStatusId" *ngFor="let data of  qmsAllStatus">{{data.qmsEmailStatus}}</option>
+                </select>
+              </div>
+          </div>
+        </div>
+        <div class="col-md-4 action-list">
+            <ul class="circle-icons">
+                <!-- <li data-bs-toggle="tooltip" data-html="true" data-placement="top" title="Clone">
+                  <a>
+                    <i class="fa fa-clone"></i>
+                  </a>
+                </li> -->
+                <li  (click)="cancelQMS()" data-bs-toggle="tooltip" data-html="true" data-placement="top" title="Cancel to Draft">
+                  <a >
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-file-o fa-stack-2x fa-3x"></i>
+                      <i class="fa fa-times fa-stack-1x"  style="font-size: 10px;margin-top: -8px;"></i>
+                    </span>
+                  </a>
+                </li>
+                <li data-bs-toggle="tooltip" data-html="true" data-placement="top" title="Edit" (click)="openEditQms(iQuotesViewModel.qmsQuoteId)">
+                  <a  >
+                    <i class="fa fa-edit"></i>
+                  </a>
+                </li>
+                <li (click)="callPdf()">
+                  <a data-bs-toggle="tooltip" data-html="true"  data-placement="top" title="PDF">
+                    <i class="fa fa-file-pdf-o"></i>
+                  </a>
+                </li>
+
+                <li (click)="DeleteQMS(iQuotesViewModel.qmsQuoteId)">
+                  <a data-bs-toggle="tooltip" data-html="true"  data-placement="top" title="Delete">
+                    <i class="fa fa-trash-o"></i>
+                  </a>
+                </li>
+
+              </ul>
+
+        </div>
+      </div>
+      <div class="row qms-block">
+        <div class="col-md-12">
+            <ul class="tabs  primary-nav nav nav-tabs">
+                <li class="tabs__item ">
+                    <a href="#quote_tab" data-bs-toggle="tab"  [ngClass]="(!isInvoiceTab)?'tabs__link active':'tabs__link'" (click)="closeSideDrawer(); onQuote()">Quotes</a>
+                </li>
+                <li class="tabs__item">
+                    <a href="#message_tab" data-bs-toggle="tab" class="tabs__link" (click)="closeSideDrawer(); onMessages()">Messages</a>
+                </li>
+                <li class="tabs__item">
+                    <a href="#note_tab" data-bs-toggle="tab"  class="tabs__link" (click)="closeSideDrawer() ;onNote()">Notes</a>
+                </li>
+                <!-- <li class="tabs__item">
+                    <a class="tabs__link">Timeline</a>
+                </li> -->
+                <li class="tabs__item">
+                  <a href="#invoice_tab" data-bs-toggle="tab"  [ngClass]="(isInvoiceTab)?'tabs__link active':'tabs__link'" (click)="closeSideDrawer(); onInvoice()">Invoice</a>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content col-md-12">
+          <div id="quote_tab"  [ngClass]="(!isInvoiceTab)?'tab-pane fade in active show':'tab-pane fade in'">
+            <app-qms-quote-tab></app-qms-quote-tab>
+          </div>
+          <div id="message_tab"  *ngIf="isQMSMessageTabOpen" class="tab-pane fade in">
+            <app-message-tab (messageData)="getMessageData($event)"></app-message-tab>
+          </div>
+          <div id="note_tab" class="tab-pane fade in">
+            <app-notes-tab (noteData)="getNoteId($event)"></app-notes-tab>
+          </div>
+          <div  class="tab-pane fade in">
+            <!-- <app-notes-tab (noteData)="getNoteId($event)"></app-notes-tab> -->
+          </div>
+          <div id="invoice_tab" [ngClass]="(isInvoiceTab)?'tab-pane fade in active show':'tab-pane fade in'">
+            <app-invoice-tab  [qmsQuoteIdEncrypt] = 'iQuotesViewModel.qmsQuoteIdEncrypt' 
+                            (customerData)="getCustomerId($event)"></app-invoice-tab>
+            <!-- <app-invoice-tab  [qmsQuoteIdEncrypt]= 'iQuotesViewModel.qmsQuoteIdEncrypt' (customerData)="getCustomerId($event)" (customerMailDetail)="qmsMailModel=$event"></app-invoice-tab> -->
+          </div>
+      </div>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="col-md-4 sideDrawer Drawer-Shadow" *ngIf="isSidePanel()">
+    <div *ngIf="isNoteDrawer()" class="background-white-1">
+      <app-notes-tab-drawer [noteId]='noteId'></app-notes-tab-drawer>
+    </div>
+    <div *ngIf="isMessageDrawer()" class="background-white-1">
+      <app-message-view-drawer [messageId]='messageData'></app-message-view-drawer>
+    </div>
+    <div *ngIf="isCompanyDrawer()" class="background-white-1 customer-drawer">
+        <app-my-customer-drawer [mqsContactIdEncrypt]='customerId'></app-my-customer-drawer>
+      </div>
+      <div *ngIf="isMessageSendDrawer()">
+        <app-message-tab-drawer [isInvoiceMail]="1" [customerMsgModel]="qmsMailModel"> </app-message-tab-drawer>
+      </div>
+      <div *ngIf="isMessageQmsDrawer()">
+        <app-message-send-new-drawer [email]="iReviewQuoteBasicInfoViewModel.email" [contactID]="iQuotesViewModel.qmsCustomerContactId" [qmsQuoteID]="iQuotesViewModel.qmsQuoteId"></app-message-send-new-drawer>
+      </div>
+  </div>
+</div>
+  {{isPdfDownload()}}
+  <div *ngIf="isEmilPdfPreview">
+    <app-qms-pdf [qmsId]= "iQuotesViewModel.qmsQuoteId" ></app-qms-pdf>
+  </div>
+  <div class="loading" *ngIf="isLoader">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>
+  <p-confirmDialog width="629" height="220" #cd>
+    <p-footer >
+        <div class="row">
+          <div class="col-md-6">
+            <button type="button" class="btn btn-ignore-rfq" (click)="cd.reject()">No</button>
+          </div>
+          <div class="col-md-6">
+            <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="cd.accept()"> Yes</button>
+          </div>
+        </div>
+      </p-footer>
+  </p-confirmDialog>

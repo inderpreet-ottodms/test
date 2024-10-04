@@ -1,0 +1,805 @@
+<div
+  class="page-body"
+  style="font-family: Poppins !important; padding: 0px 20px"
+>
+  <div class="row text-center">
+    <div class="col-md-12 m-t-10">
+      <span class="f-14">Looking for some help?</span>
+      <a
+        class="color-blue f-14"
+        data-bs-target="#cacheConfirmModel"
+        data-bs-toggle="modal"
+      >
+        We are here!</a
+      >
+    </div>
+  </div>
+
+  <div class="row" *ngIf="accountVerifyMessage">
+    <div class="col-md-12">
+      <div class="cus-alert-danger">
+        <div>
+          <i class="fa fa-info-circle" aria-hidden="true"></i>
+          <span class="m-l-5">Attention Needed</span>
+        </div>
+        <p>
+          Your email address has not been verified. Please verify your email
+          address or
+          <span
+            style="color: blue; cursor: pointer"
+            (click)="sendVerificationLink()"
+            >Click Here</span
+          >
+          to resend the email. You will not be able to message a manufacturer
+          until you are verified.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="row">
+      <div [ngClass]="isSidePanel() ? 'col-md-8' : 'col-md-12'">
+        <app-rfq-warning-banner></app-rfq-warning-banner>
+        <div class="row">
+          <div class="col-md-7 Welcome-to-mfg-padding">
+            <span class="Welcome-to-mfg-title"
+              >Welcome to the Manufacturing Marketplace!</span
+            >
+          </div>
+          <div class="col-md-5 dash-btn">
+            <button
+              type="button"
+              class="create-rfq-dash pointerCursor"
+              (click)="setManfacValue()"
+              name="create_an_rfq"
+            >
+              <span class="myRFQ-create-Rfq-btn-text-dash1">Create an RFQ</span>
+            </button>
+            <button
+              type="button"
+              class="myRFQ-create-Rfq-btn-dash profile-btn pointerCursor"
+              [routerLink]="['/profile/buyerprofile']"
+              name="my_company_profile"
+            >
+              <span class="myRFQ-create-Rfq-btn-text-dash"
+                >My Company Profile</span
+              >
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-xl-3">
+            <div
+              class="card order-card border-green"
+              [routerLink]="['/rfq/myrfq']"
+              [class.minHeight]="isSidePanel()"
+              >
+              <div class="card-block">
+                <div class="row">
+                  <div class="col-md-8">
+                    <h6>My RFQs</h6>
+                  </div>
+                  <div class="col-md-4 text-right">
+                    <i class="fa fa-trophy"></i>
+                  </div>
+                  <div class="col-md-4" style="padding-right: 0px">
+                    <h2 class="text-left">
+                      <span *ngIf="!isCountLoaded">{{
+                        iRFQViewModel?.myRFQCount
+                      }}</span>
+                      <span *ngIf="isCountLoaded" class="cus-font-size"
+                        >loading</span
+                      >
+                    </h2>
+                  </div>
+                  <div
+                    class="col-md-8"
+                    style="
+                      margin-top: 15px;
+                      text-align: right;
+                      padding-left: 2px;
+                    "
+                  >
+                    <p class="m-b-0">Your requests for quote</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div
+              class="card order-card border-red"
+              [routerLink]="['/rfq/myqoutes']"
+              [class.minHeight]="isSidePanel()"
+            >
+              <div class="card-block">
+                <div class="row">
+                  <div class="col-md-8">
+                    <h6>New Quotes</h6>
+                  </div>
+                  <div class="col-md-4 text-right">
+                    <i class="fa fa-quote-right"></i>
+                  </div>
+                  <div class="col-md-4" style="padding-right: 0px">
+                    <h2 class="text-left">
+                      <span *ngIf="!isCountLoaded">{{
+                        iRFQViewModel?.newQuotesCount
+                      }}</span>
+                      <span *ngIf="isCountLoaded" class="cus-font-size"
+                        >loading</span
+                      >
+                    </h2>
+                  </div>
+                  <div
+                    class="col-md-8"
+                    style="
+                      margin-top: 15px;
+                      text-align: right;
+                      padding-left: 2px;
+                    "
+                  >
+                    <p class="m-b-0">Total new quotes to review</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div
+              class="card order-card border-gray"
+              [routerLink]="['/rfq/myrfq']"
+              [queryParams]="{ filter: 'Closed' }"
+              [class.minHeight]="isSidePanel()"
+            >
+              <div class="card-block">
+                <div class="row">
+                  <div class="col-md-8">
+                    <h6>RFQs to Award</h6>
+                  </div>
+                  <div class="col-md-4 text-right">
+                    <img src="assets/award.svg" style="width: 20px" />
+                  </div>
+                  <div class="col-md-4" style="padding-right: 0px">
+                    <h2 class="text-left" *ngIf="isCountLoaded">
+                      <span class="cus-font-size">loading</span>
+                    </h2>
+                    <h2
+                      class="text-left"
+                      *ngIf="
+                        iRFQViewModel?.rfqToAwardCount !== undefined &&
+                        iRFQViewModel?.rfqToAwardCount !== null &&
+                        !isCountLoaded
+                      "
+                    >
+                      <span>{{ iRFQViewModel?.rfqToAwardCount }}</span>
+                    </h2>
+                    <h2
+                      class="text-left"
+                      *ngIf="
+                        iRFQViewModel?.rfqToAwardCount == undefined &&
+                        iRFQViewModel?.rfqToAwardCount == null &&
+                        !isCountLoaded
+                      "
+                    >
+                      <span>0</span>
+                    </h2>
+                  </div>
+                  <div
+                    class="col-md-8"
+                    style="
+                      margin-top: 15px;
+                      text-align: right;
+                      padding-left: 2px;
+                    "
+                  >
+                    <p class="m-b-0">Award or Decline Quotes</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div
+              class="card order-card border-blue"
+              [routerLink]="['/rfq/rfqnda/']"
+              [class.minHeight]="isSidePanel()"
+            >
+              <div class="card-block">
+                <div class="row">
+                  <div class="col-md-8">
+                    <h6>NDAs</h6>
+                  </div>
+                  <div class="col-md-4 text-right">
+                    <!-- <i class="fa fa-trophy"></i> -->
+                    <img src="assets/file-signature.svg" style="width: 20px" />
+                  </div>
+                  <div class="col-md-4" style="padding-right: 0px">
+                    <h2 class="text-left" *ngIf="isCountLoaded">
+                      <span class="cus-font-size">loading</span>
+                    </h2>
+                    <h2
+                      class="text-left"
+                      *ngIf="
+                        iRFQViewModel?.ndaToApproveCount !== undefined &&
+                        iRFQViewModel?.ndaToApproveCount !== null &&
+                        !isCountLoaded
+                      "
+                    >
+                      <span>{{ iRFQViewModel?.ndaToApproveCount }}</span>
+                    </h2>
+                    <h2
+                      class="text-left"
+                      *ngIf="
+                        iRFQViewModel?.ndaToApproveCount == undefined &&
+                        iRFQViewModel?.ndaToApproveCount == null &&
+                        !isCountLoaded
+                      "
+                    >
+                      <span>0</span>
+                    </h2>
+                  </div>
+                  <div
+                    class="col-md-8"
+                    style="
+                      margin-top: 15px;
+                      text-align: right;
+                      padding-left: 2px;
+                    "
+                  >
+                    <p class="m-b-0">Approve or Decline asap</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-12 col-md-12 m-b-30">
+            <div *ngIf="isCreateRfqLoader" class="loading">
+              <div class="loader animation-start">
+                <span class="circle delay-1 size-2"></span>
+                <span class="circle delay-2 size-4"></span>
+                <span class="circle delay-3 size-6"></span>
+                <span class="circle delay-4 size-7"></span>
+                <span class="circle delay-5 size-7"></span>
+                <span class="circle delay-6 size-6"></span>
+                <span class="circle delay-7 size-4"></span>
+                <span class="circle delay-8 size-2"></span>
+              </div>
+            </div>
+            <!-- new part traking value prop tile -->
+            <!-- <div style="margin-left: 470px">
+              <span class="f-20 f-w-600">Create New Request for Quote</span>
+            </div> -->
+            <div
+              class="community-image-wrap prop-tile"
+              style="cursor: pointer; display: flex; column-gap: 1rem"
+            >
+
+
+              <div class="community-image-wrap"  *ngIf="showOrder">
+                <div>
+                  <div class="order-header">
+                    <h4 class="order-header-h4">Order Management
+                      <span class="order-new">NEW!</span>
+                      <button type="button" style="position: relative;left: 60px;top: -5px;" (click)="closeOrderPopup()"  class="close" data-bs-dismiss="modal"><img src="assets/images/Close.png"  style="width: 18px;"></button>
+                    </h4>
+                    <img src="assets/images/Badge.png" class="img-badge">
+                    <span class="order-content">Now you can track the<br> status of your parts and <br> much more!
+                        <span data-bs-target="#ordermanagementModal" data-bs-toggle="modal" class="order-modal">Learn More</span>
+                    </span>
+                  </div>
+                </div>
+        </div>
+        <div class="buyer-drag-area">
+          <span class="f-20 f-w-600">Create New Request for Quote</span>
+          <div class="drag-drop">
+            <div
+              class="drag-drop-outer"
+              ng2FileDrop
+              [ngClass]="{ 'nv-file-over': hasBaseDropZoneOver }"
+              [uploader]="uploader"
+              style="width: 100%"
+            >
+              <div class="drag-area-content">
+                <div>
+                  <div style="display: flex; align-items: center">
+                    <div class="m-l-0 m-r-10">
+                      <img
+                        src="assets/cloud-upload-alt-solid.svg"
+                        style="width: 80px; color: #2E58D6"
+                        class="Drag-Drop-Image-Icon"
+                      />
+                    </div>
+                    <div class="f-14 m-t-10">
+                      <span class="f-16 f-w-600 m-t-10"
+                        >Drag your RFQ part file here.
+                        <i class="fa fa-info-circle drag-info" style="color:#2E58D6" placement="right" data-container="body"
+                        [ngbTooltip]="partUploadToolTip">
+                    </i>
+                    <ng-template #partUploadToolTip style="font-family: Poppins">
+                        <b>The recommended file types are:</b><br>
+                        .pdf, .jpg, .tif, .bpm, .dxf, .dwg, .stp, 
+                        .step, .sldprt, .igs, .iges, .ipt, .x_t, .stl
+                    </ng-template>
+                        </span>
+                      <br />
+                      Or, browse
+                      <span
+                        class="pointer-cursor color-blue colorBlue"
+                        (click)="file.click()"
+                        >your files.</span
+                      >
+                      Or, browse your
+                      <span
+                        class="pointer-cursor color-blue colorBlue"
+                        (click)="openPartLibraryDrawer()"
+                        >parts library</span
+                      >. <br />
+                      <input
+                        type="file"
+                        #file
+                        style="display: none"
+                        ng2FileSelect
+                        multiple
+                        [uploader]="uploader"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display: flex;">
+                    <div class="m-r-10">
+                      <img
+                        src="assets/shield-alt-solid.svg"
+                        style="width: 65px; color: #2E58D6"
+                        class="Drag-Drop-Image-Icon"
+                      />
+                    </div>
+                    <div class="f-14 m-t-10">
+                      <span class="f-16 f-w-600 m-t-10"
+                        >Need to execute an NDA.</span
+                      >
+                      <br />
+                      <span
+                        >No problem. You'll have that option in the next
+                        step!</span
+                      >. <br />
+                      <span class="f-12" style="color: #919aa3"
+                        >Why would I need an NDA?</span
+                      >
+                      <i
+                        class="icofont icofont-info-circle"
+                        style="color: #2E58D6"
+                        placement="right"
+                        data-container="body"
+                        [ngbTooltip]="tooltipNda"
+                      ></i>
+                      <ng-template
+                        #tooltipNda
+                        style="font-family: Poppins; text-align: left"
+                      >
+                        All RFQs and related data are, by default, protected
+                        under MFG's standard non disclosure agreement, which
+                        protects your info and uploaded data, requiring
+                        interested suppliers to accept and digitally sign
+                        the NDA prior to accessing your files. You may
+                        update this setting on the next screen </ng-template
+                      >&nbsp;&nbsp;&nbsp;&nbsp;
+                      <span class="f-12" style="color: #919aa3"
+                        >What types of NDAs are available?</span
+                      >
+                      <i
+                        class="icofont icofont-info-circle"
+                        style="color: #2E58D6"
+                        placement="auto"
+                        data-container="body"
+                        [ngbTooltip]="tooltipNDAType"
+                      ></i>
+                      <ng-template
+                        #tooltipNDAType
+                        style="font-family: Poppins; text-align: left"
+                      >
+                        There are two. The 1st level<br />
+                        NDA requires manufacturers<br />
+                        to digitally sign your <br />
+                        agreement. The 2nd level<br />
+                        adds an additional step <br />
+                        where you also approve them. </ng-template
+                      ><br />
+                      <input
+                        type="file"
+                        #file
+                        style="display: none"
+                        ng2FileSelect
+                        multiple
+                        [uploader]="uploader"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+
+
+
+
+              <!-- For M2-4352 As per discussion commented below code -->
+              <!-- <div class="m-b-10">
+                <span class="f-20 f-w-600">Create New Request for Quote</span>
+              </div>
+               -->
+              <!-- <div class="drag-drop">
+                <div
+                  class="drag-drop-outer"
+                  ng2FileDrop
+                  [ngClass]="{ 'nv-file-over': hasBaseDropZoneOver }"
+                  [uploader]="uploader"
+                  style="width: 100%"
+                >
+                  <div style="display: flex">
+                    <div>
+                      <div style="display: flex; align-items: center">
+                        <div class="m-l-0 m-r-10">
+                          <img
+                            src="assets/cloud-upload-alt-solid.svg"
+                            style="width: 80px; color: #2E58D6"
+                            class="Drag-Drop-Image-Icon"
+                          />
+                        </div>
+                        <div class="f-14 m-t-10">
+                          <span class="f-16 f-w-600 m-t-10"
+                            >Drag your RFQ part file here.</span
+                          >
+                          <br />
+                          Or, browse
+                          <span
+                            class="pointer-cursor color-blue colorBlue"
+                            (click)="file.click()"
+                            >your files.</span
+                          >
+                          Or, browse your
+                          <span
+                            class="pointer-cursor color-blue colorBlue"
+                            (click)="openPartLibraryDrawer()"
+                            >parts library</span
+                          >. <br />
+                          <span class="f-12" style="color: #919aa3"
+                            >What is the max file size?</span
+                          >
+                          <i
+                            class="icofont icofont-info-circle"
+                            style="color: #2E58D6"
+                            placement="right"
+                            data-container="body"
+                            [ngbTooltip]="tooltipMaxSize"
+                          ></i>
+                          <ng-template
+                            #tooltipMaxSize
+                            style="font-family: Poppins; text-align: left"
+                          >
+                            The maximum file size you <br />
+                            can upload is 500 MB. If you <br />
+                            need a larger size, Please <br />
+                            reach out to <br />
+                            buyersupport@mfg.com </ng-template
+                          >&nbsp;&nbsp;&nbsp;&nbsp;
+                          <span class="f-12" style="color: #919aa3"
+                            >What file types are allowed?</span
+                          >
+                          <i
+                            class="icofont icofont-info-circle"
+                            style="color: #2E58D6"
+                            placement="right"
+                            data-container="body"
+                            [ngbTooltip]="tooltipType"
+                          ></i>
+                          <ng-template
+                            #tooltipType
+                            style="font-family: Poppins; text-align: left"
+                          >
+                            The accepted file formats are:<br />
+                            .pdf, .jpg, .tif, .bmp, .png, .dxf, .dwg .stp,
+                            .step, .sldprt, .igs, .iges, .ipt, .x_t. .stl </ng-template
+                          ><br />
+                          <input
+                            type="file"
+                            #file
+                            style="display: none"
+                            ng2FileSelect
+                            multiple
+                            [uploader]="uploader"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div style="display: flex; align-items: center">
+                        <div class="m-l-30 m-r-10">
+                          <img
+                            src="assets/shield-alt-solid.svg"
+                            style="width: 65px; color: #2E58D6"
+                            class="Drag-Drop-Image-Icon"
+                          />
+                        </div>
+                        <div class="f-14 m-t-10">
+                          <span class="f-16 f-w-600 m-t-10"
+                            >Need to execute an NDA.</span
+                          >
+                          <br />
+                          <span
+                            >No problem. You'll have that option in the next
+                            step!</span
+                          >. <br />
+                          <span class="f-12" style="color: #919aa3"
+                            >Why would I need an NDA?</span
+                          >
+                          <i
+                            class="icofont icofont-info-circle"
+                            style="color: #2E58D6"
+                            placement="right"
+                            data-container="body"
+                            [ngbTooltip]="tooltipNda"
+                          ></i>
+                          <ng-template
+                            #tooltipNda
+                            style="font-family: Poppins; text-align: left"
+                          >
+                            All RFQs and related data are, by default, protected
+                            under MFG's standard non disclosure agreement, which
+                            protects your info and uploaded data, requiring
+                            interested suppliers to accept and digitally sign
+                            the NDA prior to accessing your files. You may
+                            update this setting on the next screen </ng-template
+                          >&nbsp;&nbsp;&nbsp;&nbsp;
+                          <span class="f-12" style="color: #919aa3"
+                            >What types of NDAs are available?</span
+                          >
+                          <i
+                            class="icofont icofont-info-circle"
+                            style="color: #2E58D6"
+                            placement="auto"
+                            data-container="body"
+                            [ngbTooltip]="tooltipNDAType"
+                          ></i>
+                          <ng-template
+                            #tooltipNDAType
+                            style="font-family: Poppins; text-align: left"
+                          >
+                            There are two. The 1st level<br />
+                            NDA requires manufacturers<br />
+                            to digitally sign your <br />
+                            agreement. The 2nd level<br />
+                            adds an additional step <br />
+                            where you also approve them. </ng-template
+                          ><br />
+                          <input
+                            type="file"
+                            #file
+                            style="display: none"
+                            ng2FileSelect
+                            multiple
+                            [uploader]="uploader"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+            </div>
+
+            <div class="sub-model">
+              <div class="">
+                <div class="m-b-10">
+                  <span class="f-20 f-w-600 p-l-5">Award RFQs</span>
+                </div>
+                <app-award-rfq></app-award-rfq>
+              </div>
+              <div class="m-b-10">
+                <div class="m-b-10">
+                  <span class="f-20 f-w-600 p-l-5">Rate Manufacturers</span>
+                </div>
+                <app-rate-manufactures></app-rate-manufactures>
+              </div>
+              <div>
+                <div class="m-b-10">
+                  <span class="f-20 f-w-600 p-l-5">New Manufacturers</span>
+                </div>
+                <app-new-manufactures></app-new-manufactures>
+              </div>
+            </div>
+             <!--uploadcare widget  -->
+              <!-- <ngx-uploadcare-widget
+                images-only="true"
+                public-key="9c770ed7e327f5037876">
+              </ngx-uploadcare-widget> -->
+            <!---->
+            <div class="mt-4">
+              <div class="card">
+                <div class="card-block">
+                  <div>
+                    <div class="tabbable-panel">
+                      <div class="tabbable-line--buyer-dash">
+                        <ul class="nav nav-tabs">
+                          <li
+                            [ngClass]="isSpecialInvites ? 'active' : ''"
+                            (click)="openSpecialInvites()"
+                          >
+                            <a href="Javascript:void(0);" 
+                              >New Quotes</a>
+                          </li>
+                          <li
+                            [ngClass]="isQuotedRfq ? 'active' : ''"
+                            (click)="openQuotedRfq()"
+                          >
+                            <a href="Javascript:void(0);">Messages</a>
+                          </li>
+                          <li
+                            [ngClass]="isLikedRFq ? 'active' : ''"
+                            (click)="openLikedRFq()"
+                          >
+                            <a href="Javascript:void(0);" 
+                              >Active RFQ<small style="font-weight: bold"
+                                >s</small
+                              ></a
+                            >
+                          </li>
+                        </ul>
+                        <div class="tab-content">
+                          <div
+                            class="tab-pane in show active"
+                            id="capabilities"
+                            *ngIf="isSpecialInvites"
+                          >
+                            <app-dash-new-quotes></app-dash-new-quotes>
+                          </div>
+                          <div class="tab-pane in show active" id="aboutus" *ngIf="isLikedRFq">
+                            <app-dash-active-rfq></app-dash-active-rfq>
+                          </div>
+
+                          <div
+                            class="tab-pane in show active"
+                            id="contactus"
+                            *ngIf="isQuotedRfq">
+                            <app-dash-message></app-dash-message>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        *ngIf="isSidePanel()"
+        class="message-side-drawer"
+        >
+        <div *ngIf="isSupplierProfileDrawer()">
+          <app-quote-supplier-profile></app-quote-supplier-profile>
+        </div>
+        <div *ngIf="isTransferRfqPanel()">
+          <app-transfer-rfq></app-transfer-rfq>
+        </div>
+        <div *ngIf="isMessageDrawer()">
+          <app-message-send-drawer></app-message-send-drawer>
+        </div>
+        <div *ngIf="isMessageThreadPanel()">
+          <app-message-thread-drawer
+            [messageThreadId]="getMessageIdForThread()"
+          ></app-message-thread-drawer>
+        </div>
+        <div *ngIf="isRfqDetailDrawer()">
+          <app-rfq-detail-sidepanel
+            [rfqId]="getCurrentRfqId()"
+          ></app-rfq-detail-sidepanel>
+        </div>
+        <div *ngIf="isPartsLibraryDrawer()">
+          <app-part-library></app-part-library>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isModelShow()">
+    <app-rating-model></app-rating-model>
+  </div>
+  <div class="modal fade" id="cacheConfirmModel" role="dialog">
+    <div class="flexDialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="w-fit">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">How Can We Help?</h4>
+              <button
+                type="button"
+                style="color: #2E58D6"
+                class="close"
+                data-bs-dismiss="modal"
+              >
+                <i class="fa fa-times-circle" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="helpModelList">
+                <ul>
+                  <li class="helpModelList-list" (click)="requstDemo()">
+                    <i class="fa fa-television iconList"></i
+                    ><span class="f-16-modal">Request a Demo</span>
+                  </li>
+                  <li class="helpModelList-list">
+                    <i class="fa fa-envelope-o iconList"></i
+                    ><span class="f-16-modal">support@mfg.com</span>
+                  </li>
+                  <li class="helpModelList-list" style="margin-bottom: 30px">
+                    <i class="fa fa-phone iconList"></i
+                    ><span class="f-16-modal">+1 888-404-9686</span>
+                    <p class="p-flex">(M-F, 8am - 5pm ET )</p>
+                  </li>
+                </ul>
+              </div>
+              <div class="row modal-footer1" style="padding: 0 0 20px 0">
+                <div class="col-md-12 text-center">
+                  <button
+                    style="width: 50%"
+                    type="button"
+                    class="btn button-green"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!----Oreder management modal---->
+<div class="modal fade" id="ordermanagementModal" role="dialog">
+<div class="flexDialog">
+<div class="modal-dialog">
+<div class="w-fit">
+<div class="modal-content">
+<div>
+<button type="button" style="position: relative;left: 430px;top: 8px;" class="close" data-bs-dismiss="modal"><img src="assets/images/Close.png"></button>
+</div>
+<div class="modal-header" style="border: none;display:flex; justify-content: center;">
+<h4 class="modal-title">What is MFG Order Management?</h4>
+</div>
+
+<div class="modal-body" style="font-size: 14px;padding: 0 0 0 52px;">
+<div>Order Management is a set of new features that adds a <br><b>purchase order</b> and <b>part statuses</b> requirement to your <br> RFQ
+ </div>
+<div class="order-modal-content">
+<img src="assets/images/Badge.png" >
+<span class="order-modal-desc">This icon on a RFQ indicates Order <br> Management is required to quote it.
+</span>
+</div>
+<div class="row modal-footer1" style="padding: 0 0 20px 0">
+<div class="col-md-12 text-center">
+ <button style="width: 50%;position: relative;left: -28px;" 
+ type="button" class="btn button-green" data-bs-dismiss="modal"
+  (click)="navigateStep1()">Create an RFQ</button>
+ </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="full-page-overlay" *ngIf="showPageDataLoding === 'show' ">
+  <div class="rfqLoader"></div>
+</div>

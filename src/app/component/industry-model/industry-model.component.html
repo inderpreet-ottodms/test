@@ -1,0 +1,57 @@
+<ng-template #industryModel let-d="dismiss" data-backdrop="static" data-keyboard="false">
+  <div class="row" *ngIf="isLoading">
+    <div class="col-md-12">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!isLoading">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Select Your Industry</h4>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 text-left">
+          <span>Please select what industry you're in to help us match you with manufacturers.</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 m-t-10">
+          <select class="form-control" name="typeId" [(ngModel)]="typeId">
+            <option value="0">Select</option>
+            <option *ngFor="let companyType of buyerTypeViewModel" [value]="companyType.industryBranchesId">  {{ companyType.industryBranchesNameEn }}</option>
+          </select>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-12 text-left">
+          <span>What manufacturing technologies are you interested in?</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 m-t-10">
+          <angular2-multiselect [data]='iCustomProcessViewModelColl' name="Processdrop1"
+            [(ngModel)]='selectedProcessItems' (onSelect)="onProcessSelect($event)"
+            (onSelectAll)="onProcessSelectAll($event)" (onDeSelect)="onProcessDeSelect($event)"
+            (onDeSelectAll)="onProcessDeSelectAll($event)" [settings]='processSettings'>
+          </angular2-multiselect>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="modal-footer text-center" style=" justify-content: center; ">
+      <button type="button" class="btn btn-save" [disabled]="(selectedProcessItems.length == 0) || (typeId == 0)? true : false" (click)="saveCompanyType()" style="width: 50%; ">Save</button>
+    </div>
+  </div>
+</ng-template>
+

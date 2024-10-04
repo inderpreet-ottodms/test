@@ -1,0 +1,139 @@
+@import '../../../../styles.scss';
+
+.card-container
+{
+    width: 100%;
+    background: #fff;
+    -webkit-box-shadow: 0 0 3px 0 rgba(145, 154, 163, 0.5);
+    box-shadow: 0 0 3px 0 rgba(145, 154, 163, 0.5);
+    border-radius: 3px;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    padding: 5px;
+    margin-bottom: 19px;
+    margin-top: 10px;
+}
+
+.card-container .box {
+	left:0;
+	text-align:center;
+	padding:20px;
+	box-sizing:border-box;
+	width:100%;
+}
+.card-container .box img
+{
+    width: 100px;
+    height: 100px;
+    background-color: #f6f7fb;
+    margin: 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.card-container .box h2
+{
+	font-size: 16px;
+	font-weight: bold;
+	margin:9px auto;
+	text-align: center;
+	color: #4a90e2;
+}
+.card-container .box h2 span
+{
+    font-size: 12px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #919aa3;
+}
+.card-container hr
+{
+    margin: 5px;
+    margin-top: 0px;
+}
+.card-container p
+{
+    color: #222222;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 1px;
+    text-align: center;
+}
+.card-container .bottom
+{
+    height: 40px;
+    width: 100%;
+    border-radius: 3px;
+    background-color: #edeff7;
+    margin-top: 15px;
+}
+.card-container .bottom ul
+{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+.card-container .bottom ul li
+{
+    list-style: none;
+    display: block;
+    color: #4a90e2;
+    margin: 6px 10px;
+    font-size: 20px;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    text-align: center;
+}
+.card-container .bottom ul li a
+{
+    display: block;
+    color: #4a90e2;
+    font-size: 20px;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    text-align: center;
+}
+.card-container .bottom ul li:hover a
+{
+    color:#e91e63;
+	transform:rotateY(360deg);
+}
+.rfq-like
+{
+    color: red;
+}
+
+.cursor-pointer
+{
+    cursor: pointer;
+}
+
+.preloader
+{
+    text-align: center;
+    font-size: 9pt;
+    font-weight: bold;
+}
+
+.region-matched
+{
+    color: yellowgreen!important;
+}
+.region-not-matched
+{
+    color: red!important;
+}
+.capabilities-matched
+{
+    color: yellowgreen!important;
+}
+.capabilities-not-matched
+{
+    color: red!important;
+}

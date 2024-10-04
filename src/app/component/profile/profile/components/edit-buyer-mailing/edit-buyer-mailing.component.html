@@ -1,0 +1,183 @@
+<div class="p-b-10">
+  <!-- <div class="row row-border-bottom">
+    <div class="col-md-12 rightpanel"><br>
+      <i class="fa fa-times-circle pull-right custom-cursor icon" (click)="closePartDrawer()"></i>
+      <h2 class="panelheading">{{ MailingAddressId == 0 ? 'Add Buyer Mailing' : 'Edit Buyer Mailing' }}</h2>
+    </div>
+  </div> -->
+  <!-- <form   (ngSubmit)="editCompanyDescription()"> -->
+    <div class="row">
+      <div class="col-md-12">
+          <p-editor name ="sdsd" [(ngModel)]="compDescription" [style]="{'height':'320px'}">
+              <p-header>
+                <span class="ql-formats">
+                    <button class="ql-list" value="bullet"></button>
+                </span>
+              </p-header>
+            </p-editor>
+     <div></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 dHelper-align">
+        <span class="description-helper">4000 characters</span>
+      </div>
+    </div>
+    <div class="row" *ngIf="isCompanyDesError">
+      <div class="col-md-12" style="color: red">
+        Company description Is required        
+      </div>
+    </div>
+    <!-- <div class="row row-padding-top">
+      <div class="col-md-6">
+        <button type="button" class="Rectangle-3" (click)="closePartDrawer(1)">
+          <span class="button-lbl" style="color: #81db6d">Cancel</span>
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button type="submit" [ngClass]="(iCompanyViewModel.description!=='' && this.iCompanyViewModel.description!== null)? 'btn Save-Equipment-active' : 'btn Save-Equipment-Deactive'">Save</button>
+      </div>
+    </div> -->
+  <!-- </form> -->
+
+  <form *ngIf="!isLoader" class="md-float-material" [formGroup]="mailingForm" (ngSubmit)="onSaveMailingInfo()">
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Street Address</label>
+          <ng-template style="max-height: 100px; overflow: scroll;" #rt let-r="result" let-t="term">
+            <ngb-highlight  [result]="formattedAddress(r)" [term]="t"></ngb-highlight>
+          </ng-template>
+          <input formControlName="streetAddress" type="text" maxlength="500" class="form-control"
+            placeholder="Address" name="dunsNumber" [(ngModel)]="iAddressModel.streetAddress"
+            [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultTemplate]="rt"
+            (selectItem)="addressSelected($event)">
+          <small *ngIf="searching" class="form-text text-muted">searching...</small>
+            <app-field-error-display [displayError]="ismailingFieldValid('streetAddress')" errorMsg="Street Address Is required"></app-field-error-display>
+          </div>
+        </div>
+    </div>
+ 
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Dept / Address 2</label>
+          <input type="text" maxlength="50" class="form-control" placeholder="Dept / Address 2" formControlName="deptAddress">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="ismailingFieldValid('deptAddress')" errorMsg="Dept / Address 2 Is required"></app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">City</label>
+         
+            <ng-template style="max-height: 100px; overflow: scroll;" #tr let-t="result" let-r="term">
+              <ngb-highlight  [result]="t.locality" [term]="r"></ngb-highlight>
+            </ng-template>
+            <input formControlName="city" type="text" maxlength="500" class="form-control"
+              placeholder="City" name="city" [(ngModel)]="iAddressModel.city"
+              [ngbTypeahead]="search1" [inputFormatter]="inputFormatBandListValue1" [resultTemplate]="tr"
+              (selectItem)="localitySelected($event)"> 
+            <small *ngIf="searching1" class="form-text text-muted">searching...</small>
+           
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="ismailingFieldValid('city')" errorMsg="City Is required"></app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Country</label>
+          <select id="jobPostingId" class="form-control" formControlName="countryId" (change)="onMailCountryChange(0)">
+            <option selected disabled [value]="0">Select Country</option>
+            <option *ngFor="let country of iCountryViewModelColl" [value]="country.countryId">
+              {{ country.countryName }}
+            </option>
+          </select>
+          <div class="error-msg3">
+            <app-field-error-display [displayError]="ismailingFieldValid('countryId')" errorMsg="Country Is required"></app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">State or Province</label>
+          <select id="jobPostingId" class="form-control" formControlName="stateId">
+            <option selected  [value]="">Select State</option>
+            <option *ngFor="let region of iRegionModel" [value]="region.regionId">
+              {{ region.regionName }}
+            </option>
+          </select>
+          <div class="error-msg3">
+            <app-field-error-display [displayError]="ismailingFieldValid('stateId')" errorMsg="State Is required"></app-field-error-display>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="Email">Zip code </label>
+          <input type="text" maxlength="8" id="mailingpostalcode" class="form-control" formControlName="postalCode"
+            placeholder="Zip / Postal Code" autocomplete="off">
+          <div class="error-msg2">
+            <app-field-error-display [displayError]="ismailingFieldValid('postalCode')" errorMsg="Zip / Postal Code Is required"></app-field-error-display>
+            <!-- <app-field-error-display [displayError]="isMailPincodeValid('postalCode')" errorMsg="Enter Proper Zip Code"></app-field-error-display> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <div class="form-check">
+            <input type="checkbox" #defaultshipping class="form-check-input" id="mailingaddressinprofile"
+              formControlName="showInProfile">
+            <label class="form-check-label" for="mailingaddressinprofile">Make this my default
+              Shipping Address</label>
+          </div><br>
+
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="onlystate" formControlName="showOnlyStateCity">
+            <label class="form-check-label" for="onlystate">Only display city and state in my
+              profile</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="row row-padding-top m-b-10">
+      <div class="mb-2" style="width: -webkit-fill-available;">
+        <button type="button" class="Rectangle-3" (click)="closePartDrawer(1)">
+          <span class="button-lbl">Cancel</span>
+        </button>
+      </div>
+      <div style="width: -webkit-fill-available;">
+        <button type="submit" [ngClass]="(mailingForm.valid)?'btn Save-Equipment-active':'btn Save-Equipment-Deactive'" [disabled] ="!mailingForm.valid">Save</button>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="isLoader">
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div>
+</div>

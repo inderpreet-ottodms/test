@@ -1,0 +1,673 @@
+<div class="" *ngIf="!isBuyerCommpleteProfile()">
+  <div class="row">
+    <div class="col-md-12">
+      <p class="lead-head">LeadStream Activity</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div [ngClass]="isSidePanel()?'col-md-8 col-9':'col-md-12 col-12'">
+      <div class="lead-body">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group">
+              <select class="form-control" [(ngModel)]="selectDays" (change)="filterAll()">
+                <option value="Last7days">Last 7 days</option>
+                <option value="Last30days">Last 30 days</option>
+                <option value="Last60days">Last 60 days</option>
+                <option value="Last90days">Last 90 days</option>
+                <option value="LastYear">Last Year</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Select Date Range" name='name' [disabled]="isLoader"
+                [value]="displaydate" readonly>
+              <div class="input-group-append" (click)="openDateRage()">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-calendar"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="isAvailable">
+          <div class="row" style=" margin: 15px 0px; ">
+            <div style="width: 100%;display: flex;justify-content: start;flex-wrap: wrap;border-bottom: 1px solid;">
+              <div class="lead-box" (click)="setActive(0)" [ngClass]="{'active': selectedBox === 0 }"
+                *ngIf="(allActivityCount)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21"
+                    height="21" viewBox="0 0 21 21">
+                    <image id="globe-solid" width="21" height="21"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAABgElEQVQ4jbWVvUoDQRSFP42FxoBipU1SCZZa+QhWim9gCKiF8SUEC0ux9CXUSqyNf08gksYkYKOikJh0RwZvcLKzswrRA0vYc+792Jns3EVS7MpJKlm2IenMfjE/F+kjMKy4KqklaUlSRYOqmN+yugCeBM5KqhniRFJB0nMC+mL+id27+rkY1AV1r3lN0pbStW15X3Uf7C+55hX1JOUlnacipQvLe5531d+KPrSaaLqxgk6A+1LH8uuE7ziM8aVJ4JBv3QFTwDFxufwIuPUqHIcRSTNAMdHaAASUokh4dP0pvU239L1gcVLZrizFavZHgYXgGeDdlpcll7+l5PMOWghs6AITgTsol38ELhQctB3YMG7gLLk8n5K3HfQ+sGHatiBL71aX1MN//PsN956+ApvAnBe49/QcKAeob+0BK8Cy5z0BB8OeqFrC3x327E9I6npecPbTptT6D1Nq1btPnVL+PL20wtO/mKf+Vuz8MPkXJTV/O/mT8Ng3qhj9Rkl8AmNj3REGi0zxAAAAAElFTkSuQmCC" />
+                  </svg>
+                  <span class="badge unread-badge">{{ allActivityCount }}</span>
+                </div>
+                <span>All Activity</span>
+              </div>
+              <div class="lead-box" (click)="setActive(1)" [ngClass]="{'active': selectedBox === 1 }"
+                *ngIf="(profileCount)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21"
+                    height="17" viewBox="0 0 21 17">
+                    <image id="address-card-solid" width="21" height="17"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAARCAYAAAAyhueAAAABGUlEQVQ4ja3Uvy5EQRTH8c+ujaAi0dCIf4VoiESUNLIRtUI8hRdBIxEvoKMhW4lEsg8goRE2Gg2FVrBXbnaKmzv3RmTvr5qZ8zvfnJOZM7UkSWAaU/rXCzoNbOIKAxVAf7BVR7MioMBpptB6FOpP9SJgF/tYxC4+IscfahSET3EQ1g8YxXEmfo+9KIsTrCqBPuf2T7n9DA6jrF5nyqA7OMInagVVveMiymIS82XQFdzhGktYy8UHMYYkdz5UVml6STdhvY1XXGIDI5nkokEZLoJ+YR3tyN6DtEOLbyXtL2M8D70tAQrjdxae2hzOI0dGWehESPiOXD3NRiclykIX8Fhs+5/SiUovp0p1U2gr/C5VKOW0qv9P6fwC/s0zsO67rsgAAAAASUVORK5CYII=" />
+                  </svg>
+                  <span class="badge unread-badge">{{ profileCount }}</span>
+                </div>
+                <span>Profile</span>
+              </div>
+              <div class="lead-box" (click)="setActive(4)" [ngClass]="{'active': selectedBox === 4 }"
+                *ngIf="(websiteCount)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21"
+                    height="17" viewBox="0 0 21 17">
+                    <image id="browser-solid" width="21" height="17"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAARCAYAAAAyhueAAAAAmklEQVQ4je2QTQrCQAxGn0PR8R7iepbdegGv4BV6BK9iu/Eq7ryNWGo/GQh0cDNKZyP0g5CEkJcfJEVrJQ2ap8E4rCStgSfltKkAl+AuwB04AgfgBly/GBeAk8Uunu6To4O9o7H8bHnOQsLw1cfE2vze/M62yKlO6/GnHnhkmn7R1pVjTVqgC/RfoGNh5hihPdABr5mw2N8B/Rs9oapRlzWg1QAAAABJRU5ErkJggg==" />
+                  </svg>
+                  <span class="badge unread-badge">{{ websiteCount }}</span>
+                </div>
+                <span>Website</span>
+              </div>
+              <div class="lead-box" (click)="setActive(5)" [ngClass]="{'active': selectedBox === 5 }"
+                *ngIf="(phoneCount)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="21"
+                    height="17">
+                    <path fill="#ffffff"
+                      d="M370.43 192.25A64 64 0 0 0 314.86 160H197.14a64 64 0 0 0-55.57 32.25L36.22 376.62A32 32 0 0 0 32 392.5V448a32 32 0 0 0 32 32h384a32 32 0 0 0 32-32v-55.5a32 32 0 0 0-4.22-15.88zM256 384a72 72 0 1 1 72-72 72 72 0 0 1-72 72zm250.18-261C436.76 65 347.38 32 256 32S75.24 65 5.82 123A16.45 16.45 0 0 0 0 135.64V192a16 16 0 0 0 16 16h70.11a16 16 0 0 0 14.31-8.85L128 128c39.9-17.28 83.2-24 128-24 44.77 0 88.07 6.72 128 24l27.58 71.15a16 16 0 0 0 14.31 8.85H496a16 16 0 0 0 16-16v-56.36a16.45 16.45 0 0 0-5.82-12.64z"
+                      class=""></path>
+                  </svg>
+                  <span class="badge unread-badge">{{ phoneCount }}</span>
+                </div>
+                <span>Phone</span>
+              </div>
+              <div class="lead-box" (click)="setActive(6)" [ngClass]="{'active': selectedBox === 6 }"
+                *ngIf="(emailCount)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21"
+                    height="16" viewBox="0 0 21 16">
+                    <image id="envelope-solid" width="21" height="16"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAQCAYAAAD52jQlAAABFklEQVQ4ja2TIUsEURRGz26QRUR0wSAWuyCuP0Bsmi0Giz/ALojNoOIv0G6wKVi3iSBGQcQgFsuCQdRdg3Lkwgi781hYd+a0mXvfme/d9wZ1Q321OG11T6USQqBOecxWgckShcFESPeT18NzCdzHTKvqmvpWYKo/6k7mqkTSZ6AFLAK3Q2R8AZaBM+AGmKfrS7tqTT1KcvTnQq2r6107XSDX3lSn1VW11VelX+qWOqqe5GqJ1Ey2ksmbSVUfYqE6p94l1T7SPw7UEXVb/VC/1WN1TN1UP5MVA0iD6yxRzHo8S3+adOWk8UeZnGcvUb8COsASUEs6emkMIv0vjbin7ZKlnZAelig8Bx5j+/EwA0wVFL4DT4C/YXxMojPHAIwAAAAASUVORK5CYII=" />
+                  </svg>
+                  <span class="badge unread-badge">{{ emailCount }}</span>
+                </div>
+                <span>Email</span>
+              </div>
+              <div class="lead-box" (click)="setActive(7)" [ngClass]="{'active': selectedBox === 7 }"
+                *ngIf="(specialInviteCount)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17"
+                    height="23" viewBox="0 0 17 23">
+                    <image id="file-invoice-dollar-solid" width="17" height="23"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAXCAYAAADtNKTnAAABTUlEQVQ4jZWUsS8EQRSHP3ccpU4iolGJRhQ0lPwBJBJRCp2I6k4vOZEoVaJDJVFr6UREo1CQK1DIFVc5QvJk4mEyb3dm70s2O9n5zbfvzWanS0TKwBhQIp82cA+MAA9mVkS2Jc2tiLhsS0TqOv673NuHjDlODdjxE91B/AB40XEFqOa0WdV7LUty7vXcA2wCfUYRiELJqYnGcaLrULIAPHqtXmolFX02A5SDNc+hZB5o6rjkLR4FToDXjLrOQsmyifyzZJ780Mja+Y5JSRrAFPBuZjxiErfwCLgCjoEPk1DCPfFZVME4sAUMA7MmlZBcAHvAipnpoJ01YBWY1H+lbRIFJLvazhywD2yYhBJr5w340mpawI1JFJAc6tsF6NUvlUlMsg5MANP6Pw2ahBLbE4c7NuvAQCwUq8TR/3vwxHCVPKVCCZpFT/s8PoG7b3u+dQVXUWNLAAAAAElFTkSuQmCC" />
+                  </svg>
+                  <span class="badge unread-badge">{{ specialInviteCount }}</span>
+                </div>
+                <span>Special Invite</span>
+              </div>
+              <div class="lead-box" (click)="setActive(8)" [ngClass]="{'active': selectedBox === 8 }"
+                *ngIf="(viewedQuoteCount)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16"
+                    height="21" viewBox="0 0 16 21">
+                    <image id="file-contract-solid" width="16" height="21"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAVCAYAAABPPm7SAAABGUlEQVQ4jd3UPytFcRgH8I9L+TsYlIxK3cWVwQtAJrMoGQxeghfA4l0o12JgEGUUk8Egk8UgC1FWBt1HJ+fUvee43GuSb33r1+/7/L7Pn/N0OiICxjGkOe7whhqeGqIiYix+xkZErEbEc0RUkqQZSxhomreIpMpTVDKllAvZwkzKxcLzTzSYdOXEKfSn5+8qy0ym8waj6E7PvTntEee5u/lkEJN1I1yLiMGU5br7k4gYrtMy9iWfcRJXhSJbQzU/xLbxjw1esJdsekFp0WATyzgsKDnkF0ma9QBlbOM2XbCFQuQXBtfYxyt2MYcH3OMCE+jBUrMWznCZ9j+LFRzjCDfYSfmWPfgbm5j8pn6LWtJCJ9Yx0qbLO6ofwcOjrJnIFJsAAAAASUVORK5CYII=" />
+                  </svg>
+                  <span class="badge unread-badge">{{ viewedQuoteCount }}</span>
+                </div>
+                <span>Quote</span>
+              </div>
+              <div class="lead-box" (click)="setActive(9)" [ngClass]="{'active': selectedBox === 9 }"
+                *ngIf="(readMessageCount)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20"
+                    height="20" viewBox="0 0 20 20">
+                    <image id="comment-alt-solid" width="20" height="20"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAm0lEQVQ4je3UMQrCQBCF4T/BG3iFtMFWPIZFTpHDSMBzeAW7WNlYW+QAFgELuyeTiEgWl0WXVPtgYBmGDwaWQVIhqdX/MaPI7AGsiZOTgYqEDcmdTgITmMCZwM7p/p7OwBp4RMDMqLPXsVkC5WRgB6wmvQY4ONSYC3CzA/utjh8nt5e09cy+axGwyhmogGvI3r5vcwf2wCYUA3gCCmumW4t1ZPoAAAAASUVORK5CYII=" />
+                  </svg>
+                  <span class="badge unread-badge">{{ readMessageCount }}</span>
+                </div>
+                <span>Messages</span>
+              </div>
+              <div class="lead-box" (click)="setActive(10)" [ngClass]="{'active': selectedBox === 10 }"
+                *ngIf="(buyerAwardRfqCount)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21"
+                    height="21" viewBox="0 0 21 21">
+                    <image id="file-certificate-solid" width="21" height="21"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAABiElEQVQ4ja2UvSuFURzHP+RdiYXBpJSiiM3GX6B0F1lYDDarMlhMCgODUtgNFoOXskiRDWVRFpEUJom+Oveee517fufmJd86dfp9z/N5nuf3csokkVA10AaUWaugW7+pAe6LHAdNrGl9rzG/PiSNhoxy8/6cqkyktBxjExjNnygF/a2KwP8FJQB3VBgrp2tgHegG+oz7BTkHlqJ4TVx995JOX80W4AqY8qs5engfmHO1juIXYeW7JO1GNT+W1CepQdLpDzrCKZMHDhurWBOShkw0rSzUpeAosDckjUta8T3odCmpXtJWEpP40tYgMBsNwmTgzUgaNAirTHk0iqtR0teCfSVQZ3ogoRjaFB1pjKCvFmHloG9BdB6o9XvXXguB9+DB38vnbifIzK2kbUk3QexEUq2kQ5NBq0JLDUh6NXZO777lRoyTViY/pod+gp4Sv+bG9AXYM04JhRfKc/pIFrgItBunhP7zliooBX0EloG7v0LjW6ofOPNt5vLdm711oAdo/RERDj4Bj2NMG4mPBSYAAAAASUVORK5CYII=" />
+                  </svg>
+                  <span class="badge unread-badge">{{ buyerAwardRfqCount }}</span>
+                </div>
+                <span>RFQs Award </span>
+              </div>
+              <div class="lead-box" (click)="setActive(11)" [ngClass]="{'active': selectedBox === 11 }"
+                *ngIf="(communityProfileCount)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21"
+                    height="17" viewBox="0 0 21 17">
+                    <image id="address-card-solid" width="21" height="17"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAARCAYAAAAyhueAAAABGUlEQVQ4ja3Uvy5EQRTH8c+ujaAi0dCIf4VoiESUNLIRtUI8hRdBIxEvoKMhW4lEsg8goRE2Gg2FVrBXbnaKmzv3RmTvr5qZ8zvfnJOZM7UkSWAaU/rXCzoNbOIKAxVAf7BVR7MioMBpptB6FOpP9SJgF/tYxC4+IscfahSET3EQ1g8YxXEmfo+9KIsTrCqBPuf2T7n9DA6jrF5nyqA7OMInagVVveMiymIS82XQFdzhGktYy8UHMYYkdz5UVml6STdhvY1XXGIDI5nkokEZLoJ+YR3tyN6DtEOLbyXtL2M8D70tAQrjdxae2hzOI0dGWehESPiOXD3NRiclykIX8Fhs+5/SiUovp0p1U2gr/C5VKOW0qv9P6fwC/s0zsO67rsgAAAAASUVORK5CYII=" />
+                  </svg>
+                  <span class="badge unread-badge">{{ communityProfileCount }}</span>
+                </div>
+                <span>Directory Profile View</span>
+              </div>
+              <div class="lead-box" (click)="setActive(12)" [ngClass]="{'active': selectedBox === 12 }"
+                *ngIf="(communityPhoneCount)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="21"
+                    height="17">
+                    <path fill="#ffffff"
+                      d="M370.43 192.25A64 64 0 0 0 314.86 160H197.14a64 64 0 0 0-55.57 32.25L36.22 376.62A32 32 0 0 0 32 392.5V448a32 32 0 0 0 32 32h384a32 32 0 0 0 32-32v-55.5a32 32 0 0 0-4.22-15.88zM256 384a72 72 0 1 1 72-72 72 72 0 0 1-72 72zm250.18-261C436.76 65 347.38 32 256 32S75.24 65 5.82 123A16.45 16.45 0 0 0 0 135.64V192a16 16 0 0 0 16 16h70.11a16 16 0 0 0 14.31-8.85L128 128c39.9-17.28 83.2-24 128-24 44.77 0 88.07 6.72 128 24l27.58 71.15a16 16 0 0 0 14.31 8.85H496a16 16 0 0 0 16-16v-56.36a16.45 16.45 0 0 0-5.82-12.64z"
+                      class=""></path>
+                  </svg>
+                  <span class="badge unread-badge">{{ communityPhoneCount }}</span>
+                </div>
+                <span>Directory Phone</span>
+              </div>
+              <div class="lead-box" (click)="setActive(13)" [ngClass]="{'active': selectedBox === 13 }"
+                *ngIf="(communityEmailCount)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21"
+                    height="16" viewBox="0 0 21 16">
+                    <image id="envelope-solid" width="21" height="16"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAQCAYAAAD52jQlAAABFklEQVQ4ja2TIUsEURRGz26QRUR0wSAWuyCuP0Bsmi0Giz/ALojNoOIv0G6wKVi3iSBGQcQgFsuCQdRdg3Lkwgi781hYd+a0mXvfme/d9wZ1Q321OG11T6USQqBOecxWgckShcFESPeT18NzCdzHTKvqmvpWYKo/6k7mqkTSZ6AFLAK3Q2R8AZaBM+AGmKfrS7tqTT1KcvTnQq2r6107XSDX3lSn1VW11VelX+qWOqqe5GqJ1Ey2ksmbSVUfYqE6p94l1T7SPw7UEXVb/VC/1WN1TN1UP5MVA0iD6yxRzHo8S3+adOWk8UeZnGcvUb8COsASUEs6emkMIv0vjbin7ZKlnZAelig8Bx5j+/EwA0wVFL4DT4C/YXxMojPHAIwAAAAASUVORK5CYII=" />
+                  </svg>
+                  <span class="badge unread-badge">{{ communityEmailCount }}</span>
+                </div>
+                <span>Directory Email</span>
+              </div>
+              <div class="lead-box" (click)="setActive(14)" [ngClass]="{'active': selectedBox === 14 }"
+                *ngIf="(communityRfqCount)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17"
+                    height="23" viewBox="0 0 17 23">
+                    <image id="file-invoice-dollar-solid" width="17" height="23"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAXCAYAAADtNKTnAAABTUlEQVQ4jZWUsS8EQRSHP3ccpU4iolGJRhQ0lPwBJBJRCp2I6k4vOZEoVaJDJVFr6UREo1CQK1DIFVc5QvJk4mEyb3dm70s2O9n5zbfvzWanS0TKwBhQIp82cA+MAA9mVkS2Jc2tiLhsS0TqOv673NuHjDlODdjxE91B/AB40XEFqOa0WdV7LUty7vXcA2wCfUYRiELJqYnGcaLrULIAPHqtXmolFX02A5SDNc+hZB5o6rjkLR4FToDXjLrOQsmyifyzZJ780Mja+Y5JSRrAFPBuZjxiErfwCLgCjoEPk1DCPfFZVME4sAUMA7MmlZBcAHvAipnpoJ01YBWY1H+lbRIFJLvazhywD2yYhBJr5w340mpawI1JFJAc6tsF6NUvlUlMsg5MANP6Pw2ahBLbE4c7NuvAQCwUq8TR/3vwxHCVPKVCCZpFT/s8PoG7b3u+dQVXUWNLAAAAAElFTkSuQmCC" />
+                  </svg>
+                  <span class="badge unread-badge">{{ communityRfqCount }}</span>
+                </div>
+                <span>Simple RFQ</span>
+              </div>
+              <div class="lead-box" (click)="setActive(15)" [ngClass]="{'active': selectedBox === 15 }"
+                *ngIf="(communityWebSiteCount)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21"
+                    height="17" viewBox="0 0 21 17">
+                    <image id="browser-solid" width="21" height="17"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAARCAYAAAAyhueAAAAAmklEQVQ4je2QTQrCQAxGn0PR8R7iepbdegGv4BV6BK9iu/Eq7ryNWGo/GQh0cDNKZyP0g5CEkJcfJEVrJQ2ap8E4rCStgSfltKkAl+AuwB04AgfgBly/GBeAk8Uunu6To4O9o7H8bHnOQsLw1cfE2vze/M62yKlO6/GnHnhkmn7R1pVjTVqgC/RfoGNh5hihPdABr5mw2N8B/Rs9oapRlzWg1QAAAABJRU5ErkJggg==" />
+                  </svg>
+                  <span class="badge unread-badge">{{ communityWebSiteCount }}</span>
+                </div>
+                <span>Directory WebSite</span>
+              </div>
+              <div class="lead-box" (click)="setActive(16)" [ngClass]="{'active': selectedBox === 16 }"
+                *ngIf="(profileViewCount)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21"
+                    height="17" viewBox="0 0 21 17">
+                    <image id="address-card-solid" width="21" height="17"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAARCAYAAAAyhueAAAABGUlEQVQ4ja3Uvy5EQRTH8c+ujaAi0dCIf4VoiESUNLIRtUI8hRdBIxEvoKMhW4lEsg8goRE2Gg2FVrBXbnaKmzv3RmTvr5qZ8zvfnJOZM7UkSWAaU/rXCzoNbOIKAxVAf7BVR7MioMBpptB6FOpP9SJgF/tYxC4+IscfahSET3EQ1g8YxXEmfo+9KIsTrCqBPuf2T7n9DA6jrF5nyqA7OMInagVVveMiymIS82XQFdzhGktYy8UHMYYkdz5UVml6STdhvY1XXGIDI5nkokEZLoJ+YR3tyN6DtEOLbyXtL2M8D70tAQrjdxae2hzOI0dGWehESPiOXD3NRiclykIX8Fhs+5/SiUovp0p1U2gr/C5VKOW0qv9P6fwC/s0zsO67rsgAAAAASUVORK5CYII=" />
+                  </svg>
+                  <span class="badge unread-badge">{{ profileViewCount }}</span>
+                </div>
+                <span>In App Profile View</span>
+              </div>
+              <div class="lead-box" (click)="setActive(17)" [ngClass]="{'active': selectedBox === 17 }"
+                *ngIf="(communityProfileLikeCount)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg aria-hidden="true" focusable="false" data-icon="thumbs-up" width="21" height="17" role="img"
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path fill="#ffffff"
+                      d="M104 224H24c-13.255 0-24 10.745-24 24v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V248c0-13.255-10.745-24-24-24zM64 472c-13.255 0-24-10.745-24-24s10.745-24 24-24 24 10.745 24 24-10.745 24-24 24zM384 81.452c0 42.416-25.97 66.208-33.277 94.548h101.723c33.397 0 59.397 27.746 59.553 58.098.084 17.938-7.546 37.249-19.439 49.197l-.11.11c9.836 23.337 8.237 56.037-9.308 79.469 8.681 25.895-.069 57.704-16.382 74.757 4.298 17.598 2.244 32.575-6.148 44.632C440.202 511.587 389.616 512 346.839 512l-2.845-.001c-48.287-.017-87.806-17.598-119.56-31.725-15.957-7.099-36.821-15.887-52.651-16.178-6.54-.12-11.783-5.457-11.783-11.998v-213.77c0-3.2 1.282-6.271 3.558-8.521 39.614-39.144 56.648-80.587 89.117-113.111 14.804-14.832 20.188-37.236 25.393-58.902C282.515 39.293 291.817 0 312 0c24 0 72 8 72 81.452z">
+                    </path>
+                  </svg>
+                  <span class="badge unread-badge">{{ communityProfileLikeCount }}</span>
+                </div>
+                <span>Liked your profile in community</span>
+              </div>
+              <div class="lead-box" (click)="setActive(19)" [ngClass]="{'active': selectedBox === 19 }"
+                *ngIf="(communityPhotos)">
+                <div class="lead-icon" style=" position: relative; ">
+                  <img src="assets/gallery.png" srcset="
+                  assets/gallery@2x.png 2x,
+                  assets/gallery@3x.png 3x
+                " /> 
+                  <span class="badge unread-badge">{{ communityPhotos }}</span>
+                </div>
+                <span>Interacted with your photos</span>
+              </div>
+              <div class="lead-box" (click)="setActive(20)" [ngClass]="{'active': selectedBox === 20 }"
+              *ngIf="(communityJobs)">
+              <div class="lead-icon" style=" position: relative; ">
+                <img src="assets/gallery.png" srcset="
+                  assets/gallery@2x.png 2x,
+                  assets/gallery@3x.png 3x
+                " /> 
+                <span class="badge unread-badge">{{ communityJobs }}</span>
+              </div>
+              <span>Looked at jobs you quoted</span>
+            </div>
+            <div class="lead-box" (click)="setActive(21)" [ngClass]="{'active': selectedBox === 21 }"
+            *ngIf="(viewed3DTour)">
+            <div class="lead-icon" style=" position: relative; ">
+              <img src="assets/gallery.png" srcset="
+              assets/gallery@2x.png 2x,
+              assets/gallery@3x.png 3x
+            " /> 
+              <span class="badge unread-badge">{{ viewed3DTour }}</span>
+            </div>
+            <span>Viewed your 3D tour</span>
+          </div>
+              <!-- <div class="lead-box" (click)="setActive(0)" [ngClass]="{'active': selectedBox === 0 }"
+                *ngIf="(allActivityCount)">
+                <h5>{{ allActivityCount }}</h5>
+                <span>All Activity</span>
+              </div>
+              <div class="lead-box" (click)="setActive(1)" [ngClass]="{'active': selectedBox === 1} "
+                *ngIf="(profileCount)">
+                <h5>{{ profileCount }}</h5>
+                <span>Viewed Profile</span>
+              </div>
+              <div class="lead-box" (click)="setActive(4)" [ngClass]="{'active': selectedBox === 4} "
+                *ngIf="(websiteCount)">
+                <h5>{{ websiteCount }}</h5>
+                <span>Viewed Website</span>
+              </div>
+              <div class="lead-box" (click)="setActive(5)" [ngClass]="{'active': selectedBox === 5 }"
+                *ngIf="(phoneCount)">
+                <h5>{{ phoneCount }}</h5>
+                <span>Phone</span>
+              </div>
+              <div class="lead-box" (click)="setActive(6)" [ngClass]="{'active': selectedBox === 6 }"
+                *ngIf="(emailCount)">
+                <h5>{{ emailCount }}</h5>
+                <span>Email</span>
+              </div>
+              <div class="lead-box" (click)="setActive(7)" [ngClass]="{'active': selectedBox === 7} "
+                *ngIf="(specialInviteCount)">
+                <h5>{{ specialInviteCount }}</h5>
+                <span>Special Invite</span>
+              </div>
+              <div class="lead-box" (click)="setActive(8)" [ngClass]="{'active': selectedBox === 8} "
+                *ngIf="(viewedQuoteCount)">
+                <h5>{{ viewedQuoteCount }}</h5>
+                <span>Quote</span>
+              </div>
+              <div class="lead-box" (click)="setActive(9)" [ngClass]="{'active': selectedBox === 9} "
+                *ngIf="(readMessageCount)">
+                <h5>{{ readMessageCount }}</h5>
+                <span>Profile Messages</span>
+              </div>
+              <div class="lead-box" (click)="setActive(10)" [ngClass]="{'active': selectedBox === 10} "
+                *ngIf="(buyerAwardRfqCount)">
+                <h5>{{ buyerAwardRfqCount }}</h5>
+                <span>Awarded RFQs from buyers</span>
+              </div>
+              <div class="lead-box" (click)="setActive(11)" [ngClass]="{'active': selectedBox === 11} "
+                *ngIf="(communityProfileCount)">
+                <h5>{{ communityProfileCount }}</h5>
+                <span>Directory Profile View</span>
+              </div>
+              <div class="lead-box" (click)="setActive(12)" [ngClass]="{'active': selectedBox === 12} "
+                *ngIf="(communityPhoneCount)">
+                <h5>{{ communityPhoneCount }}</h5>
+                <span>Directory Phone</span>
+              </div>
+              <div class="lead-box" (click)="setActive(13)" [ngClass]="{'active': selectedBox === 13} "
+                *ngIf="(communityEmailCount)">
+                <h5>{{ communityEmailCount }}</h5>
+                <span>Directory Email</span>
+              </div>
+              <div class="lead-box" (click)="setActive(14)" [ngClass]="{'active': selectedBox === 14} "
+                *ngIf="(communityRfqCount)">
+                <h5>{{ communityRfqCount }}</h5>
+                <span>Simple RFQ</span>
+              </div>
+              <div class="lead-box" (click)="setActive(15)" [ngClass]="{'active': selectedBox === 15} "
+                *ngIf="(communityWebSiteCount)">
+                <h5>{{ communityWebSiteCount }}</h5>
+                <span>Directory WebSite</span>
+              </div>
+              <div class="lead-box" (click)="setActive(16)" [ngClass]="{'active': selectedBox === 16} "
+                *ngIf="(profileViewCount)">
+                <h5>{{ profileViewCount }}</h5>
+                <span>In App Profile View</span>
+              </div> -->
+            </div>
+          </div>
+          <div class="row" *ngIf="(ILeadsStreamModel.length !== 0)">
+            <div class="col-12">
+              <div class="row">
+                <div class="col-md-3 lead-subhead" style="padding-left: 40px;"><span>Date & Time</span></div>
+                <div class="col-md-3 lead-subhead" style="padding-left: 25px;"><span>Contact Name</span></div>
+                <div class="col-md-3 lead-subhead"><span>Company</span></div>
+                <div class="col-md-3 lead-subhead" style="padding-left: 5px;"><span>Interaction</span></div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="isLoader">
+            <div class="loader animation-start">
+              <span class="circle delay-1 size-2"></span>
+              <span class="circle delay-2 size-4"></span>
+              <span class="circle delay-3 size-6"></span>
+              <span class="circle delay-4 size-7"></span>
+              <span class="circle delay-5 size-7"></span>
+              <span class="circle delay-6 size-6"></span>
+              <span class="circle delay-7 size-4"></span>
+              <span class="circle delay-8 size-2"></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+
+              <div class="row lead-info" *ngFor="let lead of ILeadsStreamModel">
+                <div class="col-md-3"><span>{{ utcDate(lead.interactionDate) | date : "MM/dd/yyyy h:mm a" }}</span>
+                </div>
+                <div class="col-md-3" *ngIf="isPremium()">
+                  <span
+                    *ngIf="lead.buyerName !== null && lead.buyerName !== '' && lead.buyerName !== undefined ">{{ lead.buyerName }}</span>
+                  <span
+                    *ngIf="lead.buyerName === null || lead.buyerName === '' || lead.buyerName === undefined ">Internet
+                    User</span>
+                </div>
+                <!-- <div *ngIf="isPremium()" class="col-md-3" ><span>{{ lead.buyerName }}</span></div> -->
+                <div *ngIf="! isPremium()" class="col-md-3 upgrade">
+                  <app-upgrade-account-btn [quoteRFQ]=false [RfqId]="0" [btnClass]=1></app-upgrade-account-btn>
+                  <!-- <button class="btn btn-small" (click)="upgradeClick()"> Upgrade your account </button> -->
+                </div>
+                <div class="col-md-3"
+                  *ngIf="lead.buyerName === null || lead.buyerName === '' || lead.buyerName === undefined ">
+                  <span placement="top" ngbTooltip="{{ lead.ipAddress }}" style="word-break:break-all">IP
+                    {{ lead.ipAddress }}</span>
+                </div>
+                <div class="col-md-3 lead-name"
+                *ngIf="!isPremium() && lead.buyerName !== null && lead.buyerName !== '' && lead.buyerName !== undefined && lead.contactIdEncrypted != '' "
+               ><span placement="top" ngbTooltip="{{ lead.companyName }}"
+                  style="word-break:break-all">{{ lead.companyName }}</span></div>
+
+                <div class="col-md-3 lead-name"
+                  *ngIf="isPremium() && lead.buyerName !== null && lead.buyerName !== '' && lead.buyerName !== undefined && lead.contactIdEncrypted != '' "
+                  (click)="openSidePanel( lead.contactIdEncrypted )"><span placement="top" ngbTooltip="{{ lead.companyName }}"
+                    style="word-break:break-all">{{ lead.companyName }}</span></div>
+                <div class="col-md-3"
+                  *ngIf="lead.buyerName !== null && lead.buyerName !== '' && lead.buyerName !== undefined && lead.contactIdEncrypted == '' "
+                  ><span placement="top" ngbTooltip="{{ lead.companyName }}"
+                    style="word-break:break-all">{{ lead.companyName }}</span></div>
+                <div class="col-md-3">
+                  <span class="lead-name"
+                    *ngIf="(lead.interaction == 'You received a profile lead message' || lead.interaction == 'You received a profile lead message from community') && lead.interaction != 'You received a Simple RFQ from community'"
+                    (click)="showMessageDetails(lead.leadId)" [innerHTML]="lead.interaction"></span>
+                  <span class="lead-desc"
+                    *ngIf="lead.interaction != 'You received a profile lead message' && lead.interaction != 'You received a profile lead message from community'  && lead.interaction != 'You received a Simple RFQ from community'"
+                    [innerHTML]="lead.interaction"></span>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="no-available" *ngIf="!isAvailable">
+          <div class="row" style=" margin: 15px 0px; ">
+            <div style=" width: 100%; display: flex; justify-content: start; ">
+              <div class="lead-box">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21"
+                    height="21" viewBox="0 0 21 21">
+                    <image id="globe-solid" width="21" height="21"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAABgElEQVQ4jbWVvUoDQRSFP42FxoBipU1SCZZa+QhWim9gCKiF8SUEC0ux9CXUSqyNf08gksYkYKOikJh0RwZvcLKzswrRA0vYc+792Jns3EVS7MpJKlm2IenMfjE/F+kjMKy4KqklaUlSRYOqmN+yugCeBM5KqhniRFJB0nMC+mL+id27+rkY1AV1r3lN0pbStW15X3Uf7C+55hX1JOUlnacipQvLe5531d+KPrSaaLqxgk6A+1LH8uuE7ziM8aVJ4JBv3QFTwDFxufwIuPUqHIcRSTNAMdHaAASUokh4dP0pvU239L1gcVLZrizFavZHgYXgGeDdlpcll7+l5PMOWghs6AITgTsol38ELhQctB3YMG7gLLk8n5K3HfQ+sGHatiBL71aX1MN//PsN956+ApvAnBe49/QcKAeob+0BK8Cy5z0BB8OeqFrC3x327E9I6npecPbTptT6D1Nq1btPnVL+PL20wtO/mKf+Vuz8MPkXJTV/O/mT8Ng3qhj9Rkl8AmNj3REGi0zxAAAAAElFTkSuQmCC" />
+                  </svg>
+                  <span class="badge unread-badge">0</span>
+                </div>
+                <span>All Activity</span>
+              </div>
+              <div class="lead-box">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21"
+                    height="17" viewBox="0 0 21 17">
+                    <image id="address-card-solid" width="21" height="17"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAARCAYAAAAyhueAAAABGUlEQVQ4ja3Uvy5EQRTH8c+ujaAi0dCIf4VoiESUNLIRtUI8hRdBIxEvoKMhW4lEsg8goRE2Gg2FVrBXbnaKmzv3RmTvr5qZ8zvfnJOZM7UkSWAaU/rXCzoNbOIKAxVAf7BVR7MioMBpptB6FOpP9SJgF/tYxC4+IscfahSET3EQ1g8YxXEmfo+9KIsTrCqBPuf2T7n9DA6jrF5nyqA7OMInagVVveMiymIS82XQFdzhGktYy8UHMYYkdz5UVml6STdhvY1XXGIDI5nkokEZLoJ+YR3tyN6DtEOLbyXtL2M8D70tAQrjdxae2hzOI0dGWehESPiOXD3NRiclykIX8Fhs+5/SiUovp0p1U2gr/C5VKOW0qv9P6fwC/s0zsO67rsgAAAAASUVORK5CYII=" />
+                  </svg>
+                  <span class="badge unread-badge">0</span>
+                </div>
+                <span>Profile</span>
+              </div>
+              <div class="lead-box">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21"
+                    height="17" viewBox="0 0 21 17">
+                    <image id="browser-solid" width="21" height="17"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAARCAYAAAAyhueAAAAAmklEQVQ4je2QTQrCQAxGn0PR8R7iepbdegGv4BV6BK9iu/Eq7ryNWGo/GQh0cDNKZyP0g5CEkJcfJEVrJQ2ap8E4rCStgSfltKkAl+AuwB04AgfgBly/GBeAk8Uunu6To4O9o7H8bHnOQsLw1cfE2vze/M62yKlO6/GnHnhkmn7R1pVjTVqgC/RfoGNh5hihPdABr5mw2N8B/Rs9oapRlzWg1QAAAABJRU5ErkJggg==" />
+                  </svg>
+                  <span class="badge unread-badge">0</span>
+                </div>
+                <span>Website</span>
+              </div>
+              <div class="lead-box">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="21"
+                    height="17">
+                    <path fill="#ffffff"
+                      d="M370.43 192.25A64 64 0 0 0 314.86 160H197.14a64 64 0 0 0-55.57 32.25L36.22 376.62A32 32 0 0 0 32 392.5V448a32 32 0 0 0 32 32h384a32 32 0 0 0 32-32v-55.5a32 32 0 0 0-4.22-15.88zM256 384a72 72 0 1 1 72-72 72 72 0 0 1-72 72zm250.18-261C436.76 65 347.38 32 256 32S75.24 65 5.82 123A16.45 16.45 0 0 0 0 135.64V192a16 16 0 0 0 16 16h70.11a16 16 0 0 0 14.31-8.85L128 128c39.9-17.28 83.2-24 128-24 44.77 0 88.07 6.72 128 24l27.58 71.15a16 16 0 0 0 14.31 8.85H496a16 16 0 0 0 16-16v-56.36a16.45 16.45 0 0 0-5.82-12.64z"
+                      class=""></path>
+                  </svg>
+                  <span class="badge unread-badge">0</span>
+                </div>
+                <span>Phone</span>
+              </div>
+              <div class="lead-box">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21"
+                    height="16" viewBox="0 0 21 16">
+                    <image id="envelope-solid" width="21" height="16"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAQCAYAAAD52jQlAAABFklEQVQ4ja2TIUsEURRGz26QRUR0wSAWuyCuP0Bsmi0Giz/ALojNoOIv0G6wKVi3iSBGQcQgFsuCQdRdg3Lkwgi781hYd+a0mXvfme/d9wZ1Q321OG11T6USQqBOecxWgckShcFESPeT18NzCdzHTKvqmvpWYKo/6k7mqkTSZ6AFLAK3Q2R8AZaBM+AGmKfrS7tqTT1KcvTnQq2r6107XSDX3lSn1VW11VelX+qWOqqe5GqJ1Ey2ksmbSVUfYqE6p94l1T7SPw7UEXVb/VC/1WN1TN1UP5MVA0iD6yxRzHo8S3+adOWk8UeZnGcvUb8COsASUEs6emkMIv0vjbin7ZKlnZAelig8Bx5j+/EwA0wVFL4DT4C/YXxMojPHAIwAAAAASUVORK5CYII=" />
+                  </svg>
+                  <span class="badge unread-badge">0</span>
+                </div>
+                <span>Email</span>
+              </div>
+              <div class="lead-box">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21"
+                    height="16" viewBox="0 0 21 16">
+                    <image id="envelope-solid" width="21" height="16"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAQCAYAAAD52jQlAAABFklEQVQ4ja2TIUsEURRGz26QRUR0wSAWuyCuP0Bsmi0Giz/ALojNoOIv0G6wKVi3iSBGQcQgFsuCQdRdg3Lkwgi781hYd+a0mXvfme/d9wZ1Q321OG11T6USQqBOecxWgckShcFESPeT18NzCdzHTKvqmvpWYKo/6k7mqkTSZ6AFLAK3Q2R8AZaBM+AGmKfrS7tqTT1KcvTnQq2r6107XSDX3lSn1VW11VelX+qWOqqe5GqJ1Ey2ksmbSVUfYqE6p94l1T7SPw7UEXVb/VC/1WN1TN1UP5MVA0iD6yxRzHo8S3+adOWk8UeZnGcvUb8COsASUEs6emkMIv0vjbin7ZKlnZAelig8Bx5j+/EwA0wVFL4DT4C/YXxMojPHAIwAAAAASUVORK5CYII=" />
+                  </svg>
+                  <span class="badge unread-badge">0</span>
+                </div>
+                <span>Special Invite</span>
+              </div>
+              <div class="lead-box">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16"
+                    height="21" viewBox="0 0 16 21">
+                    <image id="file-contract-solid" width="16" height="21"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAVCAYAAABPPm7SAAABGUlEQVQ4jd3UPytFcRgH8I9L+TsYlIxK3cWVwQtAJrMoGQxeghfA4l0o12JgEGUUk8Egk8UgC1FWBt1HJ+fUvee43GuSb33r1+/7/L7Pn/N0OiICxjGkOe7whhqeGqIiYix+xkZErEbEc0RUkqQZSxhomreIpMpTVDKllAvZwkzKxcLzTzSYdOXEKfSn5+8qy0ym8waj6E7PvTntEee5u/lkEJN1I1yLiMGU5br7k4gYrtMy9iWfcRJXhSJbQzU/xLbxjw1esJdsekFp0WATyzgsKDnkF0ma9QBlbOM2XbCFQuQXBtfYxyt2MYcH3OMCE+jBUrMWznCZ9j+LFRzjCDfYSfmWPfgbm5j8pn6LWtJCJ9Yx0qbLO6ofwcOjrJnIFJsAAAAASUVORK5CYII=" />
+                  </svg>
+                  <span class="badge unread-badge">0</span>
+                </div>
+                <span>Quote</span>
+              </div>
+              <div class="lead-box">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20"
+                    height="20" viewBox="0 0 20 20">
+                    <image id="comment-alt-solid" width="20" height="20"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAm0lEQVQ4je3UMQrCQBCF4T/BG3iFtMFWPIZFTpHDSMBzeAW7WNlYW+QAFgELuyeTiEgWl0WXVPtgYBmGDwaWQVIhqdX/MaPI7AGsiZOTgYqEDcmdTgITmMCZwM7p/p7OwBp4RMDMqLPXsVkC5WRgB6wmvQY4ONSYC3CzA/utjh8nt5e09cy+axGwyhmogGvI3r5vcwf2wCYUA3gCCmumW4t1ZPoAAAAASUVORK5CYII=" />
+                  </svg>
+                  <span class="badge unread-badge">0</span>
+                </div>
+                <span>Messages</span>
+              </div>
+              <div class="lead-box">
+                <div class="lead-icon" style=" position: relative; ">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21"
+                    height="21" viewBox="0 0 21 21">
+                    <image id="file-certificate-solid" width="21" height="21"
+                      xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAABiElEQVQ4ja2UvSuFURzHP+RdiYXBpJSiiM3GX6B0F1lYDDarMlhMCgODUtgNFoOXskiRDWVRFpEUJom+Oveee517fufmJd86dfp9z/N5nuf3csokkVA10AaUWaugW7+pAe6LHAdNrGl9rzG/PiSNhoxy8/6cqkyktBxjExjNnygF/a2KwP8FJQB3VBgrp2tgHegG+oz7BTkHlqJ4TVx995JOX80W4AqY8qs5engfmHO1juIXYeW7JO1GNT+W1CepQdLpDzrCKZMHDhurWBOShkw0rSzUpeAosDckjUta8T3odCmpXtJWEpP40tYgMBsNwmTgzUgaNAirTHk0iqtR0teCfSVQZ3ogoRjaFB1pjKCvFmHloG9BdB6o9XvXXguB9+DB38vnbifIzK2kbUk3QexEUq2kQ5NBq0JLDUh6NXZO777lRoyTViY/pod+gp4Sv+bG9AXYM04JhRfKc/pIFrgItBunhP7zliooBX0EloG7v0LjW6ofOPNt5vLdm711oAdo/RERDj4Bj2NMG4mPBSYAAAAASUVORK5CYII=" />
+                  </svg>
+                  <span class="badge unread-badge">0</span>
+                </div>
+                <span>RFQs Award </span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <h6>Once you fill out your profile, your LeadStream dashboard will look like the sample below.</h6>
+            </div>
+          </div>
+          <div class="gray-box">
+            <div class="row">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-md-3 lead-subhead" style="padding-left: 40px;"><span>Date & Time</span></div>
+                  <div class="col-md-3 lead-subhead" style="padding-left: 25px;"><span>Contact Name</span></div>
+                  <div class="col-md-3 lead-subhead"><span>Company</span></div>
+                  <div class="col-md-3 lead-subhead" style="padding-left: 5px;"><span>Interaction</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+
+                <div class="row lead-info">
+                  <div class="col-md-3"><span>09/15/2019 10:15 AM</span></div>
+                  <div class="col-md-3"><span>Richard Clayton</span></div>
+                  <div class="col-md-3"><span>ACME, LTD.</span></div>
+                  <div class="col-md-3"><span>Viewed your profile</span></div>
+                </div>
+                <div class="row lead-info">
+                  <div class="col-md-3"><span>09/14/2019 3:27 PM</span></div>
+                  <div class="col-md-3"><span>John Desmond</span></div>
+                  <div class="col-md-3"><span>Widgets N’ Co.</span></div>
+                  <div class="col-md-3"><span>Read your message</span></div>
+                </div>
+                <div class="row lead-info">
+                  <div class="col-md-3"><span>09/10/2019 12:02 PM</span></div>
+                  <div class="col-md-3"><span>Bonnie Clyde</span></div>
+                  <div class="col-md-3"><span>The Company</span></div>
+                  <div class="col-md-3"><span>Viewed your profile</span></div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ------------------------- Pagination start----------------------- -->
+        <div class="row" style="margin-top: 20px;" *ngIf="(ILeadsStreamModel.length !== 0)">
+          <div class="col-md-2">
+            <div class="dataTables_length" id="example_length">
+              <label>Show
+                <select name="example_length" aria-controls="example" class="" [(ngModel)]="pageSize"
+                  (change)="filterAll()">
+                  <option value="24">24</option>
+                  <option value="48">48</option>
+                  <option value="96">96</option>
+                </select>
+                entries</label>
+            </div>
+          </div>
+          <div class="col-md-10">
+            <div class="paginations">
+              <div>
+                <div id="radioBtn" class="btn-group">
+                  <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}"
+                    class="btn btn-primary btn-sm notActive" (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                    Previous
+                  </a>
+                  <a *ngFor="let page of pagesIndex" (click)="setPage(page)"
+                    [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                    data-bs-toggle="fun" data-title="X">
+                    {{page}}
+                  </a>
+                  <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+                    (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                    Next
+                  </a>
+                </div>
+                <input type="hidden" name="fun" id="fun">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="(ILeadsStreamModel.length !== 0)">
+          <div class="col-md-12">
+            <div class="pull-right padd-right">
+              <label class="showreccount"> {{currentIndex }} of {{pageNumber}} </label>
+            </div>
+          </div>
+        </div>
+        <!-- ------------------------- Pagination end----------------------- -->
+      </div>
+
+    </div>
+    <div class="col-md-4 col-4 sideDrawer Drawer-Shadow"
+      style="padding-right:0px;position:fixed;width:380px;right: 0;overflow-y: auto;height:100%;padding-bottom:150px;top: 85px;"
+      *ngIf="isSidePanel()">
+      <div *ngIf="isRfqDrawer()">
+        <app-supplier-rfq-detail-sidepanel [rfqId]="getCurrentRfqId()"></app-supplier-rfq-detail-sidepanel>
+      </div>
+      <div *ngIf="isBuyerMiniProfile()">
+        <app-mini-buyer-profile></app-mini-buyer-profile>
+      </div>
+      <div *ngIf="isMessageRfqPanel()">
+        <app-message-send-drawer></app-message-send-drawer>
+      </div>
+      <div *ngIf="isMessageView()">
+        <app-lead-message-view></app-lead-message-view>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="isBuyerCommpleteProfile()">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-10">
+
+      </div>
+      <div class="col-md-2 floatRight">
+        <button type="button" class="btn btn-submit-rfq-close-1 RectangleYes-2-1" (click)="goBack()">Go Back</button>
+      </div>
+    </div>
+    <div>
+      <app-buyer-view-profile></app-buyer-view-profile>
+    </div>
+  </div>
+</div>
+<div *ngIf="isModelShow()">
+  <app-rating-model></app-rating-model>
+</div>
+
+<p-dialog header="Select Date Range" [(visible)]="isDatePupupShow" [modal]="true" [responsive]="true"
+  styleClass="Rectangle-3" [autoZIndex]="false" style="z-index: 10001;height:450px;">
+    <p class="clear" (click)="clearDate()">Clear</p>
+  <div class="row">
+    <div class="col-md-6 text-center">
+      <p-calendar [(ngModel)]="firstDate" dateFormat="dd/mm/yyyy" [maxDate]="maxDate" [inline]="true"></p-calendar>
+    </div>
+    <div class="col-md-6 text-center">
+      <p-calendar [(ngModel)]="secondDate" dateFormat="dd/mm/yy" [maxDate]="maxDate" [minDate]="firstDate"
+        [inline]="true"></p-calendar>
+    </div>
+  </div>
+  <p-footer>
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-6 text-center">
+          <button type="button" style="width: 284px;" class="btn btn-md btn-block waves-effect text-center m-b-20 cancleButton"
+            (click)="hidePopup()">Cancel</button>
+        </div>
+        <div class="col-md-6 text-center">
+          <button type="button" style="width: 284px; margin-left: 22px;" class="btn btn-md btn-block waves-effect text-center m-b-20 Rectanglebtn-active"
+            label="Yes" (click)="filterAll()"> Apply</button>
+        </div>
+      </div>
+    </div>
+  </p-footer>
+</p-dialog>
+<!-- <app-upgrade-account *ngIf="showUpgradeAccountModal" [quoteRFQ]=false [RfqId]=0 (modalCloseEvent)="closeModal($event)"></app-upgrade-account> -->

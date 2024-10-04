@@ -1,0 +1,26 @@
+<ng-template #expireModel let-d="dismiss" data-backdrop="static" data-keyboard="false">
+  <div class="modal-header">
+    <p class="modal-title" style="font-size: 14px;"><b>Your session is about to expire.</b></p>
+    <!-- <button type="button" class="close" data-bs-dismiss="modal" (click)="d('notNow');closeModel(false)"><i
+        class="fa fa-times-circle" aria-hidden="true" style="color: #4a90e2;"></i></button> -->
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12 text-left">
+          <p>
+            Your session will expire soon. Do you want to continue and stay logged in?
+
+          </p>
+      </div>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-12  text-center" style="margin-bottom: 25px;">
+        <button type="button" class="cancel-button" (click)="stayInLogin()">Stay Logged In</button>
+        <button type="button" class="accept-button m-r-10" (click)="logMeOut()">Log Me Out</button>
+      </div>
+    </div>
+    <p id="demo" style="font-size: 17px;
+    text-align: center; color:red"></p>
+  </ng-template>

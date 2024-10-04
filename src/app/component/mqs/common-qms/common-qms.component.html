@@ -1,0 +1,350 @@
+<div class="row">
+  <div class="" [ngClass]="isSidePanel()?'col-md-8':'col-md-12'">
+    <div class="row">
+      <div [ngClass]="'col-md-12'">
+        <div class="lead-body">
+          <div class="row"  style="margin-bottom:10px">
+            <div class="col-md-6" *ngIf="QmsType === 1 || QmsType == 8 ">
+              <div class="btn-group">
+                <button type="button" (click)="setStatusFilter('all')"
+                  [ngClass]="(activeStatusFilterBtn == 'all')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+                  All</button>
+                <button type="button" (click)="setStatusFilter('archived')"
+                  [ngClass]="(activeStatusFilterBtn == 'archived')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+                  Deleted</button>
+              </div>
+            </div>
+            <div class="col-md-3 offset-3" *ngIf="QmsType == 8 ">
+              <i class="fa fa-search icon-search" (click)="filterAll()" placement="top" container="body"
+                ngbTooltip="Search"></i>
+              <input class="search search-text" [disabled]="isLoader" placeholder="Search" type="text"
+                (keypress)="searchByKey($event)" [(ngModel)]="searchFilterValue"
+                (input)="checkSearch(searchFilterValue)" />
+              <i class="fa fa-times-circle icon" (click)="removeTextValue()" placement="top" container="body"
+                ngbTooltip="Remove Text"></i>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-2">
+              <div class="form-group">
+                <select class="form-control" [(ngModel)]="sortsAllStatusFilterValue" (change)="filterAll()"
+                  [disabled]="isLoader  || activeStatusFilterBtn === 'archived' || QmsType === 3 || QmsType == 4">
+                  <option value="1">All Quotes</option>
+                  <option value="3"> Active Quotes</option>
+                  <option value="4"> Expired Quotes</option>
+                  <!-- <option value="5"> Accepted Quotes</option>
+                  <option value="6"> Declined Quotes</option> -->
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2" >
+              <div class="form-group">
+                <select class="form-control" [(ngModel)]="sortsStatusFilterValue" [disabled]="isLoader"
+                  (change)="filterAll()">
+                  <option value="0">Quote status</option>
+                  <option [value]="data.qmsEmailStatusId" *ngFor="let data of  emailAllStatus">{{data.qmsEmailStatus}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <div class="form-group">
+                <select class="form-control" [(ngModel)]="sortProFilterValue" [disabled]="isLoader"
+                  (change)="filterAll()">
+                  <option value="0">Probability </option>
+                  <option [value]="data.qmsProbabilityId" *ngFor="let data of  probabilityAll">{{data.qmsProbability}}</option>
+                </select>
+              </div>
+            </div>
+
+
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <select class="form-control" [(ngModel)]="sortCompanyFilterValue" [disabled]="isLoader"
+                  (change)="filterAll()">
+                  <option value="0">Company / Contact</option>
+                  <option [value]="data.contactID" [innerHTML]="getConcateValue(data)"
+                    *ngFor="let data of  contactCompanyList"></option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-3" *ngIf="QmsType === 8">
+              <div class="form-group">
+                <select class="form-control" [(ngModel)]="sortQuoterFilterValue" [disabled]="isLoader"
+                  (change)="filterAll()">
+                  <option value="0">Quoter</option>
+                  <option [value]="data.quoterContactId"
+                    *ngFor="let data of  quoterList"> {{data.quoterName}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3" *ngIf="QmsType !== 8 " >
+              <i class="fa fa-search icon-search" (click)="filterAll()" placement="top" container="body"
+                ngbTooltip="Search"></i>
+              <input class="search search-text" [disabled]="isLoader" placeholder="Search" type="text"
+                (keypress)="searchByKey($event)" [(ngModel)]="searchFilterValue"
+                (input)="checkSearch(searchFilterValue)" />
+              <i class="fa fa-times-circle icon" (click)="removeTextValue()" placement="top" container="body"
+                ngbTooltip="Remove Text"></i>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="isMyQoutsAvailable">
+            {{reloadPageOnQuotedrawerClose()}}
+            <div class="col-12">
+              <div class="row quote-heading-section">
+                <div class="col-md-1 lead-subhead" style="word-break: break-word"><span>Live Quote#</span>
+                  <i (click)="toggleColumn('quote_id')" [ngClass]="(toggleQms)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                </div>
+                <div class="col-md-1 lead-subhead" [class.col-md-1]="QmsType === 8" [class.col-md-2]="QmsType !== 8"><span>Quote Reference</span>
+                  <i (click)="toggleColumn('quoteName')"
+                    [ngClass]="(toggleQuoteName)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                </div>
+                <div class="col-md-1 lead-subhead" *ngIf="QmsType === 8"><span>Quoter</span>
+                  <i (click)="toggleColumn('quoter')"
+                    [ngClass]="(togglequoter)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                </div>
+                <div class="col-md-1 lead-subhead"><span>Expires (date)</span>
+                  <i (click)="toggleColumn('Date')"
+                    [ngClass]="(toggleExpireDate)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                </div>
+
+                <div class="lead-subhead"  [class.break-text]="isSidePanel()" [class.col-md-1]="QmsType === 1" [class.col-md-2]="QmsType !== 1"><span>Company Name</span>
+                  <i (click)="toggleColumn('company')"
+                    [ngClass]="(toggleCompanyName)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                </div>
+                <div class="col-md-1 lead-subhead"><span>Contact Name</span>
+                  <i (click)="toggleColumn('contact')"
+                    [ngClass]="(toggleContactName)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                </div>
+
+
+                <div class="col-md-1 lead-subhead"><span>Process</span>
+                  <i (click)="toggleColumn('process')"
+                    [ngClass]="(toggleProcess)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                </div>
+
+                <div class="col-md-1 lead-subhead"><span> Quote Status</span>
+                  <i (click)="toggleColumn('quote_status')"
+                    [ngClass]="(toggleStatus)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                </div>
+
+
+                <div class="col-md-1 lead-subhead"  [class.break-text]="isSidePanel()"><span>Probability</span>
+                  <i (click)="toggleColumn('probalility')"
+                    [ngClass]="(toggleCompanyName)?'fa fa-sort-asc':'fa fa-sort-desc'"></i>
+                </div>
+                <div *ngIf="QmsType === 1" class="col-md-1 lead-subhead"><span>Actions Taken</span></div>
+                <div class="col-md-2 lead-subhead" style="text-align: center"><span>Actions</span></div>
+
+              </div>
+
+            </div>
+          </div>
+          <div *ngIf="isLoader" class="loading">
+            <div class="loader animation-start">
+              <span class="circle delay-1 size-2"></span>
+              <span class="circle delay-2 size-4"></span>
+              <span class="circle delay-3 size-6"></span>
+              <span class="circle delay-4 size-7"></span>
+              <span class="circle delay-5 size-7"></span>
+              <span class="circle delay-6 size-6"></span>
+              <span class="circle delay-7 size-4"></span>
+              <span class="circle delay-8 size-2"></span>
+            </div>
+          </div>
+          <div class="row" *ngIf="isMyQoutsAvailable">
+            <div class="col-md-12">
+
+              <div class="row lead-info" *ngFor="let myQms of items">
+                <div class="col-md-1 lead-subhead lead-name pointer-cursor p-t-20 p-b-20"
+                  (click)="openQuoteReviewDrawer(myQms.qmsQuoteId ,$event)">
+                  <span (click)="openQMSDetailsPage(myQms.qmsQuoteId, myQms.quoteId, $event)">{{myQms.quoteId}}</span>
+                </div>
+                <div class="col-md-1 lead-subhead pointer-cursor lead-name p-t-20 p-b-20"
+                  (click)="openQuoteReviewDrawer(myQms.qmsQuoteId,$event)" [class.col-md-1]="QmsType === 8" [class.col-md-2]="QmsType !== 8">
+                  <span placement="top" data-container="body" ngbTooltip="{{myQms.quoteName}}"
+                    (click)="openQMSDetailsPage(myQms.qmsQuoteId, myQms.quoteId, $event)">{{ (myQms.quoteName) ? (myQms.quoteName | dotLimit:'15') : 'N/A' }}</span>
+                </div>
+                <div  *ngIf="QmsType === 8" class="col-md-1 lead-subhead pointer-cursor lead-name p-t-20 p-b-20"
+                (click)="openQuoteReviewDrawer(myQms.qmsQuoteId,$event)">
+                <span placement="top" data-container="body" ngbTooltip="{{myQms.supplier}}"
+                  (click)="openQMSDetailsPage(myQms.qmsQuoteId, myQms.quoteId, $event)">{{ (myQms.supplier) ? (myQms.supplier | dotLimit:'15') : 'N/A' }}</span>
+              </div>
+                <div class="col-md-1 lead-subhead pointer-cursor p-t-20 p-b-20 text-wrap"
+                  (click)="openQuoteReviewDrawer(myQms.qmsQuoteId,$event)">
+                  <span placement="top" data-container="body"
+                    ngbTooltip="{{myQms?.quoteExpired | date :  'MM/dd/yyyy' }}">{{ (myQms?.quoteExpired) ? (myQms?.quoteExpired | date :  "MM/dd/yyyy") : 'N/A' }}</span>
+                </div>
+
+
+                <div class="col-md-1 lead-subhead lead-name text-truncate pointer-cursor p-t-20 p-b-20"
+                  [class.col-md-1]="QmsType === 1" [class.col-md-2]="QmsType !== 1"
+                  (click)="openQuoteReviewDrawer(myQms.qmsQuoteId,$event)">
+                  <span placement="top" data-container="body" ngbTooltip="{{myQms.companyName}}"
+                    (click)="openCompanyDrawer(myQms?.qmsCompanyIdEncrypt, $event)">
+                    {{(myQms.companyName)?(myQms.companyName| dotLimit:'15'):'N/A'}}</span></div>
+                <div class="col-md-1 lead-subhead text-truncate pointer-cursor p-t-20 p-b-20"
+                  (click)="openQuoteReviewDrawer(myQms.qmsQuoteId,$event)" placement="top" data-container="body"
+                  ngbTooltip="{{myQms.contactName}}">
+                  <span>{{(myQms.contactName)?(myQms.contactName| dotLimit:'15'):'N/A'}}</span></div>
+                <div class="col-md-1 lead-subhead pointer-cursor text-wrap p-t-20 p-b-20"
+                  (click)="openQuoteReviewDrawer(myQms.qmsQuoteId,$event)">
+                  <span placement="top" data-container="body"
+                    ngbTooltip="{{myQms.process}}">{{(myQms.process)?(myQms.process| dotLimit:'10'):'N/A'}}</span></div>
+                <div class="col-md-1 lead-subhead pointer-cursor text-wrap p-t-20 p-b-20"
+                  (click)="openQuoteReviewDrawer(myQms.qmsQuoteId,$event)"><span placement="top" data-container="body"
+                    ngbTooltip="{{myQms.quoteStatus}}">{{ myQms.quoteStatus }}</span></div>
+                <div class="col-md-1 lead-subhead pointer-cursor text-wrap lead-name p-t-20 p-b-20"
+                  (click)="openQuoteReviewDrawer(myQms.qmsQuoteId,$event)"><span>{{ myQms.probability }}</span></div>
+                <div *ngIf="QmsType === 1" class="col-md-1">
+                  <span>
+                    <img  *ngIf="myQms.quoteDowloaded" src="assets/file-pdf-solid-active.svg" style="width: 12px;">
+                    <img *ngIf="!myQms.quoteDowloaded" src="assets/file-pdf-solid-deactive.svg" style="width: 12px;">
+                    <!-- <i class="fa fa-file-pdf-o f-14" [class.qms-status-active]="myQms.quoteDowloaded"
+                      [class.qms-status-deactive]="!myQms.quoteDowloaded" aria-hidden="true"></i> -->
+                  </span>
+                  <span>
+                    <i class="fa fa-inbox f-14" [class.qms-status-active]="myQms.quoteSentToSelf"
+                      [class.qms-status-deactive]="!myQms.quoteSentToSelf" aria-hidden="true"></i>
+                  </span>
+                  <span>
+                    <i class="fa fa-users f-14" [class.qms-status-active]="myQms.quoteSentToCustome"
+                      [class.qms-status-deactive]="!myQms.quoteSentToCustome" aria-hidden="true"></i>
+                  </span>
+                </div>
+                <div class="col-md-2 lead-subhead actiondiv flex-container" [class.padding-none]="isSidePanel()">
+                  <span>
+                    <i class="fa fa-edit qms-action" (click)="openEditQms(myQms.qmsQuoteId)" placement="top"
+                      container="body" ngbTooltip="Edit QMS"></i>
+                  </span>
+                  <span>
+                    <i class="fa fa-file-pdf-o qms-action" (click)="callPdf(myQms.qmsQuoteId)" aria-hidden="true"
+                      placement="top" container="body" ngbTooltip="Download PDF"></i>
+                  </span>
+                  <span *ngIf="QmsType === 1"
+                    (click)="callSelfEmailPdf(myQms.qmsQuoteId, myQms.quoteId, myQms.quoteName)">
+                    <i class="fa fa-inbox qms-action" aria-hidden="true" placement="top" container="body"
+                      ngbTooltip="Email to Myself"></i>
+                  </span>
+                  <span *ngIf="QmsType === 1"
+                    (click)="callCustomerEmailPdf(myQms.customerEmail,myQms.contactName, myQms.qmsQuoteId, myQms.quoteId, myQms.quoteName)">
+                    <i class="fa fa-users qms-action" aria-hidden="true" placement="top" container="body"
+                      ngbTooltip="Email to Customer"></i>
+                  </span>
+                  <span *ngIf="activeStatusFilterBtn !== 'archived'">
+                    <i class="fa fa-trash qms-action" (click)="DeleteQMS(myQms.qmsQuoteId)" placement="top"
+                      container="body" ngbTooltip="Delete QMS"></i>
+                  </span>
+                  <span *ngIf="activeStatusFilterBtn === 'archived'" class="deleted">
+                    <i class="fa fa-trash qms-action" placement="top" container="body" ngbTooltip="Delete QMS"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="myRFQ-rfq-no-available" *ngIf="!isMyQoutsAvailable">
+            <div class="row" style="text-align: center;padding-top:106px">
+              <div class="col-md-12">
+                <div>
+                  <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+                      assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+                </div>
+              </div>
+            </div>
+            <div class="row" style="padding-top:34px">
+              <div class="col-md-12">
+                <div class="myRFQ-noRFQActive-helper-text" *ngIf="QmsType == 1">No My Quotes found at this time.</div>
+                <div class="myRFQ-noRFQActive-helper-text" *ngIf="QmsType == 3">No Active Quotes found at this time.
+                </div>
+                <div class="myRFQ-noRFQActive-helper-text" *ngIf="QmsType == 4">No Expired Quotes found at this time.
+                </div>
+                <div class="myRFQ-noRFQActive-helper-text" *ngIf="QmsType == 8">No My Company Quotes found at this time.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ------------------------- Pagination start----------------------- -->
+          <div class="row" style="margin-top: 20px;" *ngIf="isMyQoutsAvailable">
+            <div class="col-md-3">
+              <div class="dataTables_length" id="example_length">
+                <label>Show
+                  <select name="example_length" aria-controls="example" class="" [(ngModel)]="pageSize"
+                    (change)="filterAll()">
+                    <option value="24">24</option>
+                    <option value="48">48</option>
+                    <option value="96">96</option>
+                  </select>
+                  entries</label>
+              </div>
+            </div>
+            <div class="col-md-9" *ngIf="!isLoader">
+              <div class="paginations">
+                <div>
+                  <div id="radioBtn" class="btn-group">
+                    <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}"
+                      class="btn btn-primary btn-sm notActive" (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                      Previous
+                    </a>
+                    <a *ngFor="let page of pagesIndex" (click)="setPage(page)"
+                      [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                      data-bs-toggle="fun" data-title="X">
+                      {{page}}
+                    </a>
+                    <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+                      (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                      Next
+                    </a>
+                  </div>
+                  <input type="hidden" name="fun" id="fun">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12" *ngIf="isMyQoutsAvailable">
+              <div class="pull-right padd-right">
+                <label class="showreccount"> {{currentIndex }} of {{pageNumber}} </label>
+              </div>
+            </div>
+          </div>
+          <!-- ------------------------- Pagination end----------------------- -->
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-4 sideDrawer Drawer-Shadow " *ngIf="isSidePanel()">
+    <div *ngIf="isCompanyDrawer()" class="background-white">
+      <app-my-customer-drawer [mqsContactIdEncrypt]='mqsContactIdEncrypt'></app-my-customer-drawer>
+    </div>
+    <div class="background-white" *ngIf="isQuoteReviewDrawer()">
+      <app-quote-review-drawer [mqsQuoteId]='mqsQuoteId' [isDraft]=false></app-quote-review-drawer>
+    </div>
+
+    <div *ngIf="isMessageDrawer()">
+      <app-message-tab-drawer (isMsgDrawerClosed)='getMsgDrawerFlag($event)' [customerMsgModel]='customerMsgModel'>
+      </app-message-tab-drawer>
+    </div>
+  </div>
+</div>
+{{isPdfDownload()}}
+<div *ngIf="isEmilPdfPreview">
+  <app-qms-pdf [qmsId]=quoteId [isDownload]="isDownload"></app-qms-pdf>
+</div>
+<p-confirmDialog header="Confirmation" icon="" width="629" height="220" #msgDlt>
+  <p-footer>
+    <div class="row qms-section">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-ignore-rfq" (click)="msgDlt.reject()">Cancel</button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="msgDlt.accept()"> Yes</button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>

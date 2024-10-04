@@ -1,0 +1,40 @@
+.quote-main-row {
+    border-radius: 3px;
+    border: 2px solid #dee2e6;
+}
+
+.flex-container{
+    display:flex;
+    justify-content: start;
+    align-items: stretch;
+    margin-left: 5px;    
+    height: 100%;
+}
+.flexbox-item-grow
+{
+    flex: 1; /* same as flex: 1 1 auto; */
+}
+.btn-retract{
+    background-color: #ccc;
+    color:#fff;
+    padding: 5px 10px;
+}
+.csvErrorModelBtn {
+    color: #fff;
+    border: 2px solid #2E58D6;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #2E58D6;
+    padding: 9px 10px !important;
+  }
+  
+  .csvErrorModelBtn1 {
+    padding: 9px 10px !important;
+    border: 2px solid #2E58D6;
+    font-weight: 600;
+    font-size: 16px;
+    border: solid 2px #2E58D6;
+    background-color:#fff;
+    color:#2E58D6
+  }

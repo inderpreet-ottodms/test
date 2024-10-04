@@ -1,0 +1,70 @@
+<div class="col-lg-12 col-md-12 col-sm-12 pagination-container">
+  <span class="static-text">Show :</span>
+  <select aria-controls="example" class="border" [(ngModel)]="currentPageSize" (change)="pageSize_OnChange()">
+    <option>24</option>
+    <option>48</option>
+    <option>96</option>
+  </select>
+  <span class="static-text">entries</span>
+  <!-- <span class="separator">{{separator}}</span> -->
+
+  <div class="page-navigation-container pull-right"  *ngIf="theam=='friendly'">
+    <span class="page-navigation" (click)="navigateAction('FIRST')">{{firstPage}}</span>
+    <span class="separator">{{separator}}</span>
+    <span class="page-navigation" (click)="navigateAction('PREVIOUS')">{{previousPage}}</span>
+
+    <span class="separator">{{separator}}</span>
+
+    <div class="page-viewer">
+      <span class="static-text">Page :</span>
+
+      <select [(ngModel)]="currentPage" ng-options="page for pages"
+              (change)="page_OnChange()">
+        <option *ngFor="let page of pages">
+          {{ page }}
+        </option>
+      </select>
+      <span>/</span>
+      <span>{{totalPages}}</span>
+    </div>
+
+    <span class="separator">{{separator}}</span>
+
+    <span class="page-navigation" (click)="navigateAction('NEXT')">{{nextPage}}</span>
+    <span class="separator">{{separator}}</span>
+    <span class="page-navigation" (click)="navigateAction('LAST')">{{lastPage}}</span>
+  </div>
+
+  <div *ngIf="theam=='compact'" class="pull-right text-center">
+    <ul>
+        <li (click)="compact_page_OnChange('PREVIOUS')">Previous</li>
+        <li *ngFor="let page of pages" [ngClass]=" (currentPage === page)?'active':''"   (click)="currentPage=page; page_OnChange()">
+          {{page}}
+        </li>
+        <li (click)="compact_page_OnChange('NEXT')">Next</li>
+    </ul>
+
+      <span class="badge badge-secondary m-t-5">{{currentPage}} of {{totalPages}}</span>
+
+  </div>
+</div>
+
+<!-- <div class="col-lg-12 col-md-12 col-sm-12 pagination-container" *ngIf="theam=='compact'">
+    <span class="static-text">Show </span>
+    <select [(ngModel)]="currentPageSize" (change)="pageSize_OnChange()">
+      <option>24</option>
+      <option>48</option>
+      <option>96</option>
+    </select>
+    <span class="static-text"> entries </span>
+
+    <div style="display: inline; border: solid 1px red;">
+        <ul>
+          <li>Previous</li>
+          <li>1</li>
+          <li>1</li>
+          <li>1</li>
+          <li>Last</li>
+        </ul>
+    </div>
+</div> -->

@@ -1,0 +1,110 @@
+$border-color: #2E58D6;
+$btn-color: #2E58D6;
+.profile-box {
+  border: 2px solid $border-color;
+  padding: 25px;
+  border-radius: 5px;
+  background-color: #fff;
+  margin: 5px 10px 20px 5px;
+}
+.profile-box:hover {
+  webkit-box-shadow: 0 0 25px -5px #9e9c9e;
+  box-shadow: 0 0 25px -5px #9e9c9e;
+}
+.progress-box {
+  padding: 3px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  margin: 5px;
+}
+.progress {
+  height: 0.6em;
+  background-color: #e2e2e5;
+}
+.progress-bar {
+  background-color: #919aa3;
+}
+.part-second {
+  border-left: 3px solid #f9f9f9;
+  padding-left: 40px;
+}
+.part-second div {
+  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: bold;
+}
+.btn-start {
+  background-color: $btn-color;
+  color: #fff;
+  padding: 5px;
+  margin-left: 30px;
+}
+.check .fa-check {
+  color: $btn-color;
+  cursor: pointer;
+}
+.check span {
+  color: $border-color;
+  margin-left: 5px;
+  font-weight: normal;
+  cursor: pointer;
+}
+.gray-color {
+  color: #e2e2e5;
+}
+.get-start {
+  color: $border-color !important;
+  cursor: pointer !important;
+}
+.help-text {
+  font-style: italic;
+  color: silver;
+  font-weight: normal;
+  margin-left: 10px;
+}
+button:disabled {
+  background-color: silver;
+  cursor: not-allowed;
+}
+/* Absolute Center Spinner */
+.loading {
+  position: fixed;
+  z-index: 999;
+  height: 2em;
+  width: 2em;
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+/* Transparent Overlay */
+.loading:before {
+  content: '';
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+  background-color: #666666;
+}
+.rectangle {
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  left: 410px;
+  font-size: 10px !important;
+  position: relative;
+  bottom: 30px;
+  width: 27%;
+  padding: 3px;
+  height: 30px;
+  background-color: #FFFAE1;
+  border: 1px solid #FFB946;
+
+}

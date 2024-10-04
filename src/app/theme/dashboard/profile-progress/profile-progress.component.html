@@ -1,0 +1,140 @@
+<div class="profile-box">
+  <div class="row">
+    <div class="col-md-5">
+      <h5 class="m-b-5">Getting Started with MFG</h5>
+      <div>
+        <span class="f-16"
+          >Complete these steps to get your account ready to go. If you have questions, check out the
+          <a
+            class="get-start f-16"
+            (click)="openGetStartedGuide()"
+            >Getting Started Guide.</a
+          ></span
+        >
+      </div>
+      <div class="m-t-10"><span class="f-16 f-w-900">Account Setup</span></div>
+      <div
+        class="row progress-box"
+        *ngIf="iBasicManufacturerViewModel !== undefined"
+      >
+        <div class="col-md-4">
+          <span class="f-20 f-w-700"
+            >{{ iBasicManufacturerViewModel.overallPercentage }}%</span
+          >
+          <span class="f-10">COMPLETE</span>
+        </div>
+        <div class="col-md-8 m-t-10">
+          <div class="progress">
+            <div
+              class="progress-bar"
+              role="progressbar"
+              [attr.aria-valuenow]="
+                iBasicManufacturerViewModel.overallPercentage
+              "
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [ngStyle]="{
+                'width.%': iBasicManufacturerViewModel.overallPercentage
+              }"
+            >
+              <span class="sr-only"
+                >{{ iBasicManufacturerViewModel.overallPercentage }}%
+                Complete</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <!-- <span class="f-12">
+          If you have questions, check out the <a class="get-start">Getting Started Guide</a> on our Knowledge Base.
+        </span> -->
+      </div>
+    </div>
+    <div class="col-md-7 part-second">
+      <div
+        *ngFor="
+          let item of iBasicManufacturerViewModel.accountSetUpSteps;
+          let i = index
+        "
+      >
+        <span
+          [ngClass]="
+            getNameClass(
+              item,
+              iBasicManufacturerViewModel.accountSetUpSteps[i - 1],
+              i
+            )
+          "
+          >{{ item.id }}. {{ item.steps }}</span>
+
+        <span *ngIf="item.status && i != 2" class="check" class="nocss_edit_{{btnArray[i]['code']}}">
+          <i *ngIf="item.showEdit" class="fa fa-check " aria-hidden="true"></i>
+          <span (click)="getProfileFun(item.id, true)">Edit</span>
+          </span>
+        <button
+          *ngIf="item.showBtn && i !== 2 else elseBlock"
+          class="btn btn-start nocss_{{btnArray[i]['code']}}"
+          (click)="getProfileFun(item.id, false)"
+          [disabled]="item.disabledBtn"
+        >
+          {{ btnArray[i]['text'] }}
+        </button>
+       
+        <ng-template #elseBlock>
+          <button
+          *ngIf="i == 2 && iBasicManufacturerViewModel.accountSetUpSteps[i - 1].status && iBasicManufacturerViewModel.isPublishProfile == null"
+          class="btn btn-start btn_{{btnArray[i]['code']}}"
+          (click)="getProfileFun(item.id, false)"
+          [disabled]="item.disabledBtn"
+        >
+          {{ btnArray[i]['text'] }}
+        </button>
+      
+        <button
+          *ngIf="i == 2 && iBasicManufacturerViewModel.accountSetUpSteps[i - 1].status && iBasicManufacturerViewModel.isPublishProfile == true"
+          class="btn btn-start"
+          disabled
+          style="margin-left:10px;padding: 3px;"
+        >
+        Pending Approval
+        </button>
+        <div *ngIf="i == 2 && iBasicManufacturerViewModel.isPublishProfile == true && isEmailVerified == false" class="rectangle"><img src="assets/warning-fill.svg" alt=""/> Please verify Your Email </div>
+        <!-- <span
+          *ngIf="i == 2 && iBasicManufacturerViewModel.accountSetUpSteps[i - 1].status && iBasicManufacturerViewModel.isPublishProfile == false"
+          style="color: #4a90e2; margin-left: 5px; font-weight: normal;"
+        >
+         Pending to publish
+      </span> -->
+      </ng-template>
+
+        <p class="help-text">{{ item.helpText }}</p>
+      </div>
+      <!-- <div *ngIf="isEmailVerified === 'false'" class="rectangle"> Please verify Your Email </div> -->
+    </div>
+  </div>
+</div>
+<app-profile-logo
+  *ngIf="toShowProfileModel"
+  [companyProfileLogoFilename]="companyProfileLogoFilename"
+  [companyProfileLogoUrl]="companyProfileLogoUrl"
+  [companyDescription]="companyDescription"
+  (openCropModelEvent)="openCropModel($event)"
+  (modelCloseEvent)="closeModel($event)"
+></app-profile-logo>
+<app-image-crop
+  *ngIf="showCropModel"
+  (closeModelEvent)="closeCropModel($event)"
+></app-image-crop>
+<div class="loading" *ngIf="isLoader">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div>

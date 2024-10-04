@@ -1,0 +1,8 @@
+<div class="col-sm-12 col-md-12col-lg-12" *ngIf="contactInfo!=null && contactId!=undefined">
+    <span style="font-family:Poppins,sans-serif;">
+        {{contactInfo.company}}<br>
+        {{contactInfo.firstName}} {{contactInfo.lastName}}<br>
+        {{contactInfo.address}}<br> 
+        {{contactInfo.city}} {{contactInfo.stateName}} {{contactInfo.zipCode}} {{contactInfo.countryName}}
+    </span>
+</div>

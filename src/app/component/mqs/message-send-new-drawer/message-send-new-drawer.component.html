@@ -1,0 +1,67 @@
+<div class="background-white">
+  <div class="row">
+    <div class="col-md-12 rightpanel">
+      <i class="fa fa-times-circle pull-right" (click)="closePartDrawer()"></i>
+      <h2 class="panelheading">Create New Message</h2>
+    </div>
+    <hr>
+    <div class="col-md-12"><br>
+      <form [formGroup]="messageForm" (ngSubmit)="onMessageSend()">
+        <div class="form-group">
+          <label style="font-weight: bold;">Subject</label>
+          <input type="text" class="form-control" id="name" placeholder="Subject" formControlName="subject">
+          <div class="error-msg">
+            <app-field-error-display [displayError]="isFieldValid('subject')" errorMsg="Enter Subject">
+            </app-field-error-display>
+          </div>
+        </div>
+        <div class="form-group">
+          <label style="font-weight: bold;">Message</label>
+          <textarea class="form-control" type="textarea" placeholder="Message" maxlength="1000" rows="7"
+            formControlName="message"></textarea>
+          <div class="error-msg">
+            <app-field-error-display [displayError]="isFieldValid('message')" errorMsg="Enter Message">
+            </app-field-error-display>
+          </div>
+        </div>
+        <div class="form-group">
+          <div *ngIf="messageFailureStatus"
+            style="margin-bottom:2.1em;text-align: left;color:red;vertical-align: middle">
+            {{ successOrFailureMsg }}
+          </div>
+          <div *ngIf="messageSuccessStatus"
+            style="margin-bottom:2.1em;text-align: left;color:green;vertical-align: middle">
+            {{ successOrFailureMsg }}
+          </div>
+        </div>
+        <div class="form-group" *ngIf="iqmsEmailMessagesViewModel.qmsEmailMessageFilesList.length !== 0">
+          <div class="row" *ngFor=" let file of iqmsEmailMessagesViewModel.qmsEmailMessageFilesList ;let i=index;">
+              <div class="col-md-8 text-wrap">
+                  <span class="fileName ">{{ getOriginalPartName(file) }}</span>
+              </div>
+                <div class="col-md-4">
+                    <span class="activeLink" (click)="removeSavedAttachFile(file,i)">Remove</span>
+                </div>
+          </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-12 text-right">
+            <input  type="file" #messageAttachment class="display-none" ng2FileSelect [uploader]="attachFilesUploader" multiple (change)="onFileSelect($event)">
+            <span (click)="messageAttachment.click()" class="cusror-pointer">Attach file(s)</span>
+          </div>
+        </div>
+
+      </div>
+        <div class="row">
+          <div class="col-md-6 centerAlign">
+            <button type="button" class="rightcancelbutton" (click)="closePartDrawer()">Cancel</button>
+          </div>
+          <div class="col-md-6 centerAlign">
+            <button type="submit" [disabled]="resetBtn() || uploadingInProg" [ngClass]="((resetBtn() || uploadingInProg) === true )? 'rightaddwithoutsubmit':' rightaddsubmit'">Send</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

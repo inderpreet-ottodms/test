@@ -1,0 +1,58 @@
+<body class="login-bg" style="font-family: Poppins;">
+  <div class="container">
+    <div id="login">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-column" class="col-md-6 col-md-offset-3">
+              <div class="loginpage-logo">
+                <img style="width: 50%;" src="assets/login/Logo_MFG_White.png" alt="MFG Logo">
+              </div>
+              <div id="login-box">
+                <div class="loginpage card-header">
+                  <h3>Forgot Password?</h3>
+                </div><br>
+
+                <div class="loginregister">
+                  <p class="forgotpassword">Please enter the email you provided during the registration process to reset your password.</p><br>
+                  <form class="md-float-material" [formGroup]="forgotForm" (ngSubmit)="onSubmit()">
+
+
+                      <div class="form-group" >
+                        <label [ngClass]="(isEmailValid('emailId') || isFieldValid('emailId'))?'Label-focus-red':(labelFocus === 'emailId')? 'Label-focus':'Label-class'" *ngIf="!checkLoginField('emailId')" style="font-weight: bold;">Email</label>
+                        <label class="Label-class" *ngIf="checkLoginField('emailId')"></label>
+                      <input type="text" [ngClass]="(isEmailValid('emailId') || isFieldValid('emailId'))?'borderRedColor':'borderBlackColor'"  (focus)="setFocus('emailId')" (blur)="setFocus('no')" maxlength="150" class="form-control" placeholder="Email Id"
+                        autocomplete="off" formControlName="emailId" name="forgot_emailId">
+                      <div class="error-msg">
+                        <app-field-error-display [displayError]="isEmailValid('emailId')" errorMsg="Email Is not in Proper format"></app-field-error-display>
+                        <app-field-error-display [displayError]="isFieldValid('emailId')" errorMsg="Email Is required"></app-field-error-display>
+                      </div>
+                      <span class="md-line"></span>
+                    </div>
+                    <div class="form-group">
+                      <div *ngIf="isForgotFailed" style="margin-bottom:2.1em;text-align: left;color:red;vertical-align: middle">
+                        {{errorForgotMessage}}
+                      </div>
+                      <div *ngIf="isForgotSuccess" style="margin-bottom:2.1em;text-align: left;color:green;vertical-align: middle">
+                        {{successMessage}}
+                      </div>
+                    </div>
+                    <div class="dropimagebuttons">
+                      <button type="submit" class="login1" *ngIf="checkLoginField('emailId')" [disabled]="resetBtn()" [ngClass]="(resetBtn() === true )? 'login11':'login1'">Submit</button>
+                      <button type="submit" class="login1" *ngIf="!checkLoginField('emailId')" [disabled]="resetBtn()" [ngClass]="(resetBtn() === true )? 'login11':'login1'"> <i class="fa fa-spinner fa-spin" *ngIf="isResponse">&nbsp;</i>Reset Password</button>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="loginregisterfooter">
+                  <p><a href="#" [routerLink]="['/auth/login/simple']" class="registerAnchor">Back to Login</a></p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

@@ -1,0 +1,156 @@
+<div>
+  <label><b>Processes</b></label>
+</div>
+<div class="form-group">
+  <div>
+      <app-ngx-gen-select *ngIf="_processTermsLoadingCompleted!=null"
+      emptyMessage = "Select your default process"
+      [(itemCollection)]="processTermsItemCollection"
+      (itemRemove)="requestToProcessRemove($event)"
+      [(selectedValue)]="selectedProcessId"
+      (selectionRemove)="clearProcessSelection($event)"
+      (selectionChange)="setProcessSelection($event)"
+      ></app-ngx-gen-select>
+      <!-- <select class="form-control" [(ngModel)]="processId">
+        <option value="0">Select Process</option>
+        <option [value]="process.id" *ngFor="let process of processData">{{ process.value }}</option>
+      </select>
+      <span *ngIf="processId != 0" (click)="removeProcess(1)"><i class="fa fa-trash f-14" aria-hidden="true"></i></span> -->
+  </div>
+  <a (click)="openModel(1)">Add new process</a>
+</div>
+
+<div>
+  <label><b>Materials</b></label>
+</div>
+<div class="form-group">
+    <app-ngx-gen-select *ngIf="_materialTermsLoadingCompleted!=null"
+    emptyMessage = "Select your default materials"
+    [(itemCollection)]="materialTermsItemCollection"
+    (itemRemove)="requestToMaterialRemove($event)"
+    [(selectedValue)]="selectedMaterialId"
+    (selectionRemove)="clearMaterialSelection($event)"
+    (selectionChange)="setMaterialSelection($event)"
+    ></app-ngx-gen-select>
+  <!-- <select class="form-control">
+    <option value="0">Select Material</option>
+    <option *ngFor="let material of materialData">{{ material.value }}</option>
+  </select> -->
+  <a (click)="openModel(2)">Add new material</a>
+</div>
+
+<div>
+  <label><b>Post Processes</b></label>
+</div>
+
+<div class="form-group">
+    <app-ngx-gen-select *ngIf="_postTermsLoadingCompleted!=null"
+    emptyMessage = "Select your default post process"
+    [(selectedValue)]="selectedPostProcessId"
+    [(itemCollection)]="postProcessTermsItemCollection"
+    (itemRemove)="requestToPostProcessRemove($event)"
+    (selectionRemove)="clearPostSelection($event)"
+    (selectionChange)="setPostSelection($event)"
+    ></app-ngx-gen-select>
+  <!-- <select class="form-control">
+    <option value="0">Select Post-Process</option>
+    <option *ngFor="let post of postData">{{ post.value }}</option>
+  </select> -->
+  <a (click)="openModel(3)">Add new post process</a>
+</div>
+
+<div>
+  <label><b> LiveQuote Probability</b></label>
+</div>
+
+<div class="form-group">
+    <app-ngx-gen-select *ngIf="_probabilityTermsLoadingCompleted!=null"
+    emptyMessage = "Select your default live quote probability"
+    [(selectedValue)]="selectedProbabilityId"
+    [(itemCollection)]="probabilityTermsItemCollection"
+    (itemRemove)="requestToProbabilityRemove($event)"
+    (selectionRemove)="clearProbability($event)"
+    (selectionChange)="setProbability($event)"
+    ></app-ngx-gen-select>
+  <!-- <select class="form-control">
+    <option value="0">Select Post-Process</option>
+    <option *ngFor="let post of postData">{{ post.value }}</option>
+  </select> -->
+  <a (click)="openModel(4)">Add new live quote probability</a>
+</div>
+<div>
+  <label><b>LiveQuote Status </b></label>
+</div>
+
+<div class="form-group">
+    <app-ngx-gen-select *ngIf="_statusTermsLoadingCompleted!=null"
+    emptyMessage = "Select your default live quote status"
+    [(selectedValue)]="selectedStatusId"
+    [(itemCollection)]="statusTermsItemCollection"
+    (itemRemove)="requestToStatusRemove($event)"
+    (selectionRemove)="clearStatus($event)"
+    (selectionChange)="setStatus($event)"
+    ></app-ngx-gen-select>
+  <!-- <select class="form-control">
+    <option value="0">Select Post-Process</option>
+    <option *ngFor="let post of postData">{{ post.value }}</option>
+  </select> -->
+  <a (click)="openModel(5)">Add new live quote status</a>
+</div>
+<ng-template #model let-d="dismiss" data-backdrop="static" data-keyboard="false">
+  <form #modelForm="ngForm">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{ modelHeader }}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('notNow'); closePriceModel();">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="row m-b-10">
+            <div class="col-md-12 col-sm-12 col-lg-12 model-popup-text">
+              <span>
+                Add a {{modelTitle}} name below. Click ‘Save + Add Another’ to keep this window open and add multiple.
+              </span>
+            </div>
+          </div>
+      <div class="row">
+        <div class="col-md-12 text-left m-b-5">
+          <span><b>{{ modelTitle }}</b></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 text-left from-group">
+          <input type="text" class="form-control" [placeholder]="modelPlaceHolder" name="namePrice" #namePrice ngModel required
+            pattern="[a-zA-Z0-9 ]*" (keyup)="checkForDuplicate(modelForm.value.namePrice, modelForm)">
+          <div
+            *ngIf="modelForm.form.controls.namePrice?.invalid && (modelForm.form.controls.namePrice?.dirty || modelForm.form.controls.namePrice?.touched)"
+            class="">
+            <p style="color:red" *ngIf="modelForm.form.controls.namePrice.errors.pattern">Please enter alpha numeric value only</p>
+          </div>
+          <p style="color:red" *ngIf="isValid">Duplicate Value</p>
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-add btn-block" (click)="d('notNow');closePriceModel();">Cancel</button>
+      <button type="button" class="btn btn-add btn-block" (click)="onSave(modelForm.value.namePrice, 1, modelForm)"
+        [disabled]="!modelForm.form.valid || modelForm.value.namePrice.trim() === '' || isValid">Save + Add Another</button>
+      <button type="button" class="btn btn-save btn-block" (click)="onSave(modelForm.value.namePrice, 0, modelForm)"
+        [disabled]="!modelForm.form.valid || modelForm.value.namePrice.trim() === ''  || isValid">Save</button>
+    </div>
+  </form>
+</ng-template>
+
+<p-confirmDialog header="Confirmation" icon="" #cd>
+    <p-footer>
+      <div class="row">
+        <div class="col-md-6">
+          <button type="button" class="btn btn-ignore-rfq" (click)="cd.reject()">No</button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-cancel-rfq" label="Yes" (click)="cd.accept()">Yes</button>
+        </div>
+      </div>
+    </p-footer>
+  </p-confirmDialog>

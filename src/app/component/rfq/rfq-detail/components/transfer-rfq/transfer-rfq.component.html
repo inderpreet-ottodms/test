@@ -1,0 +1,20 @@
+<div class="background-white">
+  <div class="row">
+    <div class="col-md-12 rightpanel">
+      <i class="fa fa-times-circle pull-right" (click)="closePartDrawer()"></i>
+      <h2 class="panelheading">Transfer RFQ to Another Owner</h2>
+    </div>
+    <hr>
+    <div class="col-md-12"><br>
+      <p>Select an individual from your organization that you would like to transfer the RFQ to.</p>
+      <div class="form-group">
+          <angular2-multiselect [data]="iBuyerListByCompanyIdModelColl" [(ngModel)]="selectedItems" [settings]="settings" (onSelect)="onSelect($event)"  #contact="ngModel" required > </angular2-multiselect>
+          <div *ngIf="isContactValid" style="color: red; text-align: right">Please select buyer  </div>
+      </div>
+      <div class="dropimagebuttons">
+        <button type="submit" class="rightcancelbutton"   (click)="closePartDrawer()">Cancel</button>
+        <button type="submit"  [ngClass]="(isPartSaveSubmit())?'rightaddsubmit-enable':'rightaddsubmit-disable'" [disabled]="!isPartSaveSubmit()" (click)="transferRfq()">Transfer </button>
+      </div>
+    </div>
+  </div>
+</div>

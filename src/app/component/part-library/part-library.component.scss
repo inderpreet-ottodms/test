@@ -1,0 +1,205 @@
+.Part-Library-Header {
+    height: 23px;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    text-align: left;
+    letter-spacing: normal;
+    color: #222222;
+  }
+
+  .Close-3 {
+    width: 17px;
+    height: 17px;
+    object-fit: contain;
+    cursor: pointer;
+  }
+  .Search-Area {
+    height: 54px;
+    background-color: #f6f7fb;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  .Search-Box {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .Part-Box-contracted {
+    margin-top: 11px;
+    margin-bottom: 11px;
+  }
+  .Part-Box-detail {
+    margin-top: 11px;
+    margin-bottom: 20px;
+  }
+  .bk-Color-White {
+    background-color: #ffffff;
+  }
+  .bk-Color-Grayed {
+    background-color: #f6f7fb;
+  }
+  .oldProcess-color {
+    background-color: #cfd0d2  ;
+  }
+  .Part-Name {
+    height: 20px;
+    font-family: Poppins;
+    font-size: 14px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #222222;
+  }
+  .Part-Number {
+    height: 18px;
+    font-family: Poppins;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    color: #222222;
+  }
+  .Add-Part-Details {
+    height: 17px;
+    font-family: Poppins;
+    font-size: 12px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #4a90e2;
+  }
+  .Part-Detail-seperator-Line {
+    height: 2px;
+    border: solid 1px #bec4cb;
+    margin-bottom: 15p;
+  }
+  .Part-Details-Label {
+    height: 17px;
+    font-family: Poppins;
+    font-size: 12px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #222222;
+  }
+  .Part-Details-Value {
+    font-family: Poppins;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #222222;
+  }
+  .Last-Details-Field {
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 17px;
+  }
+  .Drawer-Shadow {
+    border-radius: 5px;
+    background-color: #ffffff;
+    box-shadow: 0 5px 10px 0 rgba(145, 154, 163, 0.65)
+  }
+  .Detail-Seperator {
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 15px;
+  }
+  .box-fit {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  .blueColor {
+    color: #4099ff;
+    font-size: 10px;
+  }
+  .pin-mrak-size {
+    font-size: 18px !important;
+    cursor: pointer;
+  }
+
+  .pin-mrak-size-count {
+    font-size: 16px !important;
+    cursor: pointer;
+  }
+
+  .downloadAll {
+    color: #4a90e2 !important;
+    cursor: pointer !important;
+    text-align: right !important;
+  }
+  .part-attachment-name {
+    height: 17px;
+    font-family: Poppins;
+    font-size: 12px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    // color: #222222;
+    color: #4a90e2;
+  }
+
+  .popover bs-popover-bottom {
+    position: sticky;
+  }
+
+  .bs-popover-bottom,
+  .bs-popover-auto[x-placement^="bottom"] {
+    position: sticky !important;
+  }
+
+  .popover right in {
+    width: 250px;
+  }
+
+  :host>>>.popover {
+    background-color: #009688;
+    color: #fff;
+  }
+
+  :host>>>.popover>.arrow:after {
+    border-top-color: #009688;
+  }
+
+  .popover-content {
+    width: 200px !important;
+    position: sticky;
+  }
+
+  .popover-content {
+    width: 200px;
+    position: sticky;
+  }
+  .Remove-attachment {
+    font-family: Poppins;
+    font-size: 12px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #4a90e2;
+    cursor: pointer !important;
+  }
+
+
+  .pointerCursor {
+    cursor: pointer
+  }

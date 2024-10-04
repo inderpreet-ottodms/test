@@ -1,0 +1,320 @@
+<form [formGroup]="rfqDetailForm" *ngIf="dataLoaded">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="formField">
+                <label for="rfqName" class="form-label">RFQ Name<sup>*</sup></label>
+                <input type="text" class="form-control" id="rfqName" aria-describedby="rfqNameHelp" name="rfqName"
+                    maxlength="100" placeholder="RFQ Name" formControlName="rfqName"
+                    (blur)="isRFQDetailFieldValid('rfqName')">
+                <inline-error-display [displayError]="isRFQDetailFieldValid('rfqName')"
+                    errorMsg="RFQ name Is required"></inline-error-display>
+            </div>
+        </div>
+    </div>
+    <div class="grayFromCont rfqndadetail-selector-no-css">
+        <div class="row pb-1">
+            <div class="col-md-12 ndaSectionHeader">
+                <span class="ndaSectionHeaderText">Choose an NDA</span><br>
+                <span>Protect your data with our Standard NDA or your own.</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6" (click)="removeNDAFile()" >
+                <div class="customRadio">
+                    <input type="radio" name="ndaLevel" id="rfqNDATypeStanard" formControlName="ndaLevel"
+                        [value]="ndaSectionData.stanardNDAValue">
+                    <span class="checkmark"></span>
+                    <label for="rfqNDATypeStanard">
+                        Standard NDA
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="customRadio">
+                    <input type="radio" name="ndaTypekey" id="ndaTypekeySingleConfirm" formControlName="ndaTypekey"
+                        [value]="ndaSectionData.singleConfirmValue">
+                    <span class="checkmark"></span>
+                    <!-- <div class="customRadioInfo"> -->
+                        <label for="ndaTypekeySingleConfirm" class="ndaConfirmLabel">
+                            Single Confirm
+                        </label>
+                        <i class="fa fa-info-circle nda-sc1" placement="right" data-container="body"
+                            [ngbTooltip]="singleConfirmTooltipMsg"></i>
+                        <ng-template #singleConfirmTooltipMsg style="font-family: Poppins">
+                            The Single Confirm option means that manufacturers only
+                            need to accept the NDA agreement before they can access
+                            your files. </ng-template>
+                    <!-- </div> -->
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="customRadio">
+                    <input type="radio" name="ndaLevel" id="rfqNDATypeCustom" formControlName="ndaLevel"
+                        [value]="ndaSectionData.customNDAValue">
+                    <span class="checkmark"></span>
+                    <label for="rfqNDATypeCustom">
+                        Custom NDA
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="customRadio">
+                    <input type="radio" name="ndaTypekey" id="ndaTypekeyDoubleConfirm" formControlName="ndaTypekey"
+                        [value]="ndaSectionData.doubleConfirmValue">
+                    <span class="checkmark"></span>
+                    <!-- <div class="customRadioInfo"> -->
+                        <label for="ndaTypekeyDoubleConfirm" class="ndaConfirmLabel">
+                            Double Confirm
+                        </label>
+                        <i class="fa fa-info-circle nda-sc1" placement="right" data-container="body"
+                            [ngbTooltip]="doubleConfirmTooltipMsg"></i>
+                        <ng-template #doubleConfirmTooltipMsg>
+                            The Double Confirm option means that manufacturers need
+                            to accept the NDA agreement and request to see your
+                            files.You must then approve the manufacturer’s request
+                            before they can access your files. </ng-template>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+      
+        <div *ngIf="getGivenFieldValue('ndaLevel')==CUSTOM_NDA_LEVEL_VALUE">
+            <div class="row">
+                <div class="col-md-12">
+                    {{NDA_CONTENT}}
+                </div>
+                <div class="col-md-12">
+                    <div class="accUploadFile mt-2">
+                        <div draggable="true" ngClass="{{dragAreaClass}}">
+                            <input type="file" formControlName="customNDAFile" name="customNDAFile"
+                                (change)="onFileChange($event)" accept="application/pdf" />
+                            <div><img src="/assets/images/buyer-process/upload_icon.png" /></div>
+                            <span>Drag and drop a file here</span>
+                            <div>Click to upload</div>
+                            <div *ngIf="rfqDetailForm.controls['customNDAFile'].invalid">
+                                <inline-error-display [displayError]="true"
+                                    errorMsg="Please upload a file"></inline-error-display>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row pt-1 pb-2" *ngIf="customNDAFileFileName">
+                <div class="col-md-12">
+                    <div class="d-flex rightFileTitle justify-content-between">
+                        <div class="">
+                            {{getFileShortName(customNDAFileFileName)}}
+                        </div>
+                        <div class="d-flex">
+                            <div class="cursor-pointer" (click)="viewRfqNdaFile(customNDAFileFileName)">
+                                View</div>
+                            <div class="fw-bold text-dark fx-3 cursor-pointer pl-3"
+                                (click)="removeNDAFile()">
+                                X</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex">
+            <div class="col-md-8">
+                <span class="cursor-pointer rfq-detail-ndahelp"
+                    (click)="toggleShowMFGNDAMessageSection()">
+                    Learn more about NDAs on MFG
+                    <i class="fa fa-info-circle"></i>
+                </span>
+            </div>
+            <div class="col-md-4">
+                <div class="pull-right">Make Default
+                    <input type="checkbox" formControlName="isDefaultNDAdetails" name="isDefaultNDAdetails" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 pb-2">
+            <input type="checkbox" (change)="togglePurposeSection()" name="isForBenchmarking"
+                formControlName="isForBenchmarking" />
+            This RFQ is for benchmarking purposes
+        </div>
+    </div>
+    <ng-container *ngIf="getGivenFieldValue('isForBenchmarking')">
+        <div class="row" *ngFor="let benchmarkingPurpose of benchmarkingPurposeList;">
+            <div class="col-md-12">
+                <div class="customRadio">
+                    <input type="radio" [value]="benchmarkingPurpose.id" (change)="makeRfqPurposeOtherCommentEMpty()"
+                        name="rfqPurpose" id="rfqPurpose{{benchmarkingPurpose.id}}" formControlName="rfqPurpose">
+                    <span class="checkmark"></span>
+                    <label for="rfqPurpose{{benchmarkingPurpose.id}}">
+                        {{benchmarkingPurpose.value}}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="rfqDetailForm.controls['rfqPurpose'].invalid"></div>
+        <inline-error-display [displayError]="rfqDetailForm.controls['rfqPurpose'].invalid"
+            errorMsg="Please select the purpose"></inline-error-display>
+
+    </ng-container>
+    <div *ngIf="getGivenFieldValue('rfqPurpose')==RFQ_PURPOSE_OTHER_ID" class="row">
+
+        <div class="col-md-12">
+            <div class="formField">
+                <textarea class="form-control" placeholder="Please explain copy..." id="rfqPurposeOtherComment"
+                    formControlName="rfqPurposeOtherComment"
+                    (blur)="isRFQDetailFieldValid('rfqPurposeOtherComment')"></textarea>
+
+                <div *ngIf="rfqDetailForm.controls['rfqPurposeOtherComment'].invalid">
+                    <inline-error-display [displayError]="true"
+                        errorMsg="Please provide the purpose description"></inline-error-display>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="formField">
+                <div class="d-inline-flex align-items-center" style="width: 200px;">
+                    <label for="rfqQuotesNeededBy" class="form-label">Quote Deadline<sup>*</sup></label>
+                    <i class="fa fa-info-circle" nda-sc aria-hidden="true" placement="top" container="body"
+                        ngbTooltip='This "quote deadline" is the date when the RFQ will be closed from the marketplace (typically 5-10 days out).'></i>
+                </div>
+                <p-calendar showIcon="true" formControlName="quotesNeededBy" id="rfqQuotesNeededBy"
+                    [minDate]="datesMinValue.quotesNeededBy" [readonlyInput]="true" [disabledDays]="[0,6]"
+                    [dateFormat]="DATE_FORMAT" (onSelect)="onQuotesNeededByChange()"
+                    [placeholder]="DATE_FORMAT_PLACEHOLDER" #quotesNeededByDateInput>
+                </p-calendar>
+                <inline-error-display [displayError]="displayQuotesNeededByDateError"
+                    errorMsg="Select a  Date"></inline-error-display>
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="formField">
+                <div class="d-inline-flex align-items-center" style="width: 200px;">
+                    <label for="rfqAwardDate" class="form-label">Award Date<sup>*</sup></label>
+                    <i class="fa fa-info-circle nda-sc" aria-hidden="true" placement="top" container="body"
+                        ngbTooltip='This "estimated award" is the estimated date in which the RFQ parts will be awarded to the supplier who wins the job.'></i>
+                </div>
+
+                <p-calendar [disabled]="disableAwardDate" showIcon="true" [readonlyInput]="true" [minDate]="datesMinValue.awardDate"
+                    [disabledDays]="[0,6]" formControlName="awardDate" (onSelect)="onAwardDateChange()"
+                    id="rfqAwardDate" [dateFormat]="DATE_FORMAT" [placeholder]="DATE_FORMAT_PLACEHOLDER"
+                    #quotesAwardDateInput>
+                </p-calendar>
+                <inline-error-display [displayError]="displayAwardDateError"
+                    errorMsg="Select a Date"></inline-error-display>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <div class="formField">
+                <div class="d-inline-flex align-items-center" style="width: 200px;">
+                    <label for="rfqDetailDeliveryDeadlline" class="form-label">Delivery Deadline<sup>*</sup></label>
+                    <i class="fa fa-info-circle nda-sc" aria-hidden="true" placement="top" container="body"
+                        ngbTooltip='This part "delivery date" is the estimated date when the part(s) are expected to be physically delivered to you.'></i>
+                </div>
+                
+                <p-calendar [disabled]="disableDeliveryDeadline" showIcon="true" name="deliveryDate"  (onSelect)="onDeliveryDateChange()"
+                    [minDate]="datesMinValue.deliveryDate" formControlName="deliveryDate" [readonlyInput]="true"
+                    [disabledDays]="[0,6]" id="rfqDetailDeliveryDeadlline" [dateFormat]="DATE_FORMAT"
+                    [placeholder]="DATE_FORMAT_PLACEHOLDER" #rfqDetailDeliveryDeadllineInput>
+                </p-calendar>
+                <inline-error-display [displayError]="displayDeliveryDateError"
+                    errorMsg="Select a Date"></inline-error-display>
+            </div>
+        </div>
+    </div>
+
+    <div [hidden]="hideAllowePartialPartQuoting()">
+        <div class="row mb-1">
+            <div class="col-md-12">Do you want to allow partial quoting?
+                <i style="font-size: 15px" class="fa fa-info-circle" aria-hidden="true" placement="right"
+                    data-container="body"
+                    ngbTooltip="By selecting Yes, you will allow manufacturers to quote only the parts they can make in this RFQ"></i>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="customRadio">
+                    <input type="radio" name="isPartialQuotingAllowed" [value]="true" id="isPartialQuotingAllowedYes"
+                        formControlName="isPartialQuotingAllowed">
+                    <span class="checkmark"></span>
+                    <label for="isPartialQuotingAllowedYes">
+                        Yes
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="customRadio">
+                    <input type="radio" name="isPartialQuotingAllowed" id="isPartialQuotingAllowedNo"
+                        formControlName="isPartialQuotingAllowed" [value]="false">
+                    <span class="checkmark"></span>
+                    <label for="isPartialQuotingAllowedNo">
+                        No
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row pb-3">
+        <div class="col-md-12 formField">
+            <label> Manufacturing Location(s)</label>
+            <span>
+                Where do you want your order manufactured? Please note that MFG currently supports in-app invoicing and
+                payments with United States manufacturers only.
+                A separate RFQ will be created for each location selection.
+            </span>
+        </div>
+        <div class="col-md-6" *ngFor="let tc of territoryClassificationList">
+            <button type="button" (click)="changeTerritoryCode(tc.territoryClassificationCode)"
+                class="manufacturingLocation w-100 {{isTerritoryClassificationCodeSelected(tc.territoryClassificationCode)?'locationSelected':null}}">{{tc.territoryClassificationName | uppercase}}</button>
+        </div>
+    </div>
+</form>
+<ng-template #showMFGNDAMessageSectionModal let-d="dismiss" data-backdrop="static" data-keyboard="false">
+    <div class="modal-header justify-content-between ">
+        <h4 class="modal-title" id="modal-basic-title">
+            Standard NDA
+        </h4>
+        <img src="assets/rfq/close-3.svg" class="pull-right" (click)="closeShowMFGNDAMessageSection()">
+    </div>
+    <div class="modal-body border-bottom">
+        <p>
+            MFG’s Standard NDA states that you retain explicit proprietary ownership of the information
+            contained within the RFQ, including all related data, and files. It also details the
+            restrictions of their use as it pertains to the fulfillment of this request.
+        </p>
+        <h4>What does it say?</h4>
+        <p><i style="color:gray;">All data and attachments related to this RFQ are
+                the property of the BUYER. The BUYER is the person or company that created and posted this
+                RFQ.The information in this document is furnished to enable preparation of quotes,
+                engineering review, evaluation, design, quality control and/or receiving inspection only,
+                and represents proprietary information of the BUYER and shall be restricted to those persons
+                having a need to know and neither it nor this document shall be used or disclosed in whole
+                or in part, for any other purpose, without the written permission of the BUYER. By clicking
+                the ACCEPT button below, you are digitally signing and agreeing to this Non-Disclosure
+                Agreement.</i></p>
+        <h6>Single Confirm</h6>
+
+        <p> The Single Confirm option means that
+            manufacturers only need to accept the NDA agreement before they can access your
+            files.</p>
+        <h6>Double Confirm</h6>
+        <p> Double Confirm option means that manufacturers need
+            to accept the NDA agreement and request to see your files.You must then approve the
+            manufacturer’s request before they can access your files.</p>
+    </div>
+    <div class="modal-footer d-block">
+        <div class="row">
+            <div class="col-md-12">
+                <button (click)="closeShowMFGNDAMessageSection()">Close</button>
+            </div>
+        </div>
+    </div>
+</ng-template>

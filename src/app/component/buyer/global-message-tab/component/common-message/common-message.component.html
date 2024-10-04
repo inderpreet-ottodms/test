@@ -1,0 +1,495 @@
+<div *ngIf="isLoader">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div>
+<div *ngIf="!isLoader">
+  <div class="row">
+    <div class="col-md-3 top-p-15">
+      <div class="panel panel-info">
+        <div class="panel-heading " style="height: 44px;" [ngClass]="{'active-tab': isAllActiveTab === true }" (click)="setCurrentMessageType('All')">
+          <h4 class="panel-title">
+            <a role="button">
+              <span class="i-email"><i class="ti-email"></i></span>
+              <span class="btn-text"><strong>Messages</strong></span>
+              <button class="count-btn">{{totalMessageCount}}</button>
+            </a>
+          </h4>
+        </div>
+        <hr style="margin-top: 0px;margin-bottom: 0px;">
+        <!--To make by defualt open a any panel put class "in" (without quotes)-->
+        <div id="per">
+          <div class="panel-body">
+            <ul class="list-group firstChild">
+              <li class="list-group-item top1 drawer-child-wrapper" [ngClass]="{'active-tab': isBuyerActiveTab === true }" (click)="setCurrentMessageType('Buyer')" *ngIf="userType === 'Supplier'">
+                <i class="ti-user" style="margin-left:20px;"></i><span class="p-l-10 drawer-child">Buyers<button
+                    class="count-btn2">{{totalBuyerMsgCount}}</button></span>
+              <hr>
+              </li>
+              <li class="list-group-item top1 drawer-child-wrapper" style="height: 44px;" [ngClass]="{'active-tab': isSupplierActiveTab === true }" (click)="setCurrentMessageType('Supplier')" *ngIf="userType === 'Buyer'">
+                <i  style="margin-left:20px;" class="ti-user"></i><span class="p-l-10 drawer-child">Manufacturers<button
+                    class="count-btn2">{{totalSupplierMsgCount}}</button></span>
+              <hr>
+              </li>
+             
+              <li class="list-group-item top2 drawer-child-wrapper" style="height: 44px;" [ngClass]="{'active-tab': isRFQActiveTab === true }" (click)="setCurrentMessageType('RFQ')">
+                <i style="margin-left:20px;" class="ti-write"></i><span
+                  class="p-l-10 drawer-child">RFQs<button class="count-btn3">{{totalRfqMsgCount}}</button></span>
+              <hr>
+              </li>    
+             
+              <li class="list-group-item top2 drawer-child-wrapper" style="height: 44px;" [ngClass]="{'active-tab': isArchiveTab === true }" (click)="setCurrentMessageType('Archive')">
+                <i style="margin-left:20px;" class="icofont icofont-files"></i><span
+                  class="p-l-10 drawer-child">Archive</span>
+              <hr>
+              </li>  
+              
+              <li class="list-group-item top2 drawer-child-wrapper" style="height: 44px;" [ngClass]="{'active-tab': isArchiveTab === true }" (click)="setCurrentMessageType('Sent')">
+                <i style="margin-left:20px;" class="ti ti-share"></i><span
+                  class="p-l-10 drawer-child">Sent</span>
+              <hr>
+              </li>  
+
+              <!-- <li class="list-group-item top2 drawer-child-wrapper" style="height: 44px;" [ngClass]="{'active-tab': isSentTab === true }" (click)="setCurrentMessageType('Sent')">
+                <span style="margin-left:35px;"
+                  class="p-l-10 drawer-child">Sent</span>
+              <hr>
+              </li>   -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="top-p-15" [ngClass]="(isSidePanel())?'col-md-9':'col-md-9'">
+       <!-- Top Buttons -->
+
+      <ul class="icon-top">
+        <!-- Enable Buttons -->
+        <li class="m-r-10 icon-btns-email" *ngIf="arrayLength > 0" (click)="markAsunReadMessages()" ngbTooltip="Mark as unread"><i
+            class="fa fa-envelope"></i></li>
+        <li class="m-r-10 icon-btns-open-email" *ngIf="arrayLength > 0" (click)="markAsReadMessages()" ngbTooltip="Mark as read"><i
+            class="icofont icofont-envelope-open"></i></li>
+        <li class="m-r-10 icon-btns-trash"  *ngIf="arrayLength > 0 && isArchiveTab == false" (click)="archiveMessages()" ngbTooltip="Archive"><i
+            class="icofont icofont-files"></i></li>
+        <li class="m-r-10 icon-btns-trash"  *ngIf="arrayLength > 0 && isArchiveTab == true" (click)="unarchiveMessages()" ngbTooltip="Unarchive"><i
+              class="icofont icofont-files"></i></li>
+        <!-- Disabled Buttons -->
+        <button class="m-r-10 icon-disable" *ngIf="arrayLength === 0" ngbTooltip="Mark as unread"><i class="fa fa-envelope"></i></button>
+        <button class="m-r-10 icon-disable" *ngIf="arrayLength === 0" ngbTooltip="Mark as read"><i class="icofont icofont-envelope-open"></i></button>
+        <button class="m-r-10 icon-disable" *ngIf="arrayLength === 0 && isArchiveTab == false" ngbTooltip="Archive"><i class="icofont icofont-files"></i></button>
+        <button class="m-r-10 icon-disable" *ngIf="arrayLength === 0 && isArchiveTab == true" ngbTooltip="Unarchive"><i class="icofont icofont-files"></i></button>
+
+      </ul>
+     
+  
+      <!-- Need to wrap above buttons in UL,LI for dynamic maintanance -->
+      <!-- Main CODE -->
+      <div class="tbl-content" *ngIf="isMesssageAvailable">
+
+        <table class="table table-hover">
+          <tbody>
+            <ng-container *ngFor="let message of items; let i = index;">
+              <tr [ngClass]="{'active-row': selectedDivIndex===i} ">
+                <table class="rfqtable">                   
+                  <tr [ngClass]="{'expanded-row': selectedDivIndex===i }">
+
+                    <div class="msg-details p-2" [ngClass]="message.messageRead?'readGrey':''">
+                      <div class=" chkbx mt-1">
+                        <input class="checkbox-container" type="checkbox" [(ngModel)]="message.isSelected"
+                          (change)="onCheckBoxSelected(message, i);">
+                      </div>
+                      <div class="pointerCursor rfqtd imgg" (click)="toggleMessageThreadDiv(i);changeToMsgRead(message)"
+                        (click)="(selectedDivIndex === i) && getThreadData(message)">
+                        <div *ngIf="(message.fromCont !== loggedId)">              
+                          <img *ngIf="userAccount !== 'Basic' || message.messageTypeId !== 225" [src]="message.companylogo"
+                            class="img-circle user-img" onError="this.src='assets/company/avatar-manu-basic-circle.svg'" />
+                        
+                          <img *ngIf="userAccount === 'Basic' && message.messageTypeId === 225"
+                            src="assets/company/avatar-manu-basic-circle.svg" class="img-circle user-img" />
+                        </div>
+                      
+                        <div  iv *ngIf="(message.toCont !== loggedId)">
+                          <img *ngIf="userAccount !== 'Basic' || message.messageTypeId !== 225" [src]="message.toContactCompanylogo"
+                            class="img-circle user-img" onError="this.src='assets/company/avatar-manu-basic-circle.svg'" />
+                        
+                          <img *ngIf="userAccount === 'Basic' && message.messageTypeId === 225"
+                            src="assets/company/avatar-manu-basic-circle.svg" class="img-circle user-img" />
+                        </div>
+                      </div>
+                      <div class="pointerCursor name pl-2" (click)="toggleMessageThreadDiv(i);changeToMsgRead(message)"
+                        (click)="(selectedDivIndex === i) && getThreadData(message)">
+                        <div>
+                          <span *ngIf="(message.fromCont !== loggedId)" class="sidepanel-hover" (click)="openSideDetailDrawer(message)">From: {{message.fromContName}}</span>
+                          <div *ngIf="(message.fromCont !== loggedId)" style="color: gray;">
+                             To: {{message.companyName}}
+                          </div>
+                          <span *ngIf="(message.toCont !== loggedId)" class="sidepanel-hover" (click)="openSideDetailDrawer(message)">From: {{message.toContName}}</span>
+                          <div *ngIf="(message.toCont !== loggedId)" style="color: gray;">
+                            To: {{message.toCompanyName}}
+                          </div>
+                        </div>                      
+                      </div>
+                      <!-- For ticket 4309 add below code -->
+                      <!-- (click)="openRfqDrawer(message.leadId, message.messageRead, message.messageId, message.messageTypeId, message.toCont, message.fromCont, message)" -->
+                      <div class="iconn">
+                        <i class="ti-user" *ngIf="message.rfqId ===null"></i>
+                        <i class="ti-write" *ngIf="message.rfqId !=null"></i>
+                      </div>
+                      <div class="message-subject messg pl-2" (click)="toggleMessageThreadDiv(i);changeToMsgRead(message)"
+                        (click)="(selectedDivIndex === i) && getThreadData(message)" (click)="openRfqDrawer(message.leadId, message.messageRead, message.messageId, message.messageTypeId, message.toCont, message.fromCont, message)">
+                        <span [innerHTML]="message.messageSubject"></span> -
+                        <span style="color: gray;">{{
+                          removeHtmlTag(message.messageDescr)
+                            | dotLimit: "20"
+                        }}</span>
+                      </div>
+                      <div class="dates pl-2" (click)="toggleMessageThreadDiv(i);changeToMsgRead(message)"
+                        (click)="(selectedDivIndex === i) && getThreadData(message)" >
+                        
+                        <div style="color: gray;" *ngIf="selectedDivIndex !== i">
+                          {{getDate(message.messageDate)}}
+                        </div>
+                        
+                        <div style="color: gray;" *ngIf="selectedDivIndex === i">
+                          {{getDate(message.messageDate)}}
+                        </div>
+                      </div>
+                      <div class="togl">
+                        <i class="fa fa-chevron-down" aria-hidden="true" *ngIf="selectedDivIndex !== i">
+                        </i>
+
+                        <i class="fa fa-chevron-up" aria-hidden="true" *ngIf="selectedDivIndex === i">
+                        </i>
+                      </div>
+                    </div>
+                  </tr>
+                </table>
+
+                <table *ngIf="selectedDivIndex===i"  class="table table-hover messageThreadTable">
+                  <tbody>
+                    <tr *ngFor="let messageThread of messageThreadList; let i2 = index;">
+                      <table *ngIf="i2==0" style="width:100%" [ngClass]="{'active-msg': selectedDivIndex2===i2 } ">
+                        <tr style="background-color: white;">
+                          <!-- {{messageThread.messageId}} -->
+                          <td class="pointerCursor rfqtd " style="background: aliceblue;">
+                            <input class="checkbox-container" type="checkbox" [(ngModel)]="messageThread.isSelected"
+                              (change)="onChildCheckBoxSelected(messageThread);">
+                          </td>
+                          <td class="pointerCursor rfqtd " style="background: aliceblue;"></td>
+                          <td class="pointerCursor rfqtd 0">
+                            <div>
+                              <img *ngIf="userAccount !== 'Basic' || childThreadData.messageTypeId !== 225"
+                                [src]="childThreadData.companylogo" class="img-circle user-img"
+                                onError="this.src='assets/company/avatar-manu-basic-circle.svg'" />
+                              <img *ngIf="userAccount === 'Basic' && childThreadData.messageTypeId === 225"
+                                src="assets/company/avatar-manu-basic-circle.svg" class="img-circle user-img" />
+                            </div>
+                          </td>
+                          <td class="pointerCursor rfqtd 0">
+                            <span class="sidepanel-hover" (click)="openSideDetailDrawer(childThreadData)">{{childThreadData.fromContName}}</span>
+
+                            <div style="color: gray;">
+                              {{childThreadData.companyName}}
+                            </div>
+                          </td>
+                          <td class="message-subject 0">
+                            <div *ngIf="messageThread.toCont == contactID">
+                              <span *ngIf="messageThread.toCompanyId == companyID">To:You</span>
+                              <span *ngIf="messageThread.toCompanyId != companyID">To:
+                                {{childThreadData.fromContName}}
+                              </span>
+                            </div>
+                            <div *ngIf="messageThread.toCont != contactID">
+                              <span *ngIf="messageThread.toCompanyId == companyID">To:You</span>
+                              <span *ngIf="messageThread.toCompanyId != companyID">To:
+                                {{childThreadData.toContName}}
+                              </span>
+                            </div>
+                            <div style="color: gray;" placement="top" data-container="body" [ngbTooltip]="tooltipMsg">
+                              <span class="f-w-0 f-14"
+                                [innerHTML]="childThreadData.messageDescr | sanitizeNolimit"></span>
+                            </div>
+                            <span *ngIf="childThreadData.messageTypeId != 230 && !isShowReplyEditor && (childThreadData.fromCont > 0 && childThreadData.toCont > 0 && (userType ==='Buyer' || ( userType ==='Supplier' && (accountType !== 'Basic' &&  accountType !== 'Silver'))))"><button class="compose-msg"
+                                (click)="showEditor($event,childThreadData)">Reply</button></span>
+                            <span *ngIf="userType ==='Supplier' && accountType === 'Basic'">
+                              <div>
+                                <app-upgrade-account-btn [quoteRFQ]=false [RfqId]="0" [btnClass]=1></app-upgrade-account-btn>
+                              </div>
+                            </span>
+                          </td>
+                          <td class="0">
+                            <div style="text-align: right">
+                              <span class="color pointerCursor" style="color: #337ab7;" *ngIf="childThreadData.messageFileNames[0].length > 1"
+                                (click)="downloadAllFiles(childThreadData.messageFileNames)"><b>Download
+                                  All</b></span>
+                            </div>
+                            <div *ngIf="childThreadData.messageFileNames[0].length !== 0" class="fileArea" style="text-align: right;">
+                              <div *ngFor=" let file of childThreadData.messageFileNames" class="fileArea">
+                                <span class="color pointerCursor" style="color: #337ab7;" (click)="downloadS3File(file, true)">{{file| originalShortName:
+                                  28}}</span>
+                              </div>
+                            </div>
+                          </td>
+
+                        </tr>
+                      </table>
+                      <table *ngIf="isShowReplyEditor === true && i2==0"
+                        [ngClass]="{'active-msg': selectedDivIndex2===i2 } ">
+                        <tr>
+                          <td class="rfqtd " style="background: aliceblue;">
+                            <input class="checkbox-container" type="checkbox" [(ngModel)]="message.isSelected"
+                              (change)="onCheckBoxSelected(message, i);">
+                          </td>
+                          <td class="rfqtd " style="background: aliceblue;"></td>
+                          <td class="pointerCursor rfqtd 0 bg-lightblue">
+                            <div>
+                              <img *ngIf="userAccount !== 'Basic' || message.messageTypeId !== 225" [src]="logoPathToShow"
+                                class="img-circle user-img" onError="this.src='assets/company/avatar-manu-basic-circle.svg'" />
+                              <img *ngIf="userAccount === 'Basic' && message.messageTypeId === 225"
+                                src="assets/company/avatar-manu-basic-circle.svg" class="img-circle user-img" />
+                            </div>
+                          </td>
+                          <td class="bg-lightblue 0">You</td>
+                          <td class="bg-lightblue 5">
+                            <span>
+                              <p>         
+                                     <span *ngIf="childThreadData.fromCont == contactID">
+                                      <span *ngIf="childThreadData.companyId != companyID">To:You</span>
+                                      <span *ngIf="childThreadData.companyId == companyID">To:
+                                        {{childThreadData.toContName }}
+                                      </span>
+                                    </span>
+                                    <span *ngIf="childThreadData.fromCont != contactID">
+                                      <span *ngIf="childThreadData.companyId == companyID">To:You</span>
+                                      <span *ngIf="childThreadData.companyId != companyID">To:
+                                        {{childThreadData.fromContName}}
+                                      </span>
+                                    </span>
+                              </p>
+                              </span>
+                            
+                            <div *ngIf="isShowReplyEditor === true" style="background: bisque;">
+                              <!-- <app-associate-message-drawer></app-associate-message-drawer> -->
+                              <app-send-message-editor (message_sent)="refreshMsgList($event)"
+                                [childThreadData]='childThreadData' [messageThreadList]='messageThreadList'>
+                              </app-send-message-editor>
+                            </div>
+                          </td>
+
+                        </tr>
+                      </table>
+                      <table  *ngIf="i2!=0" [ngClass]="{'active-msg': selectedDivIndex2===i2 } ">
+                        <tr *ngIf="i2!=0" style="background-color: #ebe9e9;">
+                          <td class="" style="background: aliceblue;">
+                            <input class="checkbox-container" type="checkbox" [(ngModel)]="messageThread.isSelected"
+                              (change)="onChildCheckBoxSelected(messageThread);">
+                          </td>
+                          <td class="pointerCursor rfqtd " style="background: aliceblue"></td>
+                          <td class="pointerCursor rfqtd 0">
+                            <div style="margin-left: 0px;">
+                              <img *ngIf="userAccount !== 'Basic' || messageThread.messageTypeId !== 225"
+                                [src]="messageThread.companylogo" class="img-circle user-img"
+                                onError="this.src='assets/company/avatar-manu-basic-circle.svg'" />
+                              <img *ngIf="userAccount === 'Basic' && messageThread.messageTypeId === 225"
+                                src="assets/company/avatar-manu-basic-circle.svg" class="img-circle user-img" />
+                            </div>
+                          </td>
+                          <td class="pointerCursor rfqtd 0" (click)="toggleMessageThreadDiv2(i2);"
+                            (click)="getChildThreadData(messageThread)">
+                            <span class="sidepanel-hover" (click)="openSideDetailDrawer(messageThread)">{{messageThread.fromContName}}</span>
+                            <div style="color: gray;">
+                              {{messageThread.companyName}}
+                            </div>
+                          </td>
+                          <td class="message-subject 0" (click)="toggleMessageThreadDiv2(i2);"
+                            (click)="getChildThreadData(messageThread)">
+                            <div *ngIf="messageThread.toCont == contactID">
+                              <span *ngIf="messageThread.toCompanyId == companyID">To:You</span>
+                              <span *ngIf="messageThread.toCompanyId != companyID">To:
+                                {{messageThread.fromContName}}
+                              </span>
+                            </div>
+                            <div *ngIf="messageThread.toCont != contactID">
+                              <span *ngIf="messageThread.toCompanyId == companyID">To:You</span>
+                              <span *ngIf="messageThread.toCompanyId != companyID">To:
+                                {{messageThread.toContName}}
+                              </span>
+                            </div>
+                            <div style="color: gray;" placement="top" data-container="body" [ngbTooltip]="tooltipMsg">
+                              <span>{{ removeHtmlTag(messageThread.messageDescr) | dotLimit:20 }}</span>
+                            </div>
+                          </td>
+                          <td class="0" *ngIf="messageThread.isMessageThread == false"
+                            (click)="toggleMessageThreadDiv2(i2);" (click)="getChildThreadData(messageThread)">
+                            <i class="fa fa-chevron-down iconDisabled" aria-hidden="true">
+                            </i>
+                            <div style="color: gray;">
+                              {{getDate(messageThread.messageDate)}}
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
+                      <div  *ngIf="selectedDivIndex2 === i2">
+                        <table class="table table-hover messageThreadTable">
+                          <tbody>
+                            <tr>
+                              <table >
+                                <tr style="background-color: white;">
+                                  <td class="pointerCursor rfqtd " style="background-color: aliceblue;"></td>
+                                  <td class="pointerCursor rfqtd " style="background-color: aliceblue;"></td>
+                                  <td class="pointerCursor rfqtd 0">
+                                    <div style="margin-left: 0px;">
+                                      <img
+                                        *ngIf="userAccount !== 'Basic' || secondchildThreadData.messageTypeId !== 225"
+                                        [src]="secondchildThreadData.companylogo" class="img-circle user-img"
+                                        onError="this.src='assets/company/avatar-manu-basic-circle.svg'" />
+                                      <img
+                                        *ngIf="userAccount === 'Basic' && secondchildThreadData.messageTypeId === 225"
+                                        src="assets/company/avatar-manu-basic-circle.svg" class="img-circle user-img" />
+                                    </div>
+                                  </td>
+                                  <td class="pointerCursor rfqtd 0">
+                                    <span class="sidepanel-hover" (click)="openSideDetailDrawer(secondchildThreadData)">{{secondchildThreadData.fromContName}}</span>
+                                    <div style="color: gray;">
+                                      {{secondchildThreadData.companyName}}
+                                    </div>
+                                  </td>
+                                  <td class="message-subject 0">
+                                      <div *ngIf="secondchildThreadData.toCont == contactID">
+                                        <span *ngIf="secondchildThreadData.toCompanyId == companyID">To:You</span>
+                                        <span *ngIf="secondchildThreadData.toCompanyId != companyID">To:
+                                          {{secondchildThreadData.fromContName}}
+                                        </span>
+                                      </div>
+                                      <div *ngIf="secondchildThreadData.toCont != contactID">
+                                        <span *ngIf="secondchildThreadData.toCompanyId == companyID">To:You</span>
+                                        <span *ngIf="secondchildThreadData.toCompanyId != companyID">To:
+                                          {{secondchildThreadData.toContName}}
+                                        </span>
+                                      </div>
+                                    <div style="color: gray;" placement="top" data-container="body"
+                                      [ngbTooltip]="tooltipMsg">
+                                      <span class="f-w-0 f-14"
+                                        [innerHTML]="secondchildThreadData.messageDescr | sanitizeNolimit"></span>
+                                    </div>
+
+                                  </td>
+                                  <td class="0">
+                                    <div style="text-align: right">
+                                      <span class="color pointerCursor" style="color: #337ab7;" *ngIf="secondchildThreadData.messageFileNames[0].length > 1"
+                                        (click)="downloadAllFiles(secondchildThreadData.messageFileNames)"><b>Download
+                                          All</b></span>
+                                    </div>
+                                    <div *ngIf="secondchildThreadData.messageFileNames[0].length !== 0"
+                                      class="fileArea">
+                                      <div *ngFor=" let file of secondchildThreadData.messageFileNames"
+                                        class="fileArea">
+                                        <span class="color pointerCursor" style="color: #337ab7;" (click)="downloadS3File(file, true)">{{file|
+                                          originalShortName: 28}}</span>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </table>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+        <!-- </div> -->
+      </div>
+
+      <div class="tbl-content" *ngIf="!isMesssageAvailable">
+        <div class="row" style="text-align: center;padding-top:90px">
+          <div class="col-md-12">
+            <div>
+              <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+          assets/rfq/no-rfq@3x.png 3x" class="myRFQ-Group">
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding-top:34px;margin-bottom:100px;">
+          <div class="col-md-12">
+            <div class="myRFQ-noRFQActive-helper-text">You don’t have any Messages at this time.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row" style="margin-top: 20px;" *ngIf="isMesssageAvailable">
+        <div class="col-md-3" *ngIf="!isLoader">
+          <div class="dataTables_length" id="example_length">
+            <label>Show
+              <select name="example_length" aria-controls="example" class="" [(ngModel)]="pageSize"
+                (change)="filterAll()">
+                <option value="24">24</option>
+                <option value="48">48</option>
+                <option value="96">96</option>
+              </select>
+              entries</label>
+          </div>
+        </div>
+        <div class="col-md-9" *ngIf="!isLoader">
+          <div class="paginations">
+            <div>
+              <div id="radioBtn" class="btn-group">
+                <a [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}"
+                  class="btn btn-primary btn-sm notActive" (click)="prevPage()" data-bs-toggle="fun" data-title="Y">
+                  Previous
+                </a>
+                <a *ngFor="let page of pagesIndex" (click)="setPage(page)"
+                  [ngClass]="(currentIndex == page)?'btn btn-primary btn-sm active':'btn btn-primary btn-sm notActive'"
+                  data-bs-toggle="fun" data-title="X">
+                  {{page}}
+                </a>
+                <a [ngClass]="{'disabled': (currentIndex == pageNumber)}" class="btn btn-primary btn-sm notActive"
+                  (click)="nextPage()" data-bs-toggle="fun" data-title="N">
+                  Next
+                </a>
+              </div>
+              <input type="hidden" name="fun" id="fun">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="isMesssageAvailable">
+        <div class="col-md-12" *ngIf="!isLoader">
+          <div class="pull-right padd-right">
+            <label class="showreccount"> {{currentIndex }} of {{pageNumber}} </label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- Old Code position-->
+
+  <p-confirmDialog header="Confirmation" icon="" width="629" height="220" #msgDlt>
+    <p-footer>
+      <div class="row" style="margin-bottom:20px; margin-top:20px;">
+        <div class="col-md-6">
+          <button type="button" class="btn btn-ignore-rfq msg-button" (click)="msgDlt.reject()">Cancel</button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-cancel-rfq msg-button" label="Yes" (click)="msgDlt.accept()">
+            {{modalBtnText}}</button>
+        </div>
+      </div>
+    </p-footer>
+  </p-confirmDialog>

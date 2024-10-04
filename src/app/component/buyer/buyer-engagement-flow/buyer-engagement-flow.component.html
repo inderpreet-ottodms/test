@@ -1,0 +1,740 @@
+<section class="signup-step-container" *ngIf="!showLoader">
+    <div>
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8">
+                <div class="wizard">
+                    <div class="wizard-inner container-progress">
+
+                        <ul class="nav nav-tabs progressbar" role="tablist">
+                            <li role="presentation" class="complete tab-0">
+                                <a id="stepper1" href="" data-bs-toggle="tab" aria-controls="step1" role="tab"
+                                    aria-expanded="true">
+                                    <span class="round-tab">
+                                        <span></span>
+                                    </span>
+                                    <span class="nav-title">Welcome</span>
+                                </a>
+
+                            </li>
+                            <li *ngIf="startedStepId !=2" role="presentation" class="disabled tab-1" (click)="onNavClick(1);saveBuyerTab()">
+                                <a id="stepper2" href="#step2" data-bs-toggle="tab" aria-controls="step2" role="tab"
+                                    aria-expanded="false">
+                                    <span class="round-tab">
+                                        <span></span>
+                                    </span>
+                                    <span class="nav-title">Buyer Process</span>
+
+                                </a>
+                            </li>
+                            <li *ngIf="startedStepId === 2" role="presentation" class="active tab-1" (click)="onNavClick(1);saveBuyerTab()">
+                                <a id="stepper2" href="#step2" data-bs-toggle="tab" aria-controls="step2" role="tab"
+                                    aria-expanded="false">
+                                    <span class="round-tab">
+                                        <span></span>
+                                    </span>
+                                    <span class="nav-title">Buyer Process</span>
+
+                                </a>
+                            </li>
+                           
+                            <li *ngIf="startedStepId !=3"role="presentation" class="disabled tab-2" (click)="onNavClick(2);saveCompanyProfile()">
+                                <a id="stepper3" href="#step3" data-bs-toggle="tab" aria-controls="step3" role="tab">
+                                    <span class="round-tab">
+                                        <span></span>
+                                    </span>
+                                    <span class="nav-title">Company Profile</span>
+
+                                </a>
+                            </li>
+                            <li *ngIf="startedStepId === 3 " role="presentation" class="active tab-1" (click)="onNavClick(2);saveCompanyProfile()">
+                                <a id="stepper3" href="#step3" data-bs-toggle="tab" aria-controls="step3" role="tab">
+                                    <span class="round-tab">
+                                        <span></span>
+                                    </span>
+                                    <span class="nav-title">Company Profile</span>
+
+                                </a>
+                            </li>
+
+                            <li role="presentation" class="disabled tab-3" (click)="onNavClick(3);saveEngageMenu()">
+                                <a href="#step4" data-bs-toggle="tab" aria-controls="step4" role="tab">
+                                    <span class="round-tab">
+                                        <span></span>
+                                    </span>
+                                    <span class="nav-title">Engage Manufacturers</span>
+
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <form role="form" action="index.html" class="login-box text-center">
+                        <div class="tab-content" id="main_form">
+                            <div class="tab-pane" role="tabpanel" id="step1">
+
+                                <!-- <ul class="list-inline pull-right">
+                                    <li><button type="button" class="default-btn next-step">Continue to next step</button></li>
+                                </ul> -->
+                            </div>
+                            <div class="tab-pane active" role="tabpanel" id="step2">
+                                <div *ngIf="!isVisibleStep2">
+                                        <div>
+                                            <img class="logo" src="assets/images/buyer-process/ClipboardCheck.png">
+                                        </div>
+
+                                        <div>
+                                            <h3 class="heading">Where are you in the buyer process?</h3>
+                                            <p class="content-label">Buyers arrive at our platform at different steps in the
+                                                buyer process.
+                                                By choosing one of the options below, we can better understand
+                                                where you are at and direct you where you want to go.
+                                            </p>
+                                            <div class="form-check">
+                                                <input [(ngModel)]="step2" type="radio" (change)="checkStepOneRadio('option1')" class="form-check-input" name="optradio" value="option1"
+                                                    checked>
+                                                <label class="form-check-label" for="radio1">Yes, I have part files ready.</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input [(ngModel)]="step2" type="radio" (change)="checkStepOneRadio('option2')"  class="form-check-input" name="optradio" value="option2">
+                                                <label class="form-check-label" for="radio2">No, do not have part files ready.</label>
+                                            </div>
+
+                                        </div>
+
+                                        <ul class="list-inline">
+                                            <li><button type="button" class="default-btn prev-step"                     
+                                                >Back</button></li>
+                                                 <!-- onNavClick(0)    back button  -->
+                                            <!-- <li><button type="button" class="default-btn next-step skip-btn">Skip</button></li> -->
+                                            <li><button type="button" class="default-btn next-step"
+                                                    (click)="activeCmpStep1();saveFirstStepId(3)">Next</button></li>
+                                        </ul>
+                                 </div>
+                                 <div *ngIf="isVisibleStep2">
+                                    <div>                                    
+                                        <img class="logo" src="assets/images/buyer-process/Gear.png" />
+                                    </div>
+                                    <h3 class="heading">No part files, huh?</h3>
+                                    <p class="content-label">Do you need drawings made for your parts? We’ve got plenty of 
+                                        resources to help you get the drawings you need.
+                                    </p>
+                                    <!-- (click)="isHelpNeededForDrawing('Yes')" -->
+                                        <div class="form-check-next">
+                                            <input [(ngModel)]="isHelpDrawingText" type="radio" class="form-check-input"  (change)="checkStepTwoRadio('Yes')" name="optionradio" value="Yes" checked>
+                                            <label class="form-check-label" for="radio3">Yes, I would like help getting drawings made</label>
+                                        </div>
+                                        <!-- (click)="isHelpNeededForDrawing('No')" -->
+                                    <div class="form-check-next">
+                                        <input [(ngModel)]="isHelpDrawingText" type="radio" class="form-check-input"  (change)="checkStepTwoRadio('No')" name="optionradio" value="No">
+                                        <label class="form-check-label" for="radio4">No, I will handle having drawings made</label>
+                                    </div>
+                                    <ul class="list-inline">
+                                        <li><button type="button" class="default-btn prev-step" (click)="activeCmpStep1()">Back</button></li>
+                                        <!-- <li><button type="button" class="default-btn next-step skip-btn">Skip</button></li> -->
+                                        <li><button type="button" class="default-btn next-step" (click)="onNavClick(2);activeCmpStep3();saveSubStepId(3)">Next</button></li>
+                                    </ul>
+                                </div>       
+                            </div>
+                            <div class="tab-pane" role="tabpanel active" id="step3">
+                                <div *ngIf="companyProfileStep1">
+                                    <div>
+                                        <img class="logo" src="assets/EngagementFlowImages/Gear.png">
+                                    </div>
+                                    <h3 class="heading">Let's Get Your First Part Started!</h3>
+                                    <p class="content-label">All files are securely stored on MFG and only released to 
+                                        manufacturers at your discretion.
+                                    </p>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group margin-top col-md-12 inner-div" 
+                                               >
+                                                <div class="dash-border"  *ngIf="iPartUploadedFileNameList?.FileNameList.length > 0">
+                                                    <span style="font-weight: bold;color:black">Your Uploaded Files</span><br>
+                                                    <div class="row part-bg"
+                                                        *ngFor="let item of iPartUploadedFileNameList?.FileNameList; let i =index ">
+                                                        <div class="col-md-10 text-truncate" style="color:#4a90e2;background-color: aliceblue;">
+                                                            <span class="upload-part-detail-list "
+                                                                (click)="downloadS3File(item.CompleteFileName, true)"
+                                                                title="Download - {{item.CompleteFileName | originalName}}">
+                                                               {{getOriginalFineName(item.CompleteFileName) }}
+                                                            </span>
+                                                        </div>
+                                                        <div class="col-md-2" style="background-color: aliceblue;">
+                                                            <a (click)="removeSavedPartDetailFile(item,i,iPartsViewModel.rfqPartId)">
+                                                              <span class="upload-part-detail-remove"><i class="fa fa-trash"></i></span>
+                                                            </a>
+                                                          </div>                                                     
+                                                    </div>
+                                                    <div id="partFileAddedError" ng2FileDrop for="file-upload"
+                                                        (click)="file.click();"
+                                                        [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                                                        (fileOver)="fileOverBase($event)" [uploader]="partDetailUploader"
+                                                        (onFileDrop)="onFileSelected($event)">
+                                                        <div>
+                                                            <div class="m-l-0">
+                                                                <i class="fa fa-cloud-upload" aria-hidden="true" style="font-size: 71px;
+                                                          color: gray;"></i>
+                                                            </div>
+                                                            <p class="p-l-10 addMoreFiles"> "Drag and drop a file here or"
+                                                                <br>
+                                                                <span class="color-blue"
+                                                                    style="cursor: pointer !important;">click to
+                                                                    upload</span>
+                                                            </p>
+                                                            <i class="icofont icofont-info-circle" style="color:#4a90e2;"
+                                                            placement="right" data-container="body" [ngbTooltip]="tooltipMsg"></i>
+                                                            <input id="file-upload" type="file" ng2FileSelect
+                                                                [uploader]="partDetailUploader" multiple
+                                                                (change)="onFileSelected($event)" #file
+                                                                style="display: none" />
+                                                            <input type="file" #fileInput ng2FileSelect
+                                                                [uploader]="uploader" style="display: none" />
+                                                        </div>
+                                                    </div>
+                                                    <div [ngClass]="(totalFileArr.length >= 1)?'col-md-12 text-center':''"
+                                                        *ngIf="totalFileArr.length >= 1">
+                                                        <span style="color: #4a90e2;font-size: 13px;"
+                                                            class="upload-part-detail-list pointerCursor"
+                                                            (click)="downloadAllFilesForPart(totalFileArr, true)">
+                                                            Download All
+                                                        </span>
+                                                    </div>
+                                                </div>                                               
+                                                <div  class="dash-border-double" 
+                                                *ngIf="!iPartUploadedFileNameList?.FileNameList.length > 0">
+                                                    <div id="partFileAddedError" ng2FileDrop for="file-upload"
+                                                        (click)="file.click()"
+                                                        [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                                                        (fileOver)="fileOverBase($event)" [uploader]="partDetailUploader"
+                                                        (onFileDrop)="onFileSelected($event)">
+                                                        <div>
+                                                            <div class="m-l-0">
+                                                                <i class="fa fa-cloud-upload" aria-hidden="true" style="font-size: 71px;
+                                                          color: gray;"></i>
+                                                            </div>
+                                                            <p class="p-l-10 addMoreFiles"> "Drag and drop a file here or"
+                                                                <br>
+                                                                <span class="color-blue"
+                                                                    style="cursor: pointer !important;">click to
+                                                                    upload</span>
+                                                            </p>
+                                                            <i class="icofont icofont-info-circle" style="color:#4a90e2;"
+                                                            placement="right" data-container="body" [ngbTooltip]="tooltipMsg"></i>
+                                                            <input id="file-upload" type="file" ng2FileSelect
+                                                                [uploader]="partDetailUploader" multiple
+                                                                (change)="onFileSelected($event)" #file
+                                                                style="display: none" />
+                                                            <input type="file" #fileInput ng2FileSelect
+                                                                [uploader]="uploader" style="display: none" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                           
+                                            <ng-template #tooltipMsg style="font-family: Poppins;">
+                                                The accepted file formats are:<br>
+                                                .pdf, .jpg, .tif, .bmp, .png, .dxf, .dwg (typically 2D)<br>
+                                                .stp, .step, .sldprt, .igs, .iges, .ipt, or .x_t. (3D)<br>
+                                                .stl files are accepted but are typically used only for 3D printed
+                                                parts<br>
+                                            </ng-template><br>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="chooseNDASection">
+                                                Choose an NDA
+                                                <p class="nda-section">Protect your data with our NDA or your own.</p>
+                                                <div class="row text-center">
+                                                    <!-- <div class="col-lg-2 col-md-2"></div> -->
+                                                    <div class="col-lg-5 col-md-5" style="text-align: end;">
+
+                                                        <label><input [checked]="activeTabNdaVerbiage === 1"
+                                                                (click)="NdaRadioBtnValue('Standard NDA')"
+                                                                [ngClass]="{'active-rfq-btn': activeTabNdaVerbiage === 1, 'deactivate-rfq-btn': activeTabNdaVerbiage !== 1 }"
+                                                                (click)="addClassNdaVerbiage(1); closecustomNda()"
+                                                                type="radio" name="optradio1"> Standard NDA</label>
+                                                        <br>
+                                                        <label style="margin-right: 10px"><input
+                                                                [checked]="activeTabNdaVerbiage === 2"
+                                                                (click)="NdaRadioBtnValue('Custom NDA');"
+                                                                [ngClass]="{'active-rfq-btn': activeTabNdaVerbiage === 2, 'deactivate-rfq-btn': activeTabNdaVerbiage !== 2, 'disableHand': canShowCustomNdaDiv() }"
+                                                                (click)="addClassNdaVerbiage(2); addCustomNda()"
+                                                                type="radio" name="optradio1"> Custom NDA</label>
+                                                    </div>
+
+                                                    <div>
+                                                        <div class="vl"></div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-6" style="text-align: start;">
+                                                        <div style="width:  max-content;">
+                                                            <label><input [checked]="activeTab === 1"
+                                                                (change)="checkConfirmRadio('Single Confirm')"
+                                                                    (click)="NdaRadioBtnValue('Single Confirm')"
+                                                                    [ngClass]="{'active-rfq-btn': activeTab === 1 , 'deactivate-rfq-btn': activeTab !== 1}"
+                                                                    (click)="addClass(1)" type="radio" name="optradio2">
+                                                                Single Confirm</label>
+                                                            <i class="icofont icofont-info-circle"
+                                                                style="color:#4a90e2;margin-left: 7px;"
+                                                                placement="right" data-container="body"
+                                                                [ngbTooltip]="tooltipMsg1"></i>
+                                                            <ng-template #tooltipMsg1 style="font-family: Poppins;">
+                                                                The Single Confirm option means that manufacturers only
+                                                                need to accept the NDA agreement before they can access
+                                                                your files.
+                                                            </ng-template><br>
+                                                        </div>
+                                                        <div style="width:  max-content;">
+                                                            <label><input [checked]="activeTab === 2"
+                                                                (change)="checkConfirmRadio('Double Confirm')"
+                                                                    (click)="NdaRadioBtnValue('Double Confirm')"
+                                                                    [ngClass]="{'active-rfq-btn': activeTab === 2 , 'deactivate-rfq-btn': activeTab !== 2}"
+                                                                    (click)="addClass(2)" type="radio" name="optradio2">
+                                                                Double Confirm</label>
+                                                            <i class="icofont icofont-info-circle" style="color:#4a90e2"
+                                                                placement="right" data-container="body"
+                                                                [ngbTooltip]="tooltipMsg2"></i>
+                                                            <ng-template #tooltipMsg2 style="font-family: Poppins;">
+                                                                The Double Confirm option means that manufacturers need
+                                                                to accept the NDA agreement and request to see your
+                                                                files.You must then approve the manufacturer’s request
+                                                                before they can access your files.
+                                                            </ng-template><br>
+                                                        </div>
+                                                    </div>
+                                                    <!-- <div class="col-lg-2 col-md-2"></div> -->
+                                                </div>
+                                                <div class="col-md-12" [hidden]="activeTab === 0"
+                                                    *ngIf="canShowCustomNdaDiv()">
+                                                    <div class="row">
+                                                        <div class="col-md-10 file-row-bk-color">
+                                                            <span placement="top" data-container="body"
+                                                                ngbTooltip="{{getOriginalFineName(CustomNdaFileName)}}"
+                                                                (click)="downloadS3File(CustomNdaFileName, true)">
+                                                                {{CustomNdaFileName | originalShortName : 40}} </span>
+                                                        </div>
+                                                        <div class="col-md-2 file-row-bk-color text-right">
+                                                            <span class="View"
+                                                                (click)="downloadS3File(CustomNdaFileName, false)">View</span>
+                                                            <span class="Remove pointerCursor"
+                                                                (click)="removeCustomNdaFile(); addClassNdaVerbiage(1)">Remove</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mfgTxt" (click)="showStandardNda()"
+                                                    style="cursor: pointer;">
+                                                    <p style="color:#56C23E ">How do MFG NDAs Work?</p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ul class="list-inline">
+                                        <li><button type="button" class="default-btn prev-step"
+                                                (click)="closecustomNda();closeStandardNda();onNavClick(1)">Back</button></li>
+                                        <ul class="list-inside"> 
+                                            <li><button type="button" class="default-btn next-step" 
+                                                    class="default-btn next-step skip-btn" (click)="closecustomNda();closeStandardNda();skipActiveCmpStep2();">Skip</button></li>
+                                            <li><button type="button" class="default-btn next-step" [disabled]="isCustomNda"
+                                                (click)="closecustomNda();closeStandardNda();activeCmpStep2();buyerPrStep2();firsPartStartedNext()">Next</button></li>
+                                        </ul>
+                                    </ul>
+                                </div>
+                                <div *ngIf="companyProfileStep2">
+                                    <div>
+                                        <img class="logo" src="assets/images/buyer-process/Toolbox.png">
+                                    </div>
+                                    <h3 class="heading">What are you looking for?</h3>
+                                    <p class="content-label">Select the industry and manufacturing process your
+                                        company typically works with. This will help us match you
+                                        with the right manufacturers.
+                                    </p>
+                                    <div class="col-md-12 inner-div">
+                                       
+                                        <div class="modal-body-industry">
+                                            <div class="row">
+                                                <div class="text-left">
+                                                    <span style="font-weight: bold">Industry<span style="color:red"> *</span></span>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="width:50%">
+                                                <div class="m-t-10">
+                                                    <select (change)="saveIndustry()" class="form-control" name="typeId" [(ngModel)]="typeId">
+                                                        <option value="0">Select</option>
+                                                        <option *ngFor="let companyType of buyerTypeViewModel"
+                                                            [value]="companyType.industryBranchesId"> {{
+                                                            companyType.industryBranchesNameEn }}</option>
+                                                    </select>
+                                                </div>
+                                                <div *ngIf="processErrorIndustry" style="color: red; text-align: right">Please select Industry
+
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <div class="text-left">
+                                                    <span class="f-b-text-left">What manufacturing technologies are you interested in?<span style="color:red"> *</span></span>
+                                                </div>
+                                            </div>
+                                          
+                                            <div class="row" style="width:50%">
+                                                <div class="m-t-10">
+                                                    <angular2-multiselect [data]='iCustomProcessViewModelColl'
+                                                        name="Processdrop1" [(ngModel)]='selectedProcessItems'
+                                                        (onSelect)="onProcessSelect($event)"
+                                                        (onSelectAll)="onProcessSelectAll($event)"
+                                                        (onDeSelect)="onProcessDeSelect($event)"
+                                                        (onDeSelectAll)="onProcessDeSelectAll($event)"
+                                                        [settings]='processSettings'>
+                                                    </angular2-multiselect>
+                                                </div>
+                                                <div *ngIf="processErrorManufacturingprocess" style="color: red; text-align: right">Please select manufacturing process
+
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <ul class="list-inline">
+                                        <li><button type="button" class="default-btn prev-step"
+                                                (click)="goToPreviousStepFromStep2()">Back</button></li>
+                                        <ul class="list-inside">
+                                            <!-- goToNextStepFromStep2(); -->
+                                            <!-- {{cmpPrStep2ButtonDisable}}// -->
+                                            <li><button type="button"  [disabled]="cmpPrStep2ButtonDisable" class="default-btn next-step"
+                                                (click)="whatAreYouLookingNext();(validateFields() && cmpPrStep1());(validateFields() && goToNextStepFromStep2()); (validateFields() && saveIndustry());">Next</button>
+                                            </li>
+                                        </ul>
+                                    </ul>
+                                </div>
+                                <div *ngIf="companyProfileStep3">
+                                    <div>
+                                        <img class="logo" src="assets/EngagementFlowImages/ProfileCard.png">
+                                    </div>
+                                    <h3 class="heading">Create your Company Profile</h3>
+                                    <p class="content-label">Create your company profile so you can be found by
+                                        manufacturers
+                                    </p>
+                                    <div class="col-md-12 inn er-div">                                      
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                    <div class="col-md-4 text-left">
+                                                        <h6 class="title-textarea">Website URL
+                                                            <!-- <span style="color:red"> *</span> -->
+                                                        </h6>
+                                                        <div class="row">
+                                                            <textarea class="form-control" maxlength="500" name="websiteUrl" [(ngModel)]="websiteUrl"
+                                                              placeholder="www.yoursite.com" rows="6" required></textarea>
+                                                        </div>
+                                                    </div>                                            
+                                                    <div class="row input-top-padding col-md-4">
+                                                        <div class="col-md-4 guide-for-upload-logo1">
+                                                            <!-- <span class="guide-for-upload-logo">Drag & Drop or </span> -->
+                                                            <div class="gallary-browse-file-text">
+                                                            <!-- <span class="or"> or</span> -->
+                                                            <span class="cursor-pointer">Your Logo
+                                                                <!-- <span style="color:red"> *</span> -->
+                                                            </span>
+                                                            <input type="file" ng2FileSelect  [uploader]="profileLogoUploader" class="custom-file-input cursor-pointer"
+                                                            style="top:-40px;color:#337ab7;cursor: text;" accept="image/jpeg, image/png" />
+                                                            <!-- <div class="custom-file-input cursor-pointer">
+                                                                <img [src]="supplierLogoPath" style="width: 120px !important;
+                                                                height: 120px !important;border-radius:50%;margin-top: 22px; "
+                                                                onError="this.src='assets/company/avatar-manu-basic.svg';">                                                              </div> -->
+                                                            </div>
+                                                            <!-- <span>to add or edit. <br>PNG or JPG files only</span> -->  
+                                                        </div>
+                                                        <div class="col-md-4" *ngIf="isFileUpladed == true">
+                                                            <div class="loader animation-start">
+                                                                <span class="circle delay-1 size-2"></span>
+                                                                <span class="circle delay-2 size-4"></span>
+                                                                <span class="circle delay-3 size-6"></span>
+                                                                <span class="circle delay-4 size-7"></span>
+                                                                <span class="circle delay-5 size-7"></span>
+                                                                <span class="circle delay-6 size-6"></span>
+                                                                <span class="circle delay-7 size-4"></span>
+                                                                <span class="circle delay-8 size-2"></span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-4" *ngIf="isFileUpladed == false">
+                                                            <label for="upload-file" class="uploaded-image">
+                                                                <div *ngIf="supplierLogoPath === ''" class="upload-company-logo-box" ng2FileDrop [uploader]="profileLogoUploader"
+                                                                    [ngClass]="{'nv-file-over': hasBaseDropZoneOver}">
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <img src="assets/supplier/logoUploadGuide.png"
+                                                                                srcset="assets/supplier/logoUploadGuide@2x.png 2x, assets/supplier/logoUploadGuide@3x.png 3x"
+                                                                                class="upload-logo-guide-margin"><br>
+                                                                               <span class="upload-logo-guide-text">Drag & drop a logo for your profile picture.(150x150)</span> <br>
+                                                                                <span class="browse-files">browse your files</span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div ng2FileDrop [uploader]="profileLogoUploader" [ngClass]="{'nv-file-over': hasBaseDropZoneOver}">
+                                                                    <img *ngIf="supplierLogoPath !== ''" class="uploaded-company-logo-box" [src]="supplierLogoPath"
+                                                                        onerror="this.src='assets/company/avatar-manu-basic.svg'">                  
+                                                                </div>
+                                                            </label>
+                                                            <input type="file" id="upload-file" ng2FileSelect  [uploader]="profileLogoUploader" class="custom-file-input cursor-pointer"
+                                                            style="top:-40px;color:#337ab7" accept="image/jpeg, image/png" style="display: none;" />
+                                                        </div>
+                                                        
+                                                        <div class="col-md-12" *ngIf="profileUploadLogoError !== ''" style="color: red; text-align: right">
+                                                        {{profileUploadLogoError}}
+                                                        </div>
+                                                    </div>   
+                                                    <div class="col-md-4">
+                                                        <h6 class="title-textarea">Company Description</h6>
+                                                        <div class="row">
+                                                            <textarea class="form-control" maxlength="500" name="cmpDescription" [(ngModel)]="cmpDescription"
+                                                              placeholder="Type a few words about your business here." rows="6" required></textarea>
+                                                        </div>
+                                                    </div>                                      
+                                            </div>
+                                           
+                                           
+                                        </div>
+                                    </div>
+                                    <ul class="list-inline">
+                                        <li><button type="button" class="default-btn prev-step"
+                                                (click)="goToPreviousStep()">Back</button></li>
+                                        <ul class="list-inside">
+                                            <!-- <li><button type="button"  class="default-btn prev-step"
+                                               >Skip</button> </li> -->
+                                            <li><button type="button"  [disabled]="cmpPrStep3ButtonDisable" class="default-btn next-step"
+                                                    (click)="cmpPrStep3();goToNextStep();saveCompanyProfileData();companyProfileNext()">Next</button>
+                                            </li>
+                                        </ul>
+                                    </ul>
+                                </div>
+
+                            </div>
+                            <!-- css need to add -->
+
+                            <div class="tab-pane" role="tabpanel" id="step4">
+                                
+                                <div *ngIf="!isVisibleStep4">
+                                    <div class="tab-pane" role="tabpanel" id="step4">
+                                        <div>
+                                            <img class="logo" src="assets/EngagementFlowImages/LaptopRFQs.png">
+                                        </div>
+                                        <div class="all-info-container">
+                                            <h3 class="heading">Qualified Manufacturers Await!</h3>
+                                        <p class="content-label">You're on your way to getting your project in front of qualified Manufacturers.
+                                                                Click below to start your first Request for Quote on the MFG Platform.
+                                        </p>
+                    
+                                        </div>
+                                        <div class="dropimagebuttons">
+                                            <button type="button" [ngClass]="'btn Save-btn-active-add-part1'" style="width: 50%;" (click)="createRFQData(true,'createRFQDataHit')" [disabled]="isdisable">Create a Request For Quote</button>
+                                           
+                                          </div>
+                                        <ul class="list-inline pull-right">
+                                            <li><button type="button" class="default-btn prev-step" (click)="onNavClick(2)">Back</button></li>
+                                            <li><button type="button"  [ngClass]="'btn Save-btn-active-add-part1'" class="default-btn next-step" (click)="willDoLater(true)" [disabled]="isWillDolaterdisable">I will do it later</button></li>
+                                        </ul>
+                                    </div>
+                                   
+                                </div>
+                                <div *ngIf="isVisibleStep4">
+                                    <div>
+    
+                                        <img class="logo" src="assets/EngagementFlowImages/Compass.png">
+                                    </div>
+                                    <div class="all-info-container">
+                                        <h3 class="heading">Drawings are necessary!</h3>
+                                    <p class="content-label-cnt">Part files or drawings are required for the best results. Here 
+                                        are some resources to get you started:
+                                    </p>
+                                    <h5 class="heading">Let’s get your drawings made. Click an option below.</h5>
+                                    </div>
+                                    <div class="dropimagebutton">
+                                        <div class="col-md-6"><button type="button" [ngClass]="'btn Save-btn-active-add-part1'" (click)="openContactModal()">Contact MFG</button>
+                                        <span class="content-display">Let an MFG Representative provide you 
+                                            with options for getting your part 
+                                            drawings made.</span>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <button type="button" [ngClass]="'btn Save-btn-active-add-part1'" (click)="onClickOfRFQ(false)">Create a Request For Quote</button>
+                                        <span class="content-display">Create a Request for Quote for your part 
+                                            drawings and we’ll put it in front of the 
+                                            right Manufacturers.</span>  
+                                    </div>
+                                       <!-- <div>
+                                        <button type="button" (click)="reDirectToSearchManufacturer(true)"
+                                          [ngClass]="'btn Save-btn-active-add-part1'">Manufacturers Who Draw</button>
+                                          <span class="content-display">See a list of Manufacturers who can 
+                                            create your part drawings and engage 
+                                            who you prefer.</span>  
+                                        </div> -->
+                                      </div>
+                                    <ul class="list-inline pull-right">
+                                        <li><button type="button" class="default-btn prev-step" (click)="onNavClick(2)">Back</button></li>
+                                        <li><button type="button" class="default-btn next-step" (click)="withoutPartLater()" >I will do it later</button></li>
+                                    </ul>
+                                </div>
+                                </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div *ngIf="isNdaClicked" class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading bottom-line">
+                        <div class="row">
+                            <div class="col-md-10" style="text-align: left">
+                                <div class="Add-Custom-NDA-title">Add Custom NDA</div>
+                            </div>
+                            <div class="col-md-2" style="text-align: right">
+                                <img src="assets/rfq/close-3.svg" class="Close-3"
+                                    (click)="closecustomNda(); addClassNdaVerbiage(1)">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body panel-body-padding-cust-nda">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="Add-a-custom-NDA-text"> Add a custom NDA to be distributed to
+                                    any manufacturer that accepts
+                                    the document. We only accept PDF files to prevent editing.</p>
+                            </div>
+                        </div>
+                        <div class="row" [hidden]="(isUploadFileDropped || isUploadFileBrowsed)">
+                            <div
+                                [ngClass]="(!isFileNotPDF)?'Drag-parent-padding-35 col-md-12':'Drag-parent-padding-18 col-md-12'">
+                                <div *ngIf="isFileNotPDF" style="color: red; text-align: right">Please
+                                    select pdf file only</div>
+                                <div class="Drag-Drop-Outer" ng2FileDrop
+                                    [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                                    (fileOver)="fileOverBase($event)" [uploader]="ndaUploader">
+                                    <div class="row">
+                                        <div class="col-md-12 Button-Center-Aligned">
+                                            <img src="assets/images/custom-nda/group-4.png"
+                                                srcset="assets/images/custom-nda/group-4@2x.png 2x, assets/images/custom-nda/group-4@3x.png 3x"
+                                                class="Drag-Drop-Image-Icon">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 Button-Center-Aligned">
+                                            <div class="Drag-drop-your-file">Drag & drop your file here,
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 Button-Center-Aligned">
+                                          <div class="or-browse-your-files">
+                                            <p class="align-centre-browseFile">or
+                                                <input type="file" #file class="display-none"
+                                                    accept="application/pdf"
+                                                    (change)="onFileChange($event)">
+                                                <span (click)="file.click()"
+                                                    class="cusror-pointer">browse your files.</span>
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    <div class="row">
+                                        <div class="col-md-12 Button-Center-Aligned">
+                                            <div class="PDF-files-only">PDF files only</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row file-entry-margin" *ngIf="isUploadFileDropped">
+                            <div class="col-md-12">
+                                <div class="row list-file">
+                                    <div class="col-md-9">
+                                        <div class="File_Name_Herepdf"
+                                            (click)="downloadS3File(fileDropName, true)" placement="top"
+                                            data-container="body" ngbTooltip="{{fileDropName}}">
+                                            {{fileDropName |dotLimit:200}}</div>
+                                    </div>
+                                    <!-- <div class="col-md-3 move-right">
+                                        <div class="Remove-list-file"
+                                            (click)="removeSelectedFile()">Remove</div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row file-entry-margin" *ngIf="isUploadFileBrowsed">
+                            <div class="col-md-12">
+                                <div class="row list-file">
+                                    <div class="col-md-9">
+                                        <div class="File_Name_Herepdf"
+                                            (click)="downloadS3File(fileBrowseName, true)">
+                                            {{fileBrowseName}}
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-md-3 move-right">
+                                        <div class="Remove-list-file pointerCursor"
+                                            (click)="removeSelectedFile()">Remove</div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row margin-top-row">
+                            <div class="col-md-6">
+                                <button class="cancel-btn-bgcolor" [ngClass]="(checkFile)?'Cancel-btn':'Cancel-btn-disabled'"
+                                type="button">
+                                    <p class="Cancel-btn-text"
+                                        (click)="closecustomNda(); addClassNdaVerbiage(1)">Cancel</p>
+                                </button>
+                            </div>
+                            <div class="col-md-6" style="margin-top: -2px;">
+                                <button class="save-btn-bgcolor" [ngClass]="(checkFile)?'Save-btn-disabled':'Save-btn'"                    
+                                    type="button" (click)="saveCustomNdaFile()" [disabled]="checkFile">
+                                    <p class="Save-btn-text"><i class="fa fa-spinner fa-spin"
+                                            *ngIf="isSaveNda"></i>Save</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="isViewStandardNdaClicked" class="Standard-NDA-Rectangle col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading bottom-line">
+                        <div class="row">
+                            <div class="col-md-8" style="text-align: left">
+                                <div class="Standard-NDA-Title">Standard NDA</div>
+                            </div>
+                            <div class="col-md-4" style="text-align: right">
+                                <img src="assets/rfq/close-3.svg" class="Close-3"
+                                    (click)="closeStandardNda();">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="Standard-NDA-Content"
+                                    [innerHTML]="standardNDAText | sanitizeHtml:7000"></div>
+                            </div>
+                        </div>
+                        <div class="row Standard-NDA-Close-Margin">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8 Button-Center-Aligned">
+                                <button class="Standard-NDA-Close" (click)="closeStandardNda();">
+                                    <div class="Standard-NDA-Close-Text">Close</div>
+                                </button>
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+      
+   
+</div>
+</section>
+<app-contact-support-modal *ngIf="toShowContactModel" [isHelpDrawingText]="isHelpDrawingText" (modelUpdateInfoChange)="toShowContactModel= $event">
+</app-contact-support-modal>
+
+<div class="full-page-overlay" *ngIf="showLoader">
+    <div class="rfqLoader"></div>
+</div>

@@ -1,0 +1,66 @@
+.background-white{
+	background:#FFF;
+	padding: 19px;
+	border-radius:5px;
+	margin-bottom:19px;
+	border-radius: 5px;
+	box-shadow: 0 0 4px 0 rgba(145, 154, 163, 0.5);
+}
+.rightpanel i{
+	color:#4a90e2;
+	font-size: 19px;
+}
+.panelheading{
+	font-size: 16px;
+	font-weight: bold;
+	color: #222;
+	margin-top:2px !important;
+	line-height:22px;
+}
+.centerAlign {
+  text-align:center !important;
+}
+.panelheading span{
+	font-size: 12px;
+	font-weight: bold;
+	color: #919aa3;
+}
+hr{
+	border: solid 1px #e2e2e5 !important;
+	float: left !important;
+	width: 100% !important;
+	margin-top:11px !important;
+	margin-bottom:5px !important;
+}
+.rightcancelbutton{
+	border-radius: 2px;
+	background-color: #FFF;
+	font-size: 16px;
+	border:  solid 2px #2E58D6;
+	margin:16px 6px 6px 6px;
+	text-align:center;
+	transition:0.3s;
+	font-weight: bold;
+	padding: 5px 15px;
+	color:#2E58D6;
+}
+.fileArea{
+    background-color: #f6f7fb;
+	padding-left: 2px;
+	color: #4a90e2;
+	margin-top: 10px;
+    cursor: pointer;
+}
+
+.btn-upgrade {
+  padding: 2px 41px !important;
+  border-radius: 2px;
+  border: solid 2px #2E58D6;
+  color: #fff;
+  background-color: #2E58D6;
+  cursor: pointer;
+  margin-bottom: 10px;
+  line-height: 30px;
+  font-weight: bold;
+  font-size: 16px;
+}

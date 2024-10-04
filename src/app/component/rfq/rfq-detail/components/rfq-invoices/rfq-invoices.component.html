@@ -1,0 +1,82 @@
+<div>
+    <div class="header-selection">
+        <div class="btn-group">
+            <!-- (click)="setStatusFilter('All')" -->
+            <button type="button" class="all-invoices" (click)="allInvoice()"
+            [ngClass]="(activeStatusFilterBtn == 'All Invoices')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'">
+            All Invoices</button>  
+            <button type="button" class="outstanding-selection" (click)="getOutStandingRecord()"
+            [ngClass]="(activeStatusFilterBtn == 'Outstanding')? 'btn my-RFQ-state-filter-button-pre-active': 'btn my-RFQ-state-filter-button-pre-inactive'"
+            > Outstanding</button>
+            <button type="button" class="postDue" (click)="getPostDue()"
+            [ngClass]="(activeStatusFilterBtn == 'Post Due')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'"
+            > Past Due</button>
+            <button type="button" class="paid" (click)="getPaid()"
+            [ngClass]="(activeStatusFilterBtn == 'Paid')? 'btn my-RFQ-state-filter-button-active': 'btn my-RFQ-state-filter-button-inactive'"
+            > Paid</button>
+        </div>
+        <div style="display: flex;">
+            <!-- <div class="sortBy">
+            <select class="select-sortby">
+                <option value=null>Sort by</option>
+                <option >
+                </option>
+            </select>
+            </div> -->
+            <div>
+            <div class="input-container">
+                <i class="fa fa-search icon-search" placement="top" container="body" style="height: 38px;"
+                ngbTooltip="Search"></i>
+                <input class="search search-text" [(ngModel)]="searchFilterValue" 
+                placeholder="Search" type="text" (keypress)="searchByKey($event)"
+                (input)="checkSearch(searchFilterValue)" />
+                <i class="fa fa-times-circle icon"  placement="top" container="body" (click)="removeTextValue()"
+                ngbTooltip="Remove Text"></i>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top: 10px;">
+        <div class="row col-md-12">
+          <div class="col-md-2" style="font-size: 12px;">Amount</div>
+          <div class="col-md-2" style="font-size: 12px;">Status</div>
+          <div class="col-md-2" style="font-size: 12px;">Invoice number</div>
+          <div class="col-md-2" style="font-size: 12px;">Due</div>
+          <div class="col-md-2" style="font-size: 12px;">Payee</div>
+          <div class="col-md-2" style="text-align: right;font-size: 12px;">Actions</div>
+        </div>
+        <div class="row col-md-12 details-section" *ngFor="let data of loadData;let i = index">
+          <div class="col-md-2">
+            <span style="font-weight: 600;">{{data.amount}}</span> USD
+          </div>
+          <div class="col-md-2" style="padding-left: 0;">
+            <div class="status-content">
+              <p class="outstanding">
+               {{data.status}}
+              </p>
+            </div>
+          </div>
+          <div class="col-md-2" >{{data.invoice_number}}</div>
+          <div class="col-md-2" >{{data.due_date | date :'mediumDate'}}</div>
+          <div class="col-md-2">{{data. supplier_name}}</div>
+          <div class="col-md-2 view-invoice">
+            <span (click)="viewInvoice(data.hosted_invoice_url)" class="box-arror-icon" style="cursor: pointer;">
+                <img src="assets/images/box-arrow-up-right.png" />
+            </span>
+            <span  style="cursor: pointer;" (click)="viewInvoice(data.hosted_invoice_url)">View invoice 
+            </span>
+            <span (click)="showActionPopUP()"  style="margin-left: 10px;" [ngbPopover]="popAttachment" container="body" #q="ngbPopover">
+              <img  src="assets/images/ecllipseDotICon.png" />
+          </span>
+            <ng-template #popAttachment>
+            <div *ngIf="showAction" style="color: #4a90e2;">
+              <p  (click)="openMessageDrawer(data.supplier_id,data.supplier_name,i)" style="cursor:pointer">Message Manufacturer</p>
+              <p  (click)="downloadPdf(data.invoice_pdf)" style="cursor:pointer">Download File</p>
+            </div>
+            </ng-template>
+          </div>
+        </div>
+    </div>
+</div>
+
+<!--)" -->

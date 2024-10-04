@@ -1,0 +1,48 @@
+<div *ngIf="!isNoRfqToAward && !isAllRfqAwarded">
+  <div class="card" style="min-height: 205px; " *ngFor="let data of awardingModuleViewList; let i = index">
+    <div style="min-height: 65px;">
+      <img *ngIf="(data.rfqThumbnail == ''  || data.rfqThumbnail== null)" src="assets/supplier/comming-soon.png">
+      <img *ngIf="(data.rfqThumbnail !== ''  && data.rfqThumbnail !== null)" [src]="data.rfqThumbnail">
+      <div>
+        <p class="name f-16" (click)="goToRfqDetail(data.rfqId, i, 1)">
+          <span placement="top" data-container="body" ngbTooltip="{{data.rfq}}">{{data.rfq | dotLimit:'23'}}</span>
+        </p>
+        <span class="f-12 f-w-600 " *ngFor="let rfqId of data.parentWithClonedRfqList;let i = index">
+          <span (click)="goToRfqDetail(rfqId, data.parentWithClonedRfqList, 1)" class="pointer"> RFQ# <span
+              style="color:#2E58D6;">{{rfqId}}</span> </span> <span *ngIf="i < (data.parentWithClonedRfqList.length)-1">,
+          </span>
+        </span>
+        <p class=" f-12">{{data.rfqClosedDate}}</p>
+      </div>
+    </div>
+    <div class="m-t-10" style="min-height: 65px;">
+      <p> {{data.rfqAwardMessage}}</p>
+    </div>
+    <div class="m-t-15" style="display:flex;justify-content:flex-end;">
+      <!-- <button class="btn-noThanks" (click)="noThanksDashAwardModule(data.rfqId)">No Thanks</button> -->
+      <button class="btn-award" (click)="goToRfqDetail(data.rfqId, data.parentWithClonedRfqList,0)">Award Parts</button>
+    </div>
+  </div>
+</div>
+<div class="card" *ngIf="isNoRfqToAward">
+  <p class="p-10 gray-color f-16 f-w-500">No RFQ in need of awarding.<br />Create one above <i
+      class="fa fa-hand-pointer-o" aria-hidden="true"></i></p>
+</div>
+<div class="card" *ngIf="isAllRfqAwarded">
+  <p class="p-10 gray-color f-16 f-w-50">All RFQs have been awarded.<br />Nice Work! </p>
+</div>
+<div *ngIf="loader" class="loading">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div>
+
+<app-regional-awarding-model *ngIf="showRegionalModel" [rfqIdList]="rfqIdList" (closeEvent)="showRegionalModel =$event">
+</app-regional-awarding-model>

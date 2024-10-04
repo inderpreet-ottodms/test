@@ -1,0 +1,112 @@
+<!-- *ngIf="isLoader == false" -->
+<div   >
+    <div class="row">
+      <div class="col-md-12">
+        <div class="background-white">
+          <div class="row top-row ">
+            <div class="col-md-3">
+                Showing 10 latest
+            </div>
+            <div class="col-md-9" style="text-align: right">  <!-- [routerLink]="['/supplier/myLikedRfq/']" -->
+              <a class="View-All-Liked-RFQs">View All TODO's</a>
+            </div>
+          </div>
+          <div class="row">
+            <br>
+            <div class="col-md-12">
+              <div class="table-responsive min-height">
+                <table class="table table-hover rfqtable">
+                  <thead>
+                    <tr>
+                      <th>Type Icon</th>
+                      <th>Todo Name</th>
+                      <th>Days Old</th>
+                      <th>Status</th>
+                      <th colspan="2">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr> <!-- *ngFor='let rfq of iBuyerQuotesListColl' -->
+                      <td class="tdborderleft">
+                          <i class="fa fa-file-text icon-first" aria-hidden="true"></i>
+                      </td>
+                      <td class="rfqtd">Complete your profile</td>
+                      <td>20 Days</td>
+                      <td class="custtd">Unread </td>
+                      <td class="tdbackgorungcolor">
+                        <i class="fa fa-eye icon-first" aria-hidden="true"></i>
+                      </td>
+                      <td class="tdborderright tdbackgorungcolor">
+                        <i class="fa fa-times-circle-o icon-second" aria-hidden="true"></i>
+                      </td>
+                    </tr>
+                    <tr> <!-- *ngFor='let rfq of iBuyerQuotesListColl' -->
+                      <td class="tdborderleft">
+                          <i class="fa fa-file-text icon-first" aria-hidden="true"></i>
+                      </td>
+                      <td class="rfqtd">NDAs to Approve</td>
+                      <td>30 Days</td>
+                      <td class="custtd">Read </td>
+                      <td class="tdbackgorungcolor">
+                        <i class="fa fa-eye icon-first" aria-hidden="true"></i>
+                      </td>
+                      <td class="tdborderright tdbackgorungcolor">
+                        <i class="fa fa-times-circle-o icon-second" aria-hidden="true"></i>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" >
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-9" style="text-align: right">   <!-- [routerLink]="['/supplier/myLikedRfq/']" -->
+      <a class="View-All-Liked-RFQs">View All TODO's</a>
+    </div>
+  </div>
+    <!-- <div class="myRFQ-rfq-no-available" >
+      <div class="row" style="text-align: center;padding-top:60px">
+        <div class="col-md-12">
+          <div>
+            <img src="assets/rfq/no-rfq.png" srcset="assets/rfq/no-rfq@2x.png 2x,
+          assets/rfq/no-rfq@3x.png 3x"
+              class="myRFQ-Group">
+          </div>
+        </div>
+      </div>
+      <div class="row" style="padding-top:34px">
+        <div class="col-md-12">
+          <div class="myRFQ-noRFQActive-helper-text">You don't have any New Quotes.</div>
+        </div>
+      </div>
+      <div class="row" style="padding-top:10px">
+        <div class="col-md-12">
+          <div class="myRFQ-noRFQActive-helper-sub-text">Press Create an RFQ to get quotes from manufacturers on any of your parts.</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12" style="text-align:center">
+          <button type="submit" [routerLink]="['/rfq/editrfq/']" class="btn Save-Rfq-button-active">
+            <span class="button-lbl pointerCursor"> Create an RFQ </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <!-- <div >
+    <div class="loader animation-start">
+      <span class="circle delay-1 size-2"></span>
+      <span class="circle delay-2 size-4"></span>
+      <span class="circle delay-3 size-6"></span>
+      <span class="circle delay-4 size-7"></span>
+      <span class="circle delay-5 size-7"></span>
+      <span class="circle delay-6 size-6"></span>
+      <span class="circle delay-7 size-4"></span>
+      <span class="circle delay-8 size-2"></span>
+    </div>
+  </div> -->

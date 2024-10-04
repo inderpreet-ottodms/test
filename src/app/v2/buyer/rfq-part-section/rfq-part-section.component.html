@@ -1,0 +1,228 @@
+<form [formGroup]="rfqPartForm" *ngIf="isInitialized">
+
+    <div class="accUploadFile">
+        <div draggable="true" ngClass="{{dragAreaClass}}">
+
+            <input type="file" formControlName="partFile" multiple (change)="onFileChange($event)" />
+            <div><img src="/assets/images/buyer-process/upload_icon.png" /></div>
+            <span>Drag and drop a file here</span>
+            <div class="click-to-upload">Click to upload</div>
+            <inline-error-display [displayError]="rfqPartForm.controls['partFile'].invalid"
+                errorMsg="Please upload a file"></inline-error-display>
+        </div>
+    </div>
+    <i class="fa fa-info-circle drag-info" placement="right" data-container="body"
+        [ngbTooltip]="partUploadToolTip">
+    </i>
+    <ng-template #partUploadToolTip style="font-family: Poppins">
+        <b>The recommended file types are:</b><br>
+        .pdf, .jpg, .tif, .bpm, .dxf, .dwg, .stp, 
+        .step, .sldprt, .igs, .iges, .ipt, .x_t, .stl
+    </ng-template>
+    <div class="row" *ngIf="showAddFromPartLibrary">
+        <div class="col-md-12 pb-2">
+            <button type="button" (click)="openAddFromPartLibrarySection()" disabled="{{disableEditCloneDelete?'disabled':null}}"
+            class="btn {{disableEditCloneDelete?'btn-secondary':'btn-primary'}} w-100 uploadLibBtn">
+                Upload from library</button>
+        </div>
+    </div>
+    <div class="row pb-1" *ngIf="getFileShortName(rfqPartFile).length>0">
+        <div class="col-md-12">
+            <div class="d-flex uploadFileTitle justify-content-between">
+                <div class="text-truncate pr-2">{{getFileShortName(rfqPartFile)}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row pb-1" *ngFor="let uploadedFileName of uploadedFileNameList">
+        <div class="col-md-12" *ngIf="getFileShortName(uploadedFileName).length>0">
+            <div class="d-flex uploadFileTitle justify-content-between">
+                <div class="text-truncate pr-2">
+                    {{getFileShortName(uploadedFileName)}}</div>
+                <div class="fw-bold text-dark fx-3 cursor-pointer" (click)="removeFile(uploadedFileName)">X</div>
+            </div>
+        </div>
+    </div>
+    <!-- Accordion Content area start -->
+    <div class="pt-2">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="formField">
+                    <label for="manufacturingProcess" class="form-label">Manufacturing Process<sup>*</sup></label>
+                    <select id="manufacturingProcess" class="form-select" name="parentPartCategoryId"
+                        formControlName="parentPartCategoryId"
+                        (change)="manufacturingProcessChangeHandler($event.target.value)">
+                        <option
+                            [selected]="selectedParentPartCategoryId==manufacturingProcess.parentDisciplineId?'selected':null"
+                            *ngFor="let manufacturingProcess of manufacturingProcessList;"
+                            [value]="manufacturingProcess.parentDisciplineId"
+                            [disabled]="manufacturingProcess.parentDisciplineId===-1?'disabled':null">
+                            {{ manufacturingProcess.parentDisciplineName }}
+                        </option>
+                    </select>
+                    <inline-error-display [displayError]="isPartFieldValid('parentPartCategoryId')"
+                        errorMsg="Manufacturing Process is required"></inline-error-display>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="formField">
+                    <label for="technique" class="form-label">Technique</label>
+                    <select id="technique" class="form-select" name="childPartCategoryId"
+                        formControlName="childPartCategoryId">
+                        <option [value]="0" [selected]="'selected'"> Select a manufacturing technique</option>
+                        <option *ngFor="let technique of techniqueList" [value]="technique.childDisciplineId">
+                            {{ technique.childDisciplineName }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <ng-container *ngIf="showQuestionsOnPartDrawer">
+            <div class="row">
+                <div class="col-md-12 pb-2">
+                    <div class="formField">
+                        <label class="form-label">Do you need tooling made?</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="customRadio">
+                        <input type="radio" [value]="MOLDING_REQUIRED_QUESTION_ANSWER.YES" name="rfqPartDrawerAnswer" id="manufacturerToMakeTheTooling"
+                            formControlName="rfqPartDrawerAnswer">
+                        <span class="checkmark"></span>
+                        <label for="manufacturerToMakeTheTooling">
+                            {{MOLDING_REQUIRED_QUESTION_ANSWER.YES}}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="customRadio">
+                        <input type="radio" [value]="MOLDING_REQUIRED_QUESTION_ANSWER.NO" name="rfqPartDrawerAnswer" id="manufacturerToMakeTheTooling"
+                            formControlName="rfqPartDrawerAnswer">
+                        <span class="checkmark"></span>
+                        <label for="manufacturerNotToMakeTheTooling">
+                            {{MOLDING_REQUIRED_QUESTION_ANSWER.NO}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="formField">
+                    <label for="materialId" class="form-label">Material <sup>*</sup> </label>
+                    <select id="materialId" class="form-select" name="materialId" formControlName="materialId">
+                        <option [value]="0" [selected]="'selected'">Select a material</option>
+                        <option *ngFor="let material of materialList" [value]="material.childMaterialId">
+                            {{ material.childMaterialName }}
+                        </option>
+                    </select>
+                    <inline-error-display [displayError]="isPartFieldValid('materialId')"
+                        errorMsg="Material is required"></inline-error-display>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="formField">
+                    <label for="processing" class="form-label">Post-Production Process</label>
+                    <select id="processing" class="form-select" formControlName="postProductionProcessId">
+                        <option [value]="0" [selected]="'selected'">Select post-processing</option>
+                        <option *ngFor="let processing of postProductionProcessList"
+                            [value]="processing.childPostProductionProcessId">
+                            {{ processing.childPostProductionProcessName }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="formField">
+
+                    <label for="partName" class="form-label">Part Name<sup>*</sup></label>
+                    <input type="text" class="form-control" id="partName" aria-describedby="partName"
+                        formControlName="partName" autocompleteOff placeholder="Part Name" (blur)="isPartFieldValid('partName')">
+                    <inline-error-display [displayError]="isPartFieldValid('partName')"
+                        errorMsg="Part Name required"></inline-error-display>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="formField">
+
+                    <label for="partNumber" class="form-label">Part Number<sup>*</sup></label>
+                    <input type="text" class="form-control" id="partNumber" aria-describedby="partNumber"
+                        formControlName="partNumber"  autocompleteOff placeholder="Part Number" name="partNumber"
+                        (blur)="isPartFieldValid('partNumber')">
+                    <inline-error-display [displayError]="isPartFieldValid('partNumber')"
+                        errorMsg="Part Number required"></inline-error-display>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="formField">
+
+                    <label for="firstQuantity" class="form-label">1st Quantity<sup>*</sup></label>
+                    <input type="number" class="form-control hidenumberinputarrow" 
+                    (keydown)="validateNumber($event)"
+                    (blur)="isPartFieldValid('firstQuantity')"
+                    nxNoScroll
+                    autocompleteOff
+                    id="firstQuantity" aria-describedby="firstQuantity" formControlName="firstQuantity"
+                    placeholder="QTY" >
+                    <inline-error-display [displayError]="isPartFieldValid('firstQuantity')"
+                        errorMsg="Quantity is required"></inline-error-display>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="formField">
+                    <label for="secondQuantity" class="form-label">2nd Quantity</label>
+                    <input type="number" class="form-control hidenumberinputarrow" 
+                    (keydown)="validateNumber($event)"
+                    nxNoScroll
+                    autocompleteOff
+                    id="secondQuantity" aria-describedby="secondQuantity" formControlName="secondQuantity"
+                    placeholder="QTY">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="formField">
+                    <label for="thirdQuantity" class="form-label">3rd Quantity</label>
+                    <input type="number" class="form-control hidenumberinputarrow" id="thirdQuantity"
+                        aria-describedby="thirdQuantity" 
+                        (keydown)="validateNumber($event)"
+                        nxNoScroll
+                        autocompleteOff
+                        formControlName="thirdQuantity" placeholder="QTY">
+                </div>
+            </div>
+        </div>
+        <div class="row pt-1 pb-3 formField">
+            <div class="col-md-12"><label>Quantity Unit</label></div>
+            <div class="col-md-4" *ngFor="let quantityUnit of quantityUnitList;">
+                <div class="customRadio">
+                    <input type="radio" name="partQtyUnitId" [value]="quantityUnit.id"
+                        id="partQtyUnitId{{quantityUnit.id}}"
+                        checked="{{PART_QTY_UNIT_DEFAULT_ID.pieces==quantityUnit.id?'checked':null}}"
+                        formControlName="partQtyUnitId">
+                    <span class="checkmark"></span>
+                    <label for="partQtyUnitId{{quantityUnit.id}}">
+                        {{quantityUnit.value}}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="formField">
+                    <label for="partDescription" class="form-label">Part Description</label>
+                    <textarea class="form-control" placeholder="Add additional information here..." id="partDescription"
+                        formControlName="partDescription" (blur)="isPartFieldValid('partDescription')"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

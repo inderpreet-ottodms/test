@@ -1,0 +1,175 @@
+<ng-template #content let-d="dismiss" data-backdrop="static" data-keyboard="false">
+      <div class="modal-header">
+        <h4 class="modal-title">Add New Customer</h4>
+        <button type="button" class="close" data-bs-dismiss="modal" (click)="d('notNow');close()"><i class="fa fa-times-circle" aria-hidden="true"
+            style="color: #4a90e2;"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12 text-left">
+              <p>Please fill out all of the fields below to add a new contact.</p>
+          </div>
+        </div>
+
+        <!-- <p>* All Required</p> -->
+        <p style="font-size:20px;margin-top:20px;"></p>
+        <div>
+          <form class="row" [formGroup]="myContactForm">
+            <div class="col-md-12">
+              <div class="from-group text-left">
+                  <label>* Company Name</label>
+                <input type="text" class="form-control" placeholder="Company Name" formControlName="companyName">
+                <div class="Loginerror-msg">
+                  <app-field-error-display [displayError]="isFieldValid('companyName')"
+                    errorMsg="Company Name is required"></app-field-error-display>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-6">
+              <div class="from-group text-left">
+                  <label>* First Name</label>
+                <input type="text" class="form-control" maxlength="50" placeholder="First Name" autocomplete="off"
+                  formControlName="firstName">
+                <div class="error-msg2">
+                  <app-field-error-display [displayError]="isFieldValid('firstName')" errorMsg="First Name is required">
+                  </app-field-error-display>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-6">
+              <div class="from-group text-left">
+                  <label>* Last Name</label>
+                <input type="text" class="form-control" maxlength="50" placeholder="Last Name" autocomplete="off"
+                  formControlName="lastName">
+                <div class="error-msg2">
+                  <app-field-error-display [displayError]="isFieldValid('lastName')" errorMsg="Last Name is required">
+                  </app-field-error-display>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="from-group text-left">
+                  <label>* Email</label>
+                <input type="text" class="form-control" placeholder="Email" formControlName="email">
+                <div class="error-msg2">
+                  <app-field-error-display [displayError]="isFieldValid('email')" errorMsg="Email is required">
+                  </app-field-error-display>
+                  <!-- <app-field-error-display [displayError]="isEmailPValid('email')"
+                  errorMsg="Email is not in proper format"></app-field-error-display>  -->
+                  <div [hidden]="!myContactForm.get('email').hasError('pattern')" style="color: red; text-align: left">
+                    Email is not in proper format</div>
+                    <!-- <div [hidden]="!myContactForm.get('email').hasError('required')" style="color: red; text-align: left">
+                      Email is required</div> -->
+                  <!-- <app-field-error-display [displayError]="isFieldValid('email')" errorMsg="Email is required">
+                  </app-field-error-display>
+                  <app-field-error-display [displayError]="isEmailPValid('email')"
+                    errorMsg="Email is not in proper format"></app-field-error-display> -->
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="from-group text-left">
+                  <label>Address</label>
+                <input type="text" class="form-control" placeholder="Address" formControlName="address">
+                <div class="Loginerror-msg">
+                  <app-field-error-display [displayError]="isFieldValid('address')" errorMsg="Address is required">
+                  </app-field-error-display>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-6">
+              <div class="from-group text-left">
+                  <label> * Country</label>
+                <select class="form-control" formControlName="countryId" (change)="getState()">
+                  <option selected [value]="0"> Select Country</option>
+                  <option *ngFor="let country of iCountryColl" [value]="country.countryId">
+                    {{ country.countryName }}
+                  </option>
+                </select>
+                <div class="Loginerror-msg">
+                  <app-field-error-display [displayError]="isFieldValid('countryId')" errorMsg="Country is required">
+                  </app-field-error-display>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="from-group text-left">
+                  <label> State</label>
+                <select class="form-control" formControlName="stateId">
+                  <option selected [value]="0"> Select State</option>
+                  <option *ngFor="let state of iRegionModel" [value]="state.regionId">
+                    {{ state.regionName }}
+                  </option>
+                </select>
+                <div class="Loginerror-msg">
+                  <app-field-error-display [displayError]="isFieldValid('stateId')" errorMsg="State is required">
+                  </app-field-error-display>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="from-group text-left">
+                  <label> City </label>
+                <input type="text" class="form-control" placeholder="City" formControlName="city">
+                <div class="Loginerror-msg">
+                  <app-field-error-display [displayError]="isFieldValid('city')" errorMsg="City is required">
+                  </app-field-error-display>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-6">
+              <div class="from-group text-left">
+                  <label> ZipCode </label>
+                <input type="text" class="form-control" placeholder="Zip" formControlName="zipCode" maxlength="8">
+                <div class="Loginerror-msg">
+                  <app-field-error-display [displayError]="isFieldValid('zipCode')" errorMsg="ZipCode is required">
+                  </app-field-error-display>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-6">
+              <div class="from-group text-left">
+                  <label> Phone Number </label>
+                <input formControlName="phoneNo" type="text" pattern="^[+]?[0-9]*" maxlength="17" class="form-control"
+                  placeholder="Phone" name="dunsNumber"
+                  (keyup)="onPaste($event)"
+                  onKeyPress="if(this.value.length==17) return false;"
+                  onkeydown="javascript: return (event.keyCode == 69  || event.keyCode == 189 || event.keyCode == 190)? false : true">
+                <!-- <div class="Loginerror-msg">
+              <app-field-error-display [displayError]="isFieldValid('phoneNo')" errorMsg="Company Phone Is required"></app-field-error-display>
+            </div> -->
+                <div [hidden]="!myContactForm.get('phoneNo').hasError('maxlength')"
+                  style="color: red; text-align: left">Mobile should be 17 digit</div>
+                <!-- <div [hidden]="!myContactForm.get('phoneNo').hasError('required')" style="color: red; text-align: right">Please Enter Phone number</div> -->
+                <div [hidden]="!myContactForm.get('phoneNo').hasError('pattern')" style="color: red; text-align: left">
+                  Mobile number should be only numbers</div>
+                <!-- <app-field-error-display [displayError]="isFieldValid('phoneNo')" errorMsg="Phone number is required">
+                </app-field-error-display> -->
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer1" style="text-align: center;margin-bottom: 20px;">
+        <div class="row">
+          <div class="col-md-6 title-green mainheading" data-bs-dismiss="modal">
+            <!-- <p>Cancle</p> -->
+            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal" (click)="d('notNow');close();">Cancel</button>
+          </div>
+          <!-- <div class="col-md-4">
+            <button type="button" class="small-button btn" (click)="addMQSContact(1)"
+              [disabled]="!myContactForm.valid">Save + Add Another</button>
+          </div> -->
+          <div class="col-md-6">
+            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal"
+              (click)="addMQSContact(2)" [disabled]="!myContactForm.valid || isBtnClicked ">Save Customer</button>
+          </div>
+        </div>
+
+      </div>
+</ng-template>

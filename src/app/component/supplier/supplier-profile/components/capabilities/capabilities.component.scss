@@ -1,0 +1,176 @@
+
+html, body {
+     height: 100%;
+}
+body{
+	font-family: Poppins;
+	background:#f6f7fb !important;
+}
+
+/*----------------------------------------Modal Popup-------------------------------------*/
+.modal-header {
+	padding-bottom: 5px;
+}
+.modal-title{
+	font-size: 21px !important;
+	font-weight:bold !important;
+}
+.modal-footer .btn-group button {
+	height:40px;
+	border-top-left-radius : 0;
+	border-top-right-radius : 0;
+	border: none;
+	border-right: 1px solid #ddd;
+}
+/*----------------------------------------Modal Popup-------------------------------------*/
+
+.form-control{
+	border-radius: 2px;
+	border: solid 1px #bec4cb;
+}
+.form-group{
+	margin-bottom: 29px;
+}
+
+.popuph2{
+  font-size: 14px;
+  font-weight: bold;
+  color: #222222;
+}
+.popupparagraph{
+	font-size: 11px;
+	font-weight: bold;
+	color: #919aa3;
+	float:right;
+	margin-right: 283px;
+	margin-top: 9px;
+}
+.popupimage {
+   border: solid 1px #bec4cb;
+   vertical-align:middle;
+   height:175px;
+   margin-bottom: 25px;
+   display: table-cell;
+}
+
+.equipment-list{
+	line-height: 28px;
+}
+
+.custom-model {
+  top: 126px !important;
+  left: 120px !important;
+}
+.Select-the-processes {
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+  text-align: left;
+  font-weight: 700;
+}
+.Deselect-All {
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #2E58D6;
+  cursor: pointer;
+}
+.Rectangle-3{
+  border-radius: 2px;
+  border: solid 2px #c2c7c1;
+  background-color: white;
+  color: #2E58D6;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+}
+.Save-Equipment-cancel {
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  padding: 0px !important;
+  background-color: #c2c7c1;
+  color:white;
+  cursor: pointer;
+}
+.Save-Equipment-active {
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  padding: 0px !important;
+  background-color: #2E58D6;
+  color:#ffffff;
+  cursor: pointer;
+}
+.Save-Equipment-Deactive {
+  width: 150px;
+  height: 35px;
+  border-radius: 2px;
+  padding: 0px !important;
+  background-color: #bec4cb;
+  color: #ffffff;
+  cursor: not-allowed !important;
+}
+.award-enable{
+  margin-right: 10px;
+  width: 120px;
+	border-radius: 2px;
+	background-color: #2E58D6;
+	font-size: 14px;
+  height: 27px;
+	border: 1px solid #2E58D6;
+	text-align:center;
+	font-weight: bold;
+  color:white;
+  cursor: pointer;
+}
+.Rectangle-indi {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 218px;
+  border-radius: 2px;
+  background-color: #ffffff;
+  border: solid 1px #bec4cb;
+  text-align: left;
+}
+.Main-Topic {
+  font-family: Poppins;
+  font-size: 13px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+  cursor: pointer;
+  text-align: left !important;
+}
+.Subtopic-1-Subtopic {
+  font-family: Poppins;
+  text-align: left !important;
+  font-size: 13px;
+  padding-left: 7px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+  cursor: pointer;
+}
+.active {
+  display: none;
+}

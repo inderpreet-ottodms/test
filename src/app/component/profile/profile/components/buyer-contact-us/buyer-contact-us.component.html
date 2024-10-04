@@ -1,0 +1,164 @@
+<div class="row" *ngIf="!isSidePanelOpen()">
+  {{ reloadPageOndrawerClose() }}
+<div class="col-md-12" style="background-color: #f6f7fb;">
+  <!-- <iframe style="width: 100% !important; height: 240px;" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11880.492291371422!2d12.4922309!3d41.8902102!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x28f1c82e908503c4!2sColosseo!5e0!3m2!1sit!2sit!4v1524815927977"
+    frameborder="0" style="border:0" allowfullscreen width="100%"></iframe> -->
+  <!-- <div  >
+      <input type="text" placeholder="search address" id="address" /> <br>
+      <button (click)="getMap()" >Locate on map</button> <br>
+       <button onclick="saveMap()">Confirm map</button>
+      </div> -->
+      <div id="map-canvas" style="width: 100% !important; height: 240px;">
+        <app-bing-map-viewer [(locationAddress)]="mapSource" *ngIf="mapSource!=null"></app-bing-map-viewer>
+      </div>
+
+  <div class="row cust-padding">
+    <div class="col-md-12 bottom-border">
+      <h2 class="innerpanelheading">Get In Touch..</h2>
+    </div>
+    <!-- <div class="col-md-8 bottom-border text-right">
+      <i class="fa fa-pencil-square-o edit-icon" aria-hidden="true" (click)="openSidePanel('isEditBuyerContactUs')"></i>
+    </div> -->
+  </div>
+  <button type="button" class="profile_btn profile_editbtn" (click)="openSidePanel('isEditBuyerContactUs')">
+      Edit Contact
+  </button>
+  <table>
+    <tbody>
+      <tr>
+        <th>Address</th>
+        <td style="white-space: initial" [innerHTML]="getAddressFormat( iContactViewModel.address )" >
+          <!-- {{iContactViewModel?.address?.streetAddress | Na}},{{iContactViewModel?.address?.deptAddress| Na}}<br>{{iContactViewModel?.address?.city| Na}},{{iContactViewModel?.address?.state| Na}},<br>
+          {{iContactViewModel?.address?.postalCode| Na}}, {{iContactViewModel?.address?.country| Na}} -->
+        </td>
+      </tr>
+      <tr>
+        <th>Phone</th>
+        <td>{{iContactViewModel?.phoneNo | Na}}</td>
+      </tr>
+      <tr>
+        <th>Website</th>
+        <td *ngIf="checkEmpty(iContactViewModel?.website)">
+          <a class="title-blue" (click)="websiteClick(iContactViewModel?.website)" >{{iContactViewModel?.website | Na}}</a>
+        </td>
+        <td *ngIf="!checkEmpty(iContactViewModel?.website)">
+            No Website Link Found
+          </td>
+      </tr>
+      <tr>
+        <th>Social</th>
+        <td class="social-icons" *ngIf="checkEmpty(iContactViewModel?.tweeter)  || checkEmpty(iContactViewModel?.facebook) || checkEmpty(iContactViewModel?.linkedIn)">
+          <a *ngIf="checkEmpty(iContactViewModel?.tweeter)" (click)="websiteClick(iContactViewModel?.tweeter)"><i class="fa fa-twitter"> </i></a>
+          <a *ngIf="checkEmpty(iContactViewModel?.facebook)" (click)="websiteClick(iContactViewModel?.facebook)"><i class="fa fa-facebook-f"></i></a>
+          <a *ngIf="checkEmpty(iContactViewModel?.linkedIn)" (click)="websiteClick(iContactViewModel?.linkedIn)"> <i class="fa fa-linkedin"></i></a>
+        </td>
+        <td class="social-icons" *ngIf="!checkEmpty(iContactViewModel?.tweeter)  && !checkEmpty(iContactViewModel?.facebook) && !checkEmpty(iContactViewModel?.linkedIn)">
+            No Social Links Found
+          </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- <div class="col-md-8">
+  <h2 class="innerpanelheading">Email Us<span class="required">* All Required</span></h2>
+  <form action="">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="First Name" required>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Last Name" required>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Company Name" required>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Email" required>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Phone" required>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Subject" required>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="form-group">
+          <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Message" rows="3" required></textarea>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="dropimagebuttons">
+          <button type="submit" class="btn Contact-btn">Send</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div> -->
+</div>
+<div *ngIf="isSidePanelOpen()">
+<div class="row">
+  <div class="col-md-12">
+      <div id="map-canvas" style="width: 100% !important; height: 240px;">
+        <app-bing-map-viewer [(locationAddress)]="mapSource" *ngIf="mapSource!=null"></app-bing-map-viewer>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" style="background-color: #f6f7fb;">
+  <div class="col-md-12">
+    <div class="row cust-padding">
+      <div class="col-md-12 bottom-border">
+        <h2 class="innerpanelheading">Get In Touch</h2>
+      </div>
+    </div>
+    <button type="button" class="profile_btn profile_editbtn" (click)="openSidePanel('isEditBuyerContactUs')">
+        Edit Contact
+    </button>
+    <table>
+      <tbody>
+        <tr>
+          <th>Address</th>
+          <td [innerHTML]="getAddressFormat( iContactViewModel.address )">
+          </td>
+        </tr>
+        <tr>
+          <th>Phone</th>
+          <td>{{iContactViewModel?.phoneNo}}</td>
+        </tr>
+        <tr>
+          <th>Website</th>
+          <td *ngIf="checkEmpty(iContactViewModel?.website)">
+            <a class="title-blue" (click)="websiteClick(iContactViewModel?.website)" >{{iContactViewModel?.website | Na}}</a>
+          </td>
+          <td *ngIf="!checkEmpty(iContactViewModel?.website)">
+              No Website Links Found
+            </td>
+        </tr>
+        <tr>
+          <th>Social</th>
+          <td class="social-icons" *ngIf="checkEmpty(iContactViewModel?.tweeter)  || checkEmpty(iContactViewModel?.facebook) || checkEmpty(iContactViewModel?.linkedIn)">
+            <a *ngIf="checkEmpty(iContactViewModel?.tweeter)" (click)="websiteClick(iContactViewModel?.tweeter)"><i class="fa fa-twitter"> </i></a>
+            <a *ngIf="checkEmpty(iContactViewModel?.facebook)" (click)="websiteClick(iContactViewModel?.facebook)"><i class="fa fa-facebook-f"></i></a>
+            <a *ngIf="checkEmpty(iContactViewModel?.linkedIn)" (click)="websiteClick(iContactViewModel?.linkedIn)"> <i class="fa fa-linkedin"></i></a>
+          </td>
+          <td class="social-icons" *ngIf="!checkEmpty(iContactViewModel?.tweeter)  && !checkEmpty(iContactViewModel?.facebook) && !checkEmpty(iContactViewModel?.linkedIn)">
+              No Social Links Found
+            </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>

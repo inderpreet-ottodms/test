@@ -1,0 +1,497 @@
+<div class="row p-t-15">
+  <div [ngClass]="(isSideDrawerOpen) ? 'col-md-8 col-9' : 'col-md-12 col-12'">
+    <app-rfq-warning-banner></app-rfq-warning-banner>
+    <div class="row">
+      <div class="col-md-6 m-b-10">
+        <div class="f-24 f-w-600 m-t-10">User Management</div>
+      </div>
+      <div class="col-md-6" *ngIf="isAdmin">
+        <button
+          type="button"
+          tabindex="0"
+          class="button-green-border invite-user-btn pull-right"
+          (click)="Invite()"
+        >
+         Invite Users
+        </button>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="isUserAvailable">
+      <div class="col-md-12">
+        <div class="rounded shadow bg-white">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="f-18 f-w-600 m-15">Company Users</div>
+            </div>
+          </div>
+          <div class="row" style="margin: 3px">
+            <div class="col-md-12 m-t-10 m-b-10 m-l-15 m-r-15 p-r-50">
+              <div class="row">
+                <div class="col-md-3">
+                  <span class="f-12 f-w-600">Name</span>
+                </div>
+                <div class="col-md-3">
+                  <span class="f-12 f-w-600">Email Address</span>
+                </div>
+                <div class="col-md-1">
+                  <span class="f-12 f-w-600">Role</span>
+                </div>
+                <div class="col-md-2">
+                  <span class="f-12 f-w-600">Permission</span>
+                </div>
+                <div class="col-md-1">
+                  <span class="f-12 f-w-600">Status</span>
+                </div>
+                <div class="col-md-2">
+                  <span></span>
+                </div>
+              </div>
+              <div
+                class="row m-b-10 rounded p-10"
+                *ngFor="let user of items"
+                style="border: 1px solid #e2e2e5"
+              >
+                <div class="col-md-3 text-truncate" (click)="openDrawer(user)">
+                  <span class="f-w-600 color-blue"
+                    >{{ user.firstName }} {{ user.lastName }}</span
+                  >
+                </div>
+                <div class="col-md-3 text-truncate" (click)="openDrawer(user)">
+                  <span>{{ user.emailId }}</span>
+                </div>
+                <div class="col-md-1 text-truncate" (click)="openDrawer(user)">
+                  <span>{{ user.role }}</span>
+                </div>
+                <div class="col-md-2 text-truncate" (click)="openDrawer(user)">
+                  <span>{{ user.permission }}</span>
+                </div>
+                <div class="col-md-1" (click)="openDrawer(user)">
+                  <span>{{ user.status }}</span>
+                </div>
+                <div class="col-md-2 text-right">
+                  <div
+                    *ngIf="
+                      user.isActive &&
+                      user.status !== 'Invited' &&
+                      currentUserId !== user.contactId
+                    "
+                    (click)="deactivateUser(user.isActive, user.contactId)"
+                    style="width: 10%"
+                    style="cursor: pointer"
+                  >
+                    <button
+                      type="button"
+                      class="btn deactivate-rfq-btn"
+                      (click)="deactivateUser(user.isActive, user.contactId)"
+                    >
+                      Deactivate
+                    </button>
+                  </div>
+                  <div
+                    *ngIf="!user.isActive && user.status !== 'Invited'"
+                    (click)="activateUser(user.isActive, user.contactId)"
+                    style="width: 10%"
+                    style="cursor: pointer"
+                  >
+                    <button
+                      type="button"
+                      class="btn active-rfq-btn"
+                      (click)="activateUser(user.isActive, user.contactId)"
+                    >
+                      Activate
+                    </button>
+                  </div>
+                  <div
+                    *ngIf="
+                      user.status === 'Invited' ||
+                      currentUserId === user.contactId
+                    "
+                  ></div>
+                </div>
+              </div>
+
+              <!-- <div class="table-responsive">
+              <table class="table table-hover usertable">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email Address</th>
+                    <th>Role</th>
+                    <th>Permission </th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor='let user of items'>
+                    <td class="rfqtd text-truncate hand border-left">{{ user.firstName |Na }} {{user.lastName }}</td>
+                    <td>{{ user.emailId | Na }}</td>
+                    <td>{{ user.role | Na }}</td>
+                    <td>{{ user.permission | Na }}</td>
+                    <td>{{ user.status | Na }} </td>
+                    <td class="editdelete" *ngIf="(user.isActive && user.status !== 'Invited' && currentUserId !== user.contactId)" (click)="deactivateUser(user.isActive,user.contactId)" style="width:10%;" style="cursor:pointer;">
+                      <button type="button" class="btn deactivate-rfq-btn " (click)="deactivateUser(user.isActive,user.contactId)">Deactivate</button>
+                    </td>
+                    <td class="editdelete" *ngIf="(!user.isActive) && (user.status !== 'Invited' )" (click)="activateUser(user.isActive,user.contactId)" style="width:10%;" style="cursor:pointer;">
+                      <button type="button" class="btn active-rfq-btn" (click)="activateUser(user.isActive,user.contactId)">Activate  </button>
+                    </td>
+                    <td class="border-right" style="width:10%;" *ngIf="(user.status === 'Invited' || currentUserId === user.contactId )"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div> -->
+            </div>
+          </div>
+          <div class="row" *ngIf="isUserAvailable" style="margin: 3px">
+            <div class="col-md-4">
+              <div class="dataTables_length" id="example_length">
+                <label
+                  >Show
+                  <select
+                    name="example_length"
+                    aria-controls="example"
+                    class=""
+                    [(ngModel)]="inputLength"
+                    (ngModelChange)="ChangeinputLength()"
+                  >
+                    <option value="24">24</option>
+                    <option value="48">48</option>
+                    <option value="96">96</option>
+                  </select>
+                  entries</label
+                >
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="paginations">
+                <div>
+                  <div id="radioBtn" class="btn-group">
+                    <a
+                      [ngClass]="{
+                        disabled: currentIndex == 1 || pageNumber == 0
+                      }"
+                      class="btn btn-primary btn-sm notActive"
+                      (click)="prevPage()"
+                      data-bs-toggle="fun"
+                      data-title="Y"
+                    >
+                      Previous
+                    </a>
+                    <a
+                      *ngFor="let page of pagesIndex"
+                      (click)="setPage(page)"
+                      [ngClass]="
+                        currentIndex == page
+                          ? 'btn btn-primary btn-sm active'
+                          : 'btn btn-primary btn-sm notActive'
+                      "
+                      data-bs-toggle="fun"
+                      data-title="X"
+                    >
+                      {{ page }}
+                    </a>
+                    <a
+                      [ngClass]="{ disabled: currentIndex == pageNumber }"
+                      class="btn btn-primary btn-sm notActive"
+                      (click)="nextPage()"
+                      data-bs-toggle="fun"
+                      data-title="N"
+                    >
+                      Next
+                    </a>
+                  </div>
+                  <input type="hidden" name="fun" id="fun" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="isUserAvailable">
+            <div class="col-md-12">
+              <div class="pull-right padd-right">
+                <label class="showreccount">
+                  {{ currentIndex }} of {{ pageNumber }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="isLoader">
+      <div class="loader animation-start">
+        <span class="circle delay-1 size-2"></span>
+        <span class="circle delay-2 size-4"></span>
+        <span class="circle delay-3 size-6"></span>
+        <span class="circle delay-4 size-7"></span>
+        <span class="circle delay-5 size-7"></span>
+        <span class="circle delay-6 size-6"></span>
+        <span class="circle delay-7 size-4"></span>
+        <span class="circle delay-8 size-2"></span>
+      </div>
+    </div>
+
+    <div
+      class="myRFQ-rfq-no-available rounded shadow bg-white"
+      *ngIf="!isUserAvailable"
+    >
+      <div class="row" style="text-align: center; padding-top: 106px">
+        <div class="col-md-12">
+          <div>
+            <img
+              src="assets/rfq/no-rfq.png"
+              srcset="assets/rfq/no-rfq@2x.png 2x, assets/rfq/no-rfq@3x.png 3x"
+              class="myRFQ-Group"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="padding-top: 34px">
+        <div class="col-md-12">
+          <div class="myRFQ-noRFQActive-helper-text">
+            You don’t have any active users at this time.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isSideDrawerOpen" class="col-md-4 col-4 sideDrawer">
+    <app-user-management-drawer [userDetails]="userDetails" (changeCloseDrawer)="closeDrawer($event)"></app-user-management-drawer>
+  </div>
+</div>
+
+<p-confirmDialog header="Confirmation" icon="" width="629" height="220" #cd>
+  <p-footer>
+    <div class="row">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-ignore-rfq" style="width: 285px;" (click)="cd.reject()">
+          No
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button
+          type="button"
+          class="btn btn-cancel-rfq"
+          label="Yes"
+          (click)="cd.accept()"
+          style="width: 285px;"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </p-footer>
+</p-confirmDialog>
+
+<p-dialog
+  header="Invite members of your company to participate in the RFQ process"
+  [(visible)]="inviteuser"
+  [modal]="true"
+  [responsive]="true"
+  [autoZIndex]="false"
+  style="z-index: 10001;width: 680;height: 580;"
+  styleClass="Rectangle-3"
+>
+  <form
+    class="md-float-material"
+    *ngIf="inviteuser"
+    [formGroup]="inviteuserForm"
+    (ngSubmit)="onSaveInviteUser()"
+  >
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-4 Rectangle-5">
+          <b>First Name</b>
+        </div>
+        <div class="col-md-8 Rectangle-5">
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="
+                inviteuserForm.get('firstName').errors?.required &&
+                (inviteuserForm.controls['firstName'].dirty ||
+                  inviteuserForm.controls['firstName'].touched)
+                  ? 'is-invalid'
+                  : ''
+              "
+              placeholder="First Name"
+              formControlName="firstName"
+              name="inviteUser_firstName"
+              required
+            />
+            <div class="error-msg2">
+              <div
+                style="color: red"
+                *ngIf="
+                  inviteuserForm.get('firstName').errors?.required &&
+                  (inviteuserForm.controls['firstName'].dirty ||
+                    inviteuserForm.controls['firstName'].touched)
+                "
+              >
+                First Name is required
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-4 Rectangle-5">
+          <b>Last Name</b>
+        </div>
+        <div class="col-md-8 Rectangle-5">
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Last Name"
+              formControlName="lastName"
+              name="inviteUser_lastName"
+            />
+            <!-- <div class="error-msg2">
+                <app-field-error-display [displayError]="isFieldValid('lastName')" errorMsg="Last Name required"></app-field-error-display>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-4 Rectangle-5">
+          <b>Email Address</b>
+        </div>
+        <div class="col-md-8 Rectangle-5">
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="
+                (inviteuserForm.get('toEmail').errors?.required ||
+                  inviteuserForm.get('toEmail').errors?.pattern) &&
+                (inviteuserForm.controls['toEmail'].dirty ||
+                  inviteuserForm.controls['toEmail'].touched)
+                  ? 'is-invalid'
+                  : ''
+              "
+              placeholder="Email Address"
+              formControlName="toEmail"
+              name="inviteUser_toEmail"
+              required
+            />
+            <div class="error-msg2">
+              <div
+                style="color: red"
+                *ngIf="
+                  inviteuserForm.get('toEmail').errors?.required &&
+                  (inviteuserForm.controls['toEmail'].dirty ||
+                    inviteuserForm.controls['toEmail'].touched)
+                "
+              >
+                Email is required
+              </div>
+              <div
+                style="color: red"
+                *ngIf="
+                  inviteuserForm.get('toEmail').errors?.pattern &&
+                  (inviteuserForm.controls['toEmail'].dirty ||
+                    inviteuserForm.controls['toEmail'].touched)
+                "
+              >
+                Invalid email
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-4 Rectangle-5">
+          <b>Permission</b>
+        </div>
+        <div class="col-md-4 Rectangle-5">
+          <div class="form-check">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="isAdmin"
+              formControlName="isAdmin"
+            />
+            <label class="form-check-label" for="isAdmin">IsAdmin</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-4 Rectangle-5">
+          <b>Invite Message</b>
+        </div>
+        <div class="col-md-8 Rectangle-5">
+          <div class="form-group">
+            <textarea
+              class="Rectangle-description"
+              maxlength="500"
+              placeholder="Enter Your Message Here"
+              formControlName="message"
+            ></textarea>
+            <p
+              style="
+                color: #919aa3;
+                font-family: Poppins;
+                text-align: center;
+                font-size: 11px;
+                margin-left: 190px;
+              "
+            >
+              500 characters (optional)
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-md-12 dHelper-align">
+
+      </div> -->
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-6">
+          <button
+            type="button"
+            class="
+              btn btn-md btn-block
+              waves-effect
+              text-center
+              m-b-20
+              Rectanglebtn-active
+            "
+            (click)="hideInvite()"
+          >
+            Cancel
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button
+            type="submit"
+            class="btn btn-md btn-block waves-effect text-center m-b-20"
+            label="Yes"
+            [disabled]="inviteuserForm.invalid || isSaveBtnDisabled"
+            [ngClass]="
+              inviteuserForm.invalid || isSaveBtnDisabled
+                ? 'Rectanglebtn-inactive'
+                : 'Rectanglebtn-active'
+            "
+          >
+            Invite User
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</p-dialog>

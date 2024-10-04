@@ -1,0 +1,50 @@
+<div class="background-white">
+  <div class="row">
+    <div class="col-md-12 rightpanel">
+      <i class="fa fa-times-circle pull-right" (click)="closeMessageDrawer()"></i>
+      <h2 class="panelheading">Message To:</h2>
+    </div>
+    <hr>
+    <div class="col-md-12"><br>
+      <div class="contactName"> {{ customerMsgModel.receiverName }} </div>
+      <form [formGroup]="messageForm" (ngSubmit)="onMessageSend()">
+        <div class="form-group">
+          <label [ngClass]="(labelFocus === 'subject')? 'Label-focus':'Label-class'"
+            *ngIf="!checkMessageField('subject')">Subject</label>
+          <input type="text" class="form-control" id="name" (focus)="setLabel('subject')" (blur)="setLabel('no')"
+            placeholder="Subject" formControlName="subject">
+          <div class="error-msg">
+            <app-field-error-display [displayError]="isFieldValid('subject')" errorMsg="Enter Subject">
+            </app-field-error-display>
+          </div>
+        </div>
+        <div class="form-group">
+          <label [ngClass]="(labelFocus === 'message')? 'Label-focus':'Label-class'"
+            *ngIf="!checkMessageField('message')">Message</label>
+          <textarea class="form-control" type="textarea" (focus)="setLabel('message')" (blur)="setLabel('no')"
+            placeholder="Message" maxlength="1000" rows="7" formControlName="message"></textarea>
+          <div class="error-msg">
+            <app-field-error-display [displayError]="isFieldValid('message')" errorMsg="Enter Message">
+            </app-field-error-display>
+          </div>
+        </div>
+        <div class="row pdfList">
+          <div class="col-md-12 text-wrap">
+            <span class="fileName ">{{ termsConditionFile }}</span><br>
+            <span class="fileName ">{{ qmsPDFFilename }}</span><br>
+            <span class="fileName ">{{ qmsPartName }}</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 centerAlign">
+            <button type="button" class="rightcancelbutton" (click)="closeMessageDrawer()">Cancel</button>
+          </div>
+          <div class="col-md-6 centerAlign">
+            <button type="submit" [disabled]="validateBtn()"
+              [ngClass]="(validateBtn())? 'rightaddwithoutsubmit':'rightaddsubmit'"><i class="fa fa-spinner fa-spin" *ngIf="isMailSend"></i> Send</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

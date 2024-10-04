@@ -1,0 +1,278 @@
+{{ IsNpsdataback()}}
+<div class="filterContainer open-rfq-container">
+  <div class="rfqFilter">
+    <div class="row pb-3">
+      <div class="col-lg-7 col-md-12 col-sm-12 full-width-row">
+        <div class="filter-dropdown filter-by d-flex">
+          <label class="f-11"> <b>Filter By</b></label>
+          <div class="dropdown" (clickOutside)="hideFilterBySection()">
+            <button class="btn-dropdown">
+              <ng-container *ngIf="!defaultFilterChipsOpened">
+                <span class="choose-filter-btn" (click)="openDefaultFilterChips()">Choose Filters</span> </ng-container>
+              <ng-container *ngIf="defaultFilterChipsOpened">
+                <ng-container *ngFor="let selectedFilter of selectedFilterBy; let i = index">
+                  <span class="select-filter-list" *ngIf="i<2">
+                    <div class="c-token">
+                      <span class="c-label">{{selectedFilter.value}}</span>
+                      <span class="c-remove" (click)="defaultFilterByChanged(selectedFilter)">
+                        <i><svg width="100%" height="100%" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 47.971 47.971"
+                            xml:space="preserve" style="enable-background: new 0 0 47.971 47.971;"
+                            class="ng-star-inserted">
+                            <g>
+                              <path d="M28.228,23.986L47.092,5.122c1.172-1.171,1.172-3.071,0-4.242c-1.172-1.172-3.07-1.172-4.242,0L23.986,19.744L5.121,0.88
+                          c-1.172-1.172-3.07-1.172-4.242,0c-1.172,1.171-1.172,3.071,0,4.242l18.865,18.864L0.879,42.85c-1.172,1.171-1.172,3.071,0,4.242
+                          C1.465,47.677,2.233,47.97,3,47.97s1.535-0.293,2.121-0.879l18.865-18.864L42.85,47.091c0.586,0.586,1.354,0.879,2.121,0.879
+                          s1.535-0.293,2.121-0.879c1.172-1.171,1.172-3.071,0-4.242L28.228,23.986z"></path>
+                            </g>
+                          </svg></i>
+                      </span>
+                    </div>
+                  </span>
+                </ng-container>
+                <span class="show-more-filter" *ngIf="selectedFilterBy.length>2">+{{selectedFilterBy.length-2}}</span>
+              </ng-container>
+              <span class="down-arrow {{isOpenFilterDropdown?'rotate-arrow-icon':null}}"
+                (click)="toggleFilterDropdown()"></span>
+            </button>
+            <ul *ngIf="isOpenFilterDropdown" class="dropdown-list">
+              <ng-container *ngIf="iSavedSearchViewModelColl && iSavedSearchViewModelColl.length>0">
+                <li class="dropdown-title">
+                  Saved
+                </li>
+                <li class="dropdown-item" *ngFor="let option of iSavedSearchViewModelColl">
+                  <div class="saved-filter-box">
+                    <div class="custom-radio" (click)="selectSaveSearch(option)">
+                      <input type="radio" [value]='option.savedSearchId' [(ngModel)]='selectedItems'
+                        id="selectSaveSearch{{option.savedSearchId}}">
+                      <label for="selectSaveSearch{{option.savedSearchId}}"> {{option.searchFilterName}}
+                      </label>
+                    </div>
+                    <span (click)="deleteSavedSearchFilterDetails(option.savedSearchId)">
+                      <img src="assets/icon/close.svg">
+                    </span>
+                  </div>
+                </li>
+              </ng-container>
+
+              <ng-container>
+                <li class="dropdown-title">
+                  Presets
+                </li>
+                <li class="dropdown-item" *ngFor="let defaultFilterBy of defaultFilterByList">
+                  <div class="custom-checkbox">
+                    <input type="checkbox" id="defaultFilterBy{{defaultFilterBy.key}}"
+                      checked="{{selectedDefaultFilterBy[defaultFilterBy.key]?'checked':null}}"
+                      (change)="defaultFilterByChanged(defaultFilterBy)">
+                    <label for="defaultFilterBy{{defaultFilterBy.key}}">{{defaultFilterBy.value}}</label>
+                  </div>
+                </li>
+              </ng-container>
+            </ul>
+          </div>
+          <div class="advance-filter">
+            <button class="{{isShowAdvance?'advFilter':'advFilterNotSelected'}}"
+              (click)="advancedFiltersClicked()">{{isShowAdvance?'Edit Filters':'Advanced Filters'}}</button>
+            <span class="blue-text" (click)="clearAll()">Clear</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5 col-md-12 col-sm-12 full-width-row">
+        <div class="filter-dropdown short-filter d-flex align-items-center">
+          <label class="f-11"> <b>Sort By</b></label>
+          <div class="dropdown" (clickOutside)="hideSortBySection()">
+            <button class="btn-dropdown {{isOpenShortDropdown?'rotate-arrow':null}}"
+              (click)="toggleShortDropdown()">{{selectedSortBy.value}}</button>
+            <ul *ngIf="isOpenShortDropdown" class="dropdown-list">
+              <li class="dropdown-item" (click)="sortByClickHandler(sortBy)" *ngFor="let sortBy of sortByList">
+                <a class="{{selectedSortBy.key===sortBy.key?'active':null}}"
+                  href="javascript:void(0);">{{sortBy.value}}</a>
+              </li>
+            </ul>
+          </div>
+          <div class="filter-search">
+            <i class="search-icon"><img src="/assets/icon/search-icon.svg" /></i>
+            <input class="form-control" placeholder="Search" type="text" style="padding-left: 35px;"
+              [(ngModel)]="searchText" (keyup)="filterSearchTextChange($event)"
+              (change)="filterSearchTextChange($event,true)" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row {{isShowAdvance ?'show-advance-filter' : 'hide-advance-filter'}}">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <div class="filterSubCont">
+        <div class="row">
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <label class="f-11"> <b>Process</b></label>
+            <angular2-multiselect [data]='iCustomProcessViewModelColl' name="process" [(ngModel)]='selectedProcessItems'
+              (onSelect)="processDataChangedHandler($event)" (onSelectAll)="processDataChangedHandler($event)"
+              (onDeSelect)="processDataChangedHandler($event)" (onDeSelectAll)="processDataChangedHandler($event)"
+              [settings]='processSettings'>
+            </angular2-multiselect>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <label class="f-11"><b>Technique</b></label>
+            <angular2-multiselect *ngIf="showTechnique" [data]='iCustomChildProcessViewModelColl'
+              [(ngModel)]="selectedChildProcessItems" name="technique" (onSelect)="onChildProcessChanged($event)"
+              (onSelectAll)="onChildProcessChanged($event)" (onDeSelect)="onChildProcessChanged($event)"
+              (onDeSelectAll)="onChildProcessChanged($event)" [settings]='childProcessSettings'></angular2-multiselect>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <label class="f-11"> <b> Certification</b></label>
+            <angular2-multiselect [settings]="certificatesettings" [data]="iCertificationViewModelColl"
+              [(ngModel)]="selectedCertificationItems" name="certificates" (onSelect)="onCertificateChanged($event)"
+              (onSelectAll)="onCertificateChanged($event)" (onDeSelect)="onCertificateChanged($event)"
+              (onDeSelectAll)="onCertificateChanged($event)">
+            </angular2-multiselect>
+          </div>
+        </div>
+        <div class="row m-t-10">
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <label class="f-11"><b> Material</b></label>
+            <angular2-multiselect [data]='iMaterialViewModelColl' [(ngModel)]="materialselectedItems" name="materials"
+              (onSelect)="onMaterialChange($event)" (onSelectAll)="onMaterialChange($event)"
+              (onGroupDeSelect)="onMaterialChange($event)" (onGroupSelect)="onMaterialChange($event)"
+              (onDeSelect)="onMaterialChange($event)" (onDeSelectAll)="onMaterialChange($event)"
+              [settings]='materialsettings' required></angular2-multiselect>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <label class="f-11"> <b> Post Process</b></label>
+            <angular2-multiselect name="postProcess" [data]='iPostProductionViewModelColl'
+              [(ngModel)]="postProcessselectedItems" [settings]='postProductionProcesssettings'
+              (onSelect)="onPostProcessChange($event)" (onGroupDeSelect)="onPostProcessChange($event)"
+              (onGroupSelect)="onPostProcessChange($event)" (onSelectAll)="onPostProcessChange($event)"
+              (onDeSelect)="onPostProcessChange($event)" (onDeSelectAll)="onPostProcessChange($event)">
+            </angular2-multiselect>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <label class="f-11"> <b> Buyer's Industry</b></label>
+            <angular2-multiselect [data]='buyerTypeViewModelColl' [(ngModel)]="selectedBuyerIndustry"
+              name="buyerIndustry" [settings]='buyerIndustrySettings' (onSelect)="buyerIndustryChangedHandler($event)"
+              (onSelectAll)="buyerIndustryChangedHandler($event)" (onDeSelect)="buyerIndustryChangedHandler($event)"
+              (onDeSelectAll)="buyerIndustryChangedHandler($event)">
+            </angular2-multiselect>
+          </div>
+        </div>
+        <div class="row m-t-10">
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <label for="proximity" class="label-text f-11"><b>Proximity</b> </label>
+            <angular2-multiselect [data]='iProximityColl' [(ngModel)]="proximityselectedItems" name="proximity"
+              [settings]='proximitysettings' (onSelect)="onProximityChange($event)"
+              (onSelectAll)="onProximityChange($event)" (onDeSelect)="onProximityChange($event)"
+              (onDeSelectAll)="onProximityChange($event)"></angular2-multiselect>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <div class="d-flex flex-column">
+              <label for="partSize" class="label-text f-11" style="padding-bottom:1px;"><b>Part Size</b> </label>
+              <div>
+                <select class="w-100 custom-select-box" [(ngModel)]="selectedPartSize" (change)="filterRFQData()">
+                  <option *ngFor="let option of partSizeList" value="{{option.key}}">
+                    {{option.value}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <div class="d-flex flex-column">
+              <label for="tolerance" class="label-text f-11" style="padding-bottom: 1px;"><b>Tolerance</b> </label>
+              <select class="w-100 custom-select-box" (change)="filterRFQData()" [(ngModel)]="selectedTolerance">
+                <option value="-1">Select Tolerance</option>
+                <option *ngFor="let option of iToleranceColl" value="{{option.id}}">
+                  {{option.value}}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex">
+          <div class="d-flex align-items-center pt-2">
+            <div class="pe-3">
+              <button class="btn saveFilter" [disabled]="disableSaveFilterButton" (click)="openModal()">Save
+                Filter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-d="dismiss" data-backdrop="static" data-keyboard="false">
+
+  <form class="save-search-popup" #savedSearchForm="ngForm" (ngSubmit)="onSaveFilter(savedSearchForm.value)">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Save Search</h4>
+      <button type="button" class="close" aria-label="Close" (click)="closeModel()">
+        <img src="assets/icon/close.svg">
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 text-left">
+          <span>Give your search a name and save it so you can access it in the future.</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 text-left from-group m-t-15 m-b-15">
+          <input type="text" class="form-control" (keyup)=isPresent(); placeholder="Name your filter"
+            name="searchFilterName" [(ngModel)]="searchFilterName" required pattern="[a-zA-Z0-9 ]*" maxlength="20">
+          <div
+            *ngIf="savedSearchForm.form.controls.searchFilterName?.invalid && (savedSearchForm.form.controls.searchFilterName?.dirty || savedSearchForm.form.controls.searchFilterName?.touched)"
+            class="">
+            <p style="color:red" *ngIf="savedSearchForm.form.controls.searchFilterName.errors.pattern">Please enter
+              alpha numeric
+              value only</p>
+          </div>
+          <div>
+            <p style="color:red" *ngIf="isDisabledBtn">This filter is already exist</p>
+          </div>
+        </div>
+
+        <div class="custom-checkbox">
+          <input type="checkbox" name="isDailyNotification" id="isDailyNotification" [(ngModel)]="isDailyNotification">
+          <label for="isDailyNotification">Add this search to my Daily Summary email so I can receive RFQ’s that match
+            this filter.</label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-cancel" (click)="closeModel()">Cancel</button>
+      <div class="btn-group-box">
+        <div class="custom-checkbox">
+          <input type="checkbox" [(ngModel)]="isDefaultSaveSearch" name="isDefaultSaveSearch" id="isDefaultSaveSearch">
+          <label for="isDefaultSaveSearch">Make Default</label>
+        </div>
+        <button type="submit" class="btn btn-save"
+          [disabled]="!savedSearchForm.form.valid || isDisabledBtn">Save</button>
+        <button style="display: none;" type="submit" class="btn btn-overwrite">Overwrite</button>
+      </div>
+    </div>
+  </form>
+</ng-template>
+<ng-template #showHideDeleteConfirmationModel let-d="dismiss" data-keyboard="false">
+  <div class="hide-unhide-poup">
+    <div class="modal-header">
+      <button type="button" class="close" (click)="closeHideDeleteConfirmationModel()">
+        <img src="assets/icon/close.svg">
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="text-center">Are you sure you want to delete this search filter?</p>
+      <div class="modal-footer">
+        <div class="col-md-12 d-flex align-items-center justify-content-center">
+          <button style="width: 30%; margin-right: 15px;" type="button" class="btn button-green" data-bs-dismiss="modal"
+            (click)="deleteSavedSearchFilterDetails(selectedSavedSearchIdToDelete,false)">Confirm</button>
+          <button style="width: 30%;" type="button" class="btn button-green" data-bs-dismiss="modal"
+            (click)="closeHideDeleteConfirmationModel()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<div class="full-page-overlay filter" *ngIf="isLoader">
+  <div class="rfqLoader"></div>
+</div>

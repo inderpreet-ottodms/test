@@ -1,0 +1,16 @@
+
+<div class="row">
+    {{ getCount() }}
+    <div class="col-md-8">
+        {{ pageTitle }}<span *ngIf="totalCount" style="font-size: 15px;">({{  totalCount  }})</span>
+    </div>
+    <div class="col-md-4 text-right" *ngIf="!isPremium() && this.userDetailsLocation !='Asia'">
+      <button (click)="setRecommnededForYouBanner()" [routerLink]="['/packages']" class="upgradeQuoteBtn">Upgrade to Quote</button>
+    </div>
+<div  class="col-md-4 text-right" *ngIf="!isPremium() && this.userDetailsLocation =='Asia'">
+  <app-upgrade-account-btn [quoteRFQ]=true [RfqId]=0 ></app-upgrade-account-btn>
+</div>
+  <div  class="col-md-4 text-right" *ngIf="!isPremium() && this.userDetailsLocation =='Asia'">
+    <app-upgrade-account-btn [quoteRFQ]=true [RfqId]=0 ></app-upgrade-account-btn>
+  </div>
+</div>

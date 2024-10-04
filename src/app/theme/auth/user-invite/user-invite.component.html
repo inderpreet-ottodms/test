@@ -1,0 +1,185 @@
+<body class="login-bg">
+  <div class="container">
+    <div id="login">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-column" class="col-md-6 col-md-offset-3">
+              <div class="loginpage-logo">
+                <img style="width: 50%;" src="assets/login/Logo_MFG_White.png" alt="MFG Logo">
+              </div>
+              <div id="login-box" *ngIf="showInviteForm">
+                <div class="loginpage card-header">
+                  <h3>User Invite</h3>
+                </div><br>
+
+                <div class="loginregister">
+                  <p class="forgotpassword">Please Enter Your Registration Detail.</p><br>
+                  <form class="md-float-material" [formGroup]="userInviteForm" (ngSubmit)="onSubmit()">
+
+
+                    <div class="form-group">
+                      <label class="Label-class" *ngIf="checkLoginField('firstname')"></label>
+                      <label
+                        [ngClass]="(isFieldValid('firstname'))?'Label-focus-red':(labelFocus === 'firstname')? 'Label-focus':'Label-class'"
+                        [ngClass]="" *ngIf="!checkLoginField('firstname')" style="font-weight: bold;">First Name
+                      </label>
+                      <input type="test" [ngClass]="(isFieldValid('firstname'))?'borderRedColor':'borderBlackColor'"
+                        (focus)="setFocus('firstname')" (blur)="setFocus('no')" class="form-control"
+                        placeholder="First Name" autocomplete="off" formControlName="firstname" placement="right"
+                        data-container="body">
+                      <!--<div class="input-group">
+                        <span class="text-left" *ngIf="(labelFocus === 'newpassword')">Must be 8-20 characters long and contain both uppercase and lower case letters and atleast one number and symbol.</span>
+                      </div>-->
+                      <div class="error-msg">
+                        <app-field-error-display [displayError]="isFieldValid('firstname')"
+                          errorMsg="First Name  Is Required"></app-field-error-display>
+                        <!-- <app-field-error-display [displayError]="isRegisterPasswordValid('newpassword')" errorMsg="Must be 6-20 characters long and contain both uppercase and lower case letters and atleast one number and symbol."></app-field-error-display> -->
+                      </div>
+                      <span class="md-line"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label class="Label-class" *ngIf="checkLoginField('lastname')"></label>
+                      <label
+                        [ngClass]="(isFieldValid('lastname'))?'Label-focus-red':(labelFocus === 'lastname')? 'Label-focus':'Label-class'"
+                        [ngClass]="" *ngIf="!checkLoginField('lastname')" style="font-weight: bold;">Last Name </label>
+                      <input type="test" [ngClass]="(isFieldValid('lastname'))?'borderRedColor':'borderBlackColor'"
+                        (focus)="setFocus('lastname')" (blur)="setFocus('no')" class="form-control"
+                        placeholder="Last Name" autocomplete="off" formControlName="lastname" placement="right"
+                        data-container="body">
+                      <!--<div class="input-group">
+                        <span class="text-left" *ngIf="(labelFocus === 'newpassword')">Must be 8-20 characters long and contain both uppercase and lower case letters and atleast one number and symbol.</span>
+                      </div>-->
+                      <div class="error-msg">
+                        <app-field-error-display [displayError]="isFieldValid('lastname')"
+                          errorMsg="Last  Name  Is Required"></app-field-error-display>
+                        <!-- <app-field-error-display [displayError]="isRegisterPasswordValid('newpassword')" errorMsg="Must be 6-20 characters long and contain both uppercase and lower case letters and atleast one number and symbol."></app-field-error-display> -->
+                      </div>
+                      <span class="md-line"></span>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="Label-class" *ngIf="checkLoginField('email')"></label>
+                      <!-- <label [ngClass]="(isFieldValid('email'))?'Label-focus-red':(labelFocus === 'email')? 'Label-focus':'Label-class'" [ngClass]="" *ngIf="!checkLoginField('email')" style="font-weight: bold;" >email</label> -->
+                      <input readonly type="test"
+                        [ngClass]="(isFieldValid('email'))?'borderRedColor':'borderBlackColor'"
+                        (focus)="setFocus('email')" (blur)="setFocus('no')" class="form-control" placeholder="Email Id"
+                        autocomplete="off" formControlName="email" placement="right" data-container="body">
+                      <!--<div class="input-group">
+                          <span class="text-left" *ngIf="(labelFocus === 'newpassword')">Must be 8-20 characters long and contain both uppercase and lower case letters and atleast one number and symbol.</span>
+                        </div>-->
+                      <div class="error-msg">
+                        <app-field-error-display [displayError]="isFieldValid('email')" errorMsg="email  Is Required">
+                        </app-field-error-display>
+                        <!-- <app-field-error-display [displayError]="isRegisterPasswordValid('newpassword')" errorMsg="Must be 6-20 characters long and contain both uppercase and lower case letters and atleast one number and symbol."></app-field-error-display> -->
+                      </div>
+                      <span class="md-line"></span>
+                    </div>
+                    <div class="form-group">
+                      <label class="Label-class" *ngIf="checkLoginField('password')"></label>
+                      <label
+                        [ngClass]="(isFieldValid('password') || isRegisterPasswordValid('password') )?'Label-focus-red':(labelFocus === 'password')? 'Label-focus':'Label-class'"
+                        [ngClass]="" *ngIf="!checkLoginField('password')" style="font-weight: bold;">Password</label>
+                      <input type="password"
+                        [ngClass]="(isFieldValid('password') || isRegisterPasswordValid('password'))?'borderRedColor':'borderBlackColor'"
+                        (focus)="setFocus('password')" (blur)="setFocus('no')" maxlength="20" class="form-control"
+                        placeholder="Enter Your  Password" autocomplete="off" formControlName="password"
+                        placement="right" data-container="body"
+                        ngbTooltip="Must be 6-20 characters long and contain both uppercase and lower case letters and atleast one number and symbol.">
+                      <!--<div class="input-group">
+                            <span class="text-left" *ngIf="(labelFocus === 'newpassword')">Must be 8-20 characters long and contain both uppercase and lower case letters and atleast one number and symbol.</span>
+                          </div>-->
+                      <div class="error-msg">
+                        <app-field-error-display [displayError]="isFieldValid('password')"
+                          errorMsg="Password Is Required"></app-field-error-display>
+                        <app-field-error-display [displayError]="isRegisterPasswordValid('password')"
+                          errorMsg="Must be 6-20 characters long and contain both uppercase and lower case letters and atleast one number and symbol.">
+                        </app-field-error-display>
+                      </div>
+                      <span class="md-line"></span>
+                    </div>
+                    <div class="form-group">
+                      <label class="Label-class" *ngIf="checkLoginField('confirmpassword')"></label>
+                      <label
+                        [ngClass]="(isFieldValid('confirmpassword') || validateOldPassword('confirmpassword','password') )?'Label-focus-red':(labelFocus === 'confirmpassword')? 'Label-focus':'Label-class'"
+                        *ngIf="!checkLoginField('confirmpassword')" style="font-weight: bold;">Re-enter Password</label>
+
+                      <input type="password"
+                        [ngClass]="(isFieldValid('confirmpassword') || validateOldPassword('confirmpassword','password') )?'borderRedColor':'borderBlackColor'"
+                        (focus)="setFocus('confirmpassword')" (blur)="setFocus('no')" maxlength="20"
+                        class="form-control" placeholder="Re-enter Password" autocomplete="off"
+                        formControlName="confirmpassword">
+                      <div class="error-msg">
+                        <app-field-error-display [displayError]="isFieldValid('confirmpassword')"
+                          errorMsg="Re-enter Password"></app-field-error-display>
+                        <app-field-error-display [displayError]="validateOldPassword('confirmpassword','password')"
+                          errorMsg="Password mismatch"></app-field-error-display>
+                      </div>
+                      <span class="md-line"></span>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-2 text-right prefix-paddingTop"
+                        *ngIf="!!selectedItems && !!selectedItems[0] && selectedItems[0].codeTelephone">
+                        <span class="phone-prefix">{{selectedItems[0].codeTelephone}}</span>
+                      </div>
+                      <div
+                        [ngClass]="!!selectedItems && !!selectedItems[0] && selectedItems[0].codeTelephone?'col-md-6':'col-md-12'">
+                        <div class="form-group">
+                          <label class="Label-class" *ngIf="checkLoginField('phoneNo')"></label>
+                          <label
+                            [ngClass]="(isFieldValid('phoneNo'))?'Label-focus-red':(labelFocus === 'phoneNo')? 'Label-focus':'Label-class'"
+                            [ngClass]="" *ngIf="!checkLoginField('phoneNo')" style="font-weight: bold;">Phone</label>
+                          <!-- <label
+                                      [ngClass]="(isFieldValid('phoneNo'))?'Label-focus-red':(labelFocus === 'phoneNo')? 'Label-focus':'Label-class'"
+                                      *ngIf="!isFieldValid('phoneNo')">Phone</label>
+                                    <label class="Label-class" *ngIf="isFieldValid('phoneNo')"></label> -->
+                          <input [ngClass]="(isFieldValid('phoneNo'))?'borderRedColor':'borderBlackColor'" type="text"
+                            (focus)="setFocus('phoneNo')" (blur)="setFocus('no')" maxlength="17"
+                            (keyup)="onPaste($event)" class="form-control" placeholder="Phone" autocomplete="off"
+                            formControlName="phoneNo" onKeyPress="if(this.value.length==17) return false;"
+                            onkeydown="javascript: return (event.keyCode == 69  || event.keyCode == 189 || event.keyCode == 187 || event.keyCode == 190)? false : true">
+                          <div class="Loginerror-msg">
+                            <div [hidden]="!userInviteForm.get('phoneNo').hasError('pattern')" style="color: #a94442;"
+                              class="error-msg">Phone number should be only numbers</div>
+                            <div style="color: #a94442;"
+                              *ngIf="userInviteForm.get('phoneNo').hasError('required') && (userInviteForm.get('phoneNo').dirty || userInviteForm.get('phoneNo').touched)"
+                              class="error-msg">Please enter phone number</div>
+                            <!-- <app-field-error-display [displayError]="isFieldValid('phoneNo')"
+                                        errorMsg="Phone number Is required"></app-field-error-display> -->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="dropimagebuttons">
+                      <button type="submit" [disabled]="resetBtn() || userInviteForm.invalid"
+                        class="login1">Register</button>
+                    </div>
+                  </form>
+                </div>
+
+              </div>
+
+              <p-confirmDialog header="Confirmation" icon="" width="629" height="220" #cd>
+                <p-footer><br>
+                  <div class="row">
+                    <!-- <div class="col-md-6">
+                                <button type="button" class="btn btn-ignore-rfq" (click)="cd.reject()">No</button>
+                              </div> -->
+                    <div class="col-md-12">
+                      <button type="button" class="btn btn-cancel-rfq" label="Ok" (click)="cd.accept()">Ok</button>
+                    </div>
+                  </div>
+                </p-footer>
+              </p-confirmDialog>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

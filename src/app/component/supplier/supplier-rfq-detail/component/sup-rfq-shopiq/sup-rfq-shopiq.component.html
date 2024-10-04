@@ -1,0 +1,154 @@
+<div *ngIf="isLoader">
+  <div class="loader animation-start">
+    <span class="circle delay-1 size-2"></span>
+    <span class="circle delay-2 size-4"></span>
+    <span class="circle delay-3 size-6"></span>
+    <span class="circle delay-4 size-7"></span>
+    <span class="circle delay-5 size-7"></span>
+    <span class="circle delay-6 size-6"></span>
+    <span class="circle delay-7 size-4"></span>
+    <span class="circle delay-8 size-2"></span>
+  </div>
+</div>
+<div class="rfq-details-right-btns" *ngIf="!showShopIQ">
+  <a
+    type="button"
+    href="/#/packages"
+    class="btn small-button"
+    style="margin-right: 25px"
+  >
+    Upgrade Your Account
+  </a>
+</div>
+<div *ngIf="!isLoader && showShopIQ">
+  <div
+    class="row"
+    *ngIf="!(!iRFQShopIQViewModelColl || iRFQShopIQViewModelColl.length === 0)"
+  >
+    <div class="col-md-10">
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="innerpanelheading">Part and Award Information (Per unit price does not include shipping, tooling & misc)</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+  <div
+    class="myRFQ-rfq-no-available"
+    *ngIf="!iRFQShopIQViewModelColl || iRFQShopIQViewModelColl.length === 0"
+  >
+    <div class="row" style="text-align: center; padding-top: 60px">
+      <div class="col-md-12">
+        <div>
+          <img
+            src="assets/rfq/no-rfq.png"
+            srcset="assets/rfq/no-rfq@2x.png 2x, assets/rfq/no-rfq@3x.png 3x"
+            class="myRFQ-Group"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-top: 34px">
+      <div class="col-md-12">
+        <div class="myRFQ-noRFQActive-helper-text">
+          You don't have any Information for this RFQ.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="shipping_right part-border"
+    *ngFor="let item of iRFQShopIQViewModelColl"
+  >
+    <div class="row row-padding">
+      <div class="col-md-4">
+        <span class="innerheading">Part Name</span>
+      </div>
+      <div class="col-md-8">{{ item.partName }}</div>
+    </div>
+    <div class="row row-padding">
+      <div class="col-md-4">
+        <span class="innerheading">Category</span>
+      </div>
+      <div class="col-md-8">{{ item.categoryName }}</div>
+    </div>
+    <div class="row row-padding">
+      <div class="col-md-4">
+        <span class="innerheading">Material</span>
+      </div>
+      <div class="col-md-8">{{ item.materialName }}</div>
+    </div>
+
+    <div *ngFor="let quantity of item.quantityListViewModel; let i = index">
+      <div class="row row-padding">
+        <div class="col-md-4">
+          <span class="innerheading">Quantity {{ i + 1 }}</span>
+        </div>
+        <div class="col-md-8">{{ quantity.quantity }}</div>
+      </div>
+
+      <div class="row row-padding" *ngIf="item.isAwardedToOtherQty == true">
+        <div class="col-md-4">
+          <span class="innerheading">Award Type</span>
+        </div>
+        <div class="col-md-8">Custom</div>
+      </div>
+      <div class="information-box">
+        <div class="box-pad" *ngIf="item.isAwardedToOtherQty == false">
+          <div class="row valueBox">
+            <div class="col-md-12 box-title">
+              Median Market Price <br />
+              (Per unit price)
+
+            </div>
+            <div
+              class="col-md-12 box-count"
+              *ngIf="
+                quantity.medianMarketPrice != null &&
+                quantity.medianMarketPrice != undefined
+              "
+            >
+              $ {{ quantity.medianMarketPrice }}
+            </div>
+            <div
+              class="col-md-12 box-count"
+              *ngIf="
+                quantity.avgMarketprice == null ||
+                quantity.avgMarketprice == undefined
+              "
+            >
+              N/A
+            </div>
+          </div>
+        </div>
+        <div class="box-pad" *ngIf="item.isAwardedToOtherQty == false">
+          <div class="row valueBox">
+            <div class="col-md-12 box-title">
+              Your Price <br />
+              (Per unit price)
+            </div>
+            <div
+              class="col-md-12 box-count priceColor"
+              *ngIf="
+                quantity.yourQuotePrice != null &&
+                quantity.yourQuotePrice != undefined
+              "
+            >
+              $ {{ quantity.yourQuotePrice }}
+            </div>
+            <div
+              class="col-md-12 box-count"
+              *ngIf="
+                quantity.yourQuotePrice == null ||
+                quantity.yourQuotePrice == undefined
+              "
+            >
+              N/A
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
